@@ -1,0 +1,52 @@
+html,body{
+	margin:0;
+	padding:0;
+	height:100%;
+}
+
+.show{
+	border: solid thin lightgray;
+}
+
+.index-page-header{
+	
+	width: 100%;
+	min-height:10%;
+	
+	font-family: sans-serif;
+	font-size: xx-large;
+	color: lightblue;
+}
+
+.menu{
+	width:100%;
+}
+
+.body-container{
+	width:100%;
+	min-height:80%;
+}
+.footer{
+	position:absolute;
+	width:100%;
+	height:100px;
+	bottom:0;
+	left:0;
+}
+
+.league-table{
+	
+	position: relative;
+	float:left;
+	width:80%;
+	height:100%;
+}
+
+.feeds{
+	
+	position: relative;
+	float:right;
+	width:19%;
+	height:100%;
+}
+
