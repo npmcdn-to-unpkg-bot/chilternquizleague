@@ -3,10 +3,19 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Chiltern Quiz League</title>
+<!--link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext' type='text/css' media='all' /-->
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <script type="text/javascript" src="/js/angular.js"></script>
 </head>
-<body ng-app>
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div class="index-page-header show">
 Chiltern Quiz League
 </div>
@@ -20,7 +29,7 @@ Chiltern Quiz League
 </div>
 <div class="body-container show">
 <div class="league-table show">table</div>
-<div class="feeds show">feeds</div>
+<div class="feeds show"><div class="fb-like-box" data-href="https://www.facebook.com/ChilternQuizLeague" data-colorscheme="light" data-show-faces="false" data-header="true" data-stream="true" data-show-border="true"></div></div>
 </div>
 <div class="footer show">footer</div>
 </body>
