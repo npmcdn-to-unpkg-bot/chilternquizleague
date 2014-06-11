@@ -5,32 +5,54 @@
 <title>Chiltern Quiz League</title>
 <!--link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext' type='text/css' media='all' /-->
 <link type="text/css" rel="stylesheet" href="/css/main.css">
+<link type="text/css" rel="stylesheet" href="/css/menu2.css">
 <script type="text/javascript" src="/js/angular.js"></script>
 </head>
 <body>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-<div class="index-page-header show">
-Chiltern Quiz League
-</div>
-<div class="menu show">
-<ul>
-	<li>Home</li>
-	<li>Teams</li>
-	<li>About</li>
-	<li>Contact Us</li>
-</ul>
-</div>
-<div class="body-container show">
-<div class="league-table show">table</div>
-<div class="feeds show"><div class="fb-like-box" data-href="https://www.facebook.com/ChilternQuizLeague" data-colorscheme="light" data-show-faces="false" data-header="true" data-stream="true" data-show-border="true"></div></div>
-</div>
-<div class="footer show">footer</div>
+	<div id="fb-root"></div>
+	<script>
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+	<div class="index-page-header show">Chiltern Quiz League</div>
+	<div class="menu">
+		<ul class="nav">
+			<li><a href="#">Home</a></li>
+			<li><a href="#">Teams</a></li>
+			<li><a href="#">Fixtures</a></li>
+			<li><a href="#">Competitions</a>
+				<ul>
+					<li><a href="#">League</a>
+					<li>
+					<li><a href="#">Beer Leg</a>
+					<li>
+					<li><a href="#">Individual</a>
+					<li>
+					<li><a href="#">Team Buzzer</a>
+					<li>
+				</ul></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Contact Us</a></li>
+		</ul>
+	</div>
+	<div class="body-container">
+		<div class="league-table">table</div>
+
+		<div class="feeds">
+			<div class="fb-like-box"
+				data-href="https://www.facebook.com/ChilternQuizLeague"
+				data-colorscheme="light" data-show-faces="false" data-header="true"
+				data-stream="true" data-show-border="true"></div>
+		</div>
+
+	</div>
+	<div class="footer show">footer</div>
 </body>
 </html>

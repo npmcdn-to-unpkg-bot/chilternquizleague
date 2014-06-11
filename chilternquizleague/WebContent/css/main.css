@@ -6,16 +6,17 @@ html,body{
 }
 
 .show{
-	border: solid 2px lightgray;
-	border-radius: 10px;
+	border: solid 10px lightgray;
+	border-radius: 15px;
 	padding: 10px;
-	margin: 10px;
+	margin-left: 1%;
+	margin-top: 1%;
 	
 }
 
 .index-page-header{
 	
-	width: 100%;
+
 	min-height:10%;
 	
 	font-family: sans-serif;
@@ -23,17 +24,13 @@ html,body{
 	color: lightblue;
 }
 
-.menu{
-	width:100%;
-}
 
 .body-container{
-	width:100%;
 
+ padding 1%;
 }
 .footer{
 	position:absolute;
-	width:100%;
 	height:40px;
 	bottom:0;
 	left:0;
@@ -41,14 +38,14 @@ html,body{
 
 .league-table{
 	
-	position: relative;
+	#position: relative;
 	float:left;
 	height:100%;
 }
 
 .feeds{
 	
-	position: relative;
+	#position: relative;
 	float:right;
 	height:100%;
 	margin-right:50px;
