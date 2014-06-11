@@ -2,24 +2,23 @@ html,body{
 	margin:0;
 	padding:0;
 	height:100%;
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
 }
 
 .show{
 	border: solid 10px lightgray;
 	border-radius: 15px;
-	padding: 10px;
-	margin-left: 1%;
-	margin-top: 1%;
 	
 }
 
-.index-page-header{
-	
+.standard-margins{
+	margin-left: 1%;
+	margin-top: 1%;
+	padding: 1%;
+}
 
-	min-height:10%;
-	
-	font-family: sans-serif;
+.index-page-header{
+
 	font-size: xx-large;
 	color: lightblue;
 }
@@ -27,9 +26,10 @@ html,body{
 
 .body-container{
 
- padding 1%;
+
 }
 .footer{
+	display:none;
 	position:fixed;
 	height:40px;
 	bottom:0;
@@ -42,18 +42,46 @@ html,body{
 		width:100%;
 }
 
+.body-content{
+	
+	float:left;
+    max-width:70%
+}
+
 .league-table{
 	
-	#position: relative;
+	float:right;
+	border: solid medium lightgray;
+	border-radius: 10px;
+	margin-left: 0;
+
+
+}
+
+.front-page-text{
 	float:left;
-	height:100%;
+	max-width:25%;
+	margin-right:1%;
 }
 
 .feeds{
 	
-	#position: relative;
+
 	float:right;
-	height:100%;
-	margin-right:50px;
+
+}
+
+.league-table-tbl tr>td{
+	
+	border: solid thin lightgray;
+	border-radius: 5px;
+
+}
+
+.league-table-tbl thead td{
+	
+	background: lightblue;
+	border: medium solid lightblue;
+	border-radius: 5px;
 }
 
