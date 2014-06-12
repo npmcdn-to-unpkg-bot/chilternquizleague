@@ -1,8 +1,13 @@
 html,body{
 	margin:0;
-	padding:0;
 	height:100%;
 	font-family: "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+}
+
+body{
+	
+	padding-left:1%;
+	padding-top:1%;	
 }
 
 .show{
@@ -26,7 +31,7 @@ html,body{
 
 .body-container{
 
-
+	padding:1%;
 }
 .footer{
 	display:none;
@@ -43,6 +48,7 @@ html,body{
 }
 
 .body-content{
+	
 	
 	float:left;
     max-width:70%
