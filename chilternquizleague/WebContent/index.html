@@ -9,7 +9,7 @@
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 </head>
-<body ng-app="chilternquiz">
+<body ng-app="qlApp">
 	<div id="fb-root"></div>
 	<script>
 		(function(d, s, id) {
@@ -50,17 +50,8 @@
 			<p class="header">League Table</p>
 			<table class="league-table-tbl">
 				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
-				<tbody>
-				<tr><td>1</td><td>Squirrel</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>2</td><td>Farnham Common</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>3</td><td>Hen B</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>4</td><td>Plough</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>5</td><td>Hen A</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>6</td><td>Bell</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>7</td><td>Red Lion A</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>8</td><td>Red Lion B</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>9</td><td>Sugar Loaf</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
-				<tr><td>10</td><td>Land of Liberty</td><td>10</td><td>10</td><td>0</td><td>0</td><td>800</td><td>20</td></tr>
+				<tbody ng-controller="ResultsController">
+				<tr ng-repeat="item in results"><td>{{item.position}}</td><td>{{item.team}}</td><td>{{item.played}}</td><td>{{item.won}}</td><td>{{item.lost}}</td><td>{{item.drawn}}</td><td>{{item.matchPointsFor}}</td><td>{{item.leaguePoints}}</td></tr>
 				</tbody>
 			</table>
 		</div>
