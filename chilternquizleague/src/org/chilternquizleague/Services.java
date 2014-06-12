@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.storage.Storage;
-import com.google.api.services.storage.model.StorageObject;
+import com.google.api.services.storage.Storage.Objects.Get;
 
 /**
  * @author gb106507
@@ -25,13 +25,15 @@ public class Services extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		if(req.getPathInfo().contains("table")){
+		if(req.getPathInfo().contains("leaguetable/current")){
 			
 			UrlFetchTransport transport = new UrlFetchTransport();
 			
 			Storage storage = new Storage(transport, new GsonFactory(), null);
 			
-			storage.objects().insert("test", new StorageObject());
+			Get results = storage.objects().get("", "results/latest");
+			
+			resp.getWriter().append(results.getObject());
 	
 			
 		}
