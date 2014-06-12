@@ -48,20 +48,13 @@ html,body{
     max-width:70%
 }
 
-.league-table{
-	
-	float:right;
-	border: solid medium lightgray;
-	border-radius: 10px;
-	margin-left: 0;
 
-
-}
 
 .front-page-text{
 	float:left;
-	max-width:25%;
 	margin-right:1%;
+	max-width: 30%;
+	font-size: 95%;
 }
 
 .feeds{
@@ -69,6 +62,21 @@ html,body{
 
 	float:right;
 
+}
+.league-table{
+	
+	float:right;
+	border: solid medium lightgray;
+	border-radius: 10px;
+	margin-left: 0;
+
+}
+
+.league-table p{
+	
+	padding-left: 1%;
+	font-size: 110%;
+	font-weight: bold;
 }
 
 .league-table-tbl tr>td{
@@ -85,3 +93,16 @@ html,body{
 	border-radius: 5px;
 }
 
+@media screen and (max-width: 1000px){
+	
+	.feeds{
+		display:none;
+	}
+	.front-page-text{
+		max-width:100%;
+	}
+	
+	.league-table{
+		float:left;
+	}
+}
