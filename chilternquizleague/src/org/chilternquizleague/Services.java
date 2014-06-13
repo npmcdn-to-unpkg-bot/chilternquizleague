@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.chilternquizleague.domain.LeagueTable;
 
+import com.google.api.client.json.gson.GsonFactory;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -31,9 +32,11 @@ public class Services extends HttpServlet {
 			
 			Objectify ofy = ObjectifyService.ofy();
 
-			final List<LeagueTable> tables = ofy.load().type(LeagueTable.class).filter("year >", Calendar.getInstance().get(Calendar.YEAR)).list();
-		
-			//serialise & add to response;
+			final List<LeagueTable> tables = ofy.load().type(LeagueTable.class).filter("endYear >=", Calendar.getInstance().get(Calendar.YEAR)).list();
+			
+			if(!tables.isEmpty()){			
+				resp.getOutputStream().write(GsonFactory.getDefaultInstance().toByteArray(tables.iterator().next()));
+			}
 		}
 
 	}

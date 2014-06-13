@@ -3,35 +3,41 @@ package org.chilternquizleague.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Embedded;
-
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
-
+@Cache
 @Entity
 public class LeagueTable {
 	
 
 	@Id
 	private long id;
-	
 
-	private String season;
 	
 	@Index
 	private int startYear;
 	
-	@Embedded
+	@Index
+	private int endYear;
+	
+
 	private List<LeagueTableRow> rows = new ArrayList<>();
 	
 	
-	public String getSeason() {
-		return season;
+	public int getStartYear() {
+		return startYear;
 	}
-	public void setSeason(String season) {
-		this.season = season;
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+	public int getEndYear() {
+		return endYear;
+	}
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
 	}
 	public List<LeagueTableRow> getRows() {
 		return rows;
