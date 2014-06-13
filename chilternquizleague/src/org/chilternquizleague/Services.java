@@ -4,16 +4,18 @@
 package org.chilternquizleague;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.storage.Storage;
-import com.google.api.services.storage.Storage.Objects.Get;
+import org.chilternquizleague.domain.LeagueTable;
+
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * @author gb106507
@@ -27,15 +29,11 @@ public class Services extends HttpServlet {
 			throws ServletException, IOException {
 		if(req.getPathInfo().contains("leaguetable/current")){
 			
-			UrlFetchTransport transport = new UrlFetchTransport();
-			
-			Storage storage = new Storage(transport, new GsonFactory(), null);
-			
-			Get results = storage.objects().get("", "results/latest");
-			
-			resp.getWriter().append(results.getObject());
-	
-			
+			Objectify ofy = ObjectifyService.ofy();
+
+			final List<LeagueTable> tables = ofy.load().type(LeagueTable.class).filter("year >", Calendar.getInstance().get(Calendar.YEAR)).list();
+		
+			//serialise & add to response;
 		}
 
 	}

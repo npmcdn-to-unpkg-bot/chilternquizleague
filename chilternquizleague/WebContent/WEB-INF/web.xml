@@ -29,4 +29,7 @@
     <servlet-name>JAX-RS Servlet</servlet-name>
     <url-pattern>/jaxrs/*</url-pattern>
   </servlet-mapping>
+  <listener>
+    <listener-class>org.chilternquizleague.EntityRegistrationListener</listener-class>
+  </listener>
 </web-app>
