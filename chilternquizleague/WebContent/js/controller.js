@@ -1,7 +1,7 @@
 var qlApp = angular.module('qlApp', []);
 
 qlApp.controller('ResultsController', [ '$scope','$http',function($scope, $http) {
-	$scope.results = $http.get("jaxrs/leaguetable/current");
+	$http.get("jaxrs/leaguetable/current",{"responseType":"json"}).success(function(ret){$scope.results = ret;});
 		
 //		[ {
 //		position : 1,

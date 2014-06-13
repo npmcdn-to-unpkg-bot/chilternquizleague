@@ -3,6 +3,7 @@ package org.chilternquizleague.domain;
 public class LeagueTableRow {
 	
 	private String team;
+	private String position;
 	private int played;
 	private int won;
 	private int lost;
@@ -58,6 +59,12 @@ public class LeagueTableRow {
 	}
 	public void setMatchPointsAgainst(int leaguePointsAgainst) {
 		this.matchPointsAgainst = leaguePointsAgainst;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 }

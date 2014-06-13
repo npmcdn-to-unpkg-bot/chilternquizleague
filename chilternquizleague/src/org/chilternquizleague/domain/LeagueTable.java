@@ -3,20 +3,23 @@ package org.chilternquizleague.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+@JsonAutoDetect
 @Cache
 @Entity
 public class LeagueTable {
 	
 
 	@Id
-	private long id;
+	private Long id;
 
-	
+
 	@Index
 	private int startYear;
 	
