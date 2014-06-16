@@ -161,7 +161,7 @@ public class Services extends HttpServlet {
 			Gson gson = new Gson();
 			Venue venue = gson.fromJson(req.getReader(), Venue.class);
 
-			ofy().save().entity(venue);
+			ofy().save().entity(venue).now();
 			
 
 		}
