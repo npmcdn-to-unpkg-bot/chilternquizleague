@@ -10,19 +10,9 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-    <description></description>
-    <display-name>ResultsService</display-name>
-    <servlet-name>ResultsService</servlet-name>
-    <servlet-class>org.chilternquizleague.ResultsService</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResultsService</servlet-name>
-    <url-pattern>/ResultsService</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <description>JAX-RS Tools Generated - Do not modify</description>
     <servlet-name>JAX-RS Servlet</servlet-name>
-    <servlet-class>org.chilternquizleague.Services</servlet-class>
+    <servlet-class>org.chilternquizleague.RESTServices</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>

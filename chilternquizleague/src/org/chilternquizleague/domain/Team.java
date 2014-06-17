@@ -3,25 +3,30 @@ package org.chilternquizleague.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
+@JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
 public class Team {
 	
 
 	@Id
-	private Long id;
+	protected Long id;
 	
 	private String name;
 	
-	private Ref<Venue> venue;
+	private String shortName;
 	
-	private List<String> emails = new ArrayList<>();
-
+	private transient Ref<Venue> venueRef;
+	
+	private transient List<Ref<User>> userRefs = new ArrayList<>();
+	
 	public String getName() {
 		return name;
 	}
@@ -30,20 +35,42 @@ public class Team {
 		this.name = name;
 	}
 
-	public Ref<Venue> getVenue() {
-		return venue;
+	public Venue getVenue() {
+		return venueRef == null ? null :venueRef.get();
 	}
 
-	public void setVenue(Ref<Venue> venue) {
-		this.venue = venue;
+	public void setVenue(Venue venue) {
+		this.venueRef = Ref.create(venue);
 	}
 
-	public List<String> getEmails() {
-		return emails;
+	public String getShortName() {
+		return shortName;
 	}
 
-	public void setEmails(List<String> emails) {
-		this.emails = emails;
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
+
+	public List<User> getUsers() {
+		
+		List<User> users = new ArrayList<>(userRefs.size());
+		
+		for(Ref<User> user : userRefs)
+		{
+			users.add(user.get());
+		}
+		
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		
+		final List<Ref<User>> userRefs = new ArrayList<>(users.size());
+		
+		for(User user : users){
+			userRefs.add(Ref.create(user));
+		}
+	}
+
 
 }

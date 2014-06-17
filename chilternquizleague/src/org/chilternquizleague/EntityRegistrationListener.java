@@ -9,6 +9,7 @@ import org.chilternquizleague.domain.LeagueResults;
 import org.chilternquizleague.domain.LeagueTable;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
+import org.chilternquizleague.domain.User;
 import org.chilternquizleague.domain.Venue;
 
 import com.googlecode.objectify.ObjectifyService;
@@ -37,6 +38,7 @@ public class EntityRegistrationListener implements ServletContextListener {
         ObjectifyService.register(Team.class);
         ObjectifyService.register(Venue.class);
         ObjectifyService.register(Fixture.class);
+        ObjectifyService.register(User.class);
 
     }
 

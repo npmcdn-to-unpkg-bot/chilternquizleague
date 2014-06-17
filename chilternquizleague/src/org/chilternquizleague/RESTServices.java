@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.chilternquizleague;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -16,9 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.chilternquizleague.domain.LeagueTable;
 import org.chilternquizleague.domain.LeagueTableRow;
+import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.Venue;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.objectify.Key;
 
 /**
@@ -26,8 +24,11 @@ import com.googlecode.objectify.Key;
  * 
  */
 @SuppressWarnings("serial")
-public class Services extends HttpServlet {
+public class RESTServices extends HttpServlet {
 
+	private ObjectMapper objectMapper;
+	
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -48,23 +49,29 @@ public class Services extends HttpServlet {
 
 		else if (req.getPathInfo().endsWith("venue-list")) {
 
-			venueList(resp);
+			makeEntityList(resp, Venue.class);
 		} else if (req.getPathInfo().contains("venue")) {
-			venueByKey(req, resp);
+			entityByKey(req, resp, Venue.class);
 		}
+		
+		else if (req.getPathInfo().endsWith("team-list")) {
+
+			makeEntityList(resp, Team.class);
+		} else if (req.getPathInfo().contains("team")) {
+			entityByKey(req, resp, Team.class);
+		}
+
 
 	}
 
-	private void venueByKey(HttpServletRequest req, HttpServletResponse resp)
+	private <T>void entityByKey(HttpServletRequest req, HttpServletResponse resp, Class<T> clazz)
 			throws IOException {
 
 		try {
 			final long id = Long.parseLong(getLastPathPart(req));
-			Venue venue = ofy().load().now(Key.create(Venue.class, id));
-
-			Gson gson = new Gson();
-
-			resp.getWriter().write(gson.toJson(venue));
+			T entity = ofy().load().now(Key.create(clazz, id));
+			
+			objectMapper.writeValue(resp.getWriter(), entity);
 		} catch (NumberFormatException e) {
 
 		}
@@ -76,14 +83,12 @@ public class Services extends HttpServlet {
 		return split[split.length - 1];
 	}
 
-	private void venueList(HttpServletResponse resp) throws IOException {
 
-		final List<Venue> venues = ofy().load().type(Venue.class).list();
 
-		Gson gson = new Gson();
+	private <T> void makeEntityList(HttpServletResponse resp, Class<T> clazz) throws IOException {
+		final List<T> venues = ofy().load().type(clazz).list();
 
-		String json = gson.toJson(venues);
-		resp.getWriter().write(json);
+		objectMapper.writeValue(resp.getWriter(), venues);
 
 	}
 
@@ -146,10 +151,9 @@ public class Services extends HttpServlet {
 		if (!tables.isEmpty()) {
 			LeagueTable table = tables.iterator().next();
 
-			Gson gson = new Gson();
-			String json = gson.toJson(table);
+			
+			objectMapper.writeValue(resp.getWriter(),table);
 
-			resp.getWriter().write(json);
 		}
 	}
 
@@ -158,18 +162,29 @@ public class Services extends HttpServlet {
 			throws ServletException, IOException {
 		if (req.getPathInfo().endsWith("venue")) {
 			
-			Gson gson = new Gson();
-			Venue venue = gson.fromJson(req.getReader(), Venue.class);
-
-			ofy().save().entity(venue).now();
-			
+			saveUpdate(req, Venue.class);
 
 		}
+		else if (req.getPathInfo().endsWith("team")) {
+			
+			saveUpdate(req, Team.class);
+
+		}
+	}
+
+	private <T>  void saveUpdate(HttpServletRequest req, Class<T> clazz) throws IOException {
+		
+		
+		T entity = objectMapper.readValue(req.getReader(), clazz);
+
+		ofy().save().entity(entity).now();
 	}
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
+		
+		objectMapper = new ObjectMapper();
 	}
 
 	@Override
