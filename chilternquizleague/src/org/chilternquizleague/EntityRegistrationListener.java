@@ -3,7 +3,13 @@ package org.chilternquizleague;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.chilternquizleague.domain.Competition;
+import org.chilternquizleague.domain.Fixture;
+import org.chilternquizleague.domain.LeagueResults;
 import org.chilternquizleague.domain.LeagueTable;
+import org.chilternquizleague.domain.Season;
+import org.chilternquizleague.domain.Team;
+import org.chilternquizleague.domain.Venue;
 
 import com.googlecode.objectify.ObjectifyService;
 
@@ -25,6 +31,13 @@ public class EntityRegistrationListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent arg0) {
         ObjectifyService.register(LeagueTable.class);
+        ObjectifyService.register(Competition.class);
+        ObjectifyService.register(LeagueResults.class);
+        ObjectifyService.register(Season.class);
+        ObjectifyService.register(Team.class);
+        ObjectifyService.register(Venue.class);
+        ObjectifyService.register(Fixture.class);
+
     }
 
 	/**

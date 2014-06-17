@@ -1,0 +1,8 @@
+.options{
+	float:left;
+}
+
+.view-pane{
+	float:right;
+	width:80%;
+}

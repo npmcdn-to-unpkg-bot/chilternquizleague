@@ -1,8 +1,6 @@
 package org.chilternquizleague.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -10,39 +8,51 @@ import com.googlecode.objectify.annotation.Index;
 
 @Cache
 @Entity
-public class LeagueTable {
+public class Season {
 	
-
 	@Id
 	private Long id;
-
+	
 	@Index
 	private int startYear;
 	
 	@Index
 	private int endYear;
-	
 
-	private List<LeagueTableRow> rows = new ArrayList<>();
+	private Ref<LeagueTable> leagueTable;
 	
-	
+	private Ref<LeagueTable> beerLegTable;
+
 	public int getStartYear() {
 		return startYear;
 	}
+
 	public void setStartYear(int startYear) {
 		this.startYear = startYear;
 	}
+
 	public int getEndYear() {
 		return endYear;
 	}
+
 	public void setEndYear(int endYear) {
 		this.endYear = endYear;
 	}
-	public List<LeagueTableRow> getRows() {
-		return rows;
+
+	public Ref<LeagueTable> getLeagueTable() {
+		return leagueTable;
 	}
-	public void setRows(List<LeagueTableRow> rows) {
-		this.rows = rows;
+
+	public void setLeagueTable(Ref<LeagueTable> leagueTable) {
+		this.leagueTable = leagueTable;
+	}
+
+	public Ref<LeagueTable> getBeerLegTable() {
+		return beerLegTable;
+	}
+
+	public void setBeerLegTable(Ref<LeagueTable> beerLegTable) {
+		this.beerLegTable = beerLegTable;
 	}
 
 }

@@ -46,12 +46,12 @@
 	</div>
 	<div class="body-container">
 		<div class="body-content">
-		<div class="league-table">
-			<p class="header">League Table</p>
+		<div class="league-table" ng-controller="ResultsController">
+			<p class="header">League Table {{results.startYear}}-{{results.endYear}}</p>
 			<table class="league-table-tbl">
 				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
-				<tbody ng-controller="ResultsController">
-				<tr ng-repeat="item in results"><td>{{item.position}}</td><td>{{item.team}}</td><td>{{item.played}}</td><td>{{item.won}}</td><td>{{item.lost}}</td><td>{{item.drawn}}</td><td>{{item.matchPointsFor}}</td><td>{{item.leaguePoints}}</td></tr>
+				<tbody >
+				<tr ng-repeat="item in results.rows"><td>{{item.position}}</td><td>{{item.team}}</td><td>{{item.played}}</td><td>{{item.won}}</td><td>{{item.lost}}</td><td>{{item.drawn}}</td><td>{{item.matchPointsFor}}</td><td>{{item.leaguePoints}}</td></tr>
 				</tbody>
 			</table>
 		</div>
