@@ -141,7 +141,9 @@
 			makeListFn("season") ]);
 
 	maintainApp.controller('SeasonDetailCtrl', [ '$scope', '$http',function($scope,$http){
+			$scope.addCompType={};
 			makeUpdateFn("season")($scope, $http);
 			makeListFn("competition-type")($scope, $http);
+			$scope.updateEndYear=function(startYear){$scope.season.endYear = parseInt(startYear) + 1;};
 	}]);
 })();

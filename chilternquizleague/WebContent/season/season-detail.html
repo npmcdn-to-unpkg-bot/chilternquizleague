@@ -4,19 +4,19 @@
 		<table>
 			<tr>
 				<td>Start Year</td>
-				<td><input ng-model="season.startYear"  ng-change="season.endYear = season.startYear + 1"></td>
+				<td><input ng-model="season.startYear"
+					ng-change="updateEndYear(season.startYear)"></td>
 			</tr>
 			<tr>
 				<td>End Year</td>
 				<td><input ng-model="season.endYear"></td>
 			</tr>
-						<tr>
+			<tr>
 				<td>Competitions</td>
 				<td><select ng-model="addCompType"
-					ng-options="competition-type for competition-type in competition-types"></select>
-</td>
+					ng-options="for item in competition-types"></td>
 			</tr>
-			
+
 
 			<tfoot>
 				<tr>
