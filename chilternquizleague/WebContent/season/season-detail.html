@@ -1,0 +1,32 @@
+<div>
+	<div class="box-title">Season Details</div>
+	<form novalidate>
+		<table>
+			<tr>
+				<td>Start Year</td>
+				<td><input ng-model="season.startYear"  ng-change="season.endYear = season.startYear + 1"></td>
+			</tr>
+			<tr>
+				<td>End Year</td>
+				<td><input ng-model="season.endYear"></td>
+			</tr>
+						<tr>
+				<td>Competitions</td>
+				<td><select ng-model="addCompType"
+					ng-options="competition-type for competition-type in competition-types"></select>
+</td>
+			</tr>
+			
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="reset()">Reset</button>
+						<button ng-click="update(season)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

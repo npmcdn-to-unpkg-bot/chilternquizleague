@@ -1,6 +1,6 @@
 (function() {
 
-	var maintainApp = angular.module('maintainApp', [ 'ngRoute' ]);
+	var maintainApp = angular.module('maintainApp', [ 'ngRoute']);
 
 	maintainApp.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/venues', {
@@ -21,6 +21,12 @@
 		}).when('/users/:userId', {
 			templateUrl : 'user/user-detail.html',
 			controller : 'UserDetailCtrl'
+		}).when('/seasons', {
+			templateUrl : 'season/season-list.html',
+			controller : 'SeasonListCtrl'
+		}).when('/seasons/:userId', {
+			templateUrl : 'season/season-detail.html',
+			controller : 'SeasonDetailCtrl'
 		}).otherwise({
 			redirectTo : ''
 		});
@@ -85,6 +91,16 @@
 
 	}
 
+	function removeFromListById(collection, entity) {
+
+		for (index in collection) {
+			if (collection[index].id == entity.id) {
+				collection.splice(index, 1);
+				break;
+			}
+		}
+	}
+
 	maintainApp.controller('VenueListCtrl', [ '$scope', '$http',
 			makeListFn("venue") ]);
 
@@ -98,13 +114,21 @@
 			function($scope, $http) {
 				makeUpdateFn("team")($scope, $http);
 				makeListFn("venue")($scope, $http);
-
+				makeListFn("user")($scope, $http);
 				$scope.$watch("team", function(team) {
 					syncToListItem($scope, team, $scope.venues, "venue");
 				});
 				$scope.$watch("venues", function(venues) {
 					syncToListItem($scope, $scope.team, venues, "venue");
 				});
+
+				$scope.userToAdd = {};
+				$scope.addUser = function(user) {
+					$scope.team.users.push(user);
+				};
+				$scope.removeUser = function(user) {
+					removeFromListById($scope.team.users, user);
+				};
 			} ]);
 
 	maintainApp.controller('UserListCtrl', [ '$scope', '$http',
@@ -112,4 +136,12 @@
 
 	maintainApp.controller('UserDetailCtrl', [ '$scope', '$http',
 			makeUpdateFn("user") ]);
+
+	maintainApp.controller('SeasonListCtrl', [ '$scope', '$http',
+			makeListFn("season") ]);
+
+	maintainApp.controller('SeasonDetailCtrl', [ '$scope', '$http',function($scope,$http){
+			makeUpdateFn("season")($scope, $http);
+			makeListFn("competition-type")($scope, $http);
+	}]);
 })();

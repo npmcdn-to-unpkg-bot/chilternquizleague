@@ -53,23 +53,12 @@ public class Team {
 
 	public List<User> getUsers() {
 		
-		List<User> users = new ArrayList<>(userRefs.size());
-		
-		for(Ref<User> user : userRefs)
-		{
-			users.add(user.get());
-		}
-		
-		return users;
+		return Utils.refsToEntities(userRefs);
 	}
 
 	public void setUsers(List<User> users) {
 		
-		final List<Ref<User>> userRefs = new ArrayList<>(users.size());
-		
-		for(User user : users){
-			userRefs.add(Ref.create(user));
-		}
+		userRefs = Utils.entitiesToRefs(users);
 	}
 
 

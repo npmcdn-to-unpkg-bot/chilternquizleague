@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.chilternquizleague.domain.CompetitionType;
-import org.chilternquizleague.domain.LeagueCompetition;
-import org.chilternquizleague.domain.LeagueTable;
-import org.chilternquizleague.domain.LeagueTableRow;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.User;
@@ -63,13 +60,20 @@ public class RESTServices extends HttpServlet {
 		} else if (req.getPathInfo().contains("season")) {
 			entityByKey(req, resp, Season.class);
 		}
-		
+
 		else if (req.getPathInfo().endsWith("user-list")) {
 
 			makeEntityList(resp, User.class);
 		} else if (req.getPathInfo().contains("user")) {
 			entityByKey(req, resp, User.class);
 		}
+		
+		else if (req.getPathInfo().endsWith("competition-type-list")) {
+
+			objectMapper.writeValue(resp.getWriter(), CompetitionType.values());
+		}
+		
+
 
 	}
 
@@ -109,7 +113,8 @@ public class RESTServices extends HttpServlet {
 				.list();
 
 		if (!seasons.isEmpty()) {
-			objectMapper.writeValue(resp.getWriter(), new LeagueTableView(seasons.iterator().next()));
+			objectMapper.writeValue(resp.getWriter(), new LeagueTableView(
+					seasons.iterator().next()));
 
 		}
 	}
@@ -130,12 +135,14 @@ public class RESTServices extends HttpServlet {
 			saveUpdate(req, Season.class);
 
 		}
+
+		else if (req.getPathInfo().endsWith("user")) {
+
+			saveUpdate(req, User.class);
+
+		}
 		
-			else if (req.getPathInfo().endsWith("user")) {
 
-				saveUpdate(req, User.class);
-
-			}
 	}
 
 	private <T> void saveUpdate(HttpServletRequest req, Class<T> clazz)

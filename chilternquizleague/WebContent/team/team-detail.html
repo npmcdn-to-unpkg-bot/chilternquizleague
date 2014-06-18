@@ -12,9 +12,22 @@
 			</tr>
 			<tr>
 				<td>Venue</td>
-				<td><select ng-model="team.venue" ng-options="venue as venue.name for venue in venues" ng-change="team.name=team.venue.name" ></td>
+				<td><select ng-model="team.venue"
+					ng-options="venue as venue.name for venue in venues"
+					ng-change="team.name=team.venue.name"></td>
 			</tr>
-
+			<tr>
+				<td></td>
+				<td><div><button ng-click="addUser(userToAdd)">Add</button><select ng-model="userToAdd" ng-options="user as user.name for user in users"/></div></td>
+			</tr>
+			<tr>
+				<td>Users</td>
+				<td>
+					<div class="show standard-margins">
+						<div ng-repeat="user in team.users"><span class="team-username">{{user.name}}</span><button ng-click="removeUser(user)">Remove</button></div>
+					</div>
+				</td>
+			</tr>
 			<tfoot>
 				<tr>
 					<td></td>

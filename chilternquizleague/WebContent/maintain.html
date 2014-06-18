@@ -6,17 +6,22 @@
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <link type="text/css" rel="stylesheet" href="/css/menu.css">
 <link type="text/css" rel="stylesheet" href="/css/maintain.css">
+<link type="text/css" rel="stylesheet" href="/css/animate.css">
 <script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-animate.js"></script>
 <script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/maintain.js"></script>
 
 </head>
 <body ng-app="maintainApp">
-<div class="options show">
+<div class="options show standard-margins">
 <div><a href="#/venues">Venues</a></div>
 <div><a href="#/users">Users</a></div>
 <div><a href="#/teams">Teams</a></div>
+<div><a href="#/seasons">Seasons</a></div>
 </div>
-<div ng-view class="view-pane show"></div>
+<div class="view-pane show standard-margins">
+<div ng-view="maintainView" class="view-animate"></div>
+</div>
 </body>
 </html>
