@@ -3,20 +3,27 @@ package org.chilternquizleague.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Parent;
 
+@JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
 public class LeagueResults {
 	
 
 	@Id
-	private Long id;
+	protected Long id;
+	
+	private @Parent Ref<LeagueCompetition> competition;
 	
 	/**
-	 * Key is string representation of the UTC date in millis
+	 * Key is string representation of the UTC date as yyyyMMdd
 	 */
 	private Map<String, LeagueResultRow> results = new HashMap<>();
 

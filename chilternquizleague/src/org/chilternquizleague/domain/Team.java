@@ -23,9 +23,9 @@ public class Team {
 	
 	private String shortName;
 	
-	private transient Ref<Venue> venueRef;
+	private Ref<Venue> venueRef;
 	
-	private transient List<Ref<User>> userRefs = new ArrayList<>();
+	private List<Ref<User>> userRefs = new ArrayList<>();
 	
 	public String getName() {
 		return name;

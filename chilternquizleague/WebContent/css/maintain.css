@@ -10,3 +10,10 @@
 	width: 80%;
 	padding: 1%;
 }
+
+.box-title {
+	font-size: 120%;
+	font-weight: 150%;
+	margin-bottom: 1%;
+	text-decoration: underline;
+}

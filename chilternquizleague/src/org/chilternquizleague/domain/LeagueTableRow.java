@@ -1,8 +1,21 @@
 package org.chilternquizleague.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+
+@JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
+@Cache
+@Entity
 public class LeagueTableRow {
 	
-	private String team;
+	@Id
+	protected Long id;
+	
+	private Ref<Team> team;
 	private String position;
 	private int played;
 	private int won;
@@ -12,11 +25,11 @@ public class LeagueTableRow {
 	private int matchPointsFor;
 	private int matchPointsAgainst;
 	
-	public String getTeam() {
-		return team;
+	public Team getTeam() {
+		return team == null ? null : team.get();
 	}
-	public void setTeam(String team) {
-		this.team = team;
+	public void setTeam(Team team) {
+		this.team = team == null ? null : Ref.create(team);
 	}
 	public int getPlayed() {
 		return played;

@@ -1,5 +1,6 @@
 <div>
-	<a href="#venues/new">Add new</a>
+	<div class="box-title">Venues</div>
+	<button onclick="document.location='#venues/new'">Add New</button>
 
 	<div ng-repeat="venue in venues">
 		<div><a href="#venues/{{venue.id}}">{{venue.name}}</a></div>

@@ -1,5 +1,6 @@
 <div>
-	<a href="#teams/new">Add new</a>
+	<div class="box-title">Teams</div>
+	<button onclick="document.location='#teams/new'">Add New</button>
 
 	<div ng-repeat="team in teams">
 		<div><a href="#teams/{{team.id}}">{{team.name}}</a></div>
