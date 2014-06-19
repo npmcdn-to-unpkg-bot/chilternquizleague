@@ -24,7 +24,7 @@
 		}).when('/seasons', {
 			templateUrl : 'season/season-list.html',
 			controller : 'SeasonListCtrl'
-		}).when('/seasons/:userId', {
+		}).when('/seasons/:seasonId', {
 			templateUrl : 'season/season-detail.html',
 			controller : 'SeasonDetailCtrl'
 		}).otherwise({
@@ -34,13 +34,13 @@
 
 	function makeUpdateFn(typeName) {
 
-		return function($scope, $http) {
+		return function($scope, $http, $routeParams) {
 
 			$scope.master = {};
 
 			$http.get(
-					"jaxrs/" + typeName + "/"
-							+ document.location.hash.split("/").pop(), {
+					"jaxrs/" + typeName + "/" + $routeParams[typeName + "Id"]
+							, {
 						"responseType" : "json"
 					}).success(function(ret) {
 				$scope.master = ret;
@@ -101,18 +101,25 @@
 		}
 	}
 
-	maintainApp.controller('VenueListCtrl', [ '$scope', '$http',
-			makeListFn("venue") ]);
+	
+	function getCommonParams(constructorFn){
+		
+		return ['$scope', '$http','$routeParams', constructorFn];
+	}
+	
+	
+	maintainApp.controller('VenueListCtrl', getCommonParams(
+			makeListFn("venue")));
 
-	maintainApp.controller('VenueDetailCtrl', [ '$scope', '$http',
-			makeUpdateFn("venue") ]);
+	maintainApp.controller('VenueDetailCtrl', getCommonParams(
+			makeUpdateFn("venue") ));
 
-	maintainApp.controller('TeamListCtrl', [ '$scope', '$http',
-			makeListFn("team") ]);
+	maintainApp.controller('TeamListCtrl', getCommonParams(
+			makeListFn("team") ));
 
-	maintainApp.controller('TeamDetailCtrl', [ '$scope', '$http',
-			function($scope, $http) {
-				makeUpdateFn("team")($scope, $http);
+	maintainApp.controller('TeamDetailCtrl',getCommonParams(
+			function($scope, $http, $routeParams) {
+				makeUpdateFn("team")($scope, $http, $routeParams);
 				makeListFn("venue")($scope, $http);
 				makeListFn("user")($scope, $http);
 				$scope.$watch("team", function(team) {
@@ -129,19 +136,19 @@
 				$scope.removeUser = function(user) {
 					removeFromListById($scope.team.users, user);
 				};
-			} ]);
+			} ));
 
-	maintainApp.controller('UserListCtrl', [ '$scope', '$http',
-			makeListFn("user") ]);
+	maintainApp.controller('UserListCtrl', getCommonParams(
+			makeListFn("user") ));
 
-	maintainApp.controller('UserDetailCtrl', [ '$scope', '$http',
-			makeUpdateFn("user") ]);
+	maintainApp.controller('UserDetailCtrl', getCommonParams(
+			makeUpdateFn("user") ));
 
-	maintainApp.controller('SeasonListCtrl', [ '$scope', '$http',
-			makeListFn("season") ]);
+	maintainApp.controller('SeasonListCtrl', getCommonParams(
+			makeListFn("season") ));
 
-	maintainApp.controller('SeasonDetailCtrl', [ '$scope', '$http',function($scope,$http){
-			makeUpdateFn("season")($scope, $http);
+	maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope,$http){
+			makeUpdateFn("season")($scope, $http, $routeParams);
 			makeListFn("competition-type")($scope, $http);
-	}]);
+	}));
 })();
