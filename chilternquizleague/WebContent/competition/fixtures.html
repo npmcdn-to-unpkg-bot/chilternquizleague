@@ -1,0 +1,36 @@
+<div>
+	<div class="box-title">League Details</div>
+	<form novalidate>
+		<table>
+			<tr>
+				<td>Current Date</td>
+				<td><input ng-model="currentDate" type="date"></td>
+			</tr>
+			<tr>
+				<td>Home</td>
+				<td><select ng-model="newFixture.home" ng-options="team from teams"></td>
+			</tr>
+			<tr>
+				<td>Away</td>
+				<td><select ng-model="newFixture.away" ng-options="team from teams"></td>
+			</tr>
+			<tr>
+				<td>Add</td>
+				<td><button ng-click="addFixture(newFixture)"></button></td>
+			</tr>
+			<tr>
+				<td>Fixtures</td><td><div ng-repeat="fixture in competition.fixtures">{{fixture.home.shortName}} - {{fixture.away.shortName}} <button ng-click="removeFixture(fixture)">Remove</button></div></td>
+			</tr>
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="reset()">Reset</button>
+						<button ng-click="update(competition)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>
