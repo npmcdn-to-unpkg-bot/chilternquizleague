@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.chilternquizleague.domain.CompetitionType;
+import org.chilternquizleague.domain.LeagueCompetition;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.User;
 import org.chilternquizleague.domain.Venue;
+import org.chilternquizleague.views.CompetitionTypeView;
 import org.chilternquizleague.views.LeagueTableView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,9 +70,9 @@ public class RESTServices extends HttpServlet {
 			entityByKey(req, resp, User.class);
 		}
 		
-		else if (req.getPathInfo().endsWith("competition-type-list")) {
+		else if (req.getPathInfo().endsWith("competitionType-list")) {
 
-			objectMapper.writeValue(resp.getWriter(), CompetitionType.values());
+			objectMapper.writeValue(resp.getWriter(), CompetitionTypeView.getList());
 		}
 		
 
@@ -124,33 +126,43 @@ public class RESTServices extends HttpServlet {
 			throws ServletException, IOException {
 		if (req.getPathInfo().endsWith("venue")) {
 
-			saveUpdate(req, Venue.class);
+			saveUpdate(req,resp, Venue.class);
 
 		} else if (req.getPathInfo().endsWith("team")) {
 
-			saveUpdate(req, Team.class);
+			saveUpdate(req,resp, Team.class);
 
 		} else if (req.getPathInfo().endsWith("season")) {
 
-			saveUpdate(req, Season.class);
+			saveUpdate(req,resp, Season.class);
 
 		}
 
 		else if (req.getPathInfo().endsWith("user")) {
 
-			saveUpdate(req, User.class);
+			saveUpdate(req,resp, User.class);
+
+		}
+		
+		else if (req.getPathInfo().endsWith("leagueCompetition")) {
+
+			saveUpdate(req,resp, LeagueCompetition.class);
 
 		}
 		
 
 	}
 
-	private <T> void saveUpdate(HttpServletRequest req, Class<T> clazz)
+	private <T> void saveUpdate(HttpServletRequest req, HttpServletResponse resp, Class<T> clazz)
 			throws IOException {
 
 		T entity = objectMapper.readValue(req.getReader(), clazz);
 
-		ofy().save().entity(entity).now();
+		Key<T> key = ofy().save().entity(entity).now();
+		
+		objectMapper.writeValue(resp.getWriter(), ofy().load().key(key).now());
+		
+		
 	}
 
 	@Override

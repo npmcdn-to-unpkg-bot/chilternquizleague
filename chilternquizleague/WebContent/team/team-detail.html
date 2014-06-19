@@ -23,8 +23,8 @@
 			<tr>
 				<td>Users</td>
 				<td>
-					<div class="show standard-margins">
-						<div ng-repeat="user in team.users"><span class="team-username">{{user.name}}</span><button ng-click="removeUser(user)">Remove</button></div>
+					<div class="show team-username-box">
+						<div ng-repeat="user in team.users"><span class="team-username">{{user.name}}<button ng-click="removeUser(user)">Remove</button></span></div>
 					</div>
 				</td>
 			</tr>
@@ -32,8 +32,8 @@
 				<tr>
 					<td></td>
 					<td>
-						<button ng-click="reset()">Reset</button>
-						<button ng-click="update(team)">Save</button>
+						<button ng-click="resetTeam()">Reset</button>
+						<button ng-click="updateTeam(team)">Save</button>
 					</td>
 				</tr>
 			</tfoot>
