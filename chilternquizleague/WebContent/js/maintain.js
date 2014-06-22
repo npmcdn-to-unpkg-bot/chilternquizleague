@@ -127,7 +127,7 @@
 	} ]);
 
 	function makeUpdateFn(typeName, noRedirect) {
-		return makeUpdateFnWithCallback(typeName, noRedirect ? null : function(ret){});
+		return makeUpdateFnWithCallback(typeName, noRedirect ? null : function(ret, $location){$location.url("/" + typeName + "s");});
 	}
 
 	function makeUpdateFnWithCallback(typeName, callback) {
@@ -157,7 +157,7 @@
 			$scope["update" + camelName] = function(entity) {
 
 				$scope[masterName] = angular.copy(entity);
-				entityService.save(typeName, entity, callback);
+				entityService.save(typeName, entity, function(ret){callback ? callback(ret, $location) : null;});
 
 			};
 
