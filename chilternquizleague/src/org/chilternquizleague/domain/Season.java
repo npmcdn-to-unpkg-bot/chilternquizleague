@@ -1,5 +1,6 @@
 package org.chilternquizleague.domain;
 
+import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -7,7 +8,6 @@ import org.chilternquizleague.domain.utils.CompetitionTypeStringifier;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -27,9 +27,15 @@ public class Season {
 
 	@Index
 	private int endYear;
+	
+	public Season()
+	{
+		startYear = Calendar.getInstance().get(Calendar.YEAR);
+		endYear = startYear + 1;
+	}
 
 	@Stringify(value = CompetitionTypeStringifier.class)
-	private Map<CompetitionType, Ref<Competition>> competitions = new EnumMap<>(
+	private Map<CompetitionType, Competition> competitions = new EnumMap<>(
 			CompetitionType.class);
 
 	public int getStartYear() {
@@ -49,11 +55,11 @@ public class Season {
 	}
 
 	public Map<CompetitionType, Competition> getCompetitions() {
-		return Utils.refToEntity(competitions);
+		return competitions; 
 	}
 
 	public void setCompetitions(Map<CompetitionType, Competition> competitions) {
-		this.competitions = Utils.entityToRef(competitions);
+		this.competitions = competitions;
 	}
 	
 	@SuppressWarnings("unchecked")

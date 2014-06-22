@@ -4,11 +4,11 @@
 		<table>
 			<tr>
 				<td>Description</td>
-				<td><input ng-model="competition.description"></td>
+				<td><input ng-model="leagueCompetition.description"></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><a href="#/league/fixtures">Fixtures</a></td>
+				<td><a href="#/league/{{leagueCompetition.id}}/fixtures">Fixtures</a></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -18,14 +18,13 @@
 				<td></td>
 				<td><a href="#/league/tables">Tables</a></td>
 			</tr>
-			
 
 			<tfoot>
 				<tr>
 					<td></td>
 					<td>
 						<button ng-click="resetLeagueCompetition()">Reset</button>
-						<button ng-click="updateLeagueCompetition(competition)">Save</button>
+						<button ng-click="addLeagueCompetition(leagueCompetition)">Save</button>
 					</td>
 				</tr>
 			</tfoot>

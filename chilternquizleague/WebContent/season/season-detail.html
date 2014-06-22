@@ -21,7 +21,9 @@
 			<tr>
 				<td></td>
 				<td><div class="show team-username-box">
-						<div ng-repeat="competition in season.competitions"><span class="team-username">{{competition.name}}<button ng-click="removeCompetition(competition)">Remove</button></span></div>
+					<table>
+					<tr ng-repeat="(type,competition) in season.competitions" class="entity-row"><td class="entity-link"><a href="#/seasons/{{type}}/{{competition.id}}">{{type}} - {{competition.description}}</a></td><td class="entity-remove-button"><button ng-click="removeCompetition(competition)">Remove</button></td></tr>
+					</table>
 					</div></td>
 			</tr>
 			<tfoot>

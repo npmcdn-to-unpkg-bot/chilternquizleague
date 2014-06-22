@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.chilternquizleague.domain.CompetitionType;
+import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.LeagueCompetition;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
@@ -69,6 +70,10 @@ public class RESTServices extends HttpServlet {
 		} else if (req.getPathInfo().contains("user")) {
 			entityByKey(req, resp, User.class);
 		}
+			 else if (req.getPathInfo().contains("leagueCompetition")) {
+				entityByKey(req, resp, LeagueCompetition.class);
+			}
+		
 		
 		else if (req.getPathInfo().endsWith("competitionType-list")) {
 
@@ -88,7 +93,15 @@ public class RESTServices extends HttpServlet {
 
 			objectMapper.writeValue(resp.getWriter(), entity);
 		} catch (NumberFormatException e) {
-
+			try{
+			
+			T entity = clazz.newInstance();
+			objectMapper.writeValue(resp.getWriter(), entity);
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -150,6 +163,12 @@ public class RESTServices extends HttpServlet {
 
 		}
 		
+		else if (req.getPathInfo().endsWith("fixture")) {
+
+			saveUpdate(req,resp, Fixture.class);
+
+		}
+		
 
 	}
 
@@ -157,10 +176,14 @@ public class RESTServices extends HttpServlet {
 			throws IOException {
 
 		T entity = objectMapper.readValue(req.getReader(), clazz);
-
+		
 		Key<T> key = ofy().save().entity(entity).now();
 		
-		objectMapper.writeValue(resp.getWriter(), ofy().load().key(key).now());
+		T reloaded = ofy().load().key(key).now();
+		System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
+		
+
+		objectMapper.writeValue(resp.getWriter(), reloaded);
 		
 		
 	}

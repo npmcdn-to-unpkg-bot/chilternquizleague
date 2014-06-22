@@ -36,7 +36,7 @@ public class EntityRegistrationListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
         ObjectifyService.register(LeagueTable.class);
         ObjectifyService.register(LeagueTableRow.class);
-        ObjectifyService.register(Competition.class);
+//        ObjectifyService.register(Competition.class);
         ObjectifyService.register(LeagueCompetition.class);
         ObjectifyService.register(LeagueResults.class);
         ObjectifyService.register(LeagueResultRow.class);
@@ -45,6 +45,7 @@ public class EntityRegistrationListener implements ServletContextListener {
         ObjectifyService.register(Venue.class);
         ObjectifyService.register(Fixture.class);
         ObjectifyService.register(User.class);
+        
 
     }
 
