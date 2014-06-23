@@ -145,8 +145,7 @@
 		var masterName = "master" + camelName;
 		var resetName = "reset" + camelName;
 
-		return function($scope, $entityService, $routeParams, $rootScope, $location,
-				entityCache) {
+		return function($scope, entityService, $routeParams, $rootScope, $location) {
 
 			var id = $routeParams[typeName + "Id"];
 
@@ -155,7 +154,7 @@
 				$scope[typeName] = angular.copy($scope[masterName]);
 			};
 
-			$entityService.load(typeName,id, function(ret){
+			entityService.load(typeName,id, function(ret){
 				$scope[masterName] = ret;
 				$scope[resetName]();
 			});
@@ -211,8 +210,8 @@
 
 	function getCommonParams(constructorFn) {
 
-		return [ '$scope', '$entityService', '$routeParams', '$rootScope', '$location',
-				'entityCache', constructorFn ];
+		return [ '$scope', 'entityService', '$routeParams', '$rootScope', '$location',
+				 constructorFn ];
 	}
 
 	maintainApp.controller('VenueListCtrl',
@@ -223,10 +222,10 @@
 
 	maintainApp.controller('TeamListCtrl', getCommonParams(makeListFn("team")));
 
-	maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope,
-			$http, $routeParams, $rootScope, $location, entityCache) {
-		makeUpdateFn("team")($scope, $http, $routeParams, $rootScope,
-				$location, entityCache);
+	maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope, entityService,
+			$http, $routeParams, $rootScope, $location) {
+		makeUpdateFn("team")($scope,entityService, $http, $routeParams, $rootScope,
+				$location);
 		makeListFn("venue")($scope, $http);
 		makeListFn("user")($scope, $http);
 		$scope.$watch("team", function(team) {
@@ -253,18 +252,18 @@
 	maintainApp.controller('SeasonListCtrl',
 			getCommonParams(makeListFn("season")));
 
-	var seasonBody = getCommonParams(function($scope, $http, $routeParams,
-			$rootScope, $location, entityCache) {
+	var seasonBody = getCommonParams(function($scope,entityService, $http, $routeParams,
+			$rootScope, $location) {
 		var seasonId = $routeParams.seasonId;
 		$scope.addCompType = {};
-		makeUpdateFn("season")($scope, $http, $routeParams, $rootScope,
-				$location, entityCache);
+		makeUpdateFn("season")($scope, entityService,$http, $routeParams, $rootScope,
+				$location);
 		makeListFn("competitionType")($scope, $http);
 		$scope.updateEndYear = function(startYear) {
 			$scope.season.endYear = parseInt(startYear) + 1;
 		};
 		$scope.addCompetition = function(type) {
-			entityCache.add("season", $scope.season, "current");
+			entityService.put("season", $scope.season, "current");
 			$location.url("/seasons/" + type.name + "/new");
 		};
 
@@ -273,19 +272,19 @@
 						'addCompetition',
 						function(event, args) {
 							$scope.season.competitions[args.competition.type] = args.competition;
-							entityCache.add("season", $scope.season);
-							entityCache.remove("season", "current");
+							entityService.put("season", $scope.season);
+							entityService.remove("season", "current");
 							$location.url("/seasons/" + seasonId);
 						});
 	});
 
 	maintainApp.controller('SeasonDetailCtrl', seasonBody);
 
-	maintainApp.controller('LeagueCompCtrl', getCommonParams(function($scope,
-			$http, $routeParams, $rootScope, $location, entityCache) {
+	maintainApp.controller('LeagueCompCtrl', getCommonParams(function($scope,entityService,
+			$http, $routeParams, $rootScope, $location) {
 
-		makeUpdateFnWithCallback("leagueCompetition", null, true)($scope,
-				$http, $routeParams, $rootScope, $location, entityCache);
+		makeUpdateFnWithCallback("leagueCompetition", null, true)($scope,entityService,
+				$http, $routeParams, $rootScope, $location);
 
 		$scope.addLeagueCompetition = function(competition) {
 			$rootScope.$emit('addCompetition', {
