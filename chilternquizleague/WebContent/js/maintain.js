@@ -27,7 +27,7 @@
 		}).when('/seasons/:seasonId', {
 			templateUrl : 'season/season-detail.html',
 			controller : 'SeasonDetailCtrl'
-		}).when('/seasons/:seasonId/league/:competitionId', {
+		}).when('/seasons/league/:competitionId', {
 			templateUrl : 'competition/league-detail.html',
 			controller : 'LeagueCompCtrl'
 		}).when('/league/:competitionId/fixtures', {
@@ -59,30 +59,32 @@
 		var camelName = typeName.charAt(0).toUpperCase()
 				+ typeName.substr(1).toLowerCase();
 
+		var masterName = "master" + camelName;
+
 		return function($scope, $http, $routeParams) {
 
-			$scope.master = {};
+			$scope[masterName] = {};
 
 			$http.get(
 					"jaxrs/" + typeName + "/" + $routeParams[typeName + "Id"],
 					{
 						"responseType" : "json"
 					}).success(function(ret) {
-				$scope["master" + camelName] = ret;
+				$scope[masterName] = ret;
 				$scope["reset" + camelName]();
 			});
 
 			$scope["update" + camelName] = function(entity) {
 
-				$scope["master" + camelName] = angular.copy(entity);
-				$http.post("jaxrs/" + typeName, $scope["master" + camelName]);
+				$scope[masterName] = angular.copy(entity);
+				$http.post("jaxrs/" + typeName, $scope[masterName]);
 				if (backAfterUpdate) {
 					document.location = "#" + typeName + "s";
 				}
 			};
 
 			$scope["reset" + camelName] = function() {
-				$scope[typeName] = angular.copy($scope["master" + camelName]);
+				$scope[typeName] = angular.copy($scope[masterName]);
 			};
 
 		};
@@ -129,7 +131,8 @@
 
 	function getCommonParams(constructorFn) {
 
-		return [ '$scope', '$http', '$routeParams', constructorFn ];
+		return [ '$scope', '$http', '$routeParams', '$rootScope', '$location',
+				constructorFn ];
 	}
 
 	maintainApp.controller('VenueListCtrl',
@@ -170,7 +173,9 @@
 			getCommonParams(makeListFn("season")));
 
 	maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope,
-			$http, $routeParams) {
+			$http, $routeParams, $rootScope, $location) {
+
+		var seasonId = $routeParams.seasonId;
 		$scope.season = {};
 		$scope.addCompType = {};
 		makeUpdateFn("season")($scope, $http, $routeParams);
@@ -179,21 +184,24 @@
 			$scope.season.endYear = parseInt(startYear) + 1;
 		};
 		$scope.addCompetition = function(type) {
-
+			$location.url("seasons/league/new");
 		};
 
-		$scope.$on('addCompetition', function(event, args) {
-			$scope.season = args;
+		$rootScope.$on('addCompetition', function(event, args) {
+			$scope.season.competitions = $scope.season.competitions ? $scope.season.competitions : {};
+			$scope.season.competitions["LEAGUE"] = args;
+			$location.url("/seasons/" + seasonId);
 		});
 	}));
 
 	maintainApp.controller('LeagueCompCtrl', getCommonParams(function($scope,
-			$http, $routeParams) {
+			$http, $routeParams, $rootScope) {
 		makeUpdateFn("leagueCompetition");
-		$scope.addCompetition 
-		  $rootScope.$on('added', function(event, args) {
-		        $rootScope.$broadcast('handleBroadcast', args);
-		    });
+		$scope.addCompetition = function(competition) {
+
+			$rootScope.$emit('addCompetition', competition);
+
+		};
 	}));
 
 	maintainApp.controller('FixturesCtrl',

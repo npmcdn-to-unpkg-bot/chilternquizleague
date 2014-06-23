@@ -14,14 +14,22 @@
 
 </head>
 <body ng-app="maintainApp">
-<div class="options show standard-margins">
-<div><a href="#/venues">Venues</a></div>
-<div><a href="#/users">Users</a></div>
-<div><a href="#/teams">Teams</a></div>
-<div><a href="#/seasons">Seasons</a></div>
-</div>
-<div class="view-pane show standard-margins">
-<div ng-view="maintainView" class="view-animate"></div>
-</div>
+	<div class="options show standard-margins">
+		<div>
+			<a href="#/venues">Venues</a>
+		</div>
+		<div>
+			<a href="#/users">Users</a>
+		</div>
+		<div>
+			<a href="#/teams">Teams</a>
+		</div>
+		<div>
+			<a href="#/seasons">Seasons</a>
+		</div>
+	</div>
+	<div class="view-pane show standard-margins">
+		<div ng-view="maintainView" class="view-animate"></div>
+	</div>
 </body>
 </html>
