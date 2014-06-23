@@ -1,0 +1,35 @@
+<div>
+	<div class="box-title">Global Details</div>
+	<form novalidate>
+		<table>
+
+			<tbody>
+				<tr>
+					<td>League Name</td>
+					<td><input ng-model="global.leagueName" /></td>
+				</tr>
+				<tr>
+					<td>Current Season</td>
+					<td><select ng-model="global.currentSeason"
+						ng-options="season as season.startYear for season in seasons" /></td>
+				</tr>
+				<tr>
+					<td>Front Page Text</td>
+					<td><textarea ng-model="global.frontPageText" cols="60"
+							rows="15" ></textarea></td>
+				</tr>
+			</tbody>
+
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="resetGlobal()">Reset</button>
+						<button ng-click="updateGlobal(global)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

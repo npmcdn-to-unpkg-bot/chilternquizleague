@@ -38,11 +38,11 @@ public class RESTServices extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		if(req.getPathInfo().endsWith("globaldata")) {
-			
+		if (req.getPathInfo().endsWith("globaldata")) {
+
 			globalData(resp);
 		}
-		
+
 		if (req.getPathInfo().contains("leaguetable")) {
 
 			currentLeagueTable(req, resp);
@@ -76,26 +76,34 @@ public class RESTServices extends HttpServlet {
 			makeEntityList(resp, User.class);
 		} else if (req.getPathInfo().contains("user")) {
 			entityByKey(req, resp, User.class);
+		} else if (req.getPathInfo().contains("leagueCompetition")) {
+			entityByKey(req, resp, LeagueCompetition.class);
+		} else if (req.getPathInfo().contains("global")) {
+			globalDetails(resp);
 		}
-			 else if (req.getPathInfo().contains("leagueCompetition")) {
-				entityByKey(req, resp, LeagueCompetition.class);
-			}
-		
-		
+
 		else if (req.getPathInfo().endsWith("competitionType-list")) {
 
-			objectMapper.writeValue(resp.getWriter(), CompetitionTypeView.getList());
+			objectMapper.writeValue(resp.getWriter(),
+					CompetitionTypeView.getList());
 		}
-		
-
 
 	}
-
-	private void globalData(HttpServletResponse resp) throws IOException{
-		final GlobalApplicationData data = ofy().load().now(Key.create(GlobalApplicationData.class, AppStartListener.globalApplicationDataId)); 
+	
+	private void globalDetails(HttpServletResponse resp) throws IOException {
+		final GlobalApplicationData data = ofy().load().key(Key.create(GlobalApplicationData.class, AppStartListener.globalApplicationDataId)).now();
 		
-		if(data != null){
-			objectMapper.writeValue(resp.getWriter(), new GlobalApplicationDataView(data));
+		objectMapper.writeValue(resp.getWriter(), data);
+	}
+
+	private void globalData(HttpServletResponse resp) throws IOException {
+		final GlobalApplicationData data = ofy().load().now(
+				Key.create(GlobalApplicationData.class,
+						AppStartListener.globalApplicationDataId));
+
+		if (data != null) {
+			objectMapper.writeValue(resp.getWriter(),
+					new GlobalApplicationDataView(data));
 		}
 	}
 
@@ -108,13 +116,11 @@ public class RESTServices extends HttpServlet {
 
 			objectMapper.writeValue(resp.getWriter(), entity);
 		} catch (NumberFormatException e) {
-			try{
-			
-			T entity = clazz.newInstance();
-			objectMapper.writeValue(resp.getWriter(), entity);
-			}
-			catch(Exception ex)
-			{
+			try {
+
+				T entity = clazz.newInstance();
+				objectMapper.writeValue(resp.getWriter(), entity);
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
@@ -134,13 +140,14 @@ public class RESTServices extends HttpServlet {
 
 	}
 
-	private void currentLeagueTable(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		
+	private void currentLeagueTable(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
+
 		final Long seasonId = Long.parseLong(getLastPathPart(req));
-		
-		final Season season = ofy().load().now(Key.create(Season.class, seasonId));
-		
+
+		final Season season = ofy().load().now(
+				Key.create(Season.class, seasonId));
+
 		if (season != null) {
 			objectMapper.writeValue(resp.getWriter(), new LeagueTableView(
 					season));
@@ -153,59 +160,60 @@ public class RESTServices extends HttpServlet {
 			throws ServletException, IOException {
 		if (req.getPathInfo().endsWith("venue")) {
 
-			saveUpdate(req,resp, Venue.class);
+			saveUpdate(req, resp, Venue.class);
 
 		} else if (req.getPathInfo().endsWith("team")) {
 
-			saveUpdate(req,resp, Team.class);
+			saveUpdate(req, resp, Team.class);
 
 		} else if (req.getPathInfo().endsWith("season")) {
 
-			saveUpdate(req,resp, Season.class);
+			saveUpdate(req, resp, Season.class);
 
 		}
 
 		else if (req.getPathInfo().endsWith("user")) {
 
-			saveUpdate(req,resp, User.class);
+			saveUpdate(req, resp, User.class);
 
 		}
-		
+
 		else if (req.getPathInfo().endsWith("leagueCompetition")) {
 
-			saveUpdate(req,resp, LeagueCompetition.class);
+			saveUpdate(req, resp, LeagueCompetition.class);
 
 		}
-		
+
 		else if (req.getPathInfo().endsWith("fixture")) {
 
-			saveUpdate(req,resp, Fixture.class);
+			saveUpdate(req, resp, Fixture.class);
 
 		}
-		
+
 		else if (req.getPathInfo().endsWith("fixtures")) {
 
-			saveUpdate(req,resp, Fixtures.class);
+			saveUpdate(req, resp, Fixtures.class);
 
 		}
 		
+		else if(req.getPathInfo().endsWith("global")){
+			saveUpdate(req, resp, GlobalApplicationData.class);
+		}
 
 	}
 
-	private <T> void saveUpdate(HttpServletRequest req, HttpServletResponse resp, Class<T> clazz)
-			throws IOException {
+	private <T> void saveUpdate(HttpServletRequest req,
+			HttpServletResponse resp, Class<T> clazz) throws IOException {
 
 		T entity = objectMapper.readValue(req.getReader(), clazz);
-		
+
 		Key<T> key = ofy().save().entity(entity).now();
-		
+
 		T reloaded = ofy().load().key(key).now();
 		System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
-		
 
 		objectMapper.writeValue(resp.getWriter(), reloaded);
-		
-		
+
 	}
 
 	@Override

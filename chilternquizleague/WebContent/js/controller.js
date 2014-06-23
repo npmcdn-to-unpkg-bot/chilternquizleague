@@ -16,7 +16,7 @@ qlApp.controller('ResultsController', [ '$scope', '$http', '$interval',
 						"responseType" : "json"
 					}).success(function(ret) {
 						$scope.results = ret;
-					}).error($interval.cancel(promise));
+					}).error(function(){$interval.cancel(promise)});
 				}, 1000, 120);
 			});
 	
