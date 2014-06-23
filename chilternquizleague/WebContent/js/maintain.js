@@ -9,7 +9,7 @@
 							function($http) {
 								var cacheHolder = {};
 								function makeEntryKey(type, id) {
-									return type + id ? id : "new";
+									return type + (id ? id : "new");
 								}
 								var cache = {
 									add : function(type, entity, id) {
