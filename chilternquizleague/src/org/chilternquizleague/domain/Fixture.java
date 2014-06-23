@@ -5,21 +5,12 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Cache;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Parent;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
-@Cache
-@Entity
-public class Fixture {
+public class Fixture{
 	
-	
-	@Id
-	protected Long id;
-	
-	private @Parent Ref<LeagueCompetition> competition;
+	private @Parent Ref<Fixtures> fixtures;
 	
 	private Date date;
 	private Ref<Team> home;

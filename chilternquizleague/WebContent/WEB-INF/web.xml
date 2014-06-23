@@ -22,4 +22,7 @@
   <listener>
     <listener-class>org.chilternquizleague.EntityRegistrationListener</listener-class>
   </listener>
+  <listener>
+    <listener-class>org.chilternquizleague.AppStartListener</listener-class>
+  </listener>
 </web-app>

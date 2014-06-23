@@ -7,16 +7,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
-public class LeagueTable {
-	
-
-	@Id
-	protected Long id;
+public class LeagueTable extends BaseEntity{
 	
 	private String description;
 

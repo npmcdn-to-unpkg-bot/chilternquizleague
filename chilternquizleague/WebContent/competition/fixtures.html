@@ -1,25 +1,28 @@
-<div>
+<div ng-controller="FixturesCtrl">
 	<div class="box-title">League Details</div>
 	<form novalidate>
 		<table>
 			<tr>
 				<td>Current Date</td>
-				<td><input ng-model="currentDate" type="date"></td>
+				<td><input ng-model="currentDate" type="date"/><button ng-click="advanceDate()">advance</button></td>
 			</tr>
 			<tr>
 				<td>Home</td>
-				<td><select ng-model="newFixture.home" ng-options="team from teams"></td>
+				<td><select ng-model="fixture.home" ng-options="team as team.name for team in teams"></td>
 			</tr>
 			<tr>
 				<td>Away</td>
-				<td><select ng-model="newFixture.away" ng-options="team from teams"></td>
+				<td><select ng-model="fixture.away" ng-options="team as team.name for team in teams"></td>
 			</tr>
 			<tr>
-				<td>Add</td>
-				<td><button ng-click="addFixture(newFixture)"></button></td>
+				<td></td>
+				<td><button ng-click="addFixture(fixture)">Add</button></td>
 			</tr>
 			<tr>
-				<td>Fixtures</td><td><div ng-repeat="fixture in competition.fixtures">{{fixture.home.shortName}} - {{fixture.away.shortName}} <button ng-click="removeFixture(fixture)">Remove</button></div></td>
+				<td>Fixtures</td><td>
+				<div ng-repeat="(date,fixts) in fixtures">{{date}}
+					<div ng-repeat="fixt in fixts">{{fixt.home.shortName}} - {{fixt.away.shortName}} <button ng-click="removeFixture(fixt)">Remove</button></div>
+				</div></td>
 			</tr>
 
 			<tfoot>
@@ -27,7 +30,7 @@
 					<td></td>
 					<td>
 						<button ng-click="reset()">Reset</button>
-						<button ng-click="update(competition)">Save</button>
+						<button ng-click="updateFixtures(fixtures)">Save</button>
 					</td>
 				</tr>
 			</tfoot>

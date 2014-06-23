@@ -8,16 +8,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
-public class Team {
-	
-
-	@Id
-	protected Long id;
+public class Team extends BaseEntity{
 	
 	private String name;
 	

@@ -5,15 +5,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
-@Cache
-@Entity
 public class LeagueTableRow {
-	
-	@Id
-	protected Long id;
 	
 	private Ref<Team> team;
 	private String position;

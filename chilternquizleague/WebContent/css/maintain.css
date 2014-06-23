@@ -22,5 +22,19 @@
 
 .team-username-box{
 	padding: 1%;
-	width:120%;
+}
+
+.team-username-box:hover{
+	background-color: lightblue;
+}
+
+.entity-link{
+	position:relative;
+	left:0;
+}
+
+.entity-remove-button{
+	padding-left:3em;
+	position:relative;
+	right: 0;
 }

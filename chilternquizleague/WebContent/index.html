@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head >
 <meta charset="ISO-8859-1">
 <title>Chiltern Quiz League</title>
 <!--link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext' type='text/css' media='all' /-->
@@ -9,7 +9,8 @@
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 </head>
-<body ng-app="qlApp">
+<body ng-app="qlApp" >
+<div  ng-controller="ResultsController">
 	<div id="fb-root"></div>
 	<script>
 		(function(d, s, id) {
@@ -22,7 +23,20 @@
 			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 	</script>
-	<div class="index-page-header show">Chiltern Quiz League</div>
+	<div class="index-page-header show">
+	<svg width="100%" height="3.27em" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <defs>
+  <filter id="svg_1_blur">
+   <feGaussianBlur stdDeviation="0.25" in="SourceGraphic"></feGaussianBlur>
+  </filter>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <text filter="url(#svg_1_blur)" font-weight="bold" font-style="normal" stroke="darkblue" transform="matrix(3.049560629489116,0,0,3.9180594493758494,-32.96046948486496,-150.6629862861461) " xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="24" id="svg_1" y="60" x="130" stroke-width="1" fill="lightblue" stroke="darkblue">{{leagueName}}</text>
+ </g>
+</svg>
+</div>
 	<div class="menu">
 		<ul class="nav">
 			<li><a href="#">Home</a></li>
@@ -46,7 +60,7 @@
 	</div>
 	<div class="body-container">
 		<div class="body-content">
-		<div class="league-table" ng-controller="ResultsController">
+		<div class="league-table">
 			<p class="header">League Table {{results.startYear}}-{{results.endYear}}</p>
 			<table class="league-table-tbl">
 				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
@@ -55,7 +69,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="front-page-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+		<div class="front-page-text">{{frontPageText}}</div>
 		
 		</div>
 
@@ -86,6 +100,7 @@
 
 		</div>
 
+	</div>
 	</div>
 	<div class="footer show"><div>footer</div></div>
 </body>

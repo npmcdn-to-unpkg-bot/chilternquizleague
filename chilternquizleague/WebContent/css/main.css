@@ -27,8 +27,13 @@ body{
 	font-size: xx-large;
 	color: lightblue;
 	padding: .5%;
-	font-weight:800;
+	
 }
+
+.index-page-header text{
+		color: lightblue;
+		font-weight:800;
+	}
 
 
 .body-container{

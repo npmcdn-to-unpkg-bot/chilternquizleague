@@ -2,25 +2,36 @@ package org.chilternquizleague.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.googlecode.objectify.annotation.Cache;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
-@Cache
-@Entity
-public class Competition {
+@JsonTypeInfo(use=JsonTypeInfo.Id.MINIMAL_CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
+public abstract class Competition {
 
-	@Id
-	protected Long id;
-	private CompetitionType type;
 
+	private final CompetitionType type;
+	private String description;
+
+	protected Competition(CompetitionType type)
+	{
+		this.type = type;
+	}
+	
+	
 	public CompetitionType getType() {
 		return type;
 	}
 
 	public void setType(CompetitionType type) {
-		this.type = type;
+		//noop
+	}
+
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

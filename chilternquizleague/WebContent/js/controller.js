@@ -3,12 +3,24 @@ var qlApp = angular.module('qlApp', []);
 qlApp.controller('ResultsController', [ '$scope', '$http', '$interval',
 		function($scope, $http, $interval) {
 
-			$interval(function() {
+			$http.get("jaxrs/globaldata", {
+				"responseType" : "json"
+			}).success(function(globalData){
+				
+				$scope.leagueName = globalData.leagueName;
+				$scope.frontPageText=globalData.frontPageText;
+				
+				var promise = $interval(function() {
 
-				$http.get("jaxrs/leaguetable/current", {
-					"responseType" : "json"
-				}).success(function(ret) {
-					$scope.results = ret;
-				});
-			}, 1000, 120);
+					$http.get("jaxrs/leaguetable/" + globalData.currentSeasonId, {
+						"responseType" : "json"
+					}).success(function(ret) {
+						$scope.results = ret;
+					}).error(promise.cancel());
+				}, 1000, 120);
+			});
+	
+			
+			
+			
 		} ]);

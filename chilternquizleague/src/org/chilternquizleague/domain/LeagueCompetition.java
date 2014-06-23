@@ -1,13 +1,10 @@
 package org.chilternquizleague.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Subclass;
 
@@ -17,29 +14,34 @@ import com.googlecode.objectify.annotation.Subclass;
 public class LeagueCompetition extends Competition{
 	
 
+	public LeagueCompetition()
+	{
+		super(CompetitionType.LEAGUE);
+	}
+	
 	/**
 	 * Key is date in yyyyMMdd format
 	 */
-	private Map<String,List<Ref<Fixture>>> fixtures = new HashMap<>();
+	private List<Fixtures> fixtures = new ArrayList<>();
 	
-	private List<Ref<LeagueResults>> results = new ArrayList<>();
+	private List<LeagueResults> results = new ArrayList<>();
 
 	private List<LeagueTable> leagueTables = new ArrayList<>();
 
-	public Map<String, List<Fixture>> getFixtures() {
-		return Utils.refsToEntities(fixtures);
+	public List<Fixtures> getFixtures() {
+		return fixtures;
 	}
 
-	public void setFixtures(Map<String, List<Fixture>> fixtures) {
-		this.fixtures = Utils.entitiesToRefs(fixtures);
+	public void setFixtures(List<Fixtures> fixtures) {
+		this.fixtures = fixtures;
 	}
 
 	public List<LeagueResults> getResults() {
-		return Utils.refsToEntities(results);
+		return results;
 	}
 
 	public void setResults(List<LeagueResults> results) {
-		this.results = Utils.entitiesToRefs(results);
+		this.results = results;
 	}
 
 	public List<LeagueTable> getLeagueTables() {

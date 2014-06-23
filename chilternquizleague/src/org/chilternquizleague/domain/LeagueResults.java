@@ -8,17 +8,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Parent;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
-public class LeagueResults {
-	
-
-	@Id
-	protected Long id;
+public class LeagueResults extends BaseEntity {
 	
 	private @Parent Ref<LeagueCompetition> competition;
 	
