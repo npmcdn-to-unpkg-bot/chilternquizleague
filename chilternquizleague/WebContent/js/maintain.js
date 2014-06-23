@@ -164,6 +164,7 @@
 			$scope["update" + camelName] = function(entity) {
 
 				$scope[masterName] = angular.copy(entity);
+				entityService.remove(typeName,id);
 				entityService.save(typeName, entity, function(ret){callback ? callback(ret, $location) : null;});
 
 			};
