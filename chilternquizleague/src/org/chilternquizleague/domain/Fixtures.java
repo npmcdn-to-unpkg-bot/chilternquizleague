@@ -7,20 +7,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Cache;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Parent;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
-@Entity
-@Cache
-public class Fixtures {
+public class Fixtures extends BaseEntity{
 	
-	@Id
-	protected Long id;
-	
-	private @Parent Ref<Competition> competition;
+	private @Parent Ref<Season> parent;
 	
 	private Date date;
 	

@@ -113,7 +113,7 @@ public class RESTServices extends HttpServlet {
 		try {
 			final long id = Long.parseLong(getLastPathPart(req));
 			T entity = ofy().load().now(Key.create(clazz, id));
-
+			objectMapper.writeValue(System.out, entity);
 			objectMapper.writeValue(resp.getWriter(), entity);
 		} catch (NumberFormatException e) {
 			try {

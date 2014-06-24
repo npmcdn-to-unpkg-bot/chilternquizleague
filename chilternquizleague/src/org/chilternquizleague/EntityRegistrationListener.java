@@ -36,13 +36,14 @@ public class EntityRegistrationListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent arg0) {
     	
-    	ObjectifyService.register(LeagueTable.class);
+//    	ObjectifyService.register(LeagueTable.class);
+//
+//        ObjectifyService.register(LeagueResults.class);
         ObjectifyService.register(LeagueCompetition.class);
-        ObjectifyService.register(LeagueResults.class);
         ObjectifyService.register(Season.class);
         ObjectifyService.register(Team.class);
         ObjectifyService.register(Venue.class);
-        ObjectifyService.register(Fixtures.class);
+  //      ObjectifyService.register(Fixtures.class);
         ObjectifyService.register(User.class);
         ObjectifyService.register(GlobalApplicationData.class);
         

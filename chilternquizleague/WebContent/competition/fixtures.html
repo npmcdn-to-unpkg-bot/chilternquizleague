@@ -1,5 +1,5 @@
 <div ng-controller="FixturesCtrl">
-	<div class="box-title">League Details</div>
+	<div class="box-title">Fixtures</div>
 	<form novalidate>
 		<table>
 			<tr>
@@ -8,11 +8,11 @@
 			</tr>
 			<tr>
 				<td>Home</td>
-				<td><select ng-model="fixture.home" ng-options="team as team.name for team in teams"></td>
+				<td><select ng-model="fixture.home" ng-options="team as team.name for team in unusedTeams"></td>
 			</tr>
 			<tr>
 				<td>Away</td>
-				<td><select ng-model="fixture.away" ng-options="team as team.name for team in teams"></td>
+				<td><select ng-model="fixture.away" ng-options="team as team.name for team in unusedTeams"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -20,8 +20,8 @@
 			</tr>
 			<tr>
 				<td>Fixtures</td><td>
-				<div ng-repeat="(date,fixts) in fixtures">{{date}}
-					<div ng-repeat="fixt in fixts">{{fixt.home.shortName}} - {{fixt.away.shortName}} <button ng-click="removeFixture(fixt)">Remove</button></div>
+				<div ng-repeat="fixts in fixturesList">{{fixts.date.toDateString()}}
+					<div ng-repeat="fixt in fixts.fixtures">{{fixt.home.shortName}} - {{fixt.away.shortName}} <button ng-click="removeFixture(fixt)">Remove</button></div>
 				</div></td>
 			</tr>
 
@@ -30,7 +30,7 @@
 					<td></td>
 					<td>
 						<button ng-click="reset()">Reset</button>
-						<button ng-click="updateFixtures(fixtures)">Save</button>
+						<button ng-click="updateFixtures(fixturesList)">Save</button>
 					</td>
 				</tr>
 			</tfoot>
