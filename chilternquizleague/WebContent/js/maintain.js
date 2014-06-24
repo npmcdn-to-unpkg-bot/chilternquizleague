@@ -1,7 +1,7 @@
 (function() {
 
 	var maintainApp = angular
-			.module('maintainApp', [ "ngRoute" ])
+			.module('maintainApp', [ "ngRoute","ngAnimate" ])
 			.factory(
 					'entityService',
 					[

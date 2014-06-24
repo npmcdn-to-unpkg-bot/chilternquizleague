@@ -119,7 +119,7 @@ public class RESTServices extends HttpServlet {
 			try {
 
 				T entity = clazz.newInstance();
-				objectMapper.writeValue(resp.getWriter(), entity);
+				objectMapper.writerWithDefaultPrettyPrinter().writeValue(resp.getWriter(), entity);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
