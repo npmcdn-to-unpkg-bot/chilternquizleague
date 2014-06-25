@@ -100,6 +100,17 @@ body{
 
 }
 
+.league-table-tbl tr:hover{
+	
+	background-color: lightgray;
+}
+
+.league-table-tbl .numeric{
+	
+	text-align:right;
+	min-width: 3em;
+}
+
 .league-table-tbl thead td{
 	
 	background: lightblue;

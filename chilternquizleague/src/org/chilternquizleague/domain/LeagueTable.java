@@ -20,10 +20,10 @@ public class LeagueTable{
 	public void setRows(List<LeagueTableRow> rows) {
 		this.rows = rows;
 	}
-	protected String getDescription() {
+	public String getDescription() {
 		return description;
 	}
-	protected void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 

@@ -4,8 +4,10 @@
 <meta charset="ISO-8859-1">
 <title>Chiltern Quiz League</title>
 <!--link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext' type='text/css' media='all' /-->
+<link rel="icon" type="image/gif" href="/favicon.gif" />
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <link type="text/css" rel="stylesheet" href="/css/menu.css">
+<link type="text/css" rel="stylesheet" href="/css/menu-other.css">
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 </head>
@@ -37,7 +39,7 @@
  </g>
 </svg>
 </div>
-	<div class="menu">
+	<div class="navigation">
 		<ul class="nav">
 			<li><a href="#">Home</a></li>
 			<li><a href="#">Teams</a></li>
@@ -45,13 +47,13 @@
 			<li><a href="#">Competitions</a>
 				<ul>
 					<li><a href="#">League</a>
-					<li>
+					</li>
 					<li><a href="#">Beer Leg</a>
-					<li>
+					</li>
 					<li><a href="#">Individual</a>
-					<li>
+					</li>
 					<li><a href="#">Team Buzzer</a>
-					<li>
+					</li>
 				</ul></li>
 			<li><a href="#">Pubs</a></li>
 			<li><a href="#">About</a></li>
@@ -62,10 +64,11 @@
 		<div class="body-content">
 		<div class="league-table">
 			<p class="header">League Table {{season.description}}</p>
-			<table class="league-table-tbl">
-				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
+			<table class="league-table-tbl" ng-repeat="table in season.tables">
+				<thead><tr ng-if="table.description"><td colspan="8">{{table.description}}</td></tr>
+				<tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
 				<tbody >
-				<tr ng-repeat="item in results.rows"><td>{{item.position}}</td><td>{{item.team}}</td><td>{{item.played}}</td><td>{{item.won}}</td><td>{{item.lost}}</td><td>{{item.drawn}}</td><td>{{item.matchPointsFor}}</td><td>{{item.leaguePoints}}</td></tr>
+				<tr ng-repeat="item in table.rows"><td class="numeric">{{item.position}}</td><td><a href="#/team.html?teamId={{team.id}}">{{item.team.shortName}}</a></td><td class="numeric">{{item.played}}</td><td class="numeric">{{item.won}}</td><td class="numeric">{{item.lost}}</td><td class="numeric">{{item.drawn}}</td><td class="numeric">{{item.matchPointsFor}}</td><td class="numeric">{{item.leaguePoints}}</td></tr>
 				</tbody>
 			</table>
 		</div>

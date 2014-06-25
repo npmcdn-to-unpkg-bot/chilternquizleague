@@ -1,7 +1,7 @@
 (function() {
 
 	var maintainApp = angular
-			.module('maintainApp', [ "ngRoute","ngAnimate" ])
+			.module('maintainApp', [ "ngRoute", "ngAnimate" ])
 			.factory(
 					'entityService',
 					[
@@ -129,9 +129,9 @@
 		}).when('/seasons/:seasonId/LEAGUE/results', {
 			templateUrl : 'competition/results.html',
 			controller : 'ResultsCtrl'
-		}).when('/seasons/:seasonId/LEAGUE/tables', {
+		}).when('/seasons/:seasonId/:compType/tables', {
 			templateUrl : 'competition/tables.html',
-			controller : 'TablesCtrl'
+			controller : 'LeagueTablesCtrl'
 		}).when('/global/current', {
 			templateUrl : 'global/global-detail.html',
 			controller : 'GlobalDetailCtrl'
@@ -290,15 +290,6 @@
 			$location.url("/seasons/" + seasonId + "/" + type.name);
 		};
 
-		$rootScope
-				.$on(
-						'addCompetition',
-						function(event, args) {
-							$scope.season.competitions[args.competition.type] = args.competition;
-							entityService.put("season", $scope.season);
-							entityService.remove("season", "current");
-							$location.url("/seasons/" + seasonId);
-						});
 	});
 
 	maintainApp.controller('SeasonDetailCtrl', seasonBody);
@@ -308,69 +299,74 @@
 
 		var seasonId = $routeParams.seasonId;
 		$scope.seasonId = seasonId;
-		makeUpdateFnWithCallback("season",null, function(ret) {
-			if (!ret.competitions.LEAGUE) {
-				$scope.$watch("leagueCompetition", function(comp){
-					$scope.masterSeason.competitions.LEAGUE = comp;
-				});
-				makeUpdateFn("leagueCompetition")($scope, entityService,
-						$routeParams, $rootScope, $location);
-			} else {
-				$scope.masterLeagueCompetion = ret.competitions.LEAGUE;
-				$scope.leagueCompetition = angular
-						.copy(ret.competitions.LEAGUE);
-			}
-		})($scope, entityService, $routeParams, $rootScope,
-				$location);
-		
+		makeUpdateFnWithCallback(
+				"season",
+				null,
+				function(ret) {
+					if (!ret.competitions.LEAGUE) {
+						$scope.$watch("leagueCompetition", function(comp) {
+							$scope.masterSeason.competitions.LEAGUE = comp;
+						});
+						makeUpdateFn("leagueCompetition")($scope,
+								entityService, $routeParams, $rootScope,
+								$location);
+					} else {
+						$scope.masterLeagueCompetion = ret.competitions.LEAGUE;
+						$scope.leagueCompetition = angular
+								.copy(ret.competitions.LEAGUE);
+					}
+				})($scope, entityService, $routeParams, $rootScope, $location);
+
 		$scope.addLeagueCompetition = function(competition) {
 			$scope.masterSeason.competitions.LEAGUE = $scope.leagueCompetition;
 			$location.url("/seasons/" + seasonId);
 		};
 
 	}));
-	
-	function UsedTeamsControl(teams, $scope){
-		
+
+	function UsedTeamsControl(teams, $scope) {
+
 		this.teams = teams;
 		this.dateMap = {};
 		this.$scope = $scope;
 		this.makeKey = function(date) {
-			return "D" + date.getYear()+date.getMonth()+date.getDate();
+			return "D" + date.getYear() + date.getMonth() + date.getDate();
 		};
 		this.currentKey = this.setDate(new Date());
 
 	}
-	
-	UsedTeamsControl.prototype.setDate = function(date){
+
+	UsedTeamsControl.prototype.setDate = function(date) {
 		this.currentKey = this.makeKey(date);
-		
-		this.$scope.unusedTeams = this.dateMap[this.currentKey] = this.dateMap.hasOwnProperty(this.currentKey) ? this.dateMap[this.currentKey] : angular.copy(this.teams);
+
+		this.$scope.unusedTeams = this.dateMap[this.currentKey] = this.dateMap
+				.hasOwnProperty(this.currentKey) ? this.dateMap[this.currentKey]
+				: angular.copy(this.teams);
 	};
-	
-	UsedTeamsControl.prototype.getUnused = function(){
-		
+
+	UsedTeamsControl.prototype.getUnused = function() {
+
 		return this.$scope.unusedTeams;
 	};
-	
-	UsedTeamsControl.prototype.add = function(team1,team2){
-		
+
+	UsedTeamsControl.prototype.add = function(team1, team2) {
+
 		var teams = this.getUnused();
-		
-		function removeTeam(team){
-			removeFromListById(teams,team);
+
+		function removeTeam(team) {
+			removeFromListById(teams, team);
 		}
-		
+
 		removeTeam(team1);
 		team2 ? removeTeam(team2) : null;
 	};
-	
-	UsedTeamsControl.prototype.remove = function(date,team1,team2){
+
+	UsedTeamsControl.prototype.remove = function(date, team1, team2) {
 		var teams = this.dateMap[this.makeKey(date)];
-		
+
 		teams.push(team1);
 		team2 ? teams.push(team2) : null;
-		
+
 	};
 
 	maintainApp
@@ -381,63 +377,61 @@
 
 						var compType = $routeParams.compType;
 						var seasonId = $routeParams.seasonId;
-						
-						function resolveExistingUnusedTeams(fixturesList){
-							
-							var utc = $scope.usedTeamsControl = new UsedTeamsControl($scope.teams, $scope);
-							
-							for(idx in fixturesList){
-								
+
+						function resolveExistingUnusedTeams(fixturesList) {
+
+							var utc = $scope.usedTeamsControl = new UsedTeamsControl(
+									$scope.teams, $scope);
+
+							for (idx in fixturesList) {
+
 								utc.setDate(fixturesList[idx].date);
-								
-								for( idx2 in fixturesList[idx].fixtures)
-								{
+
+								for (idx2 in fixturesList[idx].fixtures) {
 									var fixture = fixturesList[idx].fixtures[idx2];
-									
+
 									utc.add(fixture.home, fixture.away);
-								};
 								}
-							
-							var date = $scope.currentDate ? $scope.currentDate : new Date();
-							utcl.setDate(date);
+								;
+							}
+
+							var date = $scope.currentDate ? $scope.currentDate
+									: new Date();
+							utc.setDate(date);
 
 						}
 
 						makeUpdateFnWithCallback(
-								"season",null,
+								"season",
+								null,
 								function(season) {
 									$scope.fixturesList = season.competitions[compType].fixtures;
-									for(idx in $scope.fixturesList){
-										$scope.fixturesList[idx].date = new Date($scope.fixturesList[idx].date);
+									for (idx in $scope.fixturesList) {
+										$scope.fixturesList[idx].date = new Date(
+												$scope.fixturesList[idx].date);
 									}
-									
+
 									resolveExistingUnusedTeams($scope.fixturesList);
 								})($scope, entityService, $routeParams,
 								$rootScope, $location);
 
 						makeListFn("team")($scope, entityService);
 
-						$scope
-								.$watch(
-										"teams",
-										function(teams) {
-											$scope
-													.$watch(
-															"currentDate",
-															function(date) {
+						$scope.$watch("teams", function(teams) {
+							$scope.$watch("currentDate", function(date) {
 
-																if (date && $scope.usedTeamsControl) {
-																	$scope.usedTeamsControl.setDate(date);
-																}
-															});
-											$scope.currentDate = new Date();
-											$scope.fixture = {};
-										});
-					
+								if (date && $scope.usedTeamsControl) {
+									$scope.usedTeamsControl.setDate(date);
+								}
+							});
+							$scope.currentDate = new Date();
+							$scope.fixture = {};
+						});
+
 						function resolveCurrentFixtures(date) {
 
-							if (!$scope.fixtures || ($scope.fixtures
-									&& $scope.fixtures.date != date)) {
+							if (!$scope.fixtures
+									|| ($scope.fixtures && $scope.fixtures.date != date)) {
 
 								var fixtures = null;
 
@@ -458,36 +452,39 @@
 								}
 
 								$scope.fixtures = fixtures;
-								
 
 							}
 						}
-						
+
 						$scope.advanceDate = function() {
 							$scope.currentDate = new Date($scope.currentDate
 									.getTime()
 									+ (7 * 60 * 60 * 24 * 1000));
 						};
 						$scope.addFixture = function(fixture) {
-							
-							resolveCurrentFixtures($scope.currentDate); 
-							
+
+							resolveCurrentFixtures($scope.currentDate);
+
 							fixture.date = $scope.currentDate;
 							$scope.fixtures.fixtures.push(fixture);
 							$scope.fixture = {};
 
-							$scope.usedTeamsControl.add(fixture.home, fixture.away);
+							$scope.usedTeamsControl.add(fixture.home,
+									fixture.away);
 						};
 						$scope.removeFixture = function(fixture) {
 							var date = new Date(fixture.date).toDateString();
-							for(idx in $scope.fixturesList){
+							for (idx in $scope.fixturesList) {
 								var fixtures = $scope.fixturesList[idx];
-								if(date == fixtures.date.toDateString()){
-									for(idx2 in fixtures.fixtures){
+								if (date == fixtures.date.toDateString()) {
+									for (idx2 in fixtures.fixtures) {
 										var listFixture = $scope.fixturesList[idx].fixtures[idx2];
-										if(fixture.home.id == listFixture.home.id && fixture.away.id == listFixture.away.id){
-											fixtures.fixtures.splice(idx2,1);
-											$scope.usedTeamsControl.remove(fixtures.date, fixture.home, fixture.away);
+										if (fixture.home.id == listFixture.home.id
+												&& fixture.away.id == listFixture.away.id) {
+											fixtures.fixtures.splice(idx2, 1);
+											$scope.usedTeamsControl.remove(
+													fixtures.date,
+													fixture.home, fixture.away);
 										}
 									}
 								}
@@ -512,4 +509,71 @@
 		})($scope, entityService);
 
 	}));
+
+	maintainApp
+			.controller(
+					'LeagueTablesCtrl',
+					getCommonParams(function($scope, entityService,
+							$routeParams, $rootScope, $location) {
+
+						var compType = $scope.compType = $routeParams.compType;
+						var seasonId = $scope.seasonId = $routeParams.seasonId;
+
+						makeUpdateFnWithCallback(
+								"season",
+								null,
+								function(ret) {
+
+									$scope.leagueTables = angular
+											.copy(ret.competitions[compType].leagueTables);
+								})($scope, entityService, $routeParams,
+								$rootScope, $location);
+
+						makeListFn("team", {
+							bindName : "currentSeason",
+							entityName : "global"
+						})($scope, entityService);
+
+						$scope.addTable = function(leagueTables) {
+
+							entityService.load("leagueTable", "new", function(
+									ret) {
+								leagueTables.push(angular.copy(ret));
+							});
+
+						};
+
+						$scope.addRow = function(table) {
+							entityService.load("leagueTableRow", "new",
+									function(ret) {
+										table.rows.push(angular.copy(ret));
+									});
+						};
+
+						$scope.update = function(leagueTables) {
+							$scope.masterSeason.competitions[compType].leagueTables = leagueTables;
+							$location.url("seasons/" + seasonId + "/"
+									+ compType);
+						};
+
+						function setTeams() {
+
+							if ($scope.leagueTables && $scope.teams) {
+								for (idx in $scope.leagueTables) {
+
+									for (idx2 in $scope.leagueTables[idx].rows) {
+										syncToListItem(
+												$scope,
+												$scope.leagueTables[idx].rows[idx2],
+												$scope.teams, "team");
+									}
+								}
+							}
+						}
+
+						$scope.$watch("teams", setTeams);
+						$scope.$watch("leagueTables", setTeams);
+
+					}));
+
 })();

@@ -1,17 +1,25 @@
 <div>
 	<div class="box-title">Tables</div>
-	<form novalidate>
+	<form>
+		<div><button ng-click="addTable(leagueTables)">Add Table</button></div>
+		<div ng-repeat="table in leagueTables">
+			<input ng-model="table.description">
+			<div><button ng-click="addRow(table)">Add Row</button></div>
+			<table class="league-table-tbl">
+				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
+				<tbody >
+				<tr ng-repeat="item in table.rows"><td><input type="number" min="0" ng-model="item.position" ng-init="setRowTeam(item)"></td><td><select ng-model="item.team"  ng-options="team as team.shortName for team in teams"></td><td><input type="number" min="0" ng-model="item.played"></td><td><input type="number" min="0" ng-model="item.won"></td><td><input type="number" min="0" ng-model="item.lost"></td><td><input type="number" min="0" ng-model="item.drawn"></td><td><input type="number" min="0" ng-model="item.matchPointsFor"></td><td><input type="number" min="0" ng-model="item.leaguePoints"></td></tr>
+				</tbody>
+			</table>
+		</div>
+		
 		<table>
-			<tr ng-repeat="results">
-				<td>Name</td>
-				<td><input ng-model="competition.description"></td>
-			</tr>
 			<tfoot>
 				<tr>
 					<td></td>
 					<td>
 						<button ng-click="reset()">Reset</button>
-						<button ng-click="update(competition)">Save</button>
+						<button ng-click="update(leagueTables)">Save</button>
 					</td>
 				</tr>
 			</tfoot>

@@ -38,3 +38,8 @@
 	position:relative;
 	right: 0;
 }
+
+.league-table-tbl input[type=number]{
+	
+	 width:2em;
+}

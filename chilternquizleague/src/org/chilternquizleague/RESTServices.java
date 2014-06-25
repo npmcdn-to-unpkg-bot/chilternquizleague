@@ -15,6 +15,8 @@ import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
 import org.chilternquizleague.domain.LeagueCompetition;
+import org.chilternquizleague.domain.LeagueTable;
+import org.chilternquizleague.domain.LeagueTableRow;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.User;
@@ -78,6 +80,11 @@ public class RESTServices extends HttpServlet {
 			entityByKey(req, resp, User.class);
 		} else if (req.getPathInfo().contains("leagueCompetition")) {
 			entityByKey(req, resp, LeagueCompetition.class);
+		} else if (req.getPathInfo().contains("leagueTableRow")) {
+			entityByKey(req, resp, LeagueTableRow.class);
+		} else if (req.getPathInfo().contains("leagueTable")) {
+			entityByKey(req, resp, LeagueTable.class);
+
 		} else if (req.getPathInfo().contains("global")) {
 			globalDetails(resp);
 		}
