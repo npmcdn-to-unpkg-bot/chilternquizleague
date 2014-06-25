@@ -15,7 +15,7 @@ qlApp.controller('ResultsController', [ '$scope', '$http', '$interval',
 					$http.get("jaxrs/leaguetable/" + globalData.currentSeasonId, {
 						"responseType" : "json"
 					}).success(function(ret) {
-						$scope.results = ret;
+						$scope.season = ret;
 					}).error(function(){$interval.cancel(promise)});
 				}, 1000, 120);
 			});

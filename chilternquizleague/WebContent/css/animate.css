@@ -1,17 +1,18 @@
+
 .view-animate.ng-enter, .view-animate.ng-leave {
-  -webkit-transition:all linear 0.5s;
-  -moz-transition:all linear 0.5s;
-  -o-transition:all linear 0.5s;
-  transition:all linear 0.5s;
-  display:block!important;
+  //-webkit-transition:all linear 0.5s;
+  //-moz-transition:all linear 0.5s;
+  //-o-transition:all linear 0.5s;
+  #transition:opacity 1s ease-in-out;
+  #display:block!important;
 }
 
-@keyframes.view-animate.ng-enter.ng-enter-active {
-  from{opacity:1;}
-  to{opacity:0}
+.view-animate.ng-enter-active} .view-animate.ng-leave-active {
+	
+	opacity : 1;
+	
 }
 
-@keyframes.view-animate.ng-leave.ng-leave-active {
-  from{opacity:0;}
-  to{opacity:1}
+.view-animate.ng-leave {
+	opacity : 0;	
 }

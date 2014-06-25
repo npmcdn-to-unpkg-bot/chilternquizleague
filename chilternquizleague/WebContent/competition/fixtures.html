@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<td>Fixtures</td><td>
-				<div ng-repeat="fixts in fixturesList">{{fixts.date.toDateString()}}
+				<div ng-repeat="fixts in fixturesList" ><span ng-click="currentDate=fixts.date">{{fixts.date.toDateString()}}</span>
 					<div ng-repeat="fixt in fixts.fixtures">{{fixt.home.shortName}} - {{fixt.away.shortName}} <button ng-click="removeFixture(fixt)">Remove</button></div>
 				</div></td>
 			</tr>

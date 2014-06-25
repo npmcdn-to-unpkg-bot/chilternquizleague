@@ -23,7 +23,7 @@ public class LeagueTableView {
 		final LeagueCompetition competition =  season.getCompetition(CompetitionType.LEAGUE);
 		
 		tables = competition.getLeagueTables();
-		description = MessageFormat.format("{1}/{2}", season.getStartYear(),season.getEndYear());
+		description = MessageFormat.format("{0}/{1}", Integer.toString(season.getStartYear()),Integer.toString(season.getEndYear()));
 		
 		
 	}

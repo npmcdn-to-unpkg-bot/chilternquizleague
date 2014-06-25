@@ -329,6 +329,49 @@
 		};
 
 	}));
+	
+	function UsedTeamsControl(teams, $scope){
+		
+		this.teams = teams;
+		this.dateMap = {};
+		this.$scope = $scope;
+		this.makeKey = function(date) {
+			return "D" + date.getYear()+date.getMonth()+date.getDate();
+		};
+		this.currentKey = this.setDate(new Date());
+
+	}
+	
+	UsedTeamsControl.prototype.setDate = function(date){
+		this.currentKey = this.makeKey(date);
+		
+		this.$scope.unusedTeams = this.dateMap[this.currentKey] = this.dateMap.hasOwnProperty(this.currentKey) ? this.dateMap[this.currentKey] : angular.copy(this.teams);
+	};
+	
+	UsedTeamsControl.prototype.getUnused = function(){
+		
+		return this.$scope.unusedTeams;
+	};
+	
+	UsedTeamsControl.prototype.add = function(team1,team2){
+		
+		var teams = this.getUnused();
+		
+		function removeTeam(team){
+			removeFromListById(teams,team);
+		}
+		
+		removeTeam(team1);
+		team2 ? removeTeam(team2) : null;
+	};
+	
+	UsedTeamsControl.prototype.remove = function(date,team1,team2){
+		var teams = this.dateMap[this.makeKey(date)];
+		
+		teams.push(team1);
+		team2 ? teams.push(team2) : null;
+		
+	};
 
 	maintainApp
 			.controller(
@@ -338,29 +381,25 @@
 
 						var compType = $routeParams.compType;
 						var seasonId = $routeParams.seasonId;
-
-						function makeKey(date) {
-							return "D" + date.getYear()+date.getMonth()+date.getDate();
-						}
 						
 						function resolveExistingUnusedTeams(fixturesList){
 							
-							$scope.allUnusedTeams = [];
+							var utc = $scope.usedTeamsControl = new UsedTeamsControl($scope.teams, $scope);
 							
 							for(idx in fixturesList){
 								
-								var key = makeKey(fixturesList[idx].date);
-								var teams = $scope.allUnusedTeams[key] = angular.copy($scope.teams);
+								utc.setDate(fixturesList[idx].date);
 								
 								for( idx2 in fixturesList[idx].fixtures)
 								{
 									var fixture = fixturesList[idx].fixtures[idx2];
 									
-									removeFromListById(teams,fixture.home);
-									removeFromListById(teams,fixture.away);
+									utc.add(fixture.home, fixture.away);
 								};
 								}
-							$scope.unusedTeams = $scope.allUnusedTeams[makeKey(new Date())];
+							
+							var date = $scope.currentDate ? $scope.currentDate : new Date();
+							utcl.setDate(date);
 
 						}
 
@@ -377,22 +416,18 @@
 								$rootScope, $location);
 
 						makeListFn("team")($scope, entityService);
-						$scope.allUnusedTeams = {};
-						$scope.unusedTeams = [];
 
 						$scope
 								.$watch(
 										"teams",
 										function(teams) {
-											
 											$scope
 													.$watch(
 															"currentDate",
 															function(date) {
 
-																if (date) {
-																	var key=makeKey(date);
-																	$scope.unusedTeams = $scope.allUnusedTeams[key] ? $scope.allUnusedTeams[key] : angular.copy($scope.teams);
+																if (date && $scope.usedTeamsControl) {
+																	$scope.usedTeamsControl.setDate(date);
 																}
 															});
 											$scope.currentDate = new Date();
@@ -401,8 +436,8 @@
 					
 						function resolveCurrentFixtures(date) {
 
-							if ($scope.fixtures
-									&& $scope.fixtures.date != date) {
+							if (!$scope.fixtures || ($scope.fixtures
+									&& $scope.fixtures.date != date)) {
 
 								var fixtures = null;
 
@@ -441,8 +476,7 @@
 							$scope.fixtures.fixtures.push(fixture);
 							$scope.fixture = {};
 
-							removeFromListById($scope.unusedTeams, fixture.home);
-							removeFromListById($scope.unusedTeams, fixture.away);
+							$scope.usedTeamsControl.add(fixture.home, fixture.away);
 						};
 						$scope.removeFixture = function(fixture) {
 							var date = new Date(fixture.date).toDateString();
@@ -453,10 +487,7 @@
 										var listFixture = $scope.fixturesList[idx].fixtures[idx2];
 										if(fixture.home.id == listFixture.home.id && fixture.away.id == listFixture.away.id){
 											fixtures.fixtures.splice(idx2,1);
-											var key=makeKey(fixtures.date);
-											var unusedTeams=$scope.allUnusedTeams[key];
-											unusedTeams.push(fixture.home);
-											unusedTeams.push(fixture.away);
+											$scope.usedTeamsControl.remove(fixtures.date, fixture.home, fixture.away);
 										}
 									}
 								}

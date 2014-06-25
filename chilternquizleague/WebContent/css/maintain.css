@@ -6,8 +6,7 @@
 
 .view-pane {
 	margin-left:10.5em;
-	#max-height:100%;
-	#overflow: auto;
+	padding:.25em;
 }
 
 .box-title {
