@@ -10,6 +10,11 @@ body{
 	padding-top:1%;	
 }
 
+.navigation{
+	margin-top:.25em;
+	margin-bottom:2.50em;
+}
+
 .show{
 	border: solid 10px lightgray;
 	border-radius: 15px;
@@ -39,7 +44,7 @@ body{
 
 .body-container{
 
-	padding:1%;
+	padding:.25em;
 }
 .footer{
 	display:none;
@@ -56,18 +61,14 @@ body{
 }
 
 .body-content{
-	
-	
-	float:left;
-    max-width:70%
+	margin-right:310px;
 }
 
 
 
 .front-page-text{
-	float:left;
-	margin-right:1%;
-	max-width: 30%;
+
+	margin-right:.25em;
 	font-size: 95%;
 }
 
@@ -83,6 +84,7 @@ body{
 	border: solid medium lightgray;
 	border-radius: 10px;
 	margin-left: 0;
+	margin-right:0;
 
 }
 
@@ -129,5 +131,6 @@ body{
 	
 	.league-table{
 		float:left;
+		margin-right:.25em;
 	}
 }

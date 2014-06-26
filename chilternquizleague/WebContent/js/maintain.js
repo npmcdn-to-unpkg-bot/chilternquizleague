@@ -183,26 +183,27 @@
 
 	}
 
-	function makeListFn(typeName, bindingConfig) {
+	function makeListFn(typeName, config) {
 
 		return function($scope, entityService) {
 			var collectionName = typeName + "s";
+			config = config ? config : {};
 
-			if (bindingConfig) {
-				collectionName = (bindingConfig.collName ? bindingConfig.collName
+			if (config.entityName && config.bindName) {
+				collectionName = (config.collName ? config.collName
 						: collectionName);
-				$scope.$watch(bindingConfig.entityName, function(entity) {
+				$scope.$watch(config.entityName, function(entity) {
 					syncToListItem($scope, entity, $scope[collectionName],
-							bindingConfig.bindName);
+							config.bindName);
 				});
 				$scope.$watch(collectionName, function(collection) {
-					syncToListItem($scope, $scope[bindingConfig.entityName],
-							collection, bindingConfig.bindName);
+					syncToListItem($scope, $scope[config.entityName],
+							collection, config.bindName);
 				});
 
 			}
 			entityService.loadList(typeName, function(ret) {
-				$scope[collectionName] = ret;
+				$scope[collectionName] = config.sort ? ret.sort(config.sort):ret;
 			});
 		};
 	}
@@ -240,7 +241,7 @@
 	}
 
 	maintainApp.controller('VenueListCtrl',
-			getCommonParams(makeListFn("venue")));
+			getCommonParams(makeListFn("venue", {sort:function(venue1,venue2){return venue1.name.localeCompare(venue2.name);}})));
 
 	maintainApp.controller('VenueDetailCtrl',
 			getCommonParams(makeUpdateFn("venue")));
@@ -253,7 +254,8 @@
 				$location);
 		makeListFn("venue", {
 			entityName : "team",
-			bindName : "venue"
+			bindName : "venue",
+			sort:function(venue1,venue2){return venue1.name.localeCompare(venue2.name);}
 		})($scope, entityService);
 		makeListFn("user")($scope, entityService);
 
@@ -266,7 +268,7 @@
 		};
 	}));
 
-	maintainApp.controller('UserListCtrl', getCommonParams(makeListFn("user")));
+	maintainApp.controller('UserListCtrl', getCommonParams(makeListFn("user",{sort:function(user1,user2){return user1.name.localCompare(user2.name);}})));
 
 	maintainApp.controller('UserDetailCtrl',
 			getCommonParams(makeUpdateFn("user")));
@@ -378,6 +380,7 @@
 						var compType = $routeParams.compType;
 						var seasonId = $routeParams.seasonId;
 
+						$scope.currentDate = new Date();
 						function resolveExistingUnusedTeams(fixturesList) {
 
 							var utc = $scope.usedTeamsControl = new UsedTeamsControl(
@@ -410,12 +413,12 @@
 										$scope.fixturesList[idx].date = new Date(
 												$scope.fixturesList[idx].date);
 									}
-
+									$scope.currentDate = $scope.fixturesList[0] ? $scope.fixturesList[0].date : $scope.currentDate;
 									resolveExistingUnusedTeams($scope.fixturesList);
 								})($scope, entityService, $routeParams,
 								$rootScope, $location);
 
-						makeListFn("team")($scope, entityService);
+						makeListFn("team",{sort:function(team1,team2){return team1.shortName.localeCompare(team2.shortName);}})($scope, entityService);
 
 						$scope.$watch("teams", function(teams) {
 							$scope.$watch("currentDate", function(date) {
@@ -424,7 +427,6 @@
 									$scope.usedTeamsControl.setDate(date);
 								}
 							});
-							$scope.currentDate = new Date();
 							$scope.fixture = {};
 						});
 
@@ -451,6 +453,7 @@
 									$scope.fixturesList.push(fixtures);
 								}
 
+								$scope.fixturesList = $scope.fixturesList.sort(function(fxs1,fxs2){return fxs1.date.getTime() - fxs2.date.getTime();});
 								$scope.fixtures = fixtures;
 
 							}
@@ -461,6 +464,11 @@
 									.getTime()
 									+ (7 * 60 * 60 * 24 * 1000));
 						};
+						
+						$scope.setCurrentDate = function(date){
+							$scope.currentDate = date;
+						};
+						
 						$scope.addFixture = function(fixture) {
 
 							resolveCurrentFixtures($scope.currentDate);
