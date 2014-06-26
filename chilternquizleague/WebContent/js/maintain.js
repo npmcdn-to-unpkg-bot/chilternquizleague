@@ -309,7 +309,7 @@
 						$scope.$watch("leagueCompetition", function(comp) {
 							$scope.masterSeason.competitions.LEAGUE = comp;
 						});
-						makeUpdateFn("leagueCompetition")($scope,
+						makeUpdateFnWithCallback("leagueCompetition")($scope,
 								entityService, $routeParams, $rootScope,
 								$location);
 					} else {

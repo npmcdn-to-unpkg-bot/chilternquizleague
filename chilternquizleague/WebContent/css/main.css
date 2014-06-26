@@ -125,12 +125,12 @@ body{
 	.feeds{
 		display:none;
 	}
-	.front-page-text{
-		max-width:100%;
-	}
 	
 	.league-table{
-		float:left;
+		float:right;
 		margin-right:.25em;
+	}
+	.body-content{
+		margin-right:0;
 	}
 }
