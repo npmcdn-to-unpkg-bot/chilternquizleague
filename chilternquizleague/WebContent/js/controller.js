@@ -4,13 +4,13 @@ var qlApp = angular.module('qlApp', [ "ngRoute" ]).factory('entityService',
 qlApp.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/team/:teamId', {
 		templateUrl : 'team/teams.html',
-		controller : 'GlobalDetailCtrl'
+		controller : 'TeamsController'
 	}).otherwise({
 		redirectTo : ''
 	});
 } ]);
 
-qlApp.controller('TeamsController', [
+qlApp.controller('ResultsController', [
 		'$scope',
 		'$http',
 		'$interval',
