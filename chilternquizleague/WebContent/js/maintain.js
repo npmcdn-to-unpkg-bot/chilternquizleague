@@ -3,137 +3,48 @@
 	var maintainApp = angular
 			.module('maintainApp', [ "ngRoute", "ngAnimate" ])
 			.factory(
-					'entityService',
-					[
-							"$http",
-							function($http) {
-								var cacheHolder = {};
-								function makeEntryKey(type, id) {
-									return type + (id ? id : "new");
-								}
-								var cache = {
-									add : function(type, entity, id) {
-										cacheHolder[makeEntryKey(type, id ? id
-												: entity.id)] = entity;
-										return entity;
-									},
-
-									remove : function(type, id) {
-
-										var ret = cache.get(type, id);
-										cacheHolder[makeEntryKey(type, id)] = null;
-										return ret;
-									},
-
-									flush : function() {
-										cacheHolder = {};
-									},
-
-									get : function(type, id) {
-
-										var key = makeEntryKey(type, id);
-										return cacheHolder.hasOwnProperty(key) ? cacheHolder[key]
-												: null;
-									}
-
-								};
-
-								function cacheCallbackFactory(type, callback,
-										id) {
-									return function(ret) {
-										cache.add(type, ret, id ? id : ret.id);
-										callback ? callback(ret) : null;
-									};
-								}
-
-								function loadFromServer(type, id, callback) {
-
-									$http.get("jaxrs/" + type + "/" + id, {
-										"responseType" : "json"
-									}).success(callback).error(cache.flush);
-								}
-
-								function saveToServer(type, entity, callback) {
-									$http.post("jaxrs/" + type, entity)
-											.success(callback).error(
-													cache.flush);
-
-								}
-
-								var service = {
-
-									load : function(type, id, callback) {
-										var entity = cache.get(type, id);
-
-										entity ? (callback ? callback(entity)
-												: null) : loadFromServer(type,
-												id, cacheCallbackFactory(type,
-														callback, id));
-									},
-
-									save : function(type, entity, callback) {
-										saveToServer(type, entity,
-												cacheCallbackFactory(type,
-														callback));
-									},
-
-									put : function(type, entity, id) {
-										return cache.add(type, entity, id);
-									},
-
-									remove : function(type, id) {
-										return cache.remove(type, id);
-									},
-
-									loadList : function(type, callback) {
-										$http.get("jaxrs/" + type + "-list", {
-											"responseType" : "json"
-										}).success(callback).error(cache.flush);
-									}
-								};
-								return service;
-							} ]);
+					'entityService', ENTITY_SERVICE_DEFN);
 	;
 
 	maintainApp.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/venues', {
-			templateUrl : 'venue/venue-list.html',
+			templateUrl : 'maintain/venue/venue-list.html',
 			controller : 'VenueListCtrl'
 		}).when('/venues/:venueId', {
-			templateUrl : 'venue/venue-detail.html',
+			templateUrl : 'maintain/venue/venue-detail.html',
 			controller : 'VenueDetailCtrl'
 		}).when('/teams', {
-			templateUrl : 'team/team-list.html',
+			templateUrl : 'maintain/team/team-list.html',
 			controller : 'TeamListCtrl'
 		}).when('/teams/:teamId', {
-			templateUrl : 'team/team-detail.html',
+			templateUrl : 'maintain/team/team-detail.html',
 			controller : 'TeamDetailCtrl'
 		}).when('/users', {
-			templateUrl : 'user/user-list.html',
+			templateUrl : 'maintain/user/user-list.html',
 			controller : 'UserListCtrl'
 		}).when('/users/:userId', {
-			templateUrl : 'user/user-detail.html',
+			templateUrl : 'maintain/user/user-detail.html',
 			controller : 'UserDetailCtrl'
 		}).when('/seasons', {
-			templateUrl : 'season/season-list.html',
+			templateUrl : 'maintain/season/season-list.html',
 			controller : 'SeasonListCtrl'
 		}).when('/seasons/:seasonId', {
-			templateUrl : 'season/season-detail.html',
+			templateUrl : 'maintain/season/season-detail.html',
 			controller : 'SeasonDetailCtrl'
 		}).when('/seasons/:seasonId/LEAGUE', {
-			templateUrl : 'competition/league-detail.html',
+			templateUrl : 'maintain/competition/league-detail.html',
 			controller : 'LeagueCompCtrl'
 		}).when('/seasons/:seasonId/:compType/fixtures', {
-			templateUrl : 'competition/fixtures.html',
+			templateUrl : 'maintain/competition/fixtures.html',
 			controller : 'FixturesCtrl'
 		}).when('/seasons/:seasonId/LEAGUE/results', {
-			templateUrl : 'competition/results.html',
+			templateUrl : 'maintain/competition/results.html',
 			controller : 'ResultsCtrl'
 		}).when('/seasons/:seasonId/:compType/tables', {
-			templateUrl : 'competition/tables.html',
+			templateUrl : 'maintain/competition/tables.html',
 			controller : 'LeagueTablesCtrl'
 		}).when('/global/current', {
-			templateUrl : 'global/global-detail.html',
+			templateUrl : 'maintain/global/global-detail.html',
 			controller : 'GlobalDetailCtrl'
 		}).otherwise({
 			redirectTo : ''

@@ -24,3 +24,13 @@ qlApp.controller('ResultsController', [ '$scope', '$http', '$interval',
 			
 			
 		} ]);
+
+qlApp.controller('TeamsController', [ '$scope', '$http', '$interval','entityService',
+                                		function($scope, $http, $interval, entityService) {
+	
+	
+		entityService.getList("team",function(teams){$scope.teams = teams;});
+	
+	
+	
+}]);
