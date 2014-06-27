@@ -28,17 +28,22 @@ body{
 }
 
 .index-page-header{
-
-	font-size: xx-large;
-	color: lightblue;
-	padding: .5%;
-	padding-bottom: 0;
 	
-}
+	background-color:lightblue;
+	
+	font-family:'Nunito', sans-serif;
+	font-size: 300%;
+
+	padding: .125em;
+	padding-left:.25em;
+ 	color: lightblue; 
+ 	text-shadow: 0 0 5px lightblue, 0 0 10px lightblue, 0 0 15px lightblue, 0 0 20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue; 
+ 	letter-spacing: 5px;  
+ }
 
 .index-page-header text{
 		color: lightblue;
-		font-weight:800;
+		
 	}
 
 
