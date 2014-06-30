@@ -5,13 +5,11 @@
 <title>{{leagueName}}</title>
 <link href='http://fonts.googleapis.com/css?family=Nunito:700'
 	rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <link type="text/css" rel="stylesheet" href="/css/menu-other.css">
 <script type="text/javascript" src="/js/angular.js"></script>
-<script type="text/javascript" src="/js/angular-route.js"></script>
-<script type="text/javascript" src="/js/entity.js"></script>
+<script type="text/javascript" src="/js/view.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 </head>
 <body>
@@ -28,7 +26,7 @@
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 		</script>
-		<div ng-include="'top.html'"></div>
+		<div ng-include="'/top.html'"></div>
 		<div class="body-container">
 			<div class="feeds">
 				<div class="fb-like-box"
@@ -41,7 +39,7 @@
 					<p class="header">League Table {{season.description}}</p>
 					<table class="league-table-tbl" ng-repeat="table in season.tables">
 						<thead>
-							<tr ng-if="table.description">
+							<tr class="league-table-description" ng-if="table.description">
 								<td colspan="8">{{table.description}}</td>
 							</tr>
 							<tr>
@@ -57,8 +55,8 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="item in table.rows">
-								<td class="numeric">{{item.position}}</td>
-								<td><a href="/team/teams.html?teamId={{item.team.id}}">{{item.team.shortName}}</a></td>
+								<td class="numeric">{{item.position ? item.position : ($index + 1)}}</td>
+								<td><a href="/team/teams.html#team/{{item.team.id}}">{{item.team.shortName}}</a></td>
 								<td class="numeric">{{item.played}}</td>
 								<td class="numeric">{{item.won}}</td>
 								<td class="numeric">{{item.lost}}</td>

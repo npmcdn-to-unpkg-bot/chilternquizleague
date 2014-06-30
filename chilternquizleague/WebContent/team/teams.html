@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="qlApp" ng-controller="ResultsController">
+<html ng-app="teamApp" ng-controller="TeamsController">
 <head>
 <meta charset="UTF-8">
 <title>{{leagueName}}</title>
@@ -8,18 +8,20 @@
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <link type="text/css" rel="stylesheet" href="/css/menu-other.css">
+<link type="text/css" rel="stylesheet" href="/css/team.css">
 <script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-animate.js"></script>
 <script type="text/javascript" src="/js/angular-route.js"></script>
-<script type="text/javascript" src="/js/entity.js"></script>
-<script type="text/javascript" src="/js/controller.js"></script>
+<script type="text/javascript" src="/js/view.js"></script>
+<script type="text/javascript" src="/js/team.js"></script>
 </head>
-<body ng-controller="TeamsController">
+<body>
 <div ng-include="'/top.html'"></div>
 <div>
-	<div class="show">
-		<div ng-repeat="team in teams | orderBy:'team.shortName'"><a href="#/team/{{teamid}}">{{team.name}}</a></div>
+	<div class="show teams">
+		<div ng-repeat="team in teams | orderBy:'team.shortName'"><a href="#/team/{{team.id}}">{{team.name}}</a></div>
 	</div>
-	<div ng-view></div>
+	<div ng-view class="team-pane standard-margins"></div>
 </div>
 </body>
 </html>

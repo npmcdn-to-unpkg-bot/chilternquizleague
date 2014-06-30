@@ -3,26 +3,32 @@
   <display-name>chilternquizleague</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
     <description>JAX-RS Tools Generated - Do not modify</description>
-    <servlet-name>JAX-RS Servlet</servlet-name>
-    <servlet-class>org.chilternquizleague.RESTServices</servlet-class>
+    <display-name>Entity REST Services</display-name>
+    <servlet-name>EntityServices</servlet-name>
+    <servlet-class>org.chilternquizleague.web.EntityServices</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>JAX-RS Servlet</servlet-name>
-    <url-pattern>/jaxrs/*</url-pattern>
+    <servlet-name>EntityServices</servlet-name>
+    <url-pattern>/entity/*</url-pattern>
   </servlet-mapping>
   <listener>
-    <listener-class>org.chilternquizleague.EntityRegistrationListener</listener-class>
+    <listener-class>org.chilternquizleague.web.EntityRegistrationListener</listener-class>
   </listener>
   <listener>
-    <listener-class>org.chilternquizleague.AppStartListener</listener-class>
+    <listener-class>org.chilternquizleague.web.AppStartListener</listener-class>
   </listener>
+  <servlet>
+    <description></description>
+    <display-name>View REST Services</display-name>
+    <servlet-name>ViewServices</servlet-name>
+    <servlet-class>org.chilternquizleague.web.ViewServices</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewServices</servlet-name>
+    <url-pattern>/view/*</url-pattern>
+  </servlet-mapping>
 </web-app>

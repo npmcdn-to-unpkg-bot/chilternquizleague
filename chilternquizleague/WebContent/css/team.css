@@ -1,0 +1,10 @@
+.teams {
+	float: left;
+	height: 80%;
+	width: 8em;
+}
+
+.team-pane {
+	margin-left: 10.5em;
+	padding: .25em;
+}
