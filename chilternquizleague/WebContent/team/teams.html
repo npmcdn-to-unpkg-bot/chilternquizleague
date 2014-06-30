@@ -9,13 +9,15 @@
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <link type="text/css" rel="stylesheet" href="/css/menu-other.css">
 <script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/entity.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 </head>
 <body ng-controller="TeamsController">
+<div ng-include="'/top.html'"></div>
 <div>
 	<div class="show">
-		<div ng-repeat="team in teams | orderBy:'team.shortName'"><a href="team/{{teamid}}">{{team.name}}</a></div>
+		<div ng-repeat="team in teams | orderBy:'team.shortName'"><a href="#/team/{{teamid}}">{{team.name}}</a></div>
 	</div>
 	<div ng-view></div>
 </div>

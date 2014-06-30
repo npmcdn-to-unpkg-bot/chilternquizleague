@@ -28,8 +28,7 @@ body{
 }
 
 .index-page-header{
-	
-	background-color:lightblue;
+
 	
 	font-family:'Nunito', sans-serif;
 	font-size: 300%;
@@ -139,3 +138,8 @@ body{
 		margin-right:0;
 	}
 }
+
+@media screen and (max-width: 500px){
+	
+	.league-table{width:100%;}
+	}

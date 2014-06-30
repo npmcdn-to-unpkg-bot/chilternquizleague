@@ -16,7 +16,7 @@ qlApp.controller('ResultsController', [
 		'$interval',
 		function($scope, $http, $interval) {
 
-			$http.get("jaxrs/globaldata", {
+			$http.get("/jaxrs/globaldata", {
 				"responseType" : "json"
 			}).success(
 					function(globalData) {
@@ -27,7 +27,7 @@ qlApp.controller('ResultsController', [
 						var promise = $interval(function() {
 
 							$http.get(
-									"jaxrs/leaguetable/"
+									"/jaxrs/leaguetable/"
 											+ globalData.currentSeasonId, {
 										"responseType" : "json"
 									}).success(function(ret) {
@@ -36,14 +36,14 @@ qlApp.controller('ResultsController', [
 								$interval.cancel(promise)
 							});
 						}, 1000, 120);
-					});
+					}); 
 
 		} ]);
 
 qlApp.controller('TeamsController', [ '$scope', '$http', '$interval',
 		'entityService', function($scope, $http, $interval, entityService) {
 
-			entityService.getList("team", function(teams) {
+			entityService.loadList("team", function(teams) {
 				$scope.teams = teams;
 			});
 
