@@ -1,4 +1,4 @@
-package org.chilternquizleague;
+package org.chilternquizleague.web;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

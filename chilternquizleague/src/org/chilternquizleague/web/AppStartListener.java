@@ -1,4 +1,4 @@
-package org.chilternquizleague;
+package org.chilternquizleague.web;
 
 import java.util.List;
 

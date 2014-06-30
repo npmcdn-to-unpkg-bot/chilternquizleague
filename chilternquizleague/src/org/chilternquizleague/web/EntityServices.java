@@ -1,9 +1,8 @@
-package org.chilternquizleague;
+package org.chilternquizleague.web;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -28,29 +27,18 @@ import org.chilternquizleague.views.LeagueTableView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.objectify.Key;
 
-/**
- * @author gb106507
- * 
- */
+
 @SuppressWarnings("serial")
-public class RESTServices extends HttpServlet {
+public class EntityServices extends HttpServlet {
 
 	private ObjectMapper objectMapper;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		if (req.getPathInfo().endsWith("globaldata")) {
 
-			globalData(resp);
-		}
 
-		if (req.getPathInfo().contains("leaguetable")) {
-
-			currentLeagueTable(req, resp);
-		}
-
-		else if (req.getPathInfo().endsWith("venue-list")) {
+		if (req.getPathInfo().endsWith("venue-list")) {
 
 			makeEntityList(resp, Venue.class);
 		}
@@ -103,16 +91,7 @@ public class RESTServices extends HttpServlet {
 		objectMapper.writeValue(resp.getWriter(), data);
 	}
 
-	private void globalData(HttpServletResponse resp) throws IOException {
-		final GlobalApplicationData data = ofy().load().now(
-				Key.create(GlobalApplicationData.class,
-						AppStartListener.globalApplicationDataId));
 
-		if (data != null) {
-			objectMapper.writeValue(resp.getWriter(),
-					new GlobalApplicationDataView(data));
-		}
-	}
 
 	private <T> void entityByKey(HttpServletRequest req,
 			HttpServletResponse resp, Class<T> clazz) throws IOException {
@@ -147,20 +126,7 @@ public class RESTServices extends HttpServlet {
 
 	}
 
-	private void currentLeagueTable(HttpServletRequest req,
-			HttpServletResponse resp) throws IOException {
 
-		final Long seasonId = Long.parseLong(getLastPathPart(req));
-
-		final Season season = ofy().load().now(
-				Key.create(Season.class, seasonId));
-
-		if (season != null) {
-			objectMapper.writeValue(resp.getWriter(), new LeagueTableView(
-					season));
-
-		}
-	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)

@@ -29,8 +29,6 @@ body{
 
 .index-page-header{
 	
-	background-color:lightblue;
-	
 	font-family:'Nunito', sans-serif;
 	font-size: 300%;
 
@@ -125,6 +123,13 @@ body{
 	border-radius: 5px;
 }
 
+.league-table-tbl thead tr.league-table-description td{
+	
+	background: #99ccff;
+	border: medium solid #99ccff;
+
+}
+
 @media screen and (max-width: 1000px){
 	
 	.feeds{
@@ -139,3 +144,10 @@ body{
 		margin-right:0;
 	}
 }
+
+@media screen and (max-width: 500px){
+
+	.league-table{width:100%;}
+
+	
+	}

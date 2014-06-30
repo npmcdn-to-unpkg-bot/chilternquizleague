@@ -1,50 +1,28 @@
-var qlApp = angular.module('qlApp', [ "ngRoute" ]).factory('entityService',
-		ENTITY_SERVICE_DEFN);
-
-qlApp.config([ '$routeProvider', function($routeProvider) {
-	$routeProvider.when('/team/:teamId', {
-		templateUrl : 'team/teams.html',
-		controller : 'TeamsController'
-	}).otherwise({
-		redirectTo : ''
-	});
-} ]);
+var qlApp = angular.module('qlApp', []).factory('viewService',
+		VIEW_SERVICE_DEFN);
 
 qlApp.controller('ResultsController', [
 		'$scope',
 		'$http',
-		'$interval',
-		function($scope, $http, $interval) {
+		'$interval','viewService',
+		function($scope, $http, $interval, viewService) {
 
-			$http.get("jaxrs/globaldata", {
-				"responseType" : "json"
-			}).success(
-					function(globalData) {
+			viewService.load("globaldata", function(globalData) {
 
-						$scope.leagueName = globalData.leagueName;
-						$scope.frontPageText = globalData.frontPageText;
+				$scope.leagueName = globalData.leagueName;
+				$scope.frontPageText = globalData.frontPageText;
 
-						var promise = $interval(function() {
+				var promise = $interval(function() {
 
-							$http.get(
-									"jaxrs/leaguetable/"
-											+ globalData.currentSeasonId, {
-										"responseType" : "json"
-									}).success(function(ret) {
-								$scope.season = ret;
-							}).error(function() {
-								$interval.cancel(promise)
-							});
-						}, 1000, 120);
-					});
-
-		} ]);
-
-qlApp.controller('TeamsController', [ '$scope', '$http', '$interval',
-		'entityService', function($scope, $http, $interval, entityService) {
-
-			entityService.getList("team", function(teams) {
-				$scope.teams = teams;
+					viewService.load("leaguetable",function(ret) {
+						$scope.season = ret;
+					}, {id: globalData.currentSeasonId}).error(function() {
+						$interval.cancel(promise)
+					} );
+				
+				}, 1000, 120);
 			});
+			
 
 		} ]);
+

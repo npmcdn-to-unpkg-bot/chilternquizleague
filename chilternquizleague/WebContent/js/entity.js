@@ -40,13 +40,13 @@ var ENTITY_SERVICE_DEFN = [
 
 			function loadFromServer(type, id, callback) {
 
-				$http.get("jaxrs/" + type + "/" + id, {
+				$http.get("/entity/" + type + "/" + id, {
 					"responseType" : "json"
 				}).success(callback).error(cache.flush);
 			}
 
 			function saveToServer(type, entity, callback) {
-				$http.post("jaxrs/" + type, entity).success(callback).error(
+				$http.post("/entity/" + type, entity).success(callback).error(
 						cache.flush);
 
 			}
@@ -75,7 +75,7 @@ var ENTITY_SERVICE_DEFN = [
 				},
 
 				loadList : function(type, callback) {
-					$http.get("jaxrs/" + type + "-list", {
+					$http.get("/entity/" + type + "-list", {
 						"responseType" : "json"
 					}).success(callback).error(cache.flush);
 				}
