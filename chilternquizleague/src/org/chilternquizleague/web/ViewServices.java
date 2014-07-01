@@ -66,13 +66,15 @@ public class ViewServices extends HttpServlet {
 			allTeams(response);
 		}
 		
+		else if(request.getPathInfo().contains("team-fixtures")){
+			allFixturesForTeam(request, response);
+		}
+		
 		else if (request.getPathInfo().contains("team")){
 			team(request,response);
 		}
 		
-		else if(request.getPathInfo().contains("team_fixtures")){
-			allFixturesForTeam(request, response);
-		}
+
 	}
 	
 	private void team(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -139,13 +141,15 @@ public class ViewServices extends HttpServlet {
 		
 		for(TeamCompetition competition : competitions){
 			
+			if(competition != null){
+			
 			for(Fixtures fixtureSet: competition.getFixtures()){
 				for(Fixture fixture : fixtureSet.getFixtures()){
 					
 					fixtures.add(new FixtureView(fixture, competition));
 				}
 			}
-			
+			}
 			
 		}
 		

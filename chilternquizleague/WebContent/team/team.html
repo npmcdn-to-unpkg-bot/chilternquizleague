@@ -6,12 +6,12 @@
 	<div>Current league standing: {{}}</div>
 	<div>
 		<div>Last few results:</div>
-				<div ng-repeat="result in results | nextNResults">{{result.date}} - {{result.fixture.home.shortName}} {{result.home}} : {{result.fixture.away.shortName}} {{result.away}}</div>
+				<div ng-repeat="result in results">{{result.date}} - {{result.fixture.home.shortName}} {{result.home}} : {{result.fixture.away.shortName}} {{result.away}}</div>
 		
 		<div></div>
 	</div>
 	<div>
 		<div>Next few fixtures:</div>
-		<div ng-repeat="fixture in fixtures | nextNFixtures | reverse">{{fixture.date}} - {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
+		<div ng-repeat="fixture in fixtures | orderBy:'fixture.date'">{{fixture.date.toDateString()}} - {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
 	</div>
 </div>
