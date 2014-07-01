@@ -148,6 +148,7 @@ body{
 @media screen and (max-width: 500px){
 
 	.league-table{width:100%;}
-
+	.front-page-text{
+	float:none;}
 	
 	}

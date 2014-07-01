@@ -4,6 +4,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -12,9 +13,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.chilternquizleague.domain.Competition;
+import org.chilternquizleague.domain.CompetitionType;
+import org.chilternquizleague.domain.Fixture;
+import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
+import org.chilternquizleague.domain.LeagueCompetition;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
+import org.chilternquizleague.domain.TeamCompetition;
+import org.chilternquizleague.views.FixtureView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 import org.chilternquizleague.views.TeamView;
@@ -60,6 +68,10 @@ public class ViewServices extends HttpServlet {
 		
 		else if (request.getPathInfo().contains("team")){
 			team(request,response);
+		}
+		
+		else if(request.getPathInfo().contains("team_fixtures")){
+			allFixturesForTeam(request, response);
 		}
 	}
 	
@@ -112,6 +124,33 @@ public class ViewServices extends HttpServlet {
 					season));
 
 		}
+	}
+	
+	private void allFixturesForTeam(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException{
+		final Long seasonId = Long.parseLong(req.getParameter("seasonId"));
+		final Long teamId = Long.parseLong(req.getParameter("teamId"));
+		
+		final Season season = ofy().load().key(Key.create(Season.class, seasonId)).now();
+		final Team team = ofy().load().key(Key.create(Team.class, teamId)).now();
+		
+		final List<TeamCompetition> competitions = Arrays.<TeamCompetition>asList((TeamCompetition)season.getCompetition(CompetitionType.LEAGUE), (TeamCompetition)season.getCompetition(CompetitionType.CUP), (TeamCompetition)season.getCompetition(CompetitionType.PLATE));
+		final List<FixtureView> fixtures = new ArrayList<>();
+		
+		for(TeamCompetition competition : competitions){
+			
+			for(Fixtures fixtureSet: competition.getFixtures()){
+				for(Fixture fixture : fixtureSet.getFixtures()){
+					
+					fixtures.add(new FixtureView(fixture, competition));
+				}
+			}
+			
+			
+		}
+		
+		objectMapper.writeValue(resp.getWriter(), fixtures);
+		
 	}
 
 }

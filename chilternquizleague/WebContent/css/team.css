@@ -1,10 +1,12 @@
 .teams {
-	float: left;
+	margin-top:1em;
+	#float: left;
 	height: 80%;
 	width: 8em;
 }
 
 .team-pane {
+	margin-top:1em;
 	margin-left: 10.5em;
 	padding: .25em;
 }

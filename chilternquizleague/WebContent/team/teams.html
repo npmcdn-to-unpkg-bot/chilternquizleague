@@ -16,12 +16,19 @@
 <script type="text/javascript" src="/js/team.js"></script>
 </head>
 <body>
-<div ng-include="'/top.html'"></div>
-<div>
-	<div class="show teams">
-		<div ng-repeat="team in teams | orderBy:'team.shortName'"><a href="#/team/{{team.id}}">{{team.name}}</a></div>
+	<div>
+		<div ng-include="'/top.html'"></div>
+		<div class="body-container">
+			<div class="show teams standard-margins">
+				<div ng-repeat="team in teams | orderBy:'team.shortName'">
+					<a href="#/team/{{team.id}}">{{team.name}}</a>
+				</div>
+			</div>
+			<div class="show team-pane standard-margins">
+				<div ng-view></div>
+			</div>
+		</div>
 	</div>
-	<div ng-view class="team-pane standard-margins"></div>
-</div>
 </body>
+
 </html>
