@@ -56,7 +56,7 @@
 						<tbody>
 							<tr ng-repeat="item in table.rows">
 								<td class="numeric">{{item.position ? item.position : ($index + 1)}}</td>
-								<td><a href="/team/teams.html#team/{{item.team.id}}">{{item.team.shortName}}</a></td>
+								<td><a href="/team/teams.html#{{item.team.id}}">{{item.team.shortName}}</a></td>
 								<td class="numeric">{{item.played}}</td>
 								<td class="numeric">{{item.won}}</td>
 								<td class="numeric">{{item.lost}}</td>

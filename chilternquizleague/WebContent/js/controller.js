@@ -7,20 +7,21 @@ qlApp.controller('ResultsController', [
 		'$interval','viewService',
 		function($scope, $http, $interval, viewService) {
 
-			viewService.view("globaldata", function(globalData) {
+			viewService.view("globaldata", {}, function(globalData) {
 
+				function loadTable(){
+					viewService.view("leaguetable", {id: globalData.currentSeasonId},function(ret) {
+						$scope.season = ret;
+					});
+				}
+				
 				$scope.leagueName = globalData.leagueName;
 				$scope.frontPageText = globalData.frontPageText;
 
-				var promise = $interval(function() {
-
-					viewService.view("leaguetable", {id: globalData.currentSeasonId},function(ret) {
-						$scope.season = ret;
-					}).error(function() {
-						$interval.cancel(promise)
+				loadTable();
+				var promise = $interval(loadTable, 1000, 120).error(function() {
+						$interval.cancel(promise);
 					} );
-				
-				}, 1000, 120);
 			});
 			
 

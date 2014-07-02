@@ -21,11 +21,31 @@
 		<div class="body-container">
 			<div class="show teams standard-margins">
 				<div ng-repeat="team in teams | orderBy:'team.shortName'">
-					<a href="#/team/{{team.id}}">{{team.name}}</a>
+					<a href="" ng-click="setTeam(team)">{{team.name}}</a>
 				</div>
 			</div>
 			<div class="show team-pane standard-margins">
-				<div ng-view></div>
+				<div>
+					<div>{{team.name}}</div>
+					<div>
+						<a href="/venue/venue.html/#venue/{{team.venue.id}}">{{team.venue.name}}</a>
+					</div>
+					<div>Current league standing: {{}}</div>
+					<div>
+						<div>Last few results:</div>
+						<div ng-repeat="result in results">{{result.date}} -
+							{{result.fixture.home.shortName}} {{result.home}} :
+							{{result.fixture.away.shortName}} {{result.away}}</div>
+
+						<div></div>
+					</div>
+					<div>
+						<div>Next few fixtures:</div>
+						<div
+							ng-repeat="fixture in fixtures | afterNow | orderBy:'fixture.date'">{{fixture.date.toDateString()}}
+							- {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
