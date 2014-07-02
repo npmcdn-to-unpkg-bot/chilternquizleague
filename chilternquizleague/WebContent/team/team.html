@@ -12,6 +12,6 @@
 	</div>
 	<div>
 		<div>Next few fixtures:</div>
-		<div ng-repeat="fixture in fixtures | orderBy:'fixture.date'">{{fixture.date.toDateString()}} - {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
+		<div ng-repeat="fixture in fixtures | afterNow | orderBy:'fixture.date'">{{fixture.date.toDateString()}} - {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
 	</div>
 </div>

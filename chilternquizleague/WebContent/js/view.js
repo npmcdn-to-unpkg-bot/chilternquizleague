@@ -9,17 +9,35 @@ var VIEW_SERVICE_DEFN = [ "$http", function($http) {
 		
 		paramString = paramString.length > 0 ? ("?"+ paramString.slice(0,-1)):"";
 		
-		return $http.get("/view/" + type + "/" + paramString, {
+		return doLoad(type, paramString, callback);
+	}
+	
+	function doLoad(type, paramString, callback){
+		
+		return $http.get("/view/" + type + paramString, {
 			"responseType" : "json"
 		}).success(callback);
 	}
 
 	var service = {
 
-		load : function(type, callback, params) {
+		load : function(type, id, callback) {
 
+			return doLoad(type, "/" + id, callback);
+		},
+		
+		view : function(type, params, callback){
+			
 			return loadFromServer(type, params, callback);
 		},
+		
+		list : function(type, callback){
+			
+			return doLoad(type, "", callback);
+		}
+		
+		
+		
 
 	};
 	return service;

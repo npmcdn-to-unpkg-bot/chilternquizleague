@@ -7,16 +7,16 @@ qlApp.controller('ResultsController', [
 		'$interval','viewService',
 		function($scope, $http, $interval, viewService) {
 
-			viewService.load("globaldata", function(globalData) {
+			viewService.view("globaldata", function(globalData) {
 
 				$scope.leagueName = globalData.leagueName;
 				$scope.frontPageText = globalData.frontPageText;
 
 				var promise = $interval(function() {
 
-					viewService.load("leaguetable",function(ret) {
+					viewService.view("leaguetable", {id: globalData.currentSeasonId},function(ret) {
 						$scope.season = ret;
-					}, {id: globalData.currentSeasonId}).error(function() {
+					}).error(function() {
 						$interval.cancel(promise)
 					} );
 				

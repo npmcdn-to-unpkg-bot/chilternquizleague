@@ -1,5 +1,20 @@
+(function(){
 var teamApp = angular.module('teamApp', [ "ngRoute" ]).factory('viewService',
 		VIEW_SERVICE_DEFN);
+
+teamApp.filter('afterNow', function() {
+    return function(input) {
+     var now = new Date().toDateString();
+     var ret = [];
+     for(idx in input){
+    	 if(input[idx].date.toDateString() >= now){
+    		 ret.push(input[idx]);
+    	 }
+     }
+     
+     return ret;
+    };
+  });
 
 teamApp.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/team/:teamId/:cycle', {
@@ -23,12 +38,12 @@ teamApp.controller('TeamsController', [
 		'$location',
 		function($scope, $http, $interval, viewService, $location) {
 
-			viewService.load("globaldata", function(globalData) {
+			viewService.view("globaldata", function(globalData) {
 
 				$scope.leagueName = globalData.leagueName;
 			});
 
-			viewService.load("teams", function(teams) {
+			viewService.list("teams", function(teams) {
 				$scope.teams = teams;
 
 
@@ -58,17 +73,18 @@ teamApp.controller('TeamController',
 					
 					var teamId = $routeParams.teamId;
 
-					viewService.load("team", function(team) {
+					viewService.load("team", teamId, function(team) {
 						$scope.team = team;
-					}, {
-						id : teamId
 					});
 
-					viewService.load("globaldata", function(globalData) {
+					viewService.view("globaldata", function(globalData) {
 
 						$scope.global = globalData;
 
-						viewService.load("team-fixtures", function(fixtures) {
+						viewService.view("team-fixtures",{
+							seasonId : globalData.currentSeasonId,
+							teamId : teamId
+						}, function(fixtures) {
 
 							for (idx in fixtures) {
 
@@ -77,10 +93,8 @@ teamApp.controller('TeamController',
 							}
 
 							$scope.fixtures = fixtures;
-						}, {
-							seasonId : globalData.currentSeasonId,
-							teamId : teamId
-						});
+						} );
 					});
 
 				} ]);
+})();
