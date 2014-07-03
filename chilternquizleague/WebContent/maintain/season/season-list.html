@@ -2,7 +2,7 @@
 	<div class="box-title">Seasons</div>
 	<button onclick="document.location='#seasons/new'">Add New</button>
 
-	<div ng-repeat="season in seasons | orderBy:'season.endYear'">
+	<div ng-repeat="season in seasons | orderBy:'startYear'">
 		<div><a href="#seasons/{{season.id}}">{{season.startYear}}/{{season.endYear}}</a></div>
 	</div>
 

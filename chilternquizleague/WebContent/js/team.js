@@ -1,13 +1,13 @@
 (function() {
-	var teamApp = angular.module('teamApp', [ "ngRoute" ]).factory(
-			'viewService', VIEW_SERVICE_DEFN);
+	var teamApp = angular.module('teamApp', [ "ngRoute" ]).factory('viewService',
+			VIEW_SERVICE_DEFN);
 
 	teamApp.filter('afterNow', function() {
 		return function(input) {
-			function makeDateString(date){
+			function makeDateString(date) {
 				return date.toISOString();
 			}
-			
+
 			var now = makeDateString(new Date());
 			var ret = [];
 			for (idx in input) {
@@ -20,8 +20,6 @@
 		};
 	});
 
-	var promise;
-
 	teamApp
 			.controller(
 					'TeamsController',
@@ -32,45 +30,50 @@
 							'$routeParams',
 							'viewService',
 							'$location',
-							function($scope, $http, $interval, $routeParams,
-									viewService, $location) {
+							function($scope, $http, $interval, $routeParams, viewService,
+									$location) {
 
+								var promise = null;
 								var teamId = $location.path().substr(1);
-								$scope.$watch("team", function(team){
-									
-									//$location.path(team.id);
-									if($scope.global){
-									viewService.view("team-fixtures", {
-										seasonId : $scope.global.currentSeasonId,
-										teamId : team.id
-									}, function(fixtures) {
+								$scope.$watch("team", function(team) {
 
-										for (idx in fixtures) {
+									if (team) {
+										$location.path("/" + team.id);
+										if ($scope.global && !team.extras) {
+											viewService.view("team-extras", {
+												seasonId : $scope.global.currentSeasonId,
+												teamId : team.id
+											}, function(extras) {
 
-											fixtures[idx].date = new Date(fixtures[idx].date);
+												for (idx in extras.fixtures) {
+
+													extras.fixtures[idx].date = new Date(fixtures[idx].date);
+												}
+
+												team.extras = extras;
+											});
 										}
-
-										$scope.fixtures = fixtures;
-									});}
-
-							});
-								viewService.view("globaldata",{}, function(
-										globalData) {
+									}
+								});
+								viewService.view("globaldata", {}, function(globalData) {
 									$scope.global = globalData;
 									$scope.leagueName = globalData.leagueName;
 								});
 
-								$scope.setTeam = function(team){
-									
+								$scope.setTeam = function(team) {
+
 									$interval.cancel(promise);
 									$scope.team = team;
 								};
-								
+
 								viewService
 										.list(
 												"teams",
 												function(teams) {
-													$scope.teams = teams;
+													$scope.teams = teams.sort(function(team1, team2) {
+														return team1.shortName
+																.localeCompare(team2.shortName);
+													});
 													if (teamId) {
 														for (idx in teams) {
 															if (teams[idx].id == teamId) {
@@ -89,65 +92,7 @@
 													}
 
 												});
-					
 
 							} ]);
 
-	teamApp.controller('TeamController', [
-			'$scope',
-			'$http',
-			'$interval',
-			'$routeParams',
-			'viewService',
-			'$location',
-			function($scope, $http, $interval, $routeParams, viewService,
-					$location) {
-
-				!$routeParams.cycle && promise ? $interval.cancel(promise)
-						: null;
-
-				var teamId = $routeParams.teamId;
-
-				
-				$scope.$on("team", function(team){
-					
-
-					viewService.view("team-fixtures", {
-						seasonId : globalData.currentSeasonId,
-						teamId : team.id
-					}, function(fixtures) {
-
-						for (idx in fixtures) {
-
-							fixtures[idx].date = new Date(fixtures[idx].date);
-						}
-
-						$scope.fixtures = fixtures;
-					});
-
-			});
-				
-				viewService.load("team", teamId, function(team) {
-					$scope.team = team;
-				});
-
-				viewService.view("globaldata", function(globalData) {
-
-					$scope.global = globalData;
-
-					viewService.view("team-fixtures", {
-						seasonId : globalData.currentSeasonId,
-						teamId : teamId
-					}, function(fixtures) {
-
-						for (idx in fixtures) {
-
-							fixtures[idx].date = new Date(fixtures[idx].date);
-						}
-
-						$scope.fixtures = fixtures;
-					});
-				});
-
-			} ]);
 })();

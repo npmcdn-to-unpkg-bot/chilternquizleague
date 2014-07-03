@@ -17,6 +17,7 @@ public class LeagueCompetition extends TeamCompetition{
 	public LeagueCompetition()
 	{
 		super(CompetitionType.LEAGUE);
+		setDescription("League");
 	}
 	
 	private List<LeagueTable> leagueTables = new ArrayList<>();

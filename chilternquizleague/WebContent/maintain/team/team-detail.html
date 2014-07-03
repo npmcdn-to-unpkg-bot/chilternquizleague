@@ -17,6 +17,11 @@
 					ng-change="team.name=team.venue.name"></td>
 			</tr>
 			<tr>
+					<td>Rubric</td>
+					<td><textarea ng-model="team.rubric.text" cols="60"
+							rows="15" ></textarea></td>
+				</tr>
+			<tr>
 				<td></td>
 				<td><div><button ng-click="addUser(userToAdd)">Add</button><select ng-model="userToAdd" ng-options="user as user.name for user in users"/></div></td>
 			</tr>

@@ -2,6 +2,7 @@ html,body{
 	margin:0;
 	height:100%;
 	font-family: "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	font-size: medium; 
 }
 
 body{
@@ -16,8 +17,14 @@ body{
 }
 
 .show{
-	border: solid 10px lightgray;
-	border-radius: 15px;
+	border: solid .5em lightgray;
+	border-radius: .75em;
+	
+}
+
+.show-thin{
+	border: solid .2em lightgray;
+	border-radius: .25em;
 	
 }
 
@@ -36,7 +43,7 @@ body{
 	padding-left:.25em;
  	color: lightblue; 
  	text-shadow: 0 0 5px lightblue, 0 0 10px lightblue, 0 0 15px lightblue, 0 0 20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue; 
- 	letter-spacing: 5px;  
+ 	letter-spacing: .25em;  
  }
 
 .index-page-header text{
@@ -85,7 +92,7 @@ body{
 	
 	float:right;
 	border: solid medium lightgray;
-	border-radius: 10px;
+	border-radius: .75em;
 	margin-left: 0;
 	margin-right:0;
 
@@ -101,7 +108,7 @@ body{
 .league-table-tbl tr>td{
 	
 	border: solid thin lightgray;
-	border-radius: 5px;
+	border-radius: .25em;
 
 }
 
@@ -120,7 +127,7 @@ body{
 	
 	background: lightblue;
 	border: medium solid lightblue;
-	border-radius: 5px;
+	border-radius: .25em;
 }
 
 .league-table-tbl thead tr.league-table-description td{
@@ -128,6 +135,19 @@ body{
 	background: #99ccff;
 	border: medium solid #99ccff;
 
+}
+
+.selected{
+	
+	background: lightblue;
+	border: medium solid lightblue;
+	border-radius: .25em;
+}
+
+.titled-list>div:first-of-type{
+	color:darkblue;
+	font-weight: bold;
+	
 }
 
 @media screen and (max-width: 1000px){

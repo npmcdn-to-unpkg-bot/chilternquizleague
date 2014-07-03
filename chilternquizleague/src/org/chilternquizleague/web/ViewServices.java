@@ -21,8 +21,10 @@ import org.chilternquizleague.domain.GlobalApplicationData;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.TeamCompetition;
+import org.chilternquizleague.domain.Text;
 import org.chilternquizleague.domain.User;
 import org.chilternquizleague.domain.Venue;
+import org.chilternquizleague.views.FixtureView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 
@@ -43,9 +45,6 @@ public class ViewServices extends HttpServlet {
 	private ObjectMapper objectMapper;
 	
 
-	
-
-
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
@@ -55,14 +54,26 @@ public class ViewServices extends HttpServlet {
 		final SimpleModule module = new SimpleModule();
 		
 		module.addSerializer(User.class, new UserSerializer());
+		module.addSerializer(Text.class, new TextSerializer());
 		
 		objectMapper.registerModule(module);
 	}
 	
-	public static class UserSerializer extends JsonSerializer<User>{
+	private static class UserSerializer extends JsonSerializer<User>{
 
 		@Override
 		public void serialize(User team, JsonGenerator gen,
+				SerializerProvider prov) throws IOException,
+				JsonProcessingException {
+	
+		}
+		
+	}
+	
+	private static class TextSerializer extends JsonSerializer<Text>{
+
+		@Override
+		public void serialize(Text text, JsonGenerator gen,
 				SerializerProvider prov) throws IOException,
 				JsonProcessingException {
 						
@@ -165,7 +176,7 @@ public class ViewServices extends HttpServlet {
 		final Season season = ofy().load().key(Key.create(Season.class, seasonId)).now();
 		
 		final List<TeamCompetition> competitions = Arrays.<TeamCompetition>asList((TeamCompetition)season.getCompetition(CompetitionType.LEAGUE), (TeamCompetition)season.getCompetition(CompetitionType.CUP), (TeamCompetition)season.getCompetition(CompetitionType.PLATE));
-		final List<Fixture> fixtures = new ArrayList<>();
+		final List<FixtureView> fixtures = new ArrayList<>();
 		
 		for(TeamCompetition competition : competitions){
 			
@@ -175,7 +186,7 @@ public class ViewServices extends HttpServlet {
 				for(Fixture fixture : fixtureSet.getFixtures()){
 					
 					if(fixture.getHome().getId().equals(teamId) || fixture.getAway().getId().equals(teamId)){
-						fixtures.add(fixture);
+						fixtures.add(new FixtureView(fixture, competition));
 					}
 					
 				}

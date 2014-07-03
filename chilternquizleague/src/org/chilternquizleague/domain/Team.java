@@ -20,6 +20,8 @@ public class Team extends BaseEntity{
 	
 	private Ref<Venue> venueRef;
 	
+	private Text rubric;
+	
 	private List<Ref<User>> userRefs = new ArrayList<>();
 	
 	public String getName() {
@@ -54,6 +56,14 @@ public class Team extends BaseEntity{
 	public void setUsers(List<User> users) {
 		
 		userRefs = Utils.entitiesToRefs(users);
+	}
+
+	public Text getRubric() {
+		return rubric;
+	}
+
+	public void setRubric(Text text) {
+		this.rubric = text;
 	}
 
 

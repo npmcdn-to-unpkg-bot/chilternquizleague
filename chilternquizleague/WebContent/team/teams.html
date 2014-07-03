@@ -5,6 +5,7 @@
 <title>{{leagueName}}</title>
 <link href='http://fonts.googleapis.com/css?family=Nunito:700'
 	rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic' rel='stylesheet' type='text/css'>
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <link type="text/css" rel="stylesheet" href="/css/main.css">
 <link type="text/css" rel="stylesheet" href="/css/menu-other.css">
@@ -20,8 +21,8 @@
 		<div ng-include="'/top.html'"></div>
 		<div class="body-container">
 			<div class="show teams standard-margins">
-				<div ng-repeat="team in teams | orderBy:'team.shortName'">
-					<a href="" ng-click="setTeam(team)">{{team.name}}</a>
+				<div ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : ''">
+					<a href="" ng-click="setTeam(item)">{{item.name}}</a>
 				</div>
 			</div>
 			<div class="show team-pane standard-margins">
@@ -31,18 +32,19 @@
 						<a href="/venue/venue.html/#venue/{{team.venue.id}}">{{team.venue.name}}</a>
 					</div>
 					<div>Current league standing: {{}}</div>
-					<div>
+					<div>{{team.extras.rubric}}</div>
+					<div class="show-thin standard-margins titled-list" >
 						<div>Last few results:</div>
-						<div ng-repeat="result in results">{{result.date}} -
+						<div ng-repeat="result in results | orderBy:'date' : reverse">{{result.date}} -
 							{{result.fixture.home.shortName}} {{result.home}} :
 							{{result.fixture.away.shortName}} {{result.away}}</div>
 
 						<div></div>
 					</div>
-					<div>
+					<div class="show-thin standard-margins titled-list">
 						<div>Next few fixtures:</div>
 						<div
-							ng-repeat="fixture in fixtures | afterNow | orderBy:'fixture.date'">{{fixture.date.toDateString()}}
+							ng-repeat="fixture in team.extras.fixtures | afterNow | orderBy:'date'">{{fixture.date.toDateString()}}
 							- {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
 					</div>
 				</div>
