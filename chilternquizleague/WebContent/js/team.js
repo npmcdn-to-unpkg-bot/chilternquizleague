@@ -97,20 +97,22 @@
 
 									var contents = generateICalContent(team.extras.fixtures);
 
+									var filename = team.shortName.replace(/\s/g, "_")
+											+ "_fixtures" + ".ics";
+
 									if (window.navigator.msSaveOrOpenBlob) {
-										var fileData = [ str ];
+										var fileData = [ contents ];
 										blobObject = new Blob(fileData);
-										$(anchorSelector).click(function() {
-											window.navigator.msSaveOrOpenBlob(blobObject, fileName);
-										});
+
+										window.navigator.msSaveOrOpenBlob(blobObject, filename);
+
 									} else {
 										var pom = document.createElement('a');
 										pom.setAttribute('href',
 												'data:text/calendar;charset=utf-8,'
 														+ encodeURIComponent(contents));
-										pom.setAttribute('download', team.shortName.replace(/\s/g,
-												"_")
-												+ "_fixtures" + ".ics");
+
+										pom.setAttribute('download', filename);
 										pom.click();
 									}
 

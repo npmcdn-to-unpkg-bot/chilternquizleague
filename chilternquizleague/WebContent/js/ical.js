@@ -4,7 +4,7 @@
  */
 function generateICalContent(fixtures){
 	
-	var file = "BEGIN:VCALENDAR\n";
+	var file = "BEGIN:VCALENDAR\nVERSION:2.0\n";
 	
 	function factorAsICSDate(date){
 		
@@ -21,11 +21,13 @@ function generateICalContent(fixtures){
 		var endDate = new Date(fixture.date);
 		endDate.setHours(22,0,0,0);
 		
+		var description = fixture.home.shortName + " - " + fixture.away.shortName + " : " + fixture.competition + "\n";
+		
 		file += "BEGIN:VEVENT\n";
 		file += "DTSTAMP:" + now;
-		file += "UID:" + startDate.getTime() + "." + fixture.home.shortName.replace(/\s/g,"") + ".chilternquizleague.uk\n";
-		file += "DESCRIPTION:" + fixture.home.shortName + " - " + fixture.away.shortName + " : " + fixture.competition + "\n";
-		file += "SUMMARY:" + fixture.home.shortName + " - " + fixture.away.shortName + " : " + fixture.competition + "\n";
+		file += "UID:" + startDate.getTime() + "." + encodeURIComponent(fixture.home.shortName.replace(/\s/g,"")) + ".chilternquizleague.uk\n";
+		file += "DESCRIPTION:" + description;
+		file += "SUMMARY:" + description;
 		
 		file += "DTSTART:" + factorAsICSDate(startDate);
 		file += "DTEND:" + factorAsICSDate(endDate);
