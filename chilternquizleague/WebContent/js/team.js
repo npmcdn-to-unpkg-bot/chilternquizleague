@@ -47,7 +47,8 @@
 
 												for (idx in extras.fixtures) {
 
-													extras.fixtures[idx].date = new Date(extras.fixtures[idx].date);
+													extras.fixtures[idx].date = new Date(
+															extras.fixtures[idx].date);
 												}
 
 												team.extras = extras;
@@ -92,15 +93,27 @@
 													}
 
 												});
-								$scope.makeICal = function(team){
-									
+								$scope.makeICal = function(team) {
+
 									var contents = generateICalContent(team.extras.fixtures);
-									
-									var pom = document.createElement('a');
-							    pom.setAttribute('href', 'data:text/calendar;charset=utf-8,' + encodeURIComponent(contents));
-							    pom.setAttribute('download', team.shortName + ".ics");
-							    pom.click();
-							    document.removeChild(pom);
+
+									if (window.navigator.msSaveOrOpenBlob) {
+										var fileData = [ str ];
+										blobObject = new Blob(fileData);
+										$(anchorSelector).click(function() {
+											window.navigator.msSaveOrOpenBlob(blobObject, fileName);
+										});
+									} else {
+										var pom = document.createElement('a');
+										pom.setAttribute('href',
+												'data:text/calendar;charset=utf-8,'
+														+ encodeURIComponent(contents));
+										pom.setAttribute('download', team.shortName.replace(/\s/g,
+												"_")
+												+ "_fixtures" + ".ics");
+										pom.click();
+									}
+
 								};
 
 							} ]);
