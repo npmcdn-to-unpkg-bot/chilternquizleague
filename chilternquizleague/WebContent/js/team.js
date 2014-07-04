@@ -47,7 +47,7 @@
 
 												for (idx in extras.fixtures) {
 
-													extras.fixtures[idx].date = new Date(fixtures[idx].date);
+													extras.fixtures[idx].date = new Date(extras.fixtures[idx].date);
 												}
 
 												team.extras = extras;
@@ -92,6 +92,16 @@
 													}
 
 												});
+								$scope.makeICal = function(team){
+									
+									var contents = generateICalContent(team.extras.fixtures);
+									
+									var pom = document.createElement('a');
+							    pom.setAttribute('href', 'data:text/calendar;charset=utf-8,' + encodeURIComponent(contents));
+							    pom.setAttribute('download', team.shortName + ".ics");
+							    pom.click();
+							    document.removeChild(pom);
+								};
 
 							} ]);
 

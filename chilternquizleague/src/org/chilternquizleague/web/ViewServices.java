@@ -27,6 +27,7 @@ import org.chilternquizleague.domain.Venue;
 import org.chilternquizleague.views.FixtureView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
+import org.chilternquizleague.views.TeamExtras;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -76,7 +77,9 @@ public class ViewServices extends HttpServlet {
 		public void serialize(Text text, JsonGenerator gen,
 				SerializerProvider prov) throws IOException,
 				JsonProcessingException {
-						
+						gen.writeStartObject();
+						gen.writeNullField("text");
+						gen.writeEndObject();
 		}
 		
 	}
@@ -100,8 +103,8 @@ public class ViewServices extends HttpServlet {
 			makeEntityList(response, Team.class);
 		}
 		
-		else if(request.getPathInfo().contains("team-fixtures")){
-			allFixturesForTeam(request, response);
+		else if(request.getPathInfo().contains("team-extras")){
+			teamExtras(request, response);
 		}
 		
 		else if (request.getPathInfo().contains("team")){
@@ -168,12 +171,13 @@ public class ViewServices extends HttpServlet {
 		}
 	}
 	
-	private void allFixturesForTeam(HttpServletRequest req,
+	private void teamExtras(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException{
 		final Long seasonId = Long.parseLong(req.getParameter("seasonId"));
 		final Long teamId = Long.parseLong(req.getParameter("teamId"));
 		
 		final Season season = ofy().load().key(Key.create(Season.class, seasonId)).now();
+		final Team team = ofy().load().key(Key.create(Team.class, teamId)).now();
 		
 		final List<TeamCompetition> competitions = Arrays.<TeamCompetition>asList((TeamCompetition)season.getCompetition(CompetitionType.LEAGUE), (TeamCompetition)season.getCompetition(CompetitionType.CUP), (TeamCompetition)season.getCompetition(CompetitionType.PLATE));
 		final List<FixtureView> fixtures = new ArrayList<>();
@@ -195,7 +199,11 @@ public class ViewServices extends HttpServlet {
 			
 		}
 		
-		objectMapper.writeValue(resp.getWriter(), fixtures);
+		TeamExtras extras = new TeamExtras(team, fixtures);
+		
+		objectMapper.writeValue(System.out, extras);
+		
+		objectMapper.writeValue(resp.getWriter(), extras);
 		
 	}
 

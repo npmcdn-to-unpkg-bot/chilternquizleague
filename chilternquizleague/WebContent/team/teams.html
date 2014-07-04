@@ -15,6 +15,7 @@
 <script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/view.js"></script>
 <script type="text/javascript" src="/js/team.js"></script>
+<script type="text/javascript" src="/js/ical.js"></script>
 </head>
 <body>
 	<div>
@@ -42,9 +43,10 @@
 						<div></div>
 					</div>
 					<div class="show-thin standard-margins titled-list">
+						<a href="" ng-click="makeICal(team)">Download Calendar</a>
 						<div>Next few fixtures:</div>
 						<div
-							ng-repeat="fixture in team.extras.fixtures | afterNow | orderBy:'date'">{{fixture.date.toDateString()}}
+							ng-repeat="fixture in team.extras.fixtures | afterNow | orderBy:'date'">{{fixture.competition}} - {{fixture.date.toDateString()}}
 							- {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
 					</div>
 				</div>

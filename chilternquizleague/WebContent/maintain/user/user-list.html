@@ -2,7 +2,7 @@
 	<div class="box-title">Users</div>
 	<button onclick="document.location='#users/new'">Add New</button>
 
-	<div ng-repeat="user in users | orderBy : 'user.name'">
+	<div ng-repeat="user in users | orderBy : 'name'">
 		<div><a href="#users/{{user.id}}">{{user.name}}</a></div>
 	</div>
 

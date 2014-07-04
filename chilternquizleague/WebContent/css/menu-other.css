@@ -93,7 +93,7 @@
         
         .navigation ul ul li{
             background-color:lightblue; /* grey */
-            border: thin solid lightblue;
+            border: thin solid white;
 			border-radius: 10px;
             width:170px;
             -webkit-transition: background-color 0.3s ease;
@@ -101,11 +101,12 @@
             -o-transition: background-color 0.3s ease;
             -ms-transition: background-color 0.3s ease;
             transition: background-color 0.3s ease;
-            margin-top:2px;
+            margin-top:0px;
         }
         
         .navigation ul ul li:hover {
-            background-color:#99ccff; /* grey */
+            background-color:#99ccff;
+            border-color: #99ccff;
         }
         
         .navigation ul ul li a {

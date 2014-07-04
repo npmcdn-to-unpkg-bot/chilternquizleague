@@ -184,11 +184,7 @@
 		};
 	}));
 
-	maintainApp.controller('UserListCtrl', getCommonParams(makeListFn("user", {
-		sort : function(user1, user2) {
-			return user1.name.localCompare(user2.name);
-		}
-	})));
+	maintainApp.controller('UserListCtrl', getCommonParams(makeListFn("user")));
 
 	maintainApp.controller('UserDetailCtrl',
 			getCommonParams(makeUpdateFn("user")));

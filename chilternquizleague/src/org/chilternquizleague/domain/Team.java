@@ -59,7 +59,7 @@ public class Team extends BaseEntity{
 	}
 
 	public Text getRubric() {
-		return rubric;
+		return rubric = rubric == null ? new Text() : rubric;
 	}
 
 	public void setRubric(Text text) {

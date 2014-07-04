@@ -1,6 +1,6 @@
 <div>
 	<div class="box-title">User Details</div>
-	<form novalidate>
+	<form>
 		<table>
 			<tr>
 				<td>Name</td>
@@ -8,7 +8,7 @@
 			</tr>
 			<tr>
 				<td>email</td>
-				<td><input ng-model="user.email" ng-change="user.name=user.email"></td>
+				<td><input type="email" ng-model="user.email" ng-change="user.name=user.email" required></td>
 			</tr>
 
 			<tfoot>
