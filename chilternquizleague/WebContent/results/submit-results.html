@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="mainApp" ng-controller="MainController">
+<head>
+<meta charset="UTF-8">
+<title>{{leagueName}}</title>
+<link href='http://fonts.googleapis.com/css?family=Nunito:700'
+	rel='stylesheet' type='text/css'>
+<link
+	href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic'
+	rel='stylesheet' type='text/css'>
+<link rel="icon" type="image/gif" href="/favicon.gif" />
+<link type="text/css" rel="stylesheet" href="/css/main.css">
+<link type="text/css" rel="stylesheet" href="/css/menu-other.css">
+<link type="text/css" rel="stylesheet" href="/css/team.css">
+<script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-animate.js"></script>
+<script type="text/javascript" src="/js/view.js"></script>
+<script type="text/javascript" src="/js/controller.js"></script>
+<script type="text/javascript" src="/js/results.js"></script>
+</head>
+<body>
+	<div>
+		<div ng-include="'/top.html'"></div>
+		<div class="body-container" ng-controller="ResultsSubmitController">
+		Submit Results
+		
+		<form >
+			<div>Enter your email address : <input type="email" ng-model="email" ng-change="fixturesForEmail(email)" size="50" required/></div>
+			<div ng-if="fixture">
+			<div>{{fixture.date.toDateString()}} : {{fixture.home.name}} - {{fixture.away.name}}</div>
+			<table >
+				<thead><tr><td colspan="2">League</td></tr></thead>
+				<tr><td>{{leagueResult.fixture.home.shortName}}</td><td><input type="number" ng-model="leagueResult.homeScore"/></td></tr>
+				<tr><td>{{leagueResult.fixture.away.shortName}}</td><td><input type="number" ng-model="leagueResult.awayScore"/></td></tr>
+				<thead><tr><td colspan="2">Beer Leg</td></tr></thead>
+				<tr><td>{{beerResult.fixture.home.shortName}}</td><td><input type="number" ng-model="beerResult.homeScore"/></td></tr>
+				<tr><td>{{beerResult.fixture.away.shortName}}</td><td><input type="number" ng-model="beerResult.awayScore"/></td></tr>
+				<thead><tr><td colspan="2">Report</td></tr></thead>
+				<tr><td colspan="2"><div><textarea cols="60" rows="15" ng-model="leagueResult.reports[0].text"></textarea></div></td></tr>
+				<tr><td colspan="2"><button ng-click="submitResults()">Submit</button>
+			</table>
+			</div>
+		</form>
+		</div>
+	</div>
+
+</body>
+</html>

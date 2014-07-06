@@ -34,6 +34,10 @@ var VIEW_SERVICE_DEFN = [ "$http", function($http) {
 		list : function(type, callback){
 			
 			return doLoad(type, "", callback);
+		},
+		
+		post : function(type, payload, callback){
+			return $http.post("/view/" + type, payload).success(callback);
 		}
 		
 		

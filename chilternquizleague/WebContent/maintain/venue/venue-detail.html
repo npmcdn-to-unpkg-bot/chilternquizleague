@@ -1,18 +1,14 @@
 <div>
 	<div class="box-title">Venue Details</div>
-	<form novalidate >
+	<form>
 		<table>
 			<tr>
 				<td>Name</td>
-				<td><input ng-model="venue.name"></td>
+				<td><input ng-model="venue.name" required></td>
 			</tr>
 			<tr>
 				<td>Address</td>
-				<td><textarea rows="10" cols="30" ng-model="venue.address"></textarea></td>
-			</tr>
-			<tr>
-				<td>Postcode</td>
-				<td><input ng-model="venue.postcode"></td>
+				<td><textarea rows="10" cols="30" ng-model="venue.address" required></textarea></td>
 			</tr>
 			<tr>
 				<td>Phone</td>
@@ -20,11 +16,11 @@
 			</tr>
 			<tr>
 				<td>Email Address</td>
-				<td><input ng-model="venue.email"></td>
+				<td><input ng-model="venue.email" type="email"></td>
 			</tr>
 			<tr>
 				<td>Website</td>
-				<td><input ng-model="venue.website"></td>
+				<td><input ng-model="venue.website" type="url"></td>
 			</tr>
 			<tfoot><tr><td></td><td>    <button ng-click="resetVenue()">Reset</button>
     <button ng-click="updateVenue(venue)">Save</button></td></tr></tfoot>

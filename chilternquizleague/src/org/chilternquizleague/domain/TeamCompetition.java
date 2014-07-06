@@ -1,6 +1,7 @@
 package org.chilternquizleague.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class TeamCompetition extends Competition {
@@ -31,5 +32,25 @@ public abstract class TeamCompetition extends Competition {
 	public void setResults(List<LeagueResults> results) {
 		this.results = results;
 	}
+	
+	protected final LeagueResults getResultsForDate(Date date){
+		
+		for(LeagueResults resultSet :results){
+			
+			if(Utils.isSameDay(date, resultSet.getDate())){
+				
+				return resultSet;
+			}
+		}
+		
+		final LeagueResults newResults = new LeagueResults();
+		newResults.setDate(date);
+		results.add(newResults);
+		
+		return newResults;
+	}
+	
+	public abstract void addResult(LeagueResultRow result);
+	
 
 }

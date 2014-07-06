@@ -1,22 +1,22 @@
 <div>
 	<div class="box-title">Global Details</div>
-	<form novalidate>
+	<form>
 		<table>
 
 			<tbody>
 				<tr>
 					<td>League Name</td>
-					<td><input ng-model="global.leagueName" /></td>
+					<td><input ng-model="global.leagueName" required/></td>
 				</tr>
 				<tr>
 					<td>Current Season</td>
 					<td><select ng-model="global.currentSeason"
-						ng-options="season as season.startYear for season in seasons" /></td>
+						ng-options="season as season.startYear for season in seasons" required/></td>
 				</tr>
 				<tr>
 					<td>Front Page Text</td>
 					<td><textarea ng-model="global.frontPageText" cols="60"
-							rows="15" ></textarea></td>
+							rows="15" required></textarea></td>
 				</tr>
 			</tbody>
 

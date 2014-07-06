@@ -1,12 +1,11 @@
 .teams {
-	#margin-top:1em;
 	float: left;
-	height: 80%;
+	min-height: 25em;
 	width: 15em;
+	margin-left:0;
 }
 
 .team-pane {
-	#margin-top:1em;
-	margin-left: 17.5em;
+	margin-left: 16.75em;
 	padding: .25em;
 }

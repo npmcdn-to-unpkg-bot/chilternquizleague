@@ -1,123 +1,109 @@
-(function() {
-	var teamApp = angular.module('teamApp', [ "ngRoute" ]).factory('viewService',
-			VIEW_SERVICE_DEFN);
+mainApp.filter('afterNow', function() {
+	return function(input) {
+		function makeDateString(date) {
+			return date.toISOString();
+		}
 
-	teamApp.filter('afterNow', function() {
-		return function(input) {
-			function makeDateString(date) {
-				return date.toISOString();
+		var now = makeDateString(new Date());
+		var ret = [];
+		for (idx in input) {
+			if (makeDateString(input[idx].date) >= now) {
+				ret.push(input[idx]);
 			}
+		}
 
-			var now = makeDateString(new Date());
-			var ret = [];
-			for (idx in input) {
-				if (makeDateString(input[idx].date) >= now) {
-					ret.push(input[idx]);
-				}
-			}
+		return ret;
+	};
+});
 
-			return ret;
-		};
-	});
+mainApp
+		.controller(
+				'TeamsController',
+				[
+						'$scope',
+						'$http',
+						'$interval',
+						'viewService',
+						'$location',
+						function($scope, $http, $interval, viewService, $location) {
 
-	teamApp
-			.controller(
-					'TeamsController',
-					[
-							'$scope',
-							'$http',
-							'$interval',
-							'$routeParams',
-							'viewService',
-							'$location',
-							function($scope, $http, $interval, $routeParams, viewService,
-									$location) {
+							var promise = null;
+							var teamId = $location.path().substr(1);
 
-								var promise = null;
-								var teamId = $location.path().substr(1);
-								$scope.$watch("team", function(team) {
+							$scope.$watch("global", function(global) {
 
-									if (team) {
-										$location.path("/" + team.id);
-										if ($scope.global && !team.extras) {
-											viewService.view("team-extras", {
-												seasonId : $scope.global.currentSeasonId,
-												teamId : team.id
-											}, function(extras) {
+								if (global) {
+									$scope.$watch("team", function(team) {
 
-												for (idx in extras.fixtures) {
+										if (team) {
+											$location.path("/" + team.id);
+											if (!team.extras) {
+												viewService.view("team-extras", {
+													seasonId : global.currentSeasonId,
+													teamId : team.id
+												}, function(extras) {
 
-													extras.fixtures[idx].date = new Date(
-															extras.fixtures[idx].date);
-												}
+													for (idx in extras.fixtures) {
 
-												team.extras = extras;
-											});
-										}
-									}
-								});
-								viewService.view("globaldata", {}, function(globalData) {
-									$scope.global = globalData;
-									$scope.leagueName = globalData.leagueName;
-								});
-
-								$scope.setTeam = function(team) {
-
-									$interval.cancel(promise);
-									$scope.team = team;
-								};
-
-								viewService
-										.list(
-												"teams",
-												function(teams) {
-													$scope.teams = teams.sort(function(team1, team2) {
-														return team1.shortName
-																.localeCompare(team2.shortName);
-													});
-													if (teamId) {
-														for (idx in teams) {
-															if (teams[idx].id == teamId) {
-																$scope.team = teams[idx];
-															}
-														}
-													} else {
-														var teamIndex = 0;
-														$scope.team = teams[0];
-														promise = $interval(
-																function() {
-
-																	$scope.team = $scope.teams[teamIndex = teamIndex >= (teams.length - 1) ? 0
-																			: (teamIndex + 1)];
-																}, 5000);
+														extras.fixtures[idx].date = new Date(
+																extras.fixtures[idx].date);
 													}
 
+													team.extras = extras;
 												});
-								$scope.makeICal = function(team) {
+											}
+										}
+									});
 
-									var contents = generateICalContent(team.extras.fixtures);
+								}
+							});
 
-									var filename = team.shortName.replace(/\s/g, "_")
-											+ "_fixtures" + ".ics";
+							$scope.setTeam = function(team) {
 
-									if (window.navigator.msSaveOrOpenBlob) {
-										var fileData = [ contents ];
-										blobObject = new Blob(fileData);
+								$interval.cancel(promise);
+								$scope.team = team;
+							};
 
-										window.navigator.msSaveOrOpenBlob(blobObject, filename);
+							viewService
+									.list(
+											"teams",
+											function(teams) {
+												$scope.teams = teams
+														.sort(function(team1, team2) {
+															return team1.shortName
+																	.localeCompare(team2.shortName);
+														});
+												if (teamId) {
+													for (idx in teams) {
+														if (teams[idx].id == teamId) {
+															$scope.team = teams[idx];
+														}
+													}
+												} else {
+													var teamIndex = 0;
+													$scope.team = teams[0];
+													promise = $interval(
+															function() {
 
-									} else {
-										var pom = document.createElement('a');
-										pom.setAttribute('href',
-												'data:text/calendar;charset=utf-8,'
-														+ encodeURIComponent(contents));
+																$scope.team = $scope.teams[teamIndex = teamIndex >= (teams.length - 1) ? 0
+																		: (teamIndex + 1)];
+															}, 5000);
+												}
 
-										pom.setAttribute('download', filename);
-										pom.click();
-									}
+											});
+							$scope.makeICal = function(team) {
 
-								};
+								var contents = generateICalContent(team.extras.fixtures);
 
-							} ]);
+								var filename = team.shortName.replace(/\s/g, "_") + "_fixtures"
+										+ ".ics";
 
-})();
+								var blob = new Blob([ contents ], {
+									type : "text/calendar;charset=utf-8"
+								});
+
+								saveAs(blob, filename);
+
+							};
+
+						} ]);

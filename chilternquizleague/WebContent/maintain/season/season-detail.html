@@ -1,16 +1,16 @@
 <div>
 	<div class="box-title">Season Details</div>
 
-	<form novalidate>
+	<form>
 		<table>
 			<tr>
 				<td>Start Year</td>
 				<td><input ng-model="season.startYear"
-					ng-change="updateEndYear(season.startYear)"></td>
+					ng-change="updateEndYear(season.startYear)" required></td>
 			</tr>
 			<tr>
 				<td>End Year</td>
-				<td><input ng-model="season.endYear"></td>
+				<td><input ng-model="season.endYear" required></td>
 			</tr>
 			<tr>
 				<td>Competitions</td>

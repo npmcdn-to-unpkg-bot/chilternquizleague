@@ -35,4 +35,8 @@ public class Fixture{
 		this.away = away == null ? null : Ref.create(away);
 	}
 
+	public boolean isSame(Fixture fixture){
+		
+		return Utils.isSameDay(date, fixture.getDate()) && home.getKey().equivalent(fixture.home.getKey());
+	}
 }

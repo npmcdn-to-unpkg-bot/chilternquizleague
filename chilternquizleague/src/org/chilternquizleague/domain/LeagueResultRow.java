@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.googlecode.objectify.Ref;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 public class LeagueResultRow {
@@ -13,8 +12,19 @@ public class LeagueResultRow {
 	private int homeScore;
 	private int awayScore;
 	
-	private Ref<Fixture> fixture;
-	private List<String> reports = new ArrayList<>();
+	private Fixture fixture;
+	private List<Text> reports = new ArrayList<>();
+	
+	public LeagueResultRow(){}
+	
+	public LeagueResultRow(Fixture fixture, int home, int away, String report){
+		
+		this.fixture = fixture;
+		this.homeScore = home;
+		this.awayScore = away;
+		this.reports.add(new Text(report));
+	}
+	
 	
 	public int getHomeScore() {
 		return homeScore;
@@ -29,15 +39,15 @@ public class LeagueResultRow {
 		this.awayScore = awayScore;
 	}
 	public Fixture getFixture() {
-		return fixture == null ? null : fixture.get();
+		return fixture;
 	}
 	public void setFixture(Fixture fixture) {
-		this.fixture = fixture == null ? null : Ref.create(fixture);
+		this.fixture = fixture;
 	}
-	public List<String> getReports() {
+	public List<Text> getReports() {
 		return reports;
 	}
-	public void setReports(List<String> reports) {
+	public void setReports(List<Text> reports) {
 		this.reports = reports;
 	}
 }

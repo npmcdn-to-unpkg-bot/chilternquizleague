@@ -7,4 +7,10 @@ public class CupCompetition extends TeamCompetition {
 		
 	}
 
+	@Override
+	public void addResult(LeagueResultRow result) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

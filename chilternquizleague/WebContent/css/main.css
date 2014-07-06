@@ -142,6 +142,17 @@ body{
 	background: lightblue;
 	border: medium solid lightblue;
 	border-radius: .25em;
+	transition:background 1s, border-color 1s ease-in;
+}
+
+.unselected{
+	border: medium solid transparent;
+	transition:background 1s, border-color 1s ease-out;
+}
+
+.titled-list{
+	
+	margin-left:0;
 }
 
 .titled-list>div:first-of-type{

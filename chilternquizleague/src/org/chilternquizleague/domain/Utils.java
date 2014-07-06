@@ -1,6 +1,9 @@
 package org.chilternquizleague.domain;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +11,10 @@ import java.util.Map;
 import com.googlecode.objectify.Ref;
 
 public class Utils {
+	
+
+private final static DateFormat format  = new SimpleDateFormat("yyyyMMdd");
+
 	
 	public static <T> List<Ref<T>> entitiesToRefs(List<T> entities){
 		
@@ -82,6 +89,10 @@ public class Utils {
 	}
 	
 	
+	public static boolean isSameDay(Date date1, Date date2){
+		
+		return format.format(date1).compareTo(format.format(date2)) == 0;
+	}
 	
 
 }

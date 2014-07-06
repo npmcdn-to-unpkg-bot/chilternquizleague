@@ -1,20 +1,20 @@
 <div>
 	<div class="box-title">Team Details</div>
-	<form novalidate>
+	<form>
 		<table>
 			<tr>
 				<td>Name</td>
-				<td><input ng-model="team.name"></td>
+				<td><input ng-model="team.name" required></td>
 			</tr>
 			<tr>
 				<td>Short Name</td>
-				<td><input ng-model="team.shortName"></td>
+				<td><input ng-model="team.shortName" required></td>
 			</tr>
 			<tr>
 				<td>Venue</td>
 				<td><select ng-model="team.venue"
 					ng-options="venue as venue.name for venue in venues"
-					ng-change="team.name=team.venue.name"></td>
+					ng-change="team.name=team.venue.name" required></td>
 			</tr>
 			<tr>
 					<td>Rubric</td>

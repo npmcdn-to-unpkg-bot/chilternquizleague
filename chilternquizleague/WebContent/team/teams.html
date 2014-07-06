@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="teamApp" ng-controller="TeamsController">
+<html ng-app="mainApp" ng-controller="MainController">
 <head>
 <meta charset="UTF-8">
 <title>{{leagueName}}</title>
@@ -12,17 +12,18 @@
 <link type="text/css" rel="stylesheet" href="/css/team.css">
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
-<script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/view.js"></script>
+<script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/team.js"></script>
 <script type="text/javascript" src="/js/ical.js"></script>
+<script type="text/javascript" src="/js/FileSaver.js"></script>
 </head>
 <body>
 	<div>
 		<div ng-include="'/top.html'"></div>
-		<div class="body-container">
+		<div class="body-container" ng-controller="TeamsController">
 			<div class="show teams standard-margins">
-				<div ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : ''">
+				<div class="selection-item" ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : 'unselected'">
 					<a href="" ng-click="setTeam(item)">{{item.name}}</a>
 				</div>
 			</div>
