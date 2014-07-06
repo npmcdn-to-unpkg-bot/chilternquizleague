@@ -16,11 +16,13 @@ public class TeamExtras {
 	protected String text;
 	
 	protected List<FixtureView> fixtures = new ArrayList<>();
+	protected List<ResultView> results = new ArrayList<>();
 	
-	public TeamExtras(Team team, List<FixtureView> fixtures) {
+	public TeamExtras(Team team, List<FixtureView> fixtures, List<ResultView> results) {
 		text = team.getRubric().getText();
 		id = team.getId();
 		this.fixtures = fixtures; 
+		this.results = results;
 	}
 
 }

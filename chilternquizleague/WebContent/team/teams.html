@@ -37,9 +37,9 @@
 					<div>{{team.extras.rubric}}</div>
 					<div class="show-thin standard-margins titled-list" >
 						<div>Last few results:</div>
-						<div ng-repeat="result in results | orderBy:'date' : reverse">{{result.date}} -
-							{{result.fixture.home.shortName}} {{result.home}} :
-							{{result.fixture.away.shortName}} {{result.away}}</div>
+						<div ng-repeat="result in team.extras.results | orderBy:'date' : true"> {{result.fixture.competition}} - {{result.fixture.date}} :
+							{{result.fixture.home.shortName}} {{result.homeScore}} :
+							 {{result.awayScore}} {{result.fixture.away.shortName}} </div>
 
 						<div></div>
 					</div>
