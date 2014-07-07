@@ -216,9 +216,10 @@ public class ViewServices extends HttpServlet {
 		final Long teamId = Long.parseLong(req.getParameter("teamId"));
 
 		final Season season = ofy().load()
-				.key(Key.create(Season.class, seasonId)).now();
-		final Team team = ofy().load().key(Key.create(Team.class, teamId))
-				.now();
+				.now(Key.create(Season.class, seasonId));
+
+		final Team team = ofy().load().now(Key.create(Team.class, teamId))
+				;
 
 		final List<FixtureView> fixtures = getTeamFixtures(teamId, season);
 

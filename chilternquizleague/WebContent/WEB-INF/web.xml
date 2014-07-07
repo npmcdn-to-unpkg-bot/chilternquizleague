@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>chilternquizleague</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
-  <servlet>
-    <description>JAX-RS Tools Generated - Do not modify</description>
-    <display-name>Entity REST Services</display-name>
-    <servlet-name>EntityServices</servlet-name>
-    <servlet-class>org.chilternquizleague.web.EntityServices</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EntityServices</servlet-name>
-    <url-pattern>/entity/*</url-pattern>
-  </servlet-mapping>
-  <listener>
-    <listener-class>org.chilternquizleague.web.EntityRegistrationListener</listener-class>
-  </listener>
-  <listener>
-    <listener-class>org.chilternquizleague.web.AppStartListener</listener-class>
-  </listener>
-  <servlet>
-    <description></description>
-    <display-name>View REST Services</display-name>
-    <servlet-name>ViewServices</servlet-name>
-    <servlet-class>org.chilternquizleague.web.ViewServices</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ViewServices</servlet-name>
-    <url-pattern>/view/*</url-pattern>
-  </servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>chilternquizleague</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<description>JAX-RS Tools Generated - Do not modify</description>
+		<display-name>Entity REST Services</display-name>
+		<servlet-name>EntityServices</servlet-name>
+		<servlet-class>org.chilternquizleague.web.EntityServices</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EntityServices</servlet-name>
+		<url-pattern>/entity/*</url-pattern>
+	</servlet-mapping>
+	<listener>
+		<listener-class>org.chilternquizleague.web.EntityRegistrationListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.chilternquizleague.web.AppStartListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>ObjectifyFilter</filter-name>
+		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ObjectifyFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<description></description>
+		<display-name>View REST Services</display-name>
+		<servlet-name>ViewServices</servlet-name>
+		<servlet-class>org.chilternquizleague.web.ViewServices</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ViewServices</servlet-name>
+		<url-pattern>/view/*</url-pattern>
+	</servlet-mapping>
 </web-app>
