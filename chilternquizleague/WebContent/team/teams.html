@@ -34,7 +34,7 @@
 						<a href="/venue/venue.html/#venue/{{team.venue.id}}">{{team.venue.name}}</a>
 					</div>
 					<div>Current league standing: {{}}</div>
-					<div>{{team.extras.rubric}}</div>
+					<div class="text-block">{{team.extras.text}}</div>
 					<div class="show-thin standard-margins titled-list" >
 						<div>Last few results:</div>
 						<div ng-repeat="result in team.extras.results | orderBy:'date' : true"> {{result.fixture.competition}} - {{result.fixture.date}} :
