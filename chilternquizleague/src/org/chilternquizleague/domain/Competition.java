@@ -11,6 +11,8 @@ public abstract class Competition {
 
 	private final CompetitionType type;
 	private String description;
+	private String startTime;
+	private String endTime;
 
 	protected Competition(CompetitionType type)
 	{
@@ -33,7 +35,29 @@ public abstract class Competition {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+
+
 	
 
 }

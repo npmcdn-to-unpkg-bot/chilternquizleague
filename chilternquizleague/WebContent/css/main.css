@@ -161,6 +161,13 @@ body{
 	
 }
 
+.text-block{
+	
+	background-color: powderblue;
+	border-radius : .25em;
+	padding : .25em;
+}
+
 @media screen and (max-width: 1000px){
 	
 	.feeds{

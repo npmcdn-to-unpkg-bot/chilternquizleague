@@ -14,6 +14,8 @@ public abstract class TeamCompetition extends Competition {
 
 	protected TeamCompetition(final CompetitionType type) {
 		super(type);
+		setStartTime("20:30");
+		setEndTime("22:00");
 
 	}
 

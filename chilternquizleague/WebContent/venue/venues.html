@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="mainApp" ng-controller="MainController">
+<head>
+<meta charset="UTF-8">
+<title>{{leagueName}}</title>
+<link href='http://fonts.googleapis.com/css?family=Nunito:700'
+	rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic' rel='stylesheet' type='text/css'>
+<link rel="icon" type="image/gif" href="/favicon.gif" />
+<link type="text/css" rel="stylesheet" href="/css/main.css">
+<link type="text/css" rel="stylesheet" href="/css/menu-other.css">
+<link type="text/css" rel="stylesheet" href="/css/team.css">
+<script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-animate.js"></script>
+<script type="text/javascript" src="/js/controller.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/venue.js"></script>
+</head>
+<body>
+	<div>
+		<div ng-include="'/top.html'"></div>
+		<div class="body-container" ng-controller="VenuesController">
+			<div class="show teams standard-margins">
+				<div class="selection-item" ng-repeat="item in venues | orderBy:'name'" ng-class="item.id == venue.id ? 'selected' : 'unselected'">
+					<a href="" ng-click="setVenue(item)">{{item.name}}</a>
+				</div>
+			</div>
+			<div class="show team-pane standard-margins">
+				<div>
+					<div>{{venue.name}}</div>
+					<div>{{venue.address}}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
