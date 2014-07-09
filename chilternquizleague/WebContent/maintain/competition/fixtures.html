@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<td>Fixtures</td><td>
-				<div class="show" ng-class="fixts.date == currentDate ? 'highlit-border' : ''" ng-repeat="fixts in fixturesList | orderBy : 'date'" ><a href="" ng-click="setCurrentDate(fixts.date)">{{fixts.date.toDateString()}}</a>
+				<div class="show-thin" ng-class="fixts.date.toDateString() == currentDate.toDateString() ? 'highlit-border' : 'lowlit-border'" ng-repeat="fixts in fixturesList | orderBy : 'date'" ><a href="" ng-click="setCurrentDate(fixts.date)">{{fixts.date.toDateString()}}</a>
 					<div ng-repeat="fixt in fixts.fixtures | orderBy : 'home.shortName'">{{fixt.home.shortName}} - {{fixt.away.shortName}} <button class="entity-remove-button" ng-click="removeFixture(fixt)">Remove</button></div>
 				</div></td>
 			</tr>

@@ -44,6 +44,31 @@
 	 width:2em;
 }
 
+@keyframes fadeIn {
+    from { height: 0; }
+      to { height: auto; }
+}
+
 .highlit-border{
 	border-color:lightblue;
+	transition:border-color .5s ease-in-out;
+}
+.highlit-border > div{
+	#animation: fadeIn 1s;
+}
+
+.lowlit-border > div{
+	
+	height:0;
+	overflow: hidden;
+
+}
+
+.lowlit-border a:hover ~div{
+
+	overflow: auto;
+	height:auto;
+	
+	animation: fadeIn 1s;
+	
 }
