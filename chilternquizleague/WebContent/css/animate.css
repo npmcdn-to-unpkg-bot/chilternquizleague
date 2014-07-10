@@ -1,18 +1,17 @@
 
-.view-animate.ng-enter, .view-animate.ng-leave {
+.view-animate.ng-enter {
   //-webkit-transition:all linear 0.5s;
   //-moz-transition:all linear 0.5s;
   //-o-transition:all linear 0.5s;
-  #transition:opacity 1s ease-in-out;
+  opacity:0;
+  border-color:transparent;
+  transition:all 1s ease-in-out;
   #display:block!important;
 }
 
-.view-animate.ng-enter-active} .view-animate.ng-leave-active {
+.view-animate.ng-enter-active {
 	
+	border-color:lightgray;
 	opacity : 1;
 	
-}
-
-.view-animate.ng-leave {
-	opacity : 0;	
 }

@@ -44,31 +44,57 @@
 	 width:2em;
 }
 
-@keyframes fadeIn {
-    from { height: 0; }
-      to { height: auto; }
-}
-
 .highlit-border{
 	border-color:lightblue;
 	transition:border-color .5s ease-in-out;
 }
 .highlit-border > div{
-	#animation: fadeIn 1s;
+	overflow: hidden;
+	height:2em;
+	transition:all .5s ease-in-out;
 }
 
 .lowlit-border > div{
-	
-	height:0;
 	overflow: hidden;
-
+	height:0;
+	transition:all .5s ease-in-out;
 }
 
 .lowlit-border a:hover ~div{
 
-	overflow: auto;
-	height:auto;
-	
-	animation: fadeIn 1s;
-	
+	overflow: hidden;
+	height:2em;
+	transition:all .5s ease-in-out;
+
 }
+
+.highlit-border > div.ng-enter, .highlit-border > div.ng-move {
+  transition:all 0.5s ease-in-out;
+  height:0;
+ }
+
+/*
+ The ng-enter-active and ng-move-active
+ are where the transition destination properties
+ are set so that the animation knows what to
+ animate.
+*/
+.highlit-border> div.ng-enter.ng-enter-active,
+.highlit-border> div.ng-move.ng-move-active {
+  height:2em;
+ }
+
+@keyframes my_animation {
+  from { height:2em; }
+  to { height:0; }
+}
+/*
+  We're using CSS keyframe animations for when
+  the leave event is triggered for the element
+  that has the .repeated-item class
+*/
+.highlit-border> div.ng-leave {
+  animation:0.5s my_animation;
+}
+
+
