@@ -16,6 +16,7 @@ public class Venue extends BaseEntity{
 	private String website;
 	private String phone;
 	private String email;
+	private String imageURL;
 	
 	public String getAddress() {
 		return address;
@@ -52,6 +53,12 @@ public class Venue extends BaseEntity{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getImageURL() {
+		return imageURL;
+	}
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 
 }

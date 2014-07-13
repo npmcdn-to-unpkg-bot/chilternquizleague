@@ -1,0 +1,9 @@
+.venue-picture{
+	right:0;
+	top:0;
+	#position:absolute;
+}
+
+.venue-container{
+	position:relative;
+}
