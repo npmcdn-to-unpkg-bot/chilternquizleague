@@ -2,7 +2,7 @@
 @import url('/css/team.css');
 
 .venue-picture{
-	position-relative;
+
 }
 
 .venue-picture>div{
@@ -11,10 +11,9 @@
 }
 
 .venue-container{
-	position:relative;
+	display:flex;
 }
 
 .venue-details{
-	
-	float:left;
+	flex-grow:1;
 }
