@@ -6,6 +6,7 @@
 <link type="text/css" rel="stylesheet" href="/css/top.css">
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/view.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/leagueTable.js"></script>
@@ -34,7 +35,7 @@
 			</div>
 			<div class="body-content">
 				<div ng-include="'/results/league-table.html'" ></div>
-				<div class="front-page-text">{{global.frontPageText}}</div>
+				<div class="front-page-text" ng-bind-html="global.frontPageText | htmlify" ></div>
 
 			</div>
 		</div>

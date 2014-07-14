@@ -8,6 +8,7 @@
 <link type="text/css" rel="stylesheet" href="/css/team.css">
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
+<script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/team.js"></script>
@@ -30,7 +31,7 @@
 						<a href="/venue/venues.html/#venue/{{team.venue.id}}">{{team.venue.name}}</a>
 					</div>
 					<div>Current league standing: {{}}</div>
-					<div class="text-block">{{team.extras.text}}</div>
+					<div class="text-block" ng-bind-html="team.extras.text | htmlify"></div>
 					<div class="show-thin standard-margins titled-list" >
 						<div>Last few results:</div>
 						<div ng-repeat="result in team.extras.results | orderBy:'date' : true"> {{result.fixture.competition}} - {{result.fixture.date}} :
