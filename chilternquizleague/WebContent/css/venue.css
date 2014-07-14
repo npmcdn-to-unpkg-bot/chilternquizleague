@@ -1,9 +1,20 @@
+@import url('/css/top.css');
+@import url('/css/team.css');
+
 .venue-picture{
-	right:0;
-	top:0;
-	#position:absolute;
+	position-relative;
+}
+
+.venue-picture>div{
+	text-align:right;
+
 }
 
 .venue-container{
 	position:relative;
+}
+
+.venue-details{
+	
+	float:left;
 }

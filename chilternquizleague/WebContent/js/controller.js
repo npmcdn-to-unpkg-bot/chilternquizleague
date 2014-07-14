@@ -50,12 +50,17 @@ var mainApp = angular.module('mainApp', []).factory(
 					return service;
 				} ]);
 
+mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
+	
+	return text ?  $sce.trustAsHtml(text.replace(/\n/g, "<br/>")) : "";
+};}]);
+
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService',
 		function($scope, $interval, viewService) {
 
 			viewService.view("globaldata", {}, function(globalData) {
 				$scope.global = globalData;
-
-			});
+				
+				});
 
 		} ]);
