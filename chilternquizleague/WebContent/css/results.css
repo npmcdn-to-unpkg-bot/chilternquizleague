@@ -1,0 +1,44 @@
+@import url('/css/main.css');
+
+.league-table { 
+	border: solid medium lightgray;
+	border-radius: .75em;
+	margin-left: 0;
+	font-size: 90%;
+}
+
+.league-table p {
+	padding-left: 1%;
+	font-size: 110%;
+	font-weight: bold;
+}
+
+.league-table-tbl tr>td {
+	border: solid thin lightgray;
+	border-radius: .25em;
+}
+
+.league-table-tbl tr:hover {
+	background-color: lightgray;
+}
+
+.league-table-tbl .numeric {
+	text-align: right;
+	min-width: 3em;
+	
+}
+
+.league-table-tbl .team-name {
+	min-width: 6em;
+}
+
+.league-table-tbl thead td {
+	background: lightblue;
+	border: medium solid lightblue;
+	border-radius: .25em;
+}
+
+.league-table-tbl thead tr.league-table-description td {
+	background: #99ccff;
+	border: medium solid #99ccff;
+}

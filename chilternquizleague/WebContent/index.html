@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>{{global.leagueName}}</title>
-<link type="text/css" rel="stylesheet" href="/css/top.css">
+<link type="text/css" rel="stylesheet" href="/css/index.css">
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
@@ -34,7 +34,7 @@
 					data-stream="true" data-show-border="true"></div>
 			</div>
 			<div class="body-content">
-				<div ng-include="'/results/league-table.html'" ></div>
+				<div class="league-table-container"ng-include="'/results/league-table.html'" ></div>
 				<div class="front-page-text" ng-bind-html="global.frontPageText | htmlify" ></div>
 
 			</div>
