@@ -1,3 +1,5 @@
+@import url('/css/top.css');
+@import url('/css/results.css');
 .options {
 	float: left;
 	height: 80%;
@@ -25,7 +27,7 @@
 }
 
 .team-username-box:hover{
-	background-color: lightblue;
+	background-color: #c1dff8;
 }
 
 .entity-link{
@@ -45,31 +47,31 @@
 }
 
 .highlit-border{
-	border-color:lightblue;
-	transition:border-color .5s ease-in-out;
+	box-shadow: .125em .125em .25em .06em #c1dff8,-.125em -.125em .25em .06em #c1dff8, .125em .125em .25em .06em #c1dff8 inset, -.125em -.125em .25em .06em #c1dff8 inset;
+	transition:border-color .5s ease-in;
 }
 .highlit-border > div{
 	overflow: hidden;
 	height:2em;
-	transition:all .5s ease-in-out;
+	transition:all .5s ease-in;
 }
 
 .lowlit-border > div{
 	overflow: hidden;
 	height:0;
-	transition:all .5s ease-in-out;
+	transition:all .5s ease-in;
 }
 
 .lowlit-border a:hover ~div{
 
 	overflow: hidden;
 	height:2em;
-	transition:all .5s ease-in-out;
+	transition:all .5s ease-in;
 
 }
 
 .highlit-border > div.ng-enter, .highlit-border > div.ng-move {
-  transition:all 0.5s ease-in-out;
+  transition:all 0.5s ease-in;
   height:0;
  }
 
@@ -88,6 +90,11 @@
   from { height:2em; }
   to { height:0; }
 }
+
+@-webkit-keyframes my_animation {
+  from { height:2em; }
+  to { height:0; }
+}
 /*
   We're using CSS keyframe animations for when
   the leave event is triggered for the element
@@ -95,6 +102,7 @@
 */
 .highlit-border> div.ng-leave {
   animation:0.5s my_animation;
+  -webkit-animation:0.5s my_animation;
 }
 
 

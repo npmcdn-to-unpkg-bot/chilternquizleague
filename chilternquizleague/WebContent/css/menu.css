@@ -25,16 +25,16 @@
         /* styling: */
             margin-right: 10px;
             
-		 	border: thin solid lightblue;
-		 	background-color: lightblue; 
+		 	border: thin solid #c1dff8;
+		 	background-color: #c1dff8; 
 			border-radius: 10px;
         }
         .navigation > ul > li > a {
         /* positioning */ 
             display:block;
         /* styling: */
-            background-color: lightblue; 
-            border: thin solid lightblue;
+            background-color: #c1dff8; 
+            border: thin solid #c1dff8;
 			border-radius: 10px;
             padding:8px 14px;
             text-decoration:none;
@@ -92,7 +92,7 @@
         /* if you want different styling for tertiary menus, just copy the 4 rules below and insert an additional ul: for example: ".navigation ul ul li", becomes: ".navigation ul ul ul li" */
         
         .navigation ul ul li{
-            background-color:lightblue; /* grey */
+            background-color:#c1dff8;
             border: thin solid white;
 			border-radius: 10px;
             width:170px;

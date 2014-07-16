@@ -1,9 +1,6 @@
 @import url('/css/main.css');
 
 .league-table { 
-	border: solid medium lightgray;
-	border-radius: .75em;
-	margin-left: 0;
 	font-size: 90%;
 }
 
@@ -25,6 +22,7 @@
 .league-table-tbl .numeric {
 	text-align: right;
 	min-width: 3em;
+	padding-right: .25em;
 	
 }
 
@@ -34,7 +32,7 @@
 
 .league-table-tbl thead td {
 	background: lightblue;
-	border: medium solid lightblue;
+	border: medium solid #c1dff8;
 	border-radius: .25em;
 }
 
