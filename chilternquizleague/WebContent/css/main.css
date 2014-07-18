@@ -20,22 +20,30 @@ body {
 .show {
 	border: solid thin aliceblue;
 	border-radius: .75em;
-	box-shadow: .25em .25em .5em .125em aliceblue,-.25em -.25em .5em .125em aliceblue
+	box-shadow: .25em .25em .5em .125em aliceblue, -.25em -.25em .5em .125em
+		aliceblue, -.25em .25em .5em .125em aliceblue, .25em -.25em .5em
+		.125em aliceblue;
 }
 
 .show-thin {
 	border-radius: .25em;
-	box-shadow: .125em .125em .25em .06em aliceblue, -.125em -.125em .25em .06em aliceblue, .125em .125em .25em .06em aliceblue inset, -.125em -.125em .25em .06em aliceblue inset;
-	padding:.25em;	
+	box-shadow: .125em .125em .25em .06em aliceblue, -.125em -.125em .25em
+		.06em aliceblue, -.125em .125em .25em .06em aliceblue, .125em -.125em
+		.25em .06em aliceblue, .125em .125em .25em .06em aliceblue inset,
+		-.125em -.125em .25em .06em aliceblue inset, -.125em .125em .25em
+		.06em aliceblue inset, .125em -.125em .25em .06em aliceblue inset;
+	padding: .25em;
 	transition: all .5s ease-in;
 }
 
 .show-thin:hover {
-	box-shadow: .125em .125em .25em .06em #c1dff8,-.125em -.125em .25em .06em #c1dff8, .125em .125em .25em .06em #c1dff8 inset, -.125em -.125em .25em .06em #c1dff8 inset;
+	box-shadow: .125em .125em .25em .06em #c1dff8, -.125em -.125em .25em
+		.06em #c1dff8, -.125em .125em .25em .06em #c1dff8, .125em -.125em
+		.25em .06em #c1dff8, .125em .125em .25em .06em #c1dff8 inset, -.125em
+		-.125em .25em .06em #c1dff8 inset, -.125em .125em .25em .06em #c1dff8
+		inset, .125em -.125em .25em .06em #c1dff8 inset;
 	transition: all .5s ease-in;
 }
-
-
 
 .standard-margins {
 	margin-left: .25em;
@@ -49,9 +57,8 @@ body {
 	padding: .125em;
 	padding-left: .25em;
 	color: #c1dff8;
-	text-shadow: 0 0 5px #c1dff8, 0 0 10px #c1dff8, 0 0 15px #c1dff8,
-		0 0 20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px
-		darkblue;
+	text-shadow: 0 0 5px #c1dff8, 0 0 10px #c1dff8, 0 0 15px #c1dff8, 0 0
+		20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue;
 	letter-spacing: .25em;
 }
 
@@ -61,7 +68,7 @@ body {
 
 .body-container {
 	padding: .1em;
-	padding-top:.5em;
+	padding-top: .5em;
 }
 
 .footer {
@@ -83,9 +90,6 @@ body {
 	margin-right: 310px;
 	display: flex;
 }
-
-
-
 
 .selected {
 	background: #c1dff8;
@@ -113,4 +117,3 @@ body {
 	border-radius: .25em;
 	padding: .25em;
 }
-

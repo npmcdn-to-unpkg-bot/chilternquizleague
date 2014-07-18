@@ -49,7 +49,7 @@
 .results:hover div{
 
 	overflow: hidden;
-	height:1em;
+	height:1.5em;
 	transition:all .5s ease-in;
 
 }
