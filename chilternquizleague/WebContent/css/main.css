@@ -60,10 +60,21 @@ body {
 	text-shadow: 0 0 5px #c1dff8, 0 0 10px #c1dff8, 0 0 15px #c1dff8, 0 0
 		20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue;
 	letter-spacing: .25em;
+	
+	transition:all 1s ease-in;
 }
 
 .page-header text {
 	color: #c1dff8;
+}
+
+.page-header:hover {
+	
+		text-shadow: 0 0 5px darkblue, 0 0 10px darkblue, 0 0 15px darkblue, 0 0
+		20px #c1dff8, 0 0 30px #c1dff8, 0 0 40px #c1dff8, 0 0 50px #c1dff8;
+		color: darkblue;
+		transition:all 1s ease-in;
+	
 }
 
 .body-container {
