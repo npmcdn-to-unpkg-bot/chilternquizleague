@@ -31,7 +31,7 @@
 					</div>
 					<div>Current league standing: {{}}</div>
 					<div ng-if="team.extras.text" class="text-block" ng-bind-html="team.extras.text | htmlify"/>
-					<div class="show-thin standard-margins titled-list" >
+					<div class="show-thin titled-list" >
 						<div>Last few results:</div>
 						<div ng-repeat="result in team.extras.results | orderBy:'date' : true"> {{result.fixture.competition}} - {{result.fixture.date}} :
 							{{result.fixture.home.shortName}} {{result.homeScore}} :
@@ -39,7 +39,7 @@
 
 						<div></div>
 					</div>
-					<div class="show-thin standard-margins titled-list">
+					<div class="show-thin titled-list">
 						<a href="" ng-click="makeICal(team)">Download Calendar</a>
 						<div>Next few fixtures:</div>
 						<div

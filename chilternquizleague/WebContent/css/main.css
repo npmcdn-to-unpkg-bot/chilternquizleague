@@ -26,6 +26,7 @@ body {
 .show-thin {
 	border-radius: .25em;
 	box-shadow: .125em .125em .25em .06em aliceblue, -.125em -.125em .25em .06em aliceblue, .125em .125em .25em .06em aliceblue inset, -.125em -.125em .25em .06em aliceblue inset;
+	padding:.25em;	
 	transition: all .5s ease-in;
 }
 
@@ -33,6 +34,8 @@ body {
 	box-shadow: .125em .125em .25em .06em #c1dff8,-.125em -.125em .25em .06em #c1dff8, .125em .125em .25em .06em #c1dff8 inset, -.125em -.125em .25em .06em #c1dff8 inset;
 	transition: all .5s ease-in;
 }
+
+
 
 .standard-margins {
 	margin-left: .25em;
