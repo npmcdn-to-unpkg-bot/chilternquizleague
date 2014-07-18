@@ -1,6 +1,5 @@
 package org.chilternquizleague.views;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import org.chilternquizleague.domain.CompetitionType;
@@ -23,7 +22,7 @@ public class LeagueTableView {
 		final LeagueCompetition competition =  season.getCompetition(CompetitionType.LEAGUE);
 		
 		tables = competition.getLeagueTables();
-		description = MessageFormat.format("{0}/{1}", Integer.toString(season.getStartYear()),Integer.toString(season.getEndYear()));
+		description = season.getDescription();
 		
 		
 	}

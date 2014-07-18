@@ -59,6 +59,11 @@ public class Season extends BaseEntity {
 		this.competitions = competitions;
 	}
 	
+	public String getDescription(){
+		
+		return "" + startYear + "/" + endYear;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T extends Competition> T getCompetition(CompetitionType type){
 		

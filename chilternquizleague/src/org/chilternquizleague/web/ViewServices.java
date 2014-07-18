@@ -113,6 +113,10 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().contains("venues")) {
 			makeEntityList(response, Venue.class);
 		}
+		
+		else if (request.getPathInfo().contains("seasons")) {
+			makeEntityList(response, Season.class);
+		}
 
 		else if (request.getPathInfo().contains("team-extras")) {
 			teamExtras(request, response);

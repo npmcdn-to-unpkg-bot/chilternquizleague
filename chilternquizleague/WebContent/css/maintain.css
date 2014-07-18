@@ -36,9 +36,10 @@
 }
 
 .entity-remove-button{
-	padding-left:3em;
-	position:relative;
-	right: 0;
+position: relative;
+float: right;
+text-align: right;
+	
 }
 
 .league-table-tbl input[type=number]{

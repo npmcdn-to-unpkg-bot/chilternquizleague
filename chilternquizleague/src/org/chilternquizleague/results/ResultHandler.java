@@ -34,7 +34,9 @@ public class ResultHandler {
 				final Season season = ofy().load().key(Key.create(Season.class,seasonId)).now();
 				final TeamCompetition competition = season.getCompetition(competitionType);
 				
-				competition.addResult(result);
+				if(competition != null){
+					competition.addResult(result);
+				}
 				
 				ofy().save().entity(season);
 				
