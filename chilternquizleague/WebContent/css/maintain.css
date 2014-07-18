@@ -48,8 +48,13 @@ text-align: right;
 }
 
 .highlit-border{
-	box-shadow: .125em .125em .25em .06em #c1dff8,-.125em -.125em .25em .06em #c1dff8, .125em .125em .25em .06em #c1dff8 inset, -.125em -.125em .25em .06em #c1dff8 inset;
-	transition:border-color .5s ease-in;
+	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
+		.031em #c1dff8, -.063em .063em .125em .031em #c1dff8, .063em -.063em
+		.125em .031em #c1dff8, .063em .063em .125em .031em #c1dff8 inset, -.063em
+		-.063em .125em .031em #c1dff8 inset, -.063em .063em .125em .031em #c1dff8
+		inset, .063em -.063em .125em .031em #c1dff8 inset;
+	transition: all .5s ease-in;
+	z-index:1;
 }
 .highlit-border > div{
 	overflow: hidden;

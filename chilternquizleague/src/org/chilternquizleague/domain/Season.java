@@ -64,6 +64,10 @@ public class Season extends BaseEntity {
 		return "" + startYear + "/" + endYear;
 	}
 	
+	public void setDescription(String desc){
+		//noop
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T extends Competition> T getCompetition(CompetitionType type){
 		
