@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 public class LeagueResults{
 	
 	private Date date;
+	private String description;
 	
 
 	/**
@@ -57,6 +58,14 @@ public class LeagueResults{
 			return false;
 		}
 		
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

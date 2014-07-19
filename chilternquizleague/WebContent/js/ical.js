@@ -17,11 +17,11 @@ function generateICalContent(fixtures){
 		
 		var fixture = fixtures[idx];
 		var startDate = new Date(fixture.date);
-		startDate.setHours(20,30,0,0,0);
+		startDate.setHours(fixture.startTime.substring(0,2),fixture.startTime.substring(3),0,0,0);
 		var endDate = new Date(fixture.date);
-		endDate.setHours(22,0,0,0);
+		endDate.setHours(fixture.endTime.substring(0,2),fixture.endTime.substring(3),0,0,0);
 		
-		var description = fixture.home.shortName + " - " + fixture.away.shortName + " : " + fixture.competition + "\n";
+		var description = fixture.home.shortName + " - " + fixture.away.shortName + " : " + fixture.description + "\n";
 		
 		file += "BEGIN:VEVENT\n";
 		file += "DTSTAMP:" + now;

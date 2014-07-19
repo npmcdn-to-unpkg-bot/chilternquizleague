@@ -376,7 +376,10 @@
 								if (!fixtures) {
 									fixtures = {
 										date : date,
-										fixtures : []
+										fixtures : [],
+										description : $scope.season.competitions[compType].description,
+										startTime : $scope.season.competitions[compType].startTime,
+										endTime : $scope.season.competitions[compType].endTime
 									};
 									$scope.fixturesList.push(fixtures);
 								}

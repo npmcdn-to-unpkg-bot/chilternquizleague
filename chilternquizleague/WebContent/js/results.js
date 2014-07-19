@@ -76,30 +76,47 @@
 
 	mainApp.controller("AllResultsController", [ '$scope', 'viewService',
 			'$location', function($scope, viewService, $location) {
-				
-				$scope.setSeason = function(season){
 
-				
+				$scope.setSeason = function(season) {
+
 					var results = [];
-					if(season){
-					
-					for(idx in season.competitions){
-						
-						results = results.concat(season.competitions[idx].results);
-						
-					}
+					if (season) {
+
+						for (idx in season.competitions) {
+
+							for(idx2 in season.competitions[idx]){
+								
+								var results = season.competitions[idx][idx2];
+								
+								result.type = season.competitions[idx].
+								
+							}
+							
+							results = results.concat(season.competitions[idx].results);
+
+						}
 					}
 					$scope.allResults = results;
-					
+
 					$scope.season = season;
-				
+
 				};
-				
-		
-				viewService.list("seasons", function(seasons){
-					$scope.seasons = seasons; 
-					$scope.setSeason($scope.seasons ? $scope.seasons[0] : null);});
-			
+
+				viewService.list("seasons", function(seasons) {
+					$scope.seasons = seasons;
+
+					for (idx in seasons) {
+
+						if (seasons[idx].id == $scope.global.currentSeasonId) {
+							$scope.setSeason(seasons[idx]);
+							return;
+						}
+						
+						$scope.setSeason(seasons ? seasons[0]:null);
+					}
+
+				});
+
 			} ]);
 
 })();

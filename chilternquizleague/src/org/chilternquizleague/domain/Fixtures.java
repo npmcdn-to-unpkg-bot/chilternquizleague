@@ -12,6 +12,9 @@ public class Fixtures extends BaseEntity{
 	
 	private Date date;
 	
+	private String startTime;
+	private String endTime;
+	
 	private String description;
 	
 	private List<Fixture> fixtures = new ArrayList<>();
@@ -38,6 +41,22 @@ public class Fixtures extends BaseEntity{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 	
 	

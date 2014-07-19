@@ -19,6 +19,21 @@
 
 	function extraStuff($scope, $interval, viewService, $location) {
 
+		$scope.makeICal = function(team) {
+
+			var contents = generateICalContent(team.extras.fixtures);
+
+			var filename = team.shortName.replace(/\s/g, "_") + "_fixtures"
+					+ ".ics";
+
+			var blob = new Blob([ contents ], {
+				type : "text/calendar;charset=utf-8"
+			});
+
+			saveAs(blob, filename);
+
+		};
+	
 		$scope.$watch("global", function(global) {
 
 			if (global) {

@@ -12,11 +12,13 @@ public class ResultView {
 	protected FixtureView fixture;
 	protected int homeScore;
 	protected int awayScore;
+	protected String description;
 	
-	public ResultView(LeagueResultRow result, Competition competition) {
+	public ResultView(LeagueResultRow result, Competition competition, String description) {
 		this.fixture = new FixtureView(result.getFixture(), competition);
 		this.homeScore = result.getHomeScore();
 		this.awayScore = result.getAwayScore();
+		this.description = description;
 	}
 	
 

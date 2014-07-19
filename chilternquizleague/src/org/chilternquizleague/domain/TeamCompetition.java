@@ -46,12 +46,28 @@ public abstract class TeamCompetition extends Competition {
 		}
 		
 		final LeagueResults newResults = new LeagueResults();
+		final Fixtures fixtures = getFixturesForDate(date);
+		
+		newResults.setDescription(fixtures != null ? fixtures.getDescription() : getDescription());
+		
 		newResults.setDate(date);
 		results.add(newResults);
 		
 		return newResults;
 	}
 	
+	private Fixtures getFixturesForDate(Date date) {
+		for(Fixtures fixtureSet :fixtures){
+			
+			if(Utils.isSameDay(date, fixtureSet.getDate())){
+				
+				return fixtureSet;
+			}
+		}
+		
+		return null;
+	}
+
 	public abstract void addResult(LeagueResultRow result);
 	
 

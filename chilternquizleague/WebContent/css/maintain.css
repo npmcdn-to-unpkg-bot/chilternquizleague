@@ -14,7 +14,7 @@
 .box-title {
 	font-size: 120%;
 	font-weight: 150%;
-	margin-bottom: 1%;
+	margin-bottom: .25em;
 	text-decoration: underline;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .team-username-box{
-	padding: 1%;
+	padding: .25em;
 }
 
 .team-username-box:hover{
@@ -58,7 +58,7 @@ text-align: right;
 }
 .highlit-border > div{
 	overflow: hidden;
-	height:2em;
+	height:1.5em;
 	transition:all .5s ease-in;
 }
 
@@ -71,7 +71,7 @@ text-align: right;
 .lowlit-border a:hover ~div{
 
 	overflow: hidden;
-	height:2em;
+	height:1.5em;
 	transition:all .5s ease-in;
 
 }
@@ -89,16 +89,16 @@ text-align: right;
 */
 .highlit-border> div.ng-enter.ng-enter-active,
 .highlit-border> div.ng-move.ng-move-active {
-  height:2em;
+  height:1.5em;
  }
 
 @keyframes my_animation {
-  from { height:2em; }
+  from { height:1.5em; }
   to { height:0; }
 }
 
 @-webkit-keyframes my_animation {
-  from { height:2em; }
+  from { height:1.5em; }
   to { height:0; }
 }
 /*

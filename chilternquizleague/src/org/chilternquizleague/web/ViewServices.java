@@ -292,7 +292,7 @@ public class ViewServices extends HttpServlet {
 
 						if (fixture.getHome().getId().equals(teamId)
 								|| fixture.getAway().getId().equals(teamId)) {
-							results.add(new ResultView(result, competition));
+							results.add(new ResultView(result, competition, resultSet.getDescription()));
 						}
 
 					}
