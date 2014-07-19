@@ -28,8 +28,8 @@
 			<tr>
 				<td>Users</td>
 				<td>
-					<div class="show team-username-box">
-						<div ng-repeat="user in team.users"><span class="team-username">{{user.name}}<button ng-click="removeUser(user)">Remove</button></span></div>
+					<div class="show-thin team-username-box">
+						<div class="team-username" ng-repeat="user in team.users"><span>{{user.name}}</span><span class="entity-remove-button"><button ng-click="removeUser(user)">Remove</button></span></div>
 					</div>
 				</td>
 			</tr>

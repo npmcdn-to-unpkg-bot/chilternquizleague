@@ -19,16 +19,13 @@
 }
 
 .team-username{
-
+	height:1.5em;
 }
 
 .team-username-box{
 	padding: .25em;
 }
 
-.team-username-box:hover{
-	background-color: #c1dff8;
-}
 
 .entity-link{
 	position:relative;
@@ -109,6 +106,11 @@ text-align: right;
 .highlit-border> div.ng-leave {
   animation:0.5s my_animation;
   -webkit-animation:0.5s my_animation;
+}
+
+input.ng-invalid{
+	
+	border:solid thin red;
 }
 
 

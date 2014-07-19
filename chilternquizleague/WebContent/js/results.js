@@ -84,14 +84,7 @@
 
 						for (idx in season.competitions) {
 
-							for(idx2 in season.competitions[idx]){
-								
-								var results = season.competitions[idx][idx2];
-								
-								result.type = season.competitions[idx].
-								
-							}
-							
+						
 							results = results.concat(season.competitions[idx].results);
 
 						}
