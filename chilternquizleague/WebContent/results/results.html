@@ -25,8 +25,8 @@
 				</div>
 			</div>
 			<div class="show team-pane standard-margins">
-				<div class="show-thin results" ng-repeat="results in allResults | orderBy : 'date' : reverse">
-					<span>{{results.date | date : 'dd MMMM yyyy'}} - {{results.description}}</span>
+				<div class="show-thin results" ng-repeat="results in allResults | orderBy : 'date' : reverse" ng-class="results == currentResults ? 'highlit-border' : 'lowlit-border'">
+					<a href="" ng-click="setCurrentResults(results)">{{results.date | date : 'dd MMMM yyyy'}} - {{results.description}}</a>
 					<div ng-repeat="result in results.results"><span>{{result.fixture.home.shortName}} {{result.homeScore}} : {{result.awayScore}} {{result.fixture.away.shortName}}</span></div>
 				</div>
 			</div>

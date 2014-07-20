@@ -77,7 +77,9 @@
 	mainApp.controller("AllResultsController", [ '$scope', 'viewService',
 			'$location', function($scope, viewService, $location) {
 
-				$scope.setSeason = function(season) {
+		$scope.setCurrentResults = function(results){$scope.currentResults = results;};		
+		
+		$scope.setSeason = function(season) {
 
 					var results = [];
 					if (season) {
@@ -90,6 +92,7 @@
 						}
 					}
 					$scope.allResults = results;
+					results.length > 0 ? $scope.setCurrentResults(results[0]) : null;
 
 					$scope.season = season;
 
@@ -111,5 +114,7 @@
 				});
 
 			} ]);
+	
+
 
 })();

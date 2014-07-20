@@ -23,14 +23,14 @@
 					<a href="" ng-click="setTeam(item)">{{item.name}}</a>
 				</div>
 			</div>
-			<div class="show team-pane standard-margins">
+			<div class="team-pane standard-margins">
 				<div>
 					<div>{{team.name}}</div>
 					<div>
 						<a href="/venue/venues.html#/{{team.venue.id}}">{{team.venue.name}}</a>
 					</div>
 					<div>Current league standing: {{}}</div>
-					<div ng-if="team.extras.text" class="text-block" ng-bind-html="team.extras.text | htmlify"></div>
+					<div ng-if="team.extras.text" class="text-block show-thin" ng-bind-html="team.extras.text | htmlify"></div>
 					<div class="show-thin titled-list" >
 						<div>Last few results:</div>
 						<div ng-repeat="result in team.extras.results | orderBy:'date' : true"> {{result.description}} - {{result.fixture.date | date:'dd MMMM yyyy'}} :
