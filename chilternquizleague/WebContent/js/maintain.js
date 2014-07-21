@@ -249,6 +249,7 @@
 		this.dateMap = {};
 		this.$scope = $scope;
 		this.makeKey = function(date) {
+			date = new Date(date);
 			return "D" + date.getYear() + date.getMonth() + date.getDate();
 		};
 		this.currentKey = this.setDate(new Date());
@@ -297,7 +298,8 @@
 						var compType = $routeParams.compType;
 						var seasonId = $routeParams.seasonId;
 
-						$scope.currentDate = new Date();
+						$scope.setCurrentDate = function(date){$scope.currentDate = new Date(date);};
+
 						function resolveExistingUnusedTeams(fixturesList) {
 
 							if (fixturesList && $scope.teams) {
@@ -329,12 +331,9 @@
 								null,
 								function(season) {
 									$scope.fixturesList = season.competitions[compType].fixtures;
-									for (idx in $scope.fixturesList) {
-										$scope.fixturesList[idx].date = new Date(
-												$scope.fixturesList[idx].date);
-									}
-									$scope.currentDate = $scope.fixturesList[0] ? $scope.fixturesList[0].date
-											: $scope.currentDate;
+
+									$scope.setCurrentDate($scope.fixturesList[0] ? makeDateWithTime($scope.fixturesList[0].start, season.competitions[compType].startTime)
+											:  makeDateWithTime(new Date(), season.competitions[compType].startTime));
 									resolveExistingUnusedTeams($scope.fixturesList);
 								})($scope, entityService, $routeParams,
 								$rootScope, $location);
@@ -358,18 +357,27 @@
 							});
 							$scope.fixture = {};
 						});
+						
+						function makeDateWithTime(baseDate, timeString){
+						
+							var date = new Date(baseDate);
+							
+							return new Date(date.getFullYear(), date.getMonth(), date.getUTCDate(),timeString.substring(0,2),timeString.substring(3));
+							
+						}
 
 						function resolveCurrentFixtures(date) {
 
+							var time = new Date(date).getTime();
+							
 							if (!$scope.fixtures
-									|| ($scope.fixtures && $scope.fixtures.start != date)) {
+									|| ($scope.fixtures && $scope.fixtures.start != time)) {
 
 								var fixtures = null;
 
 								for (index in $scope.fixturesList) {
 									if ($scope.fixturesList[index].start
-											.toDateString() == date
-											.toDateString()) {
+											 == time) {
 										fixtures = $scope.fixturesList[index];
 										break;
 									}
@@ -378,17 +386,17 @@
 									fixtures = {
 										fixtures : [],
 										description : $scope.season.competitions[compType].description,
-										start : new Date(date.getFullYear(), date.getMonth(), date.getUTCDate(),$scope.season.competitions[compType].startTime.substring(0,2),$scope.season.competitions[compType].startTime.substring(3)), 
+										start : makeDateWithTime(date, $scope.season.competitions[compType].startTime).getTime(), 
 
-										end : new Date(date.getFullYear(), date.getMonth(), date.getUTCDate(),$scope.season.competitions[compType].endTime.substring(0,2),$scope.season.competitions[compType].endTime.substring(3)) 
+										end : makeDateWithTime(date, $scope.season.competitions[compType].endTime).getTime()
 									};
 									$scope.fixturesList.push(fixtures);
 								}
 
 								$scope.fixturesList = $scope.fixturesList
 										.sort(function(fxs1, fxs2) {
-											return fxs1.start.getTime()
-													- fxs2.start.getTime();
+											return fxs1.start
+													- fxs2.start;
 										});
 								$scope.fixtures = fixtures;
 
@@ -396,13 +404,9 @@
 						}
 
 						$scope.advanceDate = function() {
-							$scope.currentDate = new Date($scope.currentDate
+							$scope.setCurrentDate( new Date($scope.currentDate
 									.getTime()
-									+ (7 * 60 * 60 * 24 * 1000));
-						};
-
-						$scope.setCurrentDate = function(date) {
-							$scope.currentDate = date;
+									+ (7 * 60 * 60 * 24 * 1000)));
 						};
 
 						$scope.addFixture = function(fixture) {
@@ -418,10 +422,10 @@
 									fixture.away);
 						};
 						$scope.removeFixture = function(fixture) {
-							var date = new Date(fixture.start).toDateString();
+							var date = new Date(fixture.start).getTime();
 							for (idx in $scope.fixturesList) {
 								var fixtures = $scope.fixturesList[idx];
-								if (date == fixtures.start.toDateString()) {
+								if (date == fixtures.start) {
 									for (idx2 in fixtures.fixtures) {
 										var listFixture = $scope.fixturesList[idx].fixtures[idx2];
 										if (fixture.home.id == listFixture.home.id
@@ -441,6 +445,8 @@
 							$location.url("seasons/" + seasonId + "/"
 									+ compType);
 						};
+						
+						//$scope.setCurrentDate(new Date());
 					}));
 
 	maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
