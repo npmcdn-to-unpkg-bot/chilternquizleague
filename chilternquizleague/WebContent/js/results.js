@@ -2,20 +2,19 @@
 
 	function nowOrBefore(input) {
 		function makeDateString(date) {
-			return date.toISOString();
+			return new Date(date).toISOString();
 		}
 
 		var now = makeDateString(new Date());
 		var ret = [];
 		for (idx in input) {
-			input[idx].date = new Date(input[idx].date);
-			if (makeDateString(input[idx].date) <= now) {
+			if (makeDateString(input[idx].start) <= now) {
 				ret.push(input[idx]);
 			}
 		}
 
 		return ret.sort(function(item1, item2) {
-			return item1.date.getTime() - item2.date.getTime();
+			return item1.start - item2.start;
 		});
 	}
 
@@ -27,7 +26,7 @@
 					viewService.view("fixtures-for-email", {
 						email : email,
 						seasonId : $scope.global.currentSeasonId,
-						isArray:true
+						isArray : true
 					}, function(fixtures) {
 
 						fixtures = nowOrBefore(fixtures);
@@ -36,13 +35,9 @@
 
 						for (idx in fixtures) {
 
-							var fixture = fixtures.pop();
+							var fixture = fixtures[idx].fixtures.pop();
 
-							$scope.fixture = {
-								date : fixture.date,
-								home : fixture.home,
-								away : fixture.away
-							};
+							$scope.fixture = fixture;
 							$scope.leagueResult = {
 								fixture : $scope.fixture,
 								reports : [ {
@@ -78,16 +73,17 @@
 	mainApp.controller("AllResultsController", [ '$scope', 'viewService',
 			'$location', function($scope, viewService, $location) {
 
-		$scope.setCurrentResults = function(results){$scope.currentResults = results;};		
-		
-		$scope.setSeason = function(season) {
+				$scope.setCurrentResults = function(results) {
+					$scope.currentResults = results;
+				};
+
+				$scope.setSeason = function(season) {
 
 					var results = [];
 					if (season) {
 
 						for (idx in season.competitions) {
 
-						
 							results = results.concat(season.competitions[idx].results);
 
 						}
@@ -108,14 +104,12 @@
 							$scope.setSeason(seasons[idx]);
 							return;
 						}
-						
-						$scope.setSeason(seasons ? seasons[0]:null);
+
+						$scope.setSeason(seasons ? seasons[0] : null);
 					}
 
 				});
 
 			} ]);
-	
-
 
 })();

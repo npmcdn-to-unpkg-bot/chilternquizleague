@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 public class Fixtures extends BaseEntity{
 	
-	private Date date;
-	
 	private Date start;
 	private Date end;
 	
@@ -36,14 +34,7 @@ public class Fixtures extends BaseEntity{
 		this.fixtures = fixtures;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
+	
 	public String getDescription() {
 		return description;
 	}

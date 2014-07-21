@@ -2,13 +2,13 @@
 	mainApp.filter('afterNow', function() {
 		return function(input) {
 			function makeDateString(date) {
-				return date.toISOString();
+				return new Date(date).toISOString();
 			}
 
 			var now = makeDateString(new Date());
 			var ret = [];
 			for (idx in input) {
-				if (makeDateString(input[idx].date) >= now) {
+				if (makeDateString(input[idx].start) >= now) {
 					ret.push(input[idx]);
 				}
 			}

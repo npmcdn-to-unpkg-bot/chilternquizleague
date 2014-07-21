@@ -58,7 +58,7 @@ public abstract class TeamCompetition extends Competition {
 	private Fixtures getFixturesForDate(Date date) {
 		for (Fixtures fixtureSet : fixtures) {
 
-			if (Utils.isSameDay(date, fixtureSet.getDate())) {
+			if (Utils.isSameDay(date, fixtureSet.getStart())) {
 
 				return fixtureSet;
 			}
