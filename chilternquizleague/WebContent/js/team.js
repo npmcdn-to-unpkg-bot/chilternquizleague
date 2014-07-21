@@ -41,7 +41,7 @@
 
 					if (team) {
 						if (!team.extras) {
-							viewService.view("team-extras", {
+							team.extras = viewService.view("team-extras", {
 								seasonId : global.currentSeasonId,
 								teamId : team.id
 							}, function(extras) {
@@ -52,7 +52,6 @@
 											extras.fixtures[idx].date);
 								}
 
-								team.extras = extras;
 							});
 						}
 					}

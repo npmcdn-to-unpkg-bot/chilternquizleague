@@ -124,7 +124,7 @@ body {
 		20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue;
 	letter-spacing: .25em;
 	
-	transition:all 1s ease-in;
+	transition:all 1s ease-out;
 }
 
 .page-header text {

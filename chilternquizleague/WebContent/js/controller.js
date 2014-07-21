@@ -5,8 +5,8 @@ var mainApp = angular.module('mainApp', []).factory(
 		[
 				"$http",
 				function($http) {
-					function loadFromServer(type, params, callback) {
-
+					function loadFromServer(type, params, callback, isArray) {
+						
 						var paramString = "";
 						for (name in params) {
 
@@ -16,14 +16,25 @@ var mainApp = angular.module('mainApp', []).factory(
 						paramString = paramString.length > 0 ? ("?" + paramString.slice(0,
 								-1)) : "";
 
-						return doLoad(type, paramString, callback);
+						return doLoad(type, paramString, callback, isArray);
 					}
 
-					function doLoad(type, paramString, callback) {
+					function doLoad(type, paramString, callback, isArray) {
+						
+						var retval = isArray ? [] : {};
+						
+						function callbackWrapper(item){
+							
+							callback ? callback(item):null;
+							angular.copy(item,retval);
 
-						return $http.get("/view/" + type + paramString, {
+						}
+						
+						$http.get("/view/" + type + paramString, {
 							"responseType" : "json"
-						}).success(callback);
+						}).success(callbackWrapper);
+						
+						return retval;
 					}
 
 					var service = {
@@ -35,12 +46,17 @@ var mainApp = angular.module('mainApp', []).factory(
 
 						view : function(type, params, callback) {
 
-							return loadFromServer(type, params, callback);
+							if(params){
+								var isArray = params.isArray;
+								delete params.isArray;
+							}
+
+							return loadFromServer(type, params, callback,isArray);
 						},
 
 						list : function(type, callback) {
 
-							return doLoad(type, "", callback);
+							return doLoad(type, "", callback, true);
 						},
 
 						post : function(type, payload, callback) {
@@ -58,9 +74,6 @@ mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService',
 		function($scope, $interval, viewService) {
 
-			viewService.view("globaldata", {}, function(globalData) {
-				$scope.global = globalData;
-				
-				});
+			$scope.global = viewService.view("globaldata");
 
 		} ]);

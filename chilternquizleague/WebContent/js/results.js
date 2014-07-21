@@ -26,7 +26,8 @@
 
 					viewService.view("fixtures-for-email", {
 						email : email,
-						seasonId : $scope.global.currentSeasonId
+						seasonId : $scope.global.currentSeasonId,
+						isArray:true
 					}, function(fixtures) {
 
 						fixtures = nowOrBefore(fixtures);
