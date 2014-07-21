@@ -1,5 +1,7 @@
 package org.chilternquizleague.domain;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -12,6 +14,8 @@ public abstract class Competition {
 	private final CompetitionType type;
 	private String description;
 	private String startTime;
+	
+
 	private String endTime;
 
 	protected Competition(CompetitionType type)
@@ -35,8 +39,7 @@ public abstract class Competition {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
+	
 	public String getStartTime() {
 		return startTime;
 	}
@@ -57,7 +60,5 @@ public abstract class Competition {
 	}
 
 
-
-	
 
 }

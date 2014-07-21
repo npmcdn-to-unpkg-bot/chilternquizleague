@@ -34,24 +34,16 @@
 
 		};
 	
-		$scope.$watch("global", function(global) {
+		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 
-			if (global) {
+			if (currentSeasonId) {
 				$scope.$watch("team", function(team) {
 
 					if (team) {
 						if (!team.extras) {
 							team.extras = viewService.view("team-extras", {
-								seasonId : global.currentSeasonId,
+								seasonId : currentSeasonId,
 								teamId : team.id
-							}, function(extras) {
-
-								for (idx in extras.fixtures) {
-
-									extras.fixtures[idx].date = new Date(
-											extras.fixtures[idx].date);
-								}
-
 							});
 						}
 					}

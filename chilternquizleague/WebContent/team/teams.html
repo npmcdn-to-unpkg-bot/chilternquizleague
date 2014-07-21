@@ -33,18 +33,18 @@
 					<div ng-if="team.extras.text" class="text-block show-thin" ng-bind-html="team.extras.text | htmlify"></div>
 					<div class="show-thin titled-list" >
 						<div>Last few results:</div>
-						<div ng-repeat="result in team.extras.results | orderBy:'date' : true"> {{result.description}} - {{result.fixture.date | date:'dd MMMM yyyy'}} :
+						<div ng-repeat="results in team.extras.results | orderBy:'date' : true"><span ng-repeat="result in results.results"> {{results.description}} - {{results.date | date:'dd MMMM yyyy'}} :
 							{{result.fixture.home.shortName}} {{result.homeScore}} :
-							 {{result.awayScore}} {{result.fixture.away.shortName}} </div>
-
+							 {{result.awayScore}} {{result.fixture.away.shortName}} </span>
+						</div>
 						<div></div>
 					</div>
 					<div class="show-thin titled-list">
 						<a href="" ng-click="makeICal(team)">Download Calendar</a>
 						<div>Next few fixtures:</div>
 						<div
-							ng-repeat="fixture in team.extras.fixtures | afterNow | orderBy:'date'">{{fixture.description}} - {{fixture.date | date:'dd MMMM yyyy'}}
-							- {{fixture.home.shortName}} : {{fixture.away.shortName}}</div>
+							ng-repeat="fixtures in team.extras.fixtures | afterNow | orderBy:'start'"><span ng-repeat="fixture in fixtures.fixtures">{{fixtures.description}} - {{fixtures.start | date:'dd MMMM yyyy'}}
+							- {{fixture.home.shortName}} : {{fixture.away.shortName}}</span></div>
 					</div>
 				</div>
 			</div>

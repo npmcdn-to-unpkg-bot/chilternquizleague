@@ -27,17 +27,14 @@ import org.chilternquizleague.domain.Text;
 import org.chilternquizleague.domain.User;
 import org.chilternquizleague.domain.Venue;
 import org.chilternquizleague.results.ResultHandler;
-import org.chilternquizleague.views.FixtureView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 import org.chilternquizleague.views.ResultSubmission;
-import org.chilternquizleague.views.ResultView;
 import org.chilternquizleague.views.TeamExtras;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -109,11 +106,11 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().contains("teams")) {
 			makeEntityList(response, Team.class);
 		}
-		
+
 		else if (request.getPathInfo().contains("venues")) {
 			makeEntityList(response, Venue.class);
 		}
-		
+
 		else if (request.getPathInfo().contains("seasons")) {
 			makeEntityList(response, Season.class);
 		}
@@ -223,15 +220,13 @@ public class ViewServices extends HttpServlet {
 		final Long seasonId = Long.parseLong(req.getParameter("seasonId"));
 		final Long teamId = Long.parseLong(req.getParameter("teamId"));
 
-		final Season season = ofy().load()
-				.now(Key.create(Season.class, seasonId));
+		final Season season = ofy().load().now(
+				Key.create(Season.class, seasonId));
 
-		final Team team = ofy().load().now(Key.create(Team.class, teamId))
-				;
+		final Team team = ofy().load().now(Key.create(Team.class, teamId));
 
-		final List<FixtureView> fixtures = getTeamFixtures(teamId, season);
-
-		TeamExtras extras = new TeamExtras(team, fixtures, getTeamResults(teamId, season));
+		TeamExtras extras = new TeamExtras(team,
+				getTeamFixtures(teamId, season), getTeamResults(teamId, season));
 
 		objectMapper.writeValue(System.out, extras);
 
@@ -239,7 +234,7 @@ public class ViewServices extends HttpServlet {
 
 	}
 
-	private List<FixtureView> getTeamFixtures(final Long teamId,
+	private List<Fixtures> getTeamFixtures(final Long teamId,
 			final Season season) {
 		final List<TeamCompetition> competitions = Arrays
 				.<TeamCompetition> asList((TeamCompetition) season
@@ -248,20 +243,27 @@ public class ViewServices extends HttpServlet {
 								.getCompetition(CompetitionType.CUP),
 						(TeamCompetition) season
 								.getCompetition(CompetitionType.PLATE));
-		final List<FixtureView> fixtures = new ArrayList<>();
+		final List<Fixtures> fixtures = new ArrayList<>();
 
 		for (TeamCompetition competition : competitions) {
 
 			if (competition != null) {
 
 				for (Fixtures fixtureSet : competition.getFixtures()) {
+
+					final Fixtures newFixSet = new Fixtures(fixtureSet);
+
 					for (Fixture fixture : fixtureSet.getFixtures()) {
 
 						if (fixture.getHome().getId().equals(teamId)
 								|| fixture.getAway().getId().equals(teamId)) {
-							fixtures.add(new FixtureView(fixture, competition));
+							newFixSet.getFixtures().add(fixture);
 						}
 
+					}
+
+					if (!newFixSet.getFixtures().isEmpty()) {
+						fixtures.add(newFixSet);
 					}
 				}
 			}
@@ -270,7 +272,7 @@ public class ViewServices extends HttpServlet {
 		return fixtures;
 	}
 
-	private List<ResultView> getTeamResults(final Long teamId,
+	private List<LeagueResults> getTeamResults(final Long teamId,
 			final Season season) {
 		final List<TeamCompetition> competitions = Arrays
 				.<TeamCompetition> asList((TeamCompetition) season
@@ -279,20 +281,24 @@ public class ViewServices extends HttpServlet {
 								.getCompetition(CompetitionType.CUP),
 						(TeamCompetition) season
 								.getCompetition(CompetitionType.PLATE));
-		final List<ResultView> results = new ArrayList<>();
+		final List<LeagueResults> results = new ArrayList<>();
 
 		for (TeamCompetition competition : competitions) {
 
 			if (competition != null) {
 
 				for (LeagueResults resultSet : competition.getResults()) {
+
+					final LeagueResults newResultSet = new LeagueResults(
+							resultSet);
+
 					for (LeagueResultRow result : resultSet.getResults()) {
 
 						final Fixture fixture = result.getFixture();
 
 						if (fixture.getHome().getId().equals(teamId)
 								|| fixture.getAway().getId().equals(teamId)) {
-							results.add(new ResultView(result, competition, resultSet.getDescription()));
+							newResultSet.getResults().add(result);
 						}
 
 					}

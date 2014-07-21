@@ -223,6 +223,7 @@
 				function(ret) {
 					if (!ret.competitions.LEAGUE) {
 						$scope.$watch("leagueCompetition", function(comp) {
+
 							$scope.masterSeason.competitions.LEAGUE = comp;
 						});
 						makeUpdateFnWithCallback("leagueCompetition")($scope,
@@ -306,7 +307,7 @@
 
 								for (idx in fixturesList) {
 
-									utc.setDate(fixturesList[idx].date);
+									utc.setDate(fixturesList[idx].start);
 
 									for (idx2 in fixturesList[idx].fixtures) {
 										var fixture = fixturesList[idx].fixtures[idx2];
@@ -361,12 +362,12 @@
 						function resolveCurrentFixtures(date) {
 
 							if (!$scope.fixtures
-									|| ($scope.fixtures && $scope.fixtures.date != date)) {
+									|| ($scope.fixtures && $scope.fixtures.start != date)) {
 
 								var fixtures = null;
 
 								for (index in $scope.fixturesList) {
-									if ($scope.fixturesList[index].date
+									if ($scope.fixturesList[index].start
 											.toDateString() == date
 											.toDateString()) {
 										fixtures = $scope.fixturesList[index];
@@ -375,19 +376,19 @@
 								}
 								if (!fixtures) {
 									fixtures = {
-										date : date,
 										fixtures : [],
 										description : $scope.season.competitions[compType].description,
-										startTime : $scope.season.competitions[compType].startTime,
-										endTime : $scope.season.competitions[compType].endTime
+										start : new Date(date.getFullYear(), date.getMonth(), date.getUTCDate(),$scope.season.competitions[compType].startTime.substring(0,2),$scope.season.competitions[compType].startTime.substring(3)), 
+
+										end : new Date(date.getFullYear(), date.getMonth(), date.getUTCDate(),$scope.season.competitions[compType].endTime.substring(0,2),$scope.season.competitions[compType].endTime.substring(3)) 
 									};
 									$scope.fixturesList.push(fixtures);
 								}
 
 								$scope.fixturesList = $scope.fixturesList
 										.sort(function(fxs1, fxs2) {
-											return fxs1.date.getTime()
-													- fxs2.date.getTime();
+											return fxs1.start.getTime()
+													- fxs2.start.getTime();
 										});
 								$scope.fixtures = fixtures;
 
@@ -408,7 +409,8 @@
 
 							resolveCurrentFixtures($scope.currentDate);
 
-							fixture.date = $scope.currentDate;
+							fixture.start = $scope.fixtures.start;
+							fixture.end = $scope.fixtures.end;
 							$scope.fixtures.fixtures.push(fixture);
 							$scope.fixture = {};
 
@@ -416,17 +418,17 @@
 									fixture.away);
 						};
 						$scope.removeFixture = function(fixture) {
-							var date = new Date(fixture.date).toDateString();
+							var date = new Date(fixture.start).toDateString();
 							for (idx in $scope.fixturesList) {
 								var fixtures = $scope.fixturesList[idx];
-								if (date == fixtures.date.toDateString()) {
+								if (date == fixtures.start.toDateString()) {
 									for (idx2 in fixtures.fixtures) {
 										var listFixture = $scope.fixturesList[idx].fixtures[idx2];
 										if (fixture.home.id == listFixture.home.id
 												&& fixture.away.id == listFixture.away.id) {
 											fixtures.fixtures.splice(idx2, 1);
 											$scope.usedTeamsControl.remove(
-													fixtures.date,
+													fixtures.start,
 													fixture.home, fixture.away);
 										}
 									}

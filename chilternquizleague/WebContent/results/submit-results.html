@@ -20,7 +20,7 @@
 		<form >
 			<div>Enter your email address : <input type="email" ng-model="email" ng-change="fixturesForEmail(email)" size="50" required/></div>
 			<div ng-if="fixture">
-			<div>{{fixture.date.toDateString()}} : {{fixture.home.name}} - {{fixture.away.name}}</div>
+			<div>{{fixture.start | date :'dd MMMM yyyy'}} : {{fixture.home.name}} - {{fixture.away.name}}</div>
 			<table >
 				<thead><tr><td colspan="2">League</td></tr></thead>
 				<tr><td>{{leagueResult.fixture.home.shortName}}</td><td><input type="number" ng-model="leagueResult.homeScore"/></td></tr>
@@ -29,7 +29,7 @@
 				<tr><td>{{beerResult.fixture.home.shortName}}</td><td><input type="number" ng-model="beerResult.homeScore"/></td></tr>
 				<tr><td>{{beerResult.fixture.away.shortName}}</td><td><input type="number" ng-model="beerResult.awayScore"/></td></tr>
 				<thead><tr><td colspan="2">Report</td></tr></thead>
-				<tr><td colspan="2"><div><textarea cols="60" rows="15" ng-model="leagueResult.reports[0].text"></textarea></div></td></tr>
+				<tr><td colspan="2"><div><textarea cols="60" rows="10" ng-model="leagueResult.reports[0].text"></textarea></div></td></tr>
 				<tr><td colspan="2"><button ng-click="submitResults()">Submit</button>
 			</table>
 			</div>

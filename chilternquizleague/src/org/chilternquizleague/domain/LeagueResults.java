@@ -14,9 +14,14 @@ public class LeagueResults{
 	private String description;
 	
 
-	/**
-	 * Key is string representation of the UTC date as yyyyMMdd
-	 */
+	public LeagueResults(){}
+	
+	public LeagueResults(LeagueResults template){
+		
+		this.date = template.date;
+		this.description = template.description;
+	}
+	
 	private List<LeagueResultRow> results = new ArrayList<>();
 
 	public List<LeagueResultRow> getResults() {

@@ -12,13 +12,22 @@ public class Fixtures extends BaseEntity{
 	
 	private Date date;
 	
-	private String startTime;
-	private String endTime;
+	private Date start;
+	private Date end;
 	
 	private String description;
 	
 	private List<Fixture> fixtures = new ArrayList<>();
 
+	public Fixtures(){}
+	
+	public Fixtures(Fixtures template){
+		this.start = template.start;
+		this.end = template.end;
+		this.description = template.description;
+	}
+	
+	
 	public List<Fixture> getFixtures() {
 		return fixtures;
 	}
@@ -43,22 +52,22 @@ public class Fixtures extends BaseEntity{
 		this.description = description;
 	}
 
-	public String getStartTime() {
-		return startTime;
+	public Date getStart() {
+		return start;
 	}
 
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
+	public void setStart(Date startTime) {
+		this.start = startTime;
 	}
 
-	public String getEndTime() {
-		return endTime;
+	public Date getEnd() {
+		return end;
 	}
 
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
+	public void setEnd(Date endTime) {
+		this.end = endTime;
 	}
-	
+
 	
 
 }
