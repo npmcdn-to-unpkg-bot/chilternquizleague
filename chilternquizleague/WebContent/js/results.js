@@ -70,8 +70,11 @@
 				};
 			} ]);
 
-	mainApp.controller("AllResultsController", [ '$scope', 'viewService',
-			'$location', function($scope, viewService, $location) {
+	mainApp.controller("AllResultsController", [
+			'$scope',
+			'viewService',
+			'$location',
+			function($scope, viewService, $location) {
 
 				$scope.setCurrentResults = function(results) {
 					$scope.currentResults = results;
@@ -79,23 +82,13 @@
 
 				$scope.setSeason = function(season) {
 
-					var results = [];
-					if (season) {
-
-						for (idx in season.competitions) {
-
-							results = results.concat(season.competitions[idx].results);
-
-						}
-					}
-					$scope.allResults = results;
-					results.length > 0 ? $scope.setCurrentResults(results[0]) : null;
-
+					$scope.allResults = season ? viewService.view("all-results",{id:season.id,isArray:true}): [];
+					
 					$scope.season = season;
 
 				};
 
-				viewService.list("seasons", function(seasons) {
+				viewService.list("season-views", function(seasons) {
 					$scope.seasons = seasons;
 
 					for (idx in seasons) {
@@ -111,5 +104,46 @@
 				});
 
 			} ]);
+
+	mainApp.controller("TeamResultsController", [ '$scope', 'viewService',
+			'$location', function($scope, viewService, $location) {
+		
+		var teamId = $location.path().substr(1);
+		
+		$scope.team = viewService.load("team", teamId);
+		
+		$scope.setSeason = function(season){$scope.season = season;};
+		
+		$scope.$watch("global.currentSeasonId", function(currentSeasonId){
+			viewService.list("season-views", function(seasons) {
+		
+			$scope.seasons = seasons;
+
+			for (idx in seasons) {
+
+				if (seasons[idx].id == $scope.global.currentSeasonId) {
+					$scope.setSeason(seasons[idx]);
+					return;
+				}
+
+				$scope.setSeason(seasons ? seasons[0] : null);
+			}});});
+
+		function teamExtras(){
+			
+			if($scope.team && $scope.season){
+				$scope.team.extras = viewService.view("team-extras", {
+					seasonId : $scope.season.id,
+					teamId : $scope.team.id
+				});
+				
+			}
+		}
+		
+		$scope.$watch("season", teamExtras);
+		$scope.$watch("team.id", teamExtras);
+		
+		
+	}]);
 
 })();

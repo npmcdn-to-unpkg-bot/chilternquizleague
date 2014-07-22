@@ -1,8 +1,13 @@
 package org.chilternquizleague.domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.chilternquizleague.domain.utils.CompetitionTypeStringifier;
 
@@ -72,6 +77,23 @@ public class Season extends BaseEntity {
 	public <T extends Competition> T getCompetition(CompetitionType type){
 		
 		return (T)type.castTo(getCompetitions().get(type));
+	}
+	
+	public List<TeamCompetition> getTeamCompetitions(){
+		
+		final Set<CompetitionType> types = new HashSet<>(Arrays.asList(CompetitionType.LEAGUE,CompetitionType.BEER_LEG, CompetitionType.CUP, CompetitionType.PLATE));
+		
+		final List<TeamCompetition> competitions = new ArrayList<>();
+		
+		for(Competition competition : this.competitions.values()){
+			
+			if(types.contains(competition.getType())){
+				
+				competitions.add((TeamCompetition)competition);
+			}
+		}
+		
+		return competitions;
 	}
 
 }
