@@ -4,12 +4,12 @@ mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 			$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {
 					function loadTable() {
-						$scope.season = viewService.view("leaguetable", {
+						viewService.view("leaguetable", {
 							id : currentSeasonId
-						});
+						},function(season){$scope.season=season;});
 					}
 					loadTable();
-					$interval(loadTable, 30000, 60)["catch"](function() {
+					$interval(loadTable, 3000, 60)["catch"](function() {
 						$interval.cancel(this);
 					});
 				}

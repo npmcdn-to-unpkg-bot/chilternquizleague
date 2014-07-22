@@ -20,11 +20,12 @@
 		<div ng-include="'/top.html'"></div>
 		<div class="body-container" ng-controller="TeamResultsController">
 			<div class="show teams standard-margins">
-				<div class="selection-item" ng-repeat="item in seasons | orderBy:'startYear' : reverse" ng-class="item.id == season.id ? 'selected' : 'unselected'">
-					<a href="" ng-click="setSeason(item)">{{item.description}}</a>
+				<div class="selection-item" ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : 'unselected'">
+					<a href="" ng-click="setTeam(item)">{{item.name}}</a>
 				</div>
 			</div>
 			<div class="team-pane standard-margins">
+				<div><span>Season</span><select ng-model="season" ng-options="season as season.description for season in seasons"></select></div>
 				<div ng-repeat="results in team.extras.results | orderBy : 'date' : reverse" >
 					<div ng-repeat="result in results.results"><span>{{results.date | date : 'dd MMMM yyyy'}} - {{results.description}} -- {{result.fixture.home.shortName}} {{result.homeScore}} : {{result.awayScore}} {{result.fixture.away.shortName}}</span></div>
 				</div>

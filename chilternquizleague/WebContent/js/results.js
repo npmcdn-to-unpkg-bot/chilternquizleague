@@ -67,6 +67,7 @@
 
 					} ]);
 
+					$scope.fixture = null;
 				};
 			} ]);
 
@@ -82,9 +83,15 @@
 
 				$scope.setSeason = function(season) {
 
-					$scope.allResults = season ? viewService.view("all-results",{id:season.id,isArray:true}): [];
+					$scope.allResults = season ? viewService.view("all-results",{id:season.id,isArray:true},function(results){
+						
+						results.sort(function(results1,results2){return results2.date -results1.date;});
+					}): [];
 					
 					$scope.season = season;
+					
+					$scope.$watch("allResults.length",function(length){
+						$scope.setCurrentResults($scope.allResults && $scope.allResults.length > 0 ? $scope.allResults[0] : null);});
 
 				};
 
@@ -105,45 +112,43 @@
 
 			} ]);
 
-	mainApp.controller("TeamResultsController", [ '$scope', 'viewService',
-			'$location', function($scope, viewService, $location) {
-		
-		var teamId = $location.path().substr(1);
-		
-		$scope.team = viewService.load("team", teamId);
-		
-		$scope.setSeason = function(season){$scope.season = season;};
-		
-		$scope.$watch("global.currentSeasonId", function(currentSeasonId){
-			viewService.list("season-views", function(seasons) {
-		
-			$scope.seasons = seasons;
-
-			for (idx in seasons) {
-
-				if (seasons[idx].id == $scope.global.currentSeasonId) {
-					$scope.setSeason(seasons[idx]);
-					return;
-				}
-
-				$scope.setSeason(seasons ? seasons[0] : null);
-			}});});
-
-		function teamExtras(){
-			
-			if($scope.team && $scope.season){
-				$scope.team.extras = viewService.view("team-extras", {
-					seasonId : $scope.season.id,
-					teamId : $scope.team.id
-				});
+	mainApp.controller("TeamResultsController", [ '$scope','$interval' ,'viewService',
+			'$location',  cyclingListControllerFactory("team", function(team1, team2) {
+				return team1.shortName.localeCompare(team2.shortName);
+			}, function($scope, $interval,viewService, $location) {
 				
-			}
-		}
-		
-		$scope.$watch("season", teamExtras);
-		$scope.$watch("team.id", teamExtras);
-		
-		
-	}]);
+				$scope.setSeason = function(season){$scope.season = season;};
+				
+				$scope.$watch("global.currentSeasonId", function(currentSeasonId){
+					viewService.list("season-views", function(seasons) {
+				
+					$scope.seasons = seasons;
+
+					for (idx in seasons) {
+
+						if (seasons[idx].id == $scope.global.currentSeasonId) {
+							$scope.setSeason(seasons[idx]);
+							return;
+						}
+
+						$scope.setSeason(seasons ? seasons[0] : null);
+					}});});
+
+				function teamExtras(){
+					
+					if($scope.team && $scope.season){
+						$scope.team.extras = viewService.view("team-extras", {
+							seasonId : $scope.season.id,
+							teamId : $scope.team.id
+						});
+						
+					}
+				}
+				
+				$scope.$watch("season", teamExtras);
+				$scope.$watch("team.id", teamExtras);
+				
+				
+			}) ]);
 
 })();
