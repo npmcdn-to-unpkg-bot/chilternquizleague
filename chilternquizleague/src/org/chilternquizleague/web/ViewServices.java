@@ -302,6 +302,10 @@ public class ViewServices extends HttpServlet {
 						}
 
 					}
+					
+					if(!newResultSet.getResults().isEmpty()){
+						results.add(newResultSet);
+					}
 				}
 			}
 
