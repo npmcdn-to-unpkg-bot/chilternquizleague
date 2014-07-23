@@ -2,6 +2,10 @@ package org.chilternquizleague.views;
 
 import org.chilternquizleague.domain.Competition;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 public class CompetitionView {
 	
 	protected String description;

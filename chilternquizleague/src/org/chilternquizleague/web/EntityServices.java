@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.VoidWork;
 
-
 @SuppressWarnings("serial")
 public class EntityServices extends HttpServlet {
 
@@ -41,7 +40,6 @@ public class EntityServices extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
 
 		if (req.getPathInfo().endsWith("venue-list")) {
 
@@ -89,14 +87,15 @@ public class EntityServices extends HttpServlet {
 		}
 
 	}
-	
+
 	private void globalDetails(HttpServletResponse resp) throws IOException {
-		final GlobalApplicationData data = ofy().load().key(Key.create(GlobalApplicationData.class, AppStartListener.globalApplicationDataId)).now();
-		
+		final GlobalApplicationData data = ofy()
+				.load()
+				.key(Key.create(GlobalApplicationData.class,
+						AppStartListener.globalApplicationDataId)).now();
+
 		objectMapper.writeValue(resp.getWriter(), data);
 	}
-
-
 
 	private <T> void entityByKey(HttpServletRequest req,
 			HttpServletResponse resp, Class<T> clazz) throws IOException {
@@ -110,7 +109,8 @@ public class EntityServices extends HttpServlet {
 			try {
 
 				T entity = clazz.newInstance();
-				objectMapper.writerWithDefaultPrettyPrinter().writeValue(resp.getWriter(), entity);
+				objectMapper.writerWithDefaultPrettyPrinter().writeValue(
+						resp.getWriter(), entity);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -130,8 +130,6 @@ public class EntityServices extends HttpServlet {
 		objectMapper.writeValue(resp.getWriter(), venues);
 
 	}
-
-
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -173,36 +171,25 @@ public class EntityServices extends HttpServlet {
 			saveUpdate(req, resp, Fixtures.class);
 
 		}
-		
-		else if(req.getPathInfo().endsWith("global")){
+
+		else if (req.getPathInfo().endsWith("global")) {
 			saveUpdate(req, resp, GlobalApplicationData.class);
 		}
 
 	}
 
 	private <T> void saveUpdate(final HttpServletRequest req,
-			final HttpServletResponse resp, final Class<T> clazz) throws IOException {
+			final HttpServletResponse resp, final Class<T> clazz)
+			throws IOException {
 
-		ofy().transact(new VoidWork() {
+		T entity = objectMapper.readValue(req.getReader(), clazz);
 
-			@Override
-			public void vrun() {
-				try {
-					T entity = objectMapper.readValue(req.getReader(), clazz);
+		Key<T> key = ofy().save().entity(entity).now();
 
-					Key<T> key = ofy().save().entity(entity).now();
+		T reloaded = ofy().load().key(key).now();
+		System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
 
-					T reloaded = ofy().load().key(key).now();
-					System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
-
-					objectMapper.writeValue(resp.getWriter(), reloaded);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				
-			}});
-		
-	
+		objectMapper.writeValue(resp.getWriter(), reloaded);
 
 	}
 

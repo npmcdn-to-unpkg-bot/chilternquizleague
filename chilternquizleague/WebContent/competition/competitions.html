@@ -21,11 +21,12 @@
 		<div class="body-container" ng-controller="CompetitionsController">
 			<div class="show teams standard-margins">
 				<div class="selection-item" ng-repeat="item in competitions" ng-class="item.type == competition.type ? 'selected' : 'unselected'">
-					<a href="" ng-click="setCompetition(item)">{{competition.description}}</a>
+					<a href="" ng-click="setCompetition(item)">{{item.description}}</a>
 				</div>
 			</div>
 			<div class="team-pane standard-margins">
-				<div ng-include="getTemplate(competition)" ></div>
+				<div><span>Season</span><select ng-model="season" ng-options="season as season.description for season in seasons"></select></div>
+				<div ng-include="getTemplate(competition.type.name)" ></div>
 			</div>
 		</div>
 	</div>
