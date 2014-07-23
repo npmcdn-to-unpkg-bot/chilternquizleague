@@ -12,7 +12,10 @@ public class Fixtures extends BaseEntity{
 	
 	private Date start;
 	private Date end;
+	private CompetitionType competitionType;
 	
+
+
 	private String description;
 	
 	private List<Fixture> fixtures = new ArrayList<>();
@@ -59,6 +62,12 @@ public class Fixtures extends BaseEntity{
 		this.end = endTime;
 	}
 
-	
+	public CompetitionType getCompetitionType() {
+		return competitionType;
+	}
+
+	public void setCompetitionType(CompetitionType competitionType) {
+		this.competitionType = competitionType;
+	}
 
 }

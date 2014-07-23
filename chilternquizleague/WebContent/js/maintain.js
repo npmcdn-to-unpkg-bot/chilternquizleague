@@ -388,7 +388,8 @@
 										description : $scope.season.competitions[compType].description,
 										start : makeDateWithTime(date, $scope.season.competitions[compType].startTime).getTime(), 
 
-										end : makeDateWithTime(date, $scope.season.competitions[compType].endTime).getTime()
+										end : makeDateWithTime(date, $scope.season.competitions[compType].endTime).getTime(),
+										competitionType:compType
 									};
 									$scope.fixturesList.push(fixtures);
 								}

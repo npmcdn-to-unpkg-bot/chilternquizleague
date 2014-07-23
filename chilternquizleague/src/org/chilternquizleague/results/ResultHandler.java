@@ -4,7 +4,6 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.LeagueResultRow;
-import org.chilternquizleague.domain.LeagueResults;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.TeamCompetition;
 

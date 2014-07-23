@@ -22,14 +22,14 @@
 			<div ng-if="fixture">
 			<div>{{fixture.start | date :'dd MMMM yyyy'}} : {{fixture.home.name}} - {{fixture.away.name}}</div>
 			<table >
-				<thead><tr><td colspan="2">League</td></tr></thead>
-				<tr><td>{{leagueResult.fixture.home.shortName}}</td><td><input type="number" ng-model="leagueResult.homeScore"/></td></tr>
-				<tr><td>{{leagueResult.fixture.away.shortName}}</td><td><input type="number" ng-model="leagueResult.awayScore"/></td></tr>
+				<thead><tr><td colspan="2">{{fixtures.description}}</td></tr></thead>
+				<tr><td>{{mainResult.fixture.home.shortName}}</td><td><input type="number" ng-model="mainResult.homeScore" placeholder="Home"/></td></tr>
+				<tr><td>{{mainResult.fixture.away.shortName}}</td><td><input type="number" ng-model="mainResult.awayScore" placeholder="Away"/></td></tr>
 				<thead><tr><td colspan="2">Beer Leg</td></tr></thead>
-				<tr><td>{{beerResult.fixture.home.shortName}}</td><td><input type="number" ng-model="beerResult.homeScore"/></td></tr>
-				<tr><td>{{beerResult.fixture.away.shortName}}</td><td><input type="number" ng-model="beerResult.awayScore"/></td></tr>
+				<tr><td>{{beerResult.fixture.home.shortName}}</td><td><input type="number" ng-model="beerResult.homeScore" placeholder="Home"/></td></tr>
+				<tr><td>{{beerResult.fixture.away.shortName}}</td><td><input type="number" ng-model="beerResult.awayScore" placeholder="Away"/></td></tr>
 				<thead><tr><td colspan="2">Report</td></tr></thead>
-				<tr><td colspan="2"><div><textarea cols="60" rows="10" ng-model="leagueResult.reports[0].text"></textarea></div></td></tr>
+				<tr><td colspan="2"><div><textarea cols="60" rows="10" ng-model="mainResult.reports[0].text"></textarea></div></td></tr>
 				<tr><td colspan="2"><button ng-click="submitResults()">Submit</button>
 			</table>
 			</div>

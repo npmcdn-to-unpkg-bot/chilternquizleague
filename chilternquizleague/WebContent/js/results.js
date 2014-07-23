@@ -33,12 +33,13 @@
 
 						$scope.fixture = null;
 
+						//loop once only
 						for (idx in fixtures) {
 
 							var fixture = fixtures[idx].fixtures.pop();
-
+							$scope.fixtures = fixtures[idx];
 							$scope.fixture = fixture;
-							$scope.leagueResult = {
+							$scope.mainResult = {
 								fixture : $scope.fixture,
 								reports : [ {
 									text : ""
@@ -56,9 +57,9 @@
 				$scope.submitResults = function() {
 
 					viewService.post("submit-results", [ {
-						result : $scope.leagueResult,
+						result : $scope.mainResult,
 						seasonId : $scope.global.currentSeasonId,
-						competitionType : "LEAGUE"
+						competitionType : fixtures.competitionType
 
 					}, {
 						result : $scope.beerResult,

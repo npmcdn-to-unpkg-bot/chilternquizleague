@@ -24,8 +24,13 @@ import org.chilternquizleague.views.CompetitionTypeView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.VoidWork;
 
 
 @SuppressWarnings("serial")
@@ -175,17 +180,29 @@ public class EntityServices extends HttpServlet {
 
 	}
 
-	private <T> void saveUpdate(HttpServletRequest req,
-			HttpServletResponse resp, Class<T> clazz) throws IOException {
+	private <T> void saveUpdate(final HttpServletRequest req,
+			final HttpServletResponse resp, final Class<T> clazz) throws IOException {
 
-		T entity = objectMapper.readValue(req.getReader(), clazz);
+		ofy().transact(new VoidWork() {
 
-		Key<T> key = ofy().save().entity(entity).now();
+			@Override
+			public void vrun() {
+				try {
+					T entity = objectMapper.readValue(req.getReader(), clazz);
 
-		T reloaded = ofy().load().key(key).now();
-		System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
+					Key<T> key = ofy().save().entity(entity).now();
 
-		objectMapper.writeValue(resp.getWriter(), reloaded);
+					T reloaded = ofy().load().key(key).now();
+					System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
+
+					objectMapper.writeValue(resp.getWriter(), reloaded);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+				
+			}});
+		
+	
 
 	}
 
@@ -206,7 +223,7 @@ public class EntityServices extends HttpServlet {
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		super.doPut(req, resp);
+		doPost(req, resp);
 	}
 
 }
