@@ -1,21 +1,21 @@
 
 <div class="league-table" ng-controller="LeagueTableController">
-	<p class="header">League Table {{season.description}}</p>
+	<p class="header">League Table {{leagueTable.description}}</p>
 	<table class="league-table-tbl"
-		ng-repeat="table in season.tables">
+		ng-repeat="table in leagueTable.tables">
 		<thead>
 			<tr class="league-table-description" ng-if="table.description">
-				<td colspan="8">{{table.description}}</td>
+				<th colspan="8">{{table.description}}</th>
 			</tr>
 			<tr>
-				<td>Pos.</td>
-				<td>Team</td>
-				<td>Played</td>
-				<td>Won</td>
-				<td>Lost</td>
-				<td>Drawn</td>
-				<td>Scored</td>
-				<td>Points</td>
+				<th>Pos.</th>
+				<th>Team</th>
+				<th>Played</th>
+				<th>Won</th>
+				<th>Lost</th>
+				<th>Drawn</th>
+				<th>Scored</th>
+				<th>Points</th>
 			</tr>
 		</thead>
 		<tbody>

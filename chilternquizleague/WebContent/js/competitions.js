@@ -1,10 +1,14 @@
-mainApp.controller('CompetitionsController', [ '$scope', '$location',
-		'viewService', function($scope, $location, viewService) {
-
+(function(){
+	
 	var templates = {
 			
 			LEAGUE:"league.html"
 	};
+
+mainApp.controller('CompetitionsController', [ '$scope', '$location',
+		'viewService', function($scope, $location, viewService) {
+	
+	var type = $location.path().substr(1);
 	
 	$scope.getTemplate = function(type){return templates[type];};
 	$scope.setCompetition = function(comp){$scope.competition = comp;};
@@ -30,11 +34,26 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 				}
 			});
 	
-	    $scope.$watch("competitions.length",function(length){
+	function getForTypeName(name){
+		
+		for(idx in $scope.competitions){
+			if($scope.competitions[idx].type.name == name){
+				return $scope.competitions[idx];
+			}			
+		}
+		
+		return null;
+	}    
+	
+	$scope.$watch("competitions.length",function(length){
 	    	
 	    	if(length > 0){
+	    		if(type){
+	    			$scope.setCompetition(getForTypeName(type));
+	    			
+	    		}else{
 	    	$scope.setCompetition($scope.competitions[0]);}
-	    	
+	    	}
 	    });
 
 			$scope.$watch("season", function(season) {
@@ -47,3 +66,18 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			});
 
 		} ]);
+
+mainApp.controller('LeagueCompetitionController', [ '$scope', '$location',
+                                           		'viewService', function($scope, $location, viewService) {
+
+		if ($scope.season) {
+
+			$scope.leagueTable = viewService.view("leaguetable", {
+					id : $scope.season.id}
+				);
+			}
+
+		
+
+}]);
+})();

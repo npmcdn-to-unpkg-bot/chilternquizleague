@@ -33,13 +33,14 @@
 	min-width: 6em;
 }
 
-.league-table-tbl thead td {
+.league-table-tbl thead th {
 	background: #c1dff8;
 	border: medium solid #c1dff8;
 	border-radius: .25em;
+	font-weight: normal;
 }
 
-.league-table-tbl thead tr.league-table-description td {
+.league-table-tbl thead tr.league-table-description th {
 	background: #99ccff;
 	border: medium solid #99ccff;
 }
