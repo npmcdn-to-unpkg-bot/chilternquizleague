@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.chilternquizleague.domain.Competition;
 import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.Fixtures;
@@ -27,6 +28,7 @@ import org.chilternquizleague.domain.Text;
 import org.chilternquizleague.domain.User;
 import org.chilternquizleague.domain.Venue;
 import org.chilternquizleague.results.ResultHandler;
+import org.chilternquizleague.views.CompetitionView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 import org.chilternquizleague.views.ResultSubmission;
@@ -139,7 +141,28 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().endsWith("fixtures-for-email")) {
 			fixturesForEmail(request, response);
 		}
+		
+		else if (request.getPathInfo().contains("competitions-view")) {
+			competitionsForSeason(request, response);
+		}
 
+	}
+
+	private void competitionsForSeason(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		final Long seasonId = Long.parseLong(request.getParameter("id"));
+		
+		final Season season = ofy().load().key(Key.create(Season.class, seasonId)).now();
+		
+		List<CompetitionView> views = new ArrayList<>();
+		
+		for(Competition competition :season.getCompetitions().values()){
+			
+			views.add(new CompetitionView(competition));
+		}
+		
+		objectMapper.writeValue(response.getWriter(), views);
+		
 	}
 
 	private void allResults(HttpServletRequest request,

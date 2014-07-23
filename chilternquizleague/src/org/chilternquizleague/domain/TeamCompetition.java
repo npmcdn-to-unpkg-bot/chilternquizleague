@@ -10,11 +10,15 @@ public abstract class TeamCompetition extends Competition {
 	private List<LeagueResults> results = new ArrayList<>();
 
 	protected TeamCompetition(final CompetitionType type) {
-		super(type);
-
+		this(type, false);
+	}
+	
+	protected TeamCompetition(final CompetitionType type, boolean subsidiary) {
+		
+		super(type, subsidiary);
+		
 		setStartTime("20:30");
 		setEndTime("22:00");
-
 	}
 
 	public List<Fixtures> getFixtures() {

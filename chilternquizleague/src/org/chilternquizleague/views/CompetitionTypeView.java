@@ -10,7 +10,7 @@ public class CompetitionTypeView {
 	private String name;
 	private String description;
 	
-	private CompetitionTypeView(CompetitionType type){
+	public CompetitionTypeView(CompetitionType type){
 		
 		name= type.name();
 		description = type.getDescription();

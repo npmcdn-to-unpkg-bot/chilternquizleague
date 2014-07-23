@@ -19,16 +19,16 @@ public enum CompetitionType {
 	INDIVIDUAL("Individual"), 
 	CUP("Knockout Cup") {
 		@Override
-		public CupCompetition castTo(Competition competition) {
+		public KnockoutCompetition castTo(Competition competition) {
 
-			return CupCompetition.class.cast(competition);
+			return KnockoutCompetition.class.cast(competition);
 		}
 	},
 	PLATE("Plate") {
 		@Override
-		public CupCompetition castTo(Competition competition) {
+		public KnockoutCompetition castTo(Competition competition) {
 
-			return CupCompetition.class.cast(competition);
+			return KnockoutCompetition.class.cast(competition);
 		}
 	},
 	BUZZER_QUIZ("Buzzer Quiz");

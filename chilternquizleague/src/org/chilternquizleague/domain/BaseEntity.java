@@ -7,10 +7,21 @@ abstract class BaseEntity {
 	@Id
 	protected Long id;
 	
+	private boolean retired;
+	
 	public Long getId()
 	{
 		return id;
 	}
+	
+	public boolean isRetired() {
+		return retired;
+	}
+
+	public void setRetired(boolean retired) {
+		this.retired = retired;
+	}
+
 
 	@Override
 	public int hashCode() {

@@ -1,8 +1,8 @@
 package org.chilternquizleague.domain;
 
-public class CupCompetition extends TeamCompetition {
+public class KnockoutCompetition extends TeamCompetition {
 
-	public CupCompetition(CompetitionType type) {
+	public KnockoutCompetition(CompetitionType type) {
 		super(type);
 		
 	}
