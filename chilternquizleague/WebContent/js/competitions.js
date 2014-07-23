@@ -32,8 +32,8 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 	
 	    $scope.$watch("competitions.length",function(length){
 	    	
-	    	if(length > 0){}
-	    	$scope.setCompetition($scope.competitions[0]);
+	    	if(length > 0){
+	    	$scope.setCompetition($scope.competitions[0]);}
 	    	
 	    });
 
