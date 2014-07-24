@@ -12,9 +12,11 @@
             padding:0; 
             
         /* styling: */
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            	font-family: 'Raleway','Helvetica', "Lucida Sans Unicode", "Bitstream Vera Sans",
+		"Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica,
+		sans-serif;
             font-weight: normal;
-            font-size: 15px;
+            font-size: 85%;
         }
         
         /* we're using the direct descendant selectors > to ONLY affect the main menu items */
@@ -23,11 +25,11 @@
             position: relative;
             float: left;
         /* styling: */
-            margin-right: 10px;
+            margin-right: .625em;
             
 		 	border: thin solid #c1dff8;
 		 	background-color: #c1dff8; 
-			border-radius: 10px;
+			border-radius: .625em;
         }
         .navigation > ul > li > a {
         /* positioning */ 
@@ -35,8 +37,8 @@
         /* styling: */
             background-color: #c1dff8; 
             border: thin solid #c1dff8;
-			border-radius: 10px;
-            padding:8px 14px;
+			border-radius: .625em;
+            padding:.5em .75em;
             text-decoration:none;
             color:darkblue; 
             
@@ -56,7 +58,7 @@
         
         .navigation ul ul{
             
-            width:340px; /* you need a width to accommodate tertiary menus */
+            width:21em; /* you need a width to accommodate tertiary menus */
             
             position:absolute;
             z-index:100;
@@ -79,13 +81,13 @@
         }
         /* tertiary drop-down box */
         .navigation ul ul ul{
-            left:170px;
-            width:170px;
+            left:10.5em;
+            width:10.5em;
         }
         
         .navigation > ul > li:hover ul, .navigation > ul > li > a:hover ul,
         .navigation ul ul li:hover > ul, .navigation ul ul li a:hover > ul{
-            height:220px; /* need a height to accommodate any tertiary menus */
+            height:15em; /* need a height to accommodate any tertiary menus */
         }
         
         /* drop-down item styles */
@@ -94,8 +96,8 @@
         .navigation ul ul li{
             background-color:#c1dff8;
             border: thin solid white;
-			border-radius: 10px;
-            width:170px;
+			border-radius: .625em;
+            width:10.5em;
             -webkit-transition: background-color 0.3s ease;
             -moz-transition: background-color 0.3s ease;
             -o-transition: background-color 0.3s ease;
@@ -112,8 +114,8 @@
         .navigation ul ul li a {
             display:block;
             text-decoration:none;
-            margin:0 12px;
-            padding:5px 0;
+            margin:0 .7em;
+            padding:.31em 0;
             color:#4c4c4c; /* grey */
         }
         .navigation ul ul li a:hover, .navigation ul ul li:hover > a {

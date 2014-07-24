@@ -7,13 +7,22 @@
 .league-table p {
 	padding-left: 1%;
 	font-size: 110%;
-	font-weight: bold;
+	font-weight: 600;
+}
+
+.league-table-tbl{
+	
+		font-family: 'Helvetica', "Lucida Sans Unicode", "Bitstream Vera Sans",
+	"Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica,
+	sans-serif;
 }
 
 .league-table-tbl tr>td {
+
 	border: solid thin lightgray;
 	border-radius: .25em;
 	transition:background-color .2s ease-in;
+	
 }
 
 

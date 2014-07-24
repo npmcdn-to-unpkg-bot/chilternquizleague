@@ -29,6 +29,10 @@
 			<tr>
 				<td colspan="2"><img alt="" src="{{venue.imageURL}}"></td>
 			</tr>
+			<tr>
+				<td>Retired</td>
+				<td><input type="checkbox" ng-model="venue.retired" required></td>
+			</tr>
 			<tfoot><tr><td></td><td>    <button ng-click="resetVenue()">Reset</button>
     <button ng-click="updateVenue(venue)">Save</button></td></tr></tfoot>
 		</table>

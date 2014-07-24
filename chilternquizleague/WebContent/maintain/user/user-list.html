@@ -3,7 +3,7 @@
 	<button onclick="document.location='#users/new'">Add New</button>
 
 	<div ng-repeat="user in users | orderBy : 'name'">
-		<div><a href="#users/{{user.id}}">{{user.name}}</a></div>
+		<div><a href="#users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</a></div>
 	</div>
 
 </div>

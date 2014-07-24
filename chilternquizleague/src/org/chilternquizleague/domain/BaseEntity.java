@@ -2,7 +2,7 @@ package org.chilternquizleague.domain;
 
 import com.googlecode.objectify.annotation.Id;
 
-abstract class BaseEntity {
+public abstract class BaseEntity {
 	
 	@Id
 	protected Long id;

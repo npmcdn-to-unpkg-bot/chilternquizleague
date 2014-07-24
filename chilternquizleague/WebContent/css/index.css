@@ -1,6 +1,10 @@
 @import url('/css/top.css');
 @import url('/css/results.css');
 
+.body-content {
+	margin-right: 310px;
+	display: flex;
+}
 .front-page-text {
 	margin-right: .25em;
 	margin-left: .5em;

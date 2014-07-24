@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.chilternquizleague.domain.BaseEntity;
 import org.chilternquizleague.domain.Competition;
 import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.Fixture;
@@ -222,11 +223,18 @@ public class ViewServices extends HttpServlet {
 
 	}
 
-	private <T> void makeEntityList(HttpServletResponse resp, Class<T> clazz)
+	private <T extends BaseEntity> void makeEntityList(HttpServletResponse resp, Class<T> clazz)
 			throws IOException {
-		final List<T> venues = ofy().load().type(clazz).list();
+		final List<T> items = new ArrayList<>();
+		
+		for(T item : ofy().load().type(clazz).list()){
+			
+			if(!item.isRetired()){
+				items.add(item);
+			}
+		}
 
-		objectMapper.writeValue(resp.getWriter(), venues);
+		objectMapper.writeValue(resp.getWriter(), items);
 
 	}
 
