@@ -19,6 +19,10 @@ select,input,textarea{
 	
 }
 
+select{
+	border-radius: .5em 0 0 .5em;
+}
+
 select:hover,input:hover,textarea:hover{
 	border-color: #c1dff8;
 	transition:border-color .3s ease-in;

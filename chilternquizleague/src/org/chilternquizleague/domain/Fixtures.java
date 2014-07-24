@@ -26,6 +26,7 @@ public class Fixtures extends BaseEntity{
 		this.start = template.start;
 		this.end = template.end;
 		this.description = template.description;
+		this.competitionType = template.competitionType;
 	}
 	
 	

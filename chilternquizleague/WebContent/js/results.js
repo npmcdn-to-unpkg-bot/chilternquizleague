@@ -59,7 +59,7 @@
 					viewService.post("submit-results", [ {
 						result : $scope.mainResult,
 						seasonId : $scope.global.currentSeasonId,
-						competitionType : fixtures.competitionType
+						competitionType :  $scope.fixtures.competitionType
 
 					}, {
 						result : $scope.beerResult,
