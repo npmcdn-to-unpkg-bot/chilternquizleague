@@ -11,6 +11,7 @@ public class GlobalApplicationData extends BaseEntity{
 	private String frontPageText;
 	private String leagueName = "Chiltern Quiz League";
 	private Ref<Season> currentSeason;
+	private Ref<GlobalText> globalText;
 	
 	public String getFrontPageText() {
 		return frontPageText;
@@ -32,6 +33,14 @@ public class GlobalApplicationData extends BaseEntity{
 	public void setCurrentSeason(Season season){
 		
 		currentSeason = season == null ? null : Ref.create(season);
+	}
+	
+	public GlobalText getGlobalText(){
+		return globalText == null ? null : globalText.get();
+	}
+	
+	public void setGlobalText(GlobalText globalText){
+		this.globalText = globalText == null ? null : Ref.create(globalText);
 	}
 	
 

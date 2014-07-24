@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
+import org.chilternquizleague.domain.GlobalText;
 import org.chilternquizleague.domain.LeagueCompetition;
 import org.chilternquizleague.domain.LeagueTable;
 import org.chilternquizleague.domain.LeagueTableRow;
@@ -48,6 +49,10 @@ public class EntityServices extends HttpServlet {
 
 		else if (req.getPathInfo().contains("venue")) {
 			entityByKey(req, resp, Venue.class);
+		}
+		
+		else if (req.getPathInfo().contains("global-text")) {
+			entityByKey(req, resp, GlobalText.class);
 		}
 
 		else if (req.getPathInfo().endsWith("team-list")) {
@@ -174,6 +179,10 @@ public class EntityServices extends HttpServlet {
 
 		else if (req.getPathInfo().endsWith("global")) {
 			saveUpdate(req, resp, GlobalApplicationData.class);
+		}
+		
+		else if (req.getPathInfo().endsWith("global-text")) {
+			saveUpdate(req, resp, GlobalText.class);
 		}
 
 	}

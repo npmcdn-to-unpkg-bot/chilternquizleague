@@ -36,6 +36,7 @@ public class AppStartListener implements ServletContextListener{
 			id = list.iterator().next().getId();
 		}
 		
+				
 		globalApplicationDataId = id;
 	}
 
