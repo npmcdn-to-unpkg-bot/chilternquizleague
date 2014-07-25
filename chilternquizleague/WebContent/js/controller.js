@@ -36,6 +36,8 @@ var mainApp = angular.module('mainApp', []).factory(
 						
 						return retval;
 					}
+					
+					var textCache = {};
 
 					var service = {
 
@@ -46,8 +48,10 @@ var mainApp = angular.module('mainApp', []).factory(
 
 						view : function(type, params, callback) {
 
+							var isArray = false;
+							
 							if(params){
-								var isArray = params.isArray;
+								isArray = params.isArray;
 								delete params.isArray;
 							}
 
@@ -61,6 +65,19 @@ var mainApp = angular.module('mainApp', []).factory(
 
 						post : function(type, payload, callback) {
 							return $http.post("/view/" + type, payload).success(callback);
+						},
+						
+						text : function(name,global) {
+							var textHolder = textCache[name] = textCache.hasOwnProperty(name) ? textCache[name] : {};
+							
+							if(!textHolder.text){
+								
+								this.view("text",{id:global.textId, name:name}, function(text){
+									textHolder.text = text;
+								});
+							}
+							
+							return textHolder;
 						}
 					};
 					return service;

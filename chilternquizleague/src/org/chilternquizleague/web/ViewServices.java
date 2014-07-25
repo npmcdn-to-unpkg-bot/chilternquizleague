@@ -20,6 +20,7 @@ import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
+import org.chilternquizleague.domain.GlobalText;
 import org.chilternquizleague.domain.LeagueResultRow;
 import org.chilternquizleague.domain.LeagueResults;
 import org.chilternquizleague.domain.Season;
@@ -146,7 +147,21 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().contains("competitions-view")) {
 			competitionsForSeason(request, response);
 		}
+		else if (request.getPathInfo().contains("text")) {
+			textForName(request,response);
+		}
 
+	}
+
+	private void textForName(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		final Long id = Long.parseLong(request.getParameter("id"));
+		final String name = request.getParameter("name");
+		
+		final GlobalText text = ofy().load().key(Key.create(GlobalText.class, id)).now();
+		
+		objectMapper.writeValue(response.getWriter(), text.getText(name));
+		
 	}
 
 	private void competitionsForSeason(HttpServletRequest request,

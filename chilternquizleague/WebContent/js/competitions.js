@@ -16,6 +16,8 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 	$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {
 
+					$scope.headerText = viewService.text("league-comp", $scope.global);
+					
 					viewService.list("season-views", function(seasons) {
 						$scope.seasons = seasons;
 
@@ -45,39 +47,59 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		return null;
 	}    
 	
-	$scope.$watch("competitions.length",function(length){
+	$scope.$watch("competitions[0]",function(first){
 	    	
-	    	if(length > 0){
+	    	if(first){
 	    		if(type){
 	    			$scope.setCompetition(getForTypeName(type));
 	    			
 	    		}else{
-	    	$scope.setCompetition($scope.competitions[0]);}
+	    	$scope.setCompetition(first);}
 	    	}
 	    });
 
-			$scope.$watch("season", function(season) {
-				if(season){
-				$scope.competitions = viewService.view("competitions-view", {
-					id : season.id,
-					isArray : true
-				});
-				}
+		$scope.$watch("season", function(season) {
+			if(season){
+			$scope.competitions = viewService.view("competitions-view", {
+				id : season.id,
+				isArray : true
 			});
+			}
+		});
 
 		} ]);
 
-mainApp.controller('LeagueCompetitionController', [ '$scope', '$location',
-                                           		'viewService', function($scope, $location, viewService) {
+	mainApp.controller('LeagueTableController', [ '$scope', '$interval',
+			'viewService', function($scope, $interval, viewService) {
+				function loadTable(season) {
 
-		if ($scope.season) {
+					if (season) {
 
-			$scope.leagueTable = viewService.view("leaguetable", {
-					id : $scope.season.id}
-				);
-			}
+						$scope.leagueTable = viewService.view("leaguetable", {
+							id : $scope.season.id
+						});
+					}
+				}
 
-		
+				loadTable($scope.season);
 
-}]);
+				$scope.$watch("season", loadTable);
+			} ]);
+
+	mainApp.controller('LeagueCompetitionController', [
+			'$scope',
+			'$location',
+			'viewService',
+			function($scope, $location, viewService) {
+
+				$scope.$watch("global.currentSeasonId", function(
+						currentSeasonId) {
+					if (currentSeasonId) {
+
+						$scope.headerText = viewService.text("league-comp",
+								$scope.global);
+					}
+				});
+
+			} ]);
 })();

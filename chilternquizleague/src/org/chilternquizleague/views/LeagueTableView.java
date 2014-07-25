@@ -1,5 +1,6 @@
 package org.chilternquizleague.views;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.chilternquizleague.domain.CompetitionType;
@@ -21,7 +22,7 @@ public class LeagueTableView {
 		
 		final LeagueCompetition competition =  season.getCompetition(CompetitionType.LEAGUE);
 		
-		tables = competition.getLeagueTables();
+		tables = competition != null ? competition.getLeagueTables() : Collections.<LeagueTable>emptyList();
 		description = season.getDescription();
 		
 		

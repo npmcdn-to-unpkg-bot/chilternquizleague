@@ -13,6 +13,12 @@
 					<td><select ng-model="global.currentSeason"
 						ng-options="season as season.startYear for season in seasons" required/></td>
 				</tr>
+				
+								<tr>
+				<td>Text Provider</td>
+					<td><select ng-model="global.globalText"
+						ng-options="text as text.name for text in texts" required/></td>
+				</tr>
 				<tr>
 					<td>Front Page Text</td>
 					<td><textarea ng-model="global.frontPageText" cols="60"

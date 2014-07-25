@@ -1,0 +1,9 @@
+<div>
+	<div class="box-title">Text</div>
+	<button onclick="document.location='#text/new'">Add New</button>
+
+	<div ng-repeat="text in texts | orderBy : 'name'">
+		<div><a href="#text/{{text.id}}" >{{text.name}}</a></div>
+	</div>
+
+</div>

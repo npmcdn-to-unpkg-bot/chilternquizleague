@@ -44,11 +44,19 @@
 		}).when('/global/current', {
 			templateUrl : 'maintain/global/global-detail.html',
 			controller : 'GlobalDetailCtrl'
+		}).when('/text', {
+			templateUrl : 'maintain/text/text-list.html',
+			controller : 'TextListCtrl'
+		}).when('/text/:textId', {
+			templateUrl : 'maintain/text/text-detail.html',
+			controller : 'TextDetailCtrl'
 		}).otherwise({
 			redirectTo : ''
 		});
 	} ]);
 
+	
+	
 	function makeUpdateFn(typeName, noRedirect) {
 		return makeUpdateFnWithCallback(typeName, (noRedirect ? null
 				: function(ret, $location) {
@@ -56,6 +64,9 @@
 				}));
 	}
 
+	/**
+	 * 
+	 */
 	function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 
 		var camelName = typeName.charAt(0).toUpperCase() + typeName.substr(1);
@@ -459,6 +470,8 @@
 			bindName : "currentSeason",
 			entityName : "global"
 		})($scope, entityService);
+		
+		makeListFn("text")($scope, entityService);
 
 	}));
 
@@ -527,5 +540,25 @@
 						$scope.$watch("leagueTables", setTeams);
 
 					}));
+	
+	maintainApp.controller('TextListCtrl', getCommonParams(makeListFn("text")));
+
+	
+	maintainApp.controller('TextDetailCtrl', getCommonParams(function($scope,
+			entityService, $routeParams, $rootScope, $location) {
+		makeUpdateFnWithCallback("text")($scope, entityService, $routeParams, $rootScope, $location);
+		
+		$scope.addEntry = function(){
+			var entry = {name:"", text:""};
+			$scope.text.entries.push(entry);
+			$scope.currentEntry = entry;
+		};
+		
+		$scope.setCurrentEntry = function(entry){
+			$scope.currentEntry = entry;
+		};
+		
+
+	}));
 
 })();

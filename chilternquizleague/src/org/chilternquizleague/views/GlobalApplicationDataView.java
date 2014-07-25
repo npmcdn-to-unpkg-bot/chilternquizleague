@@ -13,6 +13,8 @@ public class GlobalApplicationDataView {
 	protected String leagueName;
 	
 	protected Long currentSeasonId;
+	
+	protected Long textId;
 
 	
 	
@@ -21,6 +23,7 @@ public class GlobalApplicationDataView {
 		frontPageText = data.getFrontPageText();
 		leagueName = data.getLeagueName();
 		currentSeasonId = data.getCurrentSeason() == null ? null : data.getCurrentSeason().getId();
+		textId = data.getGlobalText() == null ? null :data.getGlobalText().getId();
 	}
 
 

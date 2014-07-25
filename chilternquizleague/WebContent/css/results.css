@@ -1,17 +1,18 @@
 @import url('/css/main.css');
 
 .league-table { 
-	font-size: 90%;
+
 }
 
-.league-table p {
-	padding-left: 1%;
-	font-size: 110%;
-	font-weight: 600;
+.league-table div.header {
+	padding-left: .25em;
+	font-weight: 700;
+	margin-top:.5em;
+	margin-bottom: .75em;
 }
 
 .league-table-tbl{
-	
+		font-size: 90%;
 		font-family: 'Helvetica', "Lucida Sans Unicode", "Bitstream Vera Sans",
 	"Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica,
 	sans-serif;

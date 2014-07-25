@@ -1,0 +1,39 @@
+<div>
+	<div class="box-title">Text Details</div>
+	<form>
+		<table>
+			<tr>
+				<td>Name</td>
+				<td><input ng-model="text.name" required></td>
+			</tr>
+			<tr>
+				<td><button ng-click="addEntry()">Add New</button></td>
+
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="show-thin standard-margins"
+						ng-class="entry == currentEntry ? 'highlit-border' : 'lowlit-border'"
+						ng-repeat="entry in text.entries | orderBy :'name'">
+						<a href="" ng-click="setCurrentEntry(entry)">{{entry.name}}</a> - <input
+							type="text" ng-model="entry.name" required>
+						<div>
+							<textarea ng-model="entry.text" rows="10" cols="60"></textarea>
+						</div>
+					</div>
+				</td>
+
+			</tr>
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="resetText()">Reset</button>
+						<button ng-click="updateText(text)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

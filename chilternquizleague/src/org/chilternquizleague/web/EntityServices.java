@@ -22,16 +22,9 @@ import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.User;
 import org.chilternquizleague.domain.Venue;
 import org.chilternquizleague.views.CompetitionTypeView;
-import org.chilternquizleague.views.GlobalApplicationDataView;
-import org.chilternquizleague.views.LeagueTableView;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.VoidWork;
 
 @SuppressWarnings("serial")
 public class EntityServices extends HttpServlet {
@@ -51,7 +44,12 @@ public class EntityServices extends HttpServlet {
 			entityByKey(req, resp, Venue.class);
 		}
 		
-		else if (req.getPathInfo().contains("global-text")) {
+		else if (req.getPathInfo().endsWith("text-list")) {
+
+			makeEntityList(resp, GlobalText.class);
+		}
+		
+		else if (req.getPathInfo().contains("text")) {
 			entityByKey(req, resp, GlobalText.class);
 		}
 
@@ -181,7 +179,7 @@ public class EntityServices extends HttpServlet {
 			saveUpdate(req, resp, GlobalApplicationData.class);
 		}
 		
-		else if (req.getPathInfo().endsWith("global-text")) {
+		else if (req.getPathInfo().endsWith("text")) {
 			saveUpdate(req, resp, GlobalText.class);
 		}
 

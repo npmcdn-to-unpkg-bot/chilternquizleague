@@ -44,5 +44,4 @@ public class GlobalApplicationData extends BaseEntity{
 	}
 	
 
-
 }
