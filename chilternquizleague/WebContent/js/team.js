@@ -39,11 +39,16 @@
 			return parts[2] ? parts[2] : "detail";
 		}
 		
-		$scope.setTemplate = function(templateName){
-			$scope.template = templateMap[templateName];
-			var parts = $location.path().split("/");
-			
-			$location.path(parts[1]+ "/" + templateName);
+
+			$scope.setTemplate = function(templateName) {
+				var template = templateMap[templateName];
+				if (template != $scope.template) {
+	
+					$scope.template = template;
+					var parts = $location.path().split("/");
+	
+					$location.path(parts[1] + "/" + templateName);
+				}
 			};
 		
 
@@ -93,7 +98,7 @@
 				return team1.shortName.localeCompare(team2.shortName);
 			}, extraStuff) ]);
 	
-	mainApp.controller("TeamResultsController", [ '$scope','$interval' ,'viewService',
+	mainApp.controller("TeamExtrasController", [ '$scope','$interval' ,'viewService',
 		'$location',  function($scope, $interval,viewService, $location) {
 			
 			$scope.setSeason = function(season){$scope.season = season;};
@@ -103,10 +108,12 @@
 			function teamExtras(){
 				
 				if($scope.team && $scope.season){
-					$scope.team.extras = viewService.view("team-extras", {
+					viewService.view("team-extras", {
 						seasonId : $scope.season.id,
 						teamId : $scope.team.id
-					});
+					}, function(extras){
+						if($scope.team.id != extras.id){
+						$scope.team.extras = extras;}});
 					
 				}
 			}

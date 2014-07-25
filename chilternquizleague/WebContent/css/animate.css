@@ -11,7 +11,30 @@
 
 .view-animate.ng-enter-active {
 	
-	border-color:lightgray;
 	opacity : 1;
 	
+}
+
+.something{
+
+}
+
+.something.ng-move,
+.something.ng-enter,
+.something.ng-leave {
+  -webkit-transition:all linear 0.5s;
+  transition:opacity linear 0.5s;
+  opacity:0;
+}
+
+.something.ng-leave.ng-leave-active,
+.something.ng-move,
+.something.ng-enter {
+  opacity:0;
+}
+
+.something.ng-leave,
+.something.ng-move.ng-move-active,
+.something.ng-enter.ng-enter-active {
+  opacity:1;
 }

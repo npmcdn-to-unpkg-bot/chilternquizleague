@@ -6,7 +6,7 @@
 	ng-bind-html="team.extras.text | htmlify"></div>
 <div class="show-thin titled-list">
 	<div>Last few results:</div>
-	<div ng-repeat="results in team.extras.results | orderBy:'date' : true">
+	<div ng-repeat="results in team.extras.results | limitTo:'5' | orderBy:'date' : true">
 		<span ng-repeat="result in results.results">
 			{{results.description}} - {{results.date | date:'dd MMMM yyyy'}} :
 			{{result.fixture.home.shortName}} {{result.homeScore}} :
@@ -19,10 +19,12 @@
 <div class="show-thin titled-list">
 	<a href="" ng-click="makeICal(team)">Download Calendar</a>
 	<div>Next few fixtures:</div>
-	<div
-		ng-repeat="fixtures in team.extras.fixtures | afterNow | orderBy:'start'">
+	<div ng-repeat="fixtures in team.extras.fixtures | afterNow | limitTo:'5' | orderBy:'start'">
 		<span ng-repeat="fixture in fixtures.fixtures">{{fixtures.description}}
 			- {{fixtures.start | date:'dd MMMM yyyy'}} -
 			{{fixture.home.shortName}} : {{fixture.away.shortName}}</span>
+	</div>
+		<div>
+		<a href="" ng-click="setTemplate('fixtures')">Show all</a>
 	</div>
 </div>
