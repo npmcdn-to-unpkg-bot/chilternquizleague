@@ -16,7 +16,7 @@
 		"Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica,
 		sans-serif;
             font-weight: normal;
-            font-size: 85%;
+            font-size: 10pt;
         }
         
         /* we're using the direct descendant selectors > to ONLY affect the main menu items */
@@ -38,7 +38,7 @@
             background-color: #c1dff8; 
             border: thin solid #c1dff8;
 			border-radius: .625em;
-            padding:.5em .75em;
+            padding:.25em .5em;
             text-decoration:none;
             color:darkblue; 
             
