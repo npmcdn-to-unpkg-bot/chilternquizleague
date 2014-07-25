@@ -5,7 +5,12 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 	return function($scope, $interval, viewService, $location) {
 
 		var promise = null;
-		var itemId = $location.path().substr(1);
+		
+		var parts = $location.path().split("/");
+		
+		//TODO: Join remaining parts [2->] back together with leading and intervening '\'
+		
+		var itemId = parts[1];
 
 		$scope["set" + camelName] = function(item) {
 
@@ -47,4 +52,42 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 
 						});
 	};
+}
+
+/**
+ * Factory function to create list and selection artefacts for e.g. a list of seasons
+ * and accompanying select box.
+ * @param type
+ * @param $scope
+ * @param options
+ * @param viewService
+ * @returns {Function} Expects an id value as parameter
+ */
+function listAndSelection(type, $scope, viewService, options){
+	
+	
+	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
+	var setName = "set" + camelName;
+	var listName = options && options.listName ? options.listName : (type + "s");
+	var remoteListName = options && options.listName ? options.listName : listName;
+	
+	return function (id){
+		
+		if(id){
+		
+			$scope[setName] = function(item){$scope[type] = item;};
+			
+			viewService.list(remoteListName, function(items) {
+		
+			$scope[listName] = items;
+
+			for (idx in items) {
+
+				if (items[idx].id == id) {
+					$scope[setName](items[idx]);
+					return;
+				}
+
+				$scope[setName](items ? items[0] : null);
+			}});};};
 }
