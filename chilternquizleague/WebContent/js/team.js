@@ -1,5 +1,12 @@
 (function() {
 	
+	mainApp.run(function ($rootScope) {
+    $rootScope.$on('$locationChangeSuccess', function () {
+        $rootScope.$broadcast("pathChanged");
+    });
+});
+	
+	
 	var templateMap = {
 		detail : "team-details.html",
 		results : "team-results.html",
@@ -25,6 +32,12 @@
 
 	function extraStuff($scope, $interval, viewService, $location) {
 
+		function getTemplateName(){
+			
+			var parts = $location.path().split("/");
+			
+			return parts[2] ? parts[2] : "detail";
+		}
 		
 		$scope.setTemplate = function(templateName){
 			$scope.template = templateMap[templateName];
@@ -33,11 +46,13 @@
 			$location.path(parts[1]+ "/" + templateName);
 			};
 		
-		var parts = $location.path().split("/");
+
 		
-		var templateName = parts[2] ? parts[2] : "detail";
+		$scope.setTemplate(getTemplateName());
 		
-		$scope.setTemplate(templateName);
+		$scope.$on("pathChanged", function(){
+			$scope.setTemplate(getTemplateName());	
+		});
 		
 		$scope.makeICal = function(team) {
 

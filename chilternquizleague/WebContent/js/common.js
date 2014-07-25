@@ -8,7 +8,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 		
 		var parts = $location.path().split("/");
 		
-		//TODO: Join remaining parts [2->] back together with leading and intervening '\'
+		var tail = "/" + parts.slice(2).join("/");
 		
 		var itemId = parts[1];
 
@@ -21,7 +21,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 		$scope.$watch(type, function(item) {
 
 			if (item) {
-				$location.path("/" + item.id);
+				$location.path("/" + item.id + tail);
 			}
 		});
 
@@ -33,7 +33,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 						listName,
 						function(items) {
 							$scope[listName] = items.sort(sortFunction);
-							if (itemId) {
+							if (itemId && itemId > 0) {
 								for (idx in items) {
 									if (items[idx].id == itemId) {
 										$scope[type] = items[idx];
