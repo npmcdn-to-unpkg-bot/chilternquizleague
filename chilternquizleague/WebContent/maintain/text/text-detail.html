@@ -1,3 +1,30 @@
+<style>
+
+.highlit-border > div{
+	height:10em;
+}
+
+
+.lowlit-border a:hover ~div{
+	height:10em;
+}
+
+ 
+.highlit-border> div.ng-enter.ng-enter-active,
+.highlit-border> div.ng-move.ng-move-active {
+  height:10em;
+ }
+
+@keyframes my_animation {
+  from { height:10em; }
+  to { height:0; }
+}
+
+@-webkit-keyframes my_animation {
+  from { height:10em; }
+  to { height:0; }
+}
+</style>
 <div>
 	<div class="box-title">Text Details</div>
 	<form>
@@ -17,7 +44,7 @@
 						ng-repeat="entry in text.entries | orderBy :'name'">
 						<a href="" ng-click="setCurrentEntry(entry)">{{entry.name}}</a> - <input
 							type="text" ng-model="entry.name" required>
-						<div>
+						<div >
 							<textarea ng-model="entry.text" rows="10" cols="60"></textarea>
 						</div>
 					</div>

@@ -471,7 +471,10 @@
 			entityName : "global"
 		})($scope, entityService);
 		
-		makeListFn("text")($scope, entityService);
+		makeListFn("text",{
+			bindName : "globalText",
+			entityName : "global"
+		})($scope, entityService);
 
 	}));
 
