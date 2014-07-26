@@ -32,6 +32,8 @@
 
 	function extraStuff($scope, $interval, viewService, $location) {
 
+		
+		
 		function getTemplateName(){
 			
 			var parts = $location.path().split("/");
@@ -77,6 +79,9 @@
 		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 
 			if (currentSeasonId) {
+				
+				$scope.headerText = viewService.text("teams-header", $scope.global);
+				
 				$scope.$watch("team", function(team) {
 
 					if (team) {
