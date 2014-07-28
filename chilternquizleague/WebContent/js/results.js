@@ -27,10 +27,10 @@
 						email : email,
 						seasonId : $scope.global.currentSeasonId,
 						isArray : true
-					}, function(fixtures) {
+					}, function(preSubmission) {
 
-						fixtures = nowOrBefore(fixtures);
-
+						fixtures = nowOrBefore(preSubmission.fixtures);
+												
 						$scope.fixture = null;
 
 						//loop once only
@@ -42,7 +42,8 @@
 							$scope.mainResult = {
 								fixture : $scope.fixture,
 								reports : [ {
-									text : ""
+									team:preSubmission.team,
+									text:{text : ""}
 								} ]
 							};
 							$scope.beerResult = {
@@ -57,11 +58,13 @@
 				$scope.submitResults = function() {
 
 					viewService.post("submit-results", [ {
+						email: $scope.email,
 						result : $scope.mainResult,
 						seasonId : $scope.global.currentSeasonId,
 						competitionType :  $scope.fixtures.competitionType
 
 					}, {
+						email: $scope.email,
 						result : $scope.beerResult,
 						seasonId : $scope.global.currentSeasonId,
 						competitionType : "BEER_LEG"

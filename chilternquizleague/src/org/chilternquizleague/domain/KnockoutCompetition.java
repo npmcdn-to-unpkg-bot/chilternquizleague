@@ -8,7 +8,7 @@ public class KnockoutCompetition extends TeamCompetition {
 	}
 
 	@Override
-	public void addResult(LeagueResultRow result) {
+	public void addResult(Result result) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -8,27 +8,27 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
-public class LeagueResults{
+public class Results{
 	
 	private Date date;
 	private String description;
 	
 
-	public LeagueResults(){}
+	public Results(){}
 	
-	public LeagueResults(LeagueResults template){
+	public Results(Results template){
 		
 		this.date = template.date;
 		this.description = template.description;
 	}
 	
-	private List<LeagueResultRow> results = new ArrayList<>();
+	private List<Result> results = new ArrayList<>();
 
-	public List<LeagueResultRow> getResults() {
+	public List<Result> getResults() {
 		return results;
 	}
 
-	public void setResults(List<LeagueResultRow> results) {
+	public void setResults(List<Result> results) {
 		this.results = results;
 	}
 	
@@ -40,9 +40,9 @@ public class LeagueResults{
 		this.date = date;
 	}
 	
-	public LeagueResultRow findRow(Fixture fixture){
+	public Result findRow(Fixture fixture){
 		
-		for(LeagueResultRow row : results){
+		for(Result row : results){
 			
 			if(row.getFixture().isSame(fixture)){
 				return row;
@@ -52,9 +52,9 @@ public class LeagueResults{
 		return null;
 	}
 	
-	public boolean addResult(LeagueResultRow incoming){
+	public boolean addResult(Result incoming){
 		
-		final LeagueResultRow row = findRow(incoming.getFixture());
+		final Result row = findRow(incoming.getFixture());
 		
 		if(row == null){
 			return results.add(incoming);

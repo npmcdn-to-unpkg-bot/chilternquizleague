@@ -41,8 +41,8 @@ public class LeagueCompetition extends TeamCompetition{
 	}
 
 	@Override
-	public void addResult(LeagueResultRow result) {
-		final LeagueResults results = getResultsForDate(result.getFixture().getStart());
+	public void addResult(Result result) {
+		final Results results = getResultsForDate(result.getFixture().getStart());
 		
 		if(results.addResult(result)){
 			

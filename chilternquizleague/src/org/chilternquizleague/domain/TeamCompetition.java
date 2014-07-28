@@ -7,7 +7,7 @@ import java.util.List;
 public abstract class TeamCompetition extends Competition {
 
 	private List<Fixtures> fixtures = new ArrayList<>();
-	private List<LeagueResults> results = new ArrayList<>();
+	private List<Results> results = new ArrayList<>();
 
 	protected TeamCompetition(final CompetitionType type) {
 		this(type, false);
@@ -29,17 +29,17 @@ public abstract class TeamCompetition extends Competition {
 		this.fixtures = fixtures;
 	}
 
-	public List<LeagueResults> getResults() {
+	public List<Results> getResults() {
 		return results;
 	}
 
-	public void setResults(List<LeagueResults> results) {
+	public void setResults(List<Results> results) {
 		this.results = results;
 	}
 
-	protected final LeagueResults getResultsForDate(Date date) {
+	protected final Results getResultsForDate(Date date) {
 
-		for (LeagueResults resultSet : results) {
+		for (Results resultSet : results) {
 
 			if (Utils.isSameDay(date, resultSet.getDate())) {
 
@@ -47,7 +47,7 @@ public abstract class TeamCompetition extends Competition {
 			}
 		}
 
-		final LeagueResults newResults = new LeagueResults();
+		final Results newResults = new Results();
 		final Fixtures fixtures = getFixturesForDate(date);
 
 		newResults.setDescription(fixtures != null ? fixtures.getDescription()
@@ -71,6 +71,6 @@ public abstract class TeamCompetition extends Competition {
 		return null;
 	}
 
-	public abstract void addResult(LeagueResultRow result);
+	public abstract void addResult(Result result);
 
 }

@@ -21,8 +21,8 @@ import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
 import org.chilternquizleague.domain.GlobalText;
-import org.chilternquizleague.domain.LeagueResultRow;
-import org.chilternquizleague.domain.LeagueResults;
+import org.chilternquizleague.domain.Result;
+import org.chilternquizleague.domain.Results;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.TeamCompetition;
@@ -33,6 +33,7 @@ import org.chilternquizleague.results.ResultHandler;
 import org.chilternquizleague.views.CompetitionView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
+import org.chilternquizleague.views.PreSubmissionView;
 import org.chilternquizleague.views.ResultSubmission;
 import org.chilternquizleague.views.SeasonView;
 import org.chilternquizleague.views.TeamExtras;
@@ -119,7 +120,7 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().contains("seasons")) {
 			makeEntityList(response, Season.class);
 		}
-		
+
 		else if (request.getPathInfo().contains("season-views")) {
 			makeSeasonViews(response);
 		}
@@ -135,7 +136,7 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().contains("venue")) {
 			entityByKey(request, response, Venue.class);
 		}
-		
+
 		else if (request.getPathInfo().contains("all-results")) {
 			allResults(request, response);
 		}
@@ -143,12 +144,11 @@ public class ViewServices extends HttpServlet {
 		else if (request.getPathInfo().endsWith("fixtures-for-email")) {
 			fixturesForEmail(request, response);
 		}
-		
+
 		else if (request.getPathInfo().contains("competitions-view")) {
 			competitionsForSeason(request, response);
-		}
-		else if (request.getPathInfo().contains("text")) {
-			textForName(request,response);
+		} else if (request.getPathInfo().contains("text")) {
+			textForName(request, response);
 		}
 
 	}
@@ -157,43 +157,46 @@ public class ViewServices extends HttpServlet {
 			HttpServletResponse response) throws IOException {
 		final Long id = Long.parseLong(request.getParameter("id"));
 		final String name = request.getParameter("name");
-		
-		final GlobalText text = ofy().load().key(Key.create(GlobalText.class, id)).now();
-		
+
+		final GlobalText text = ofy().load()
+				.key(Key.create(GlobalText.class, id)).now();
+
 		objectMapper.writeValue(response.getWriter(), text.getText(name));
-		
+
 	}
 
 	private void competitionsForSeason(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		final Long seasonId = Long.parseLong(request.getParameter("id"));
-		
-		final Season season = ofy().load().key(Key.create(Season.class, seasonId)).now();
-		
+
+		final Season season = ofy().load()
+				.key(Key.create(Season.class, seasonId)).now();
+
 		List<CompetitionView> views = new ArrayList<>();
-		
-		for(Competition competition :season.getCompetitions().values()){
-			
+
+		for (Competition competition : season.getCompetitions().values()) {
+
 			views.add(new CompetitionView(competition));
 		}
-		
+
 		objectMapper.writeValue(response.getWriter(), views);
-		
+
 	}
 
 	private void allResults(HttpServletRequest request,
-			HttpServletResponse response) throws IOException{
+			HttpServletResponse response) throws IOException {
 		final Long seasonId = Long.parseLong(request.getParameter("id"));
-		
-		final Season season = ofy().load().key(Key.create(Season.class, seasonId)).now();
-		
-		final List<LeagueResults> results = new ArrayList<>();
-		
-		for(TeamCompetition competition : season.getTeamCompetitions()){
-			
+
+		final Season season = ofy().load()
+				.key(Key.create(Season.class, seasonId)).now();
+
+		final List<Results> results = new ArrayList<>();
+
+		for (TeamCompetition competition : season.getTeamCompetitions()) {
+
 			results.addAll(competition.getResults());
 		}
-		
+
 		objectMapper.writeValue(response.getWriter(), results);
 	}
 
@@ -212,8 +215,10 @@ public class ViewServices extends HttpServlet {
 
 			for (User user : team.getUsers()) {
 				if (email.equalsIgnoreCase(user.getEmail())) {
-					objectMapper.writeValue(response.getWriter(),
-							getTeamFixtures(team.getId(), season));
+					objectMapper.writeValue(
+							response.getWriter(),
+							new PreSubmissionView(team, getTeamFixtures(
+									team.getId(), season)));
 				}
 			}
 		}
@@ -238,13 +243,13 @@ public class ViewServices extends HttpServlet {
 
 	}
 
-	private <T extends BaseEntity> void makeEntityList(HttpServletResponse resp, Class<T> clazz)
-			throws IOException {
+	private <T extends BaseEntity> void makeEntityList(
+			HttpServletResponse resp, Class<T> clazz) throws IOException {
 		final List<T> items = new ArrayList<>();
-		
-		for(T item : ofy().load().type(clazz).list()){
-			
-			if(!item.isRetired()){
+
+		for (T item : ofy().load().type(clazz).list()) {
+
+			if (!item.isRetired()) {
 				items.add(item);
 			}
 		}
@@ -312,7 +317,8 @@ public class ViewServices extends HttpServlet {
 
 		for (TeamCompetition competition : competitions) {
 
-			if (competition != null && competition.getType() != CompetitionType.BEER_LEG) {
+			if (competition != null
+					&& competition.getType() != CompetitionType.BEER_LEG) {
 
 				for (Fixtures fixtureSet : competition.getFixtures()) {
 
@@ -336,21 +342,20 @@ public class ViewServices extends HttpServlet {
 		}
 		return fixtures;
 	}
-	
-	private void makeSeasonViews(HttpServletResponse resp) throws IOException{
-		
+
+	private void makeSeasonViews(HttpServletResponse resp) throws IOException {
+
 		final List<SeasonView> seasons = new ArrayList<>();
-		
-		for(Season season : ofy().load().type(Season.class)){
-			
+
+		for (Season season : ofy().load().type(Season.class)) {
+
 			seasons.add(new SeasonView(season));
 		}
-		
+
 		objectMapper.writeValue(resp.getWriter(), seasons);
 	}
 
-	private List<LeagueResults> getTeamResults(final Long teamId,
-			final Season season) {
+	private List<Results> getTeamResults(final Long teamId, final Season season) {
 		final List<TeamCompetition> competitions = Arrays
 				.<TeamCompetition> asList((TeamCompetition) season
 						.getCompetition(CompetitionType.LEAGUE),
@@ -358,18 +363,17 @@ public class ViewServices extends HttpServlet {
 								.getCompetition(CompetitionType.CUP),
 						(TeamCompetition) season
 								.getCompetition(CompetitionType.PLATE));
-		final List<LeagueResults> results = new ArrayList<>();
+		final List<Results> results = new ArrayList<>();
 
 		for (TeamCompetition competition : competitions) {
 
 			if (competition != null) {
 
-				for (LeagueResults resultSet : competition.getResults()) {
+				for (Results resultSet : competition.getResults()) {
 
-					final LeagueResults newResultSet = new LeagueResults(
-							resultSet);
+					final Results newResultSet = new Results(resultSet);
 
-					for (LeagueResultRow result : resultSet.getResults()) {
+					for (Result result : resultSet.getResults()) {
 
 						final Fixture fixture = result.getFixture();
 
@@ -379,8 +383,8 @@ public class ViewServices extends HttpServlet {
 						}
 
 					}
-					
-					if(!newResultSet.getResults().isEmpty()){
+
+					if (!newResultSet.getResults().isEmpty()) {
 						results.add(newResultSet);
 					}
 				}
@@ -396,7 +400,7 @@ public class ViewServices extends HttpServlet {
 				request.getReader(), ResultSubmission[].class);
 
 		for (final ResultSubmission submission : submissions) {
-			new ResultHandler(submission.getResult(), submission.getSeasonId(),
+			new ResultHandler(submission.getResult(),submission.getEmail(), submission.getSeasonId(),
 					submission.getCompetitionType()).commit();
 
 		}
