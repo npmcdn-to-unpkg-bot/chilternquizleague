@@ -18,7 +18,7 @@ public class GlobalText extends BaseEntity {
 	
 	public String getText(final String key){
 		
-		return text.get(key).getText();
+		return text.containsKey(key) ? text.get(key).getText() : "No text found for '" + key +"'" ;
 	}
 	
 	public void setText(final String key, final String text){

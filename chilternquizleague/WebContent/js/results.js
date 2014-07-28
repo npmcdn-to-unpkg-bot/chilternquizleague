@@ -29,27 +29,30 @@
 						isArray : true
 					}, function(preSubmission) {
 
-						fixtures = nowOrBefore(preSubmission.fixtures);
-												
-						$scope.fixture = null;
-
-						//loop once only
-						for (idx in fixtures) {
-
-							var fixture = fixtures[idx].fixtures.pop();
-							$scope.fixtures = fixtures[idx];
-							$scope.fixture = fixture;
-							$scope.mainResult = {
-								fixture : $scope.fixture,
-								reports : [ {
-									team:preSubmission.team,
-									text:{text : ""}
-								} ]
-							};
-							$scope.beerResult = {
-								fixture : $scope.fixture
-							};
-							break;
+						if(preSubmission.fixtures)
+						{
+							fixtures = nowOrBefore(preSubmission.fixtures);
+													
+							$scope.fixture = null;
+	
+							//loop once only
+							for (idx in fixtures) {
+	
+								var fixture = fixtures[idx].fixtures.pop();
+								$scope.fixtures = fixtures[idx];
+								$scope.fixture = fixture;
+								$scope.mainResult = {
+									fixture : $scope.fixture,
+									reports : [ {
+										team:preSubmission.team,
+										text:{text : ""}
+									} ]
+								};
+								$scope.beerResult = {
+									fixture : $scope.fixture
+								};
+								break;
+							}
 						}
 
 					});
@@ -88,8 +91,9 @@
 				$scope.setSeason = function(season) {
 
 					$scope.allResults = season ? viewService.view("all-results",{id:season.id,isArray:true},function(results){
-						
+						if(results){
 						results.sort(function(results1,results2){return results2.date -results1.date;});
+						}
 					}): [];
 					
 					$scope.season = season;
@@ -116,43 +120,5 @@
 
 			} ]);
 
-	mainApp.controller("TeamResultsController", [ '$scope','$interval' ,'viewService',
-			'$location',  cyclingListControllerFactory("team", function(team1, team2) {
-				return team1.shortName.localeCompare(team2.shortName);
-			}, function($scope, $interval,viewService, $location) {
-				
-				$scope.setSeason = function(season){$scope.season = season;};
-				
-				$scope.$watch("global.currentSeasonId", function(currentSeasonId){
-					viewService.list("season-views", function(seasons) {
-				
-					$scope.seasons = seasons;
-
-					for (idx in seasons) {
-
-						if (seasons[idx].id == $scope.global.currentSeasonId) {
-							$scope.setSeason(seasons[idx]);
-							return;
-						}
-
-						$scope.setSeason(seasons ? seasons[0] : null);
-					}});});
-
-				function teamExtras(){
-					
-					if($scope.team && $scope.season){
-						$scope.team.extras = viewService.view("team-extras", {
-							seasonId : $scope.season.id,
-							teamId : $scope.team.id
-						});
-						
-					}
-				}
-				
-				$scope.$watch("season", teamExtras);
-				$scope.$watch("team.id", teamExtras);
-				
-				
-			}) ]);
 
 })();

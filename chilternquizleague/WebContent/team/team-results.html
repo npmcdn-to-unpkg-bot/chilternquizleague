@@ -1,13 +1,7 @@
 <div ng-controller="TeamExtrasController">
-	<span>Season</span><select ng-model="season"
-		ng-options="season as season.description for season in seasons"></select>
-</div>
-<div class="something"
-	ng-repeat="results in team.extras.results | orderBy : 'date' : true">
-	<div  ng-repeat="result in results.results">
-		<span>{{results.date | date : 'dd MMMM yyyy'}} -
-			{{results.description}} -- {{result.fixture.home.shortName}}
-			{{result.homeScore}} : {{result.awayScore}}
-			{{result.fixture.away.shortName}}</span>
+	<div>
+		<span>Season</span><select ng-model="season"
+			ng-options="season as season.description for season in seasons"></select>
 	</div>
+	<div class="something" ng-include="'/results/results-table.html'"></div>
 </div>

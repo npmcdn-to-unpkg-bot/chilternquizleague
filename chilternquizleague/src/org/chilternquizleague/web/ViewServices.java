@@ -74,6 +74,8 @@ public class ViewServices extends HttpServlet {
 		public void serialize(User team, JsonGenerator gen,
 				SerializerProvider prov) throws IOException,
 				JsonProcessingException {
+			
+			gen.writeNull();
 
 		}
 
@@ -197,6 +199,7 @@ public class ViewServices extends HttpServlet {
 			results.addAll(competition.getResults());
 		}
 
+		objectMapper.writeValue(System.out, results);
 		objectMapper.writeValue(response.getWriter(), results);
 	}
 

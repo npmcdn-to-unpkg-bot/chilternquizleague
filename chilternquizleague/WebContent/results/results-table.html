@@ -1,0 +1,11 @@
+<table ng-controller="ResultsTable">
+
+<thead  ng-repeat-start="resultSet in results | orderBy: 'date' : true">
+<tr><th>{{resultSet.description}}</th><th colspan="8">{{resultSet.date | date:'dd MMMM yyyy'}}</th></tr>
+</thead>
+<tbody ng-repeat-end>
+<tr ng-repeat="result in resultSet.results | orderBy :'fixture.home.shortName'">
+	<td>{{result.fixture.home.shortName}}</td><td>{{result.homeScore}}</td><td>{{result.awayScore}}</td><td>{{result.fixture.away.shortName}}</td><td><a href="" ng-click="showReports(result)">Reports</a></td>
+</tr>
+</tbody>
+</table>

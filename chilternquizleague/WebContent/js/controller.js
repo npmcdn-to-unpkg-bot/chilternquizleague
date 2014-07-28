@@ -25,7 +25,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate"]).factory(
 						
 						function callbackWrapper(item){
 							
-							callback ? callback(item):null;
+							callback && item ? callback(item):null;
 							angular.copy(item,retval);
 
 						}

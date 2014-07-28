@@ -119,7 +119,7 @@
 					}, function(extras){
 						if($scope.team.id != extras.id){
 						$scope.team.extras = extras;}});
-					
+
 				}
 			}
 			
@@ -129,7 +129,15 @@
 			$scope.$watch("season", teamExtras);
 			$scope.$watch("team.id", teamExtras);
 			
-			
+
 		} ]);
+
+	mainApp.controller('ResultsTable', [ '$scope', '$interval', 'viewService',
+	                            			'$location', function($scope) {
+		
+		$scope.$watch("team.extras.results", function(results){
+			$scope.results = results;});
+	}]);
+
 
 })();

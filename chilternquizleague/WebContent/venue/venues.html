@@ -2,7 +2,6 @@
 <html ng-app="mainApp" ng-controller="MainController">
 <head>
 <meta charset="UTF-8">
-<title>{{global.leagueName}} - Venues</title>
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <link type="text/css" rel="stylesheet" href="/css/venue.css">
 <script type="text/javascript" src="/js/angular.js"></script>
@@ -11,6 +10,7 @@
 <script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/venue.js"></script>
+<title ng-cloak >{{global.leagueName}} - Venues</title>
 </head>
 <body>
 	<div>
@@ -30,7 +30,7 @@
 					<div>phone : {{venue.phone}}</div>
 					
 				</div>
-				<div class="venue-picture"><div><img alt="" src="{{venue.imageURL}}"></div></div>
+				<div class="venue-picture"><div><img alt="" ng-src="{{venue.imageURL}}"></div></div>
 			</div>
 		</div>
 	</div>
