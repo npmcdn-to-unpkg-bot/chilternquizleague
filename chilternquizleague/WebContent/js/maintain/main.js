@@ -43,10 +43,10 @@ maintainApp.config([ '$routeProvider', function($routeProvider) {
 	}).when('/global/current', {
 		templateUrl : 'maintain/global/global-detail.html',
 		controller : 'GlobalDetailCtrl'
-	}).when('/text', {
+	}).when('/texts', {
 		templateUrl : 'maintain/text/text-list.html',
 		controller : 'TextListCtrl'
-	}).when('/text/:textId', {
+	}).when('/texts/:textId', {
 		templateUrl : 'maintain/text/text-detail.html',
 		controller : 'TextDetailCtrl'
 	}).otherwise({
