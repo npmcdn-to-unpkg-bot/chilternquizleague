@@ -66,5 +66,12 @@ public class Team extends BaseEntity{
 		this.rubric = text;
 	}
 
+	@Override
+	public String toString() {
+		return "Team [name=" + name + ", shortName=" + shortName
+				+ ", venueRef=" + venueRef + ", rubric=" + rubric
+				+ ", userRefs=" + userRefs + "]";
+	}
+
 
 }

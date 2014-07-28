@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tools.ant.util.StringUtils;
 import org.chilternquizleague.domain.BaseEntity;
 import org.chilternquizleague.domain.Competition;
 import org.chilternquizleague.domain.CompetitionType;
@@ -75,8 +76,7 @@ public class ViewServices extends HttpServlet {
 				SerializerProvider prov) throws IOException,
 				JsonProcessingException {
 			
-			gen.writeNull();
-
+		
 		}
 
 	}
@@ -199,7 +199,6 @@ public class ViewServices extends HttpServlet {
 			results.addAll(competition.getResults());
 		}
 
-		objectMapper.writeValue(System.out, results);
 		objectMapper.writeValue(response.getWriter(), results);
 	}
 
@@ -399,14 +398,15 @@ public class ViewServices extends HttpServlet {
 
 	private void submitResults(HttpServletRequest request) throws IOException {
 
+		
 		final ResultSubmission[] submissions = objectMapper.readValue(
 				request.getReader(), ResultSubmission[].class);
 
 		for (final ResultSubmission submission : submissions) {
 			new ResultHandler(submission.getResult(),submission.getEmail(), submission.getSeasonId(),
 					submission.getCompetitionType()).commit();
-
-		}
+			
+			}
 
 	}
 

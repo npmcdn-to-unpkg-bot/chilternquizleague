@@ -54,4 +54,10 @@ public class Fixture {
 				&& home.getKey().equivalent(fixture.home.getKey());
 	}
 
+	@Override
+	public String toString() {
+		return "Fixture [start=" + start + ", end=" + end + ", home=" + home
+				+ ", away=" + away + "]";
+	}
+
 }

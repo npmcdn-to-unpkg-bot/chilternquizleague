@@ -1,4 +1,5 @@
 @import url('/css/top.css');
+@import url('/css/results.css');
 .teams {
 	float: left;
 	min-height: 25em;

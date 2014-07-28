@@ -49,6 +49,8 @@ public class ResultHandler {
 				
 				ofy().save().entity(season);
 				
+				System.out.println("Result " + result + " committed");
+				
 			}
 		
 		});
