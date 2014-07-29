@@ -10,7 +10,7 @@ public abstract class TeamCompetition extends Competition {
 
 	private List<Ref<Fixtures>> fixtures = new ArrayList<>();
 	private List<Ref<Results>> results = new ArrayList<>();
-
+	
 	protected TeamCompetition(final CompetitionType type) {
 		this(type, false);
 	}
@@ -28,7 +28,7 @@ public abstract class TeamCompetition extends Competition {
 	}
 
 	public void setFixtures(List<Fixtures> fixtures) {
-		this.fixtures = Utils.entitiesToRefs(fixtures);
+		this.fixtures = Utils.entitiesToRefs(fixtures, getSeason());
 	}
 
 	public List<Results> getResults() {
@@ -36,7 +36,7 @@ public abstract class TeamCompetition extends Competition {
 	}
 
 	public void setResults(List<Results> results) {
-		this.results = Utils.entitiesToRefs(results);
+		this.results = Utils.entitiesToRefs(results, getSeason());
 	}
 
 	protected final Results getResultsForDate(Date date) {
@@ -57,7 +57,7 @@ public abstract class TeamCompetition extends Competition {
 
 		newResults.setDate(date);
 		
-		results.add(Utils.entityToRef(newResults));
+		results.add(Utils.entityToRef(newResults, getSeason()));
 
 		return newResults;
 	}
@@ -76,4 +76,8 @@ public abstract class TeamCompetition extends Competition {
 
 	public abstract Results addResult(Result result);
 
+	public void addResults(Results results){
+		
+		this.results.add(Ref.create(results));
+	}
 }

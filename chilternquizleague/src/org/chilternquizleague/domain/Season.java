@@ -36,7 +36,7 @@ public class Season extends BaseEntity {
 		endYear = startYear + 1;
 	}
 
-	@Stringify(value = CompetitionTypeStringifier.class)
+	@Stringify(CompetitionTypeStringifier.class)
 	private Map<CompetitionType, Competition> competitions = new EnumMap<>(
 			CompetitionType.class);
 

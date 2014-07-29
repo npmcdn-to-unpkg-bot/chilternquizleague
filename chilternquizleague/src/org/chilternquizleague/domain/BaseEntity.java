@@ -21,6 +21,10 @@ public abstract class BaseEntity {
 	public void setRetired(boolean retired) {
 		this.retired = retired;
 	}
+	
+	void setParent(Object parent){
+		//noop
+	}
 
 
 	@Override

@@ -6,13 +6,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Parent;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Entity
 @Cache
-public class Fixtures extends BaseEntity{
+public class Fixtures extends SeasonChild{
 	
 	private Date start;
 	private Date end;
@@ -71,5 +73,6 @@ public class Fixtures extends BaseEntity{
 	public void setCompetitionType(CompetitionType competitionType) {
 		this.competitionType = competitionType;
 	}
+	
 
 }

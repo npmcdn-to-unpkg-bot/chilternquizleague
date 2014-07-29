@@ -19,8 +19,16 @@ public class Utils {
 
 	public static <T extends BaseEntity> Ref<T> entityToRef(final T entity){
 		
+		return entityToRef(entity, null);
+	}
+	
+	public static <T extends BaseEntity> Ref<T> entityToRef(final T entity, final Object parent){
+		
 		if (entity.id == null){
-			
+			if(parent != null)
+			{
+				entity.setParent(parent);
+			}
 			final Key<T> key = ofy().save().entity(entity).now();
 			return Ref.create(key);
 		}
@@ -33,16 +41,22 @@ public class Utils {
 	
 	
 	public static <T extends BaseEntity> List<Ref<T>> entitiesToRefs(
-			List<T> entities) {
+			List<T> entities, final Object parent) {
 
 		final List<Ref<T>> refs = new ArrayList<>();
 
 		for (T entity : entities) {
 
-			refs.add(entityToRef(entity));
+			refs.add(entityToRef(entity, parent));
 		}
 
 		return refs;
+	}
+	
+	public static <T extends BaseEntity> List<Ref<T>> entitiesToRefs(
+			List<T> entities) {
+
+		return entitiesToRefs(entities, null);
 	}
 
 	public static <T extends BaseEntity> List<T> refsToEntities(

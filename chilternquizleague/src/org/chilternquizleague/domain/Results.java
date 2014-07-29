@@ -12,11 +12,11 @@ import com.googlecode.objectify.annotation.Entity;
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Entity
 @Cache
-public class Results extends BaseEntity{
+public class Results extends SeasonChild{
 	
 	private Date date;
 	private String description;
-	
+
 
 	public Results(){}
 	
@@ -76,5 +76,6 @@ public class Results extends BaseEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 
 }
