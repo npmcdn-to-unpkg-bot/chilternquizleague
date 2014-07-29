@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -14,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tools.ant.util.StringUtils;
 import org.chilternquizleague.domain.BaseEntity;
 import org.chilternquizleague.domain.Competition;
 import org.chilternquizleague.domain.CompetitionType;
@@ -29,7 +30,6 @@ import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.TeamCompetition;
 import org.chilternquizleague.domain.Text;
 import org.chilternquizleague.domain.User;
-import org.chilternquizleague.domain.Venue;
 import org.chilternquizleague.results.ResultHandler;
 import org.chilternquizleague.views.CompetitionView;
 import org.chilternquizleague.views.GlobalApplicationDataView;
@@ -42,7 +42,6 @@ import org.chilternquizleague.views.TeamExtras;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.googlecode.objectify.Key;
@@ -50,17 +49,19 @@ import com.googlecode.objectify.Key;
 /**
  * Servlet implementation class ViewServices
  */
-public class ViewServices extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class ViewServices extends BaseRESTService {
 
-	private ObjectMapper objectMapper;
+	private final static Logger LOG = Logger.getLogger(ViewServices.class
+			.getName());
 
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
 	public void init(ServletConfig config) throws ServletException {
-		objectMapper = new ObjectMapper();
 
+		super.init(config);
+		
 		final SimpleModule module = new SimpleModule();
 
 		module.addSerializer(User.class, new UserSerializer());
@@ -75,8 +76,7 @@ public class ViewServices extends HttpServlet {
 		public void serialize(User team, JsonGenerator gen,
 				SerializerProvider prov) throws IOException,
 				JsonProcessingException {
-			
-		
+
 		}
 
 	}
@@ -101,58 +101,48 @@ public class ViewServices extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		if (request.getPathInfo().contains("globaldata")) {
+		final String[] parts = getParts(request);
+
+		final String head = parts[0];
+
+		if (head.contains("globaldata")) {
 
 			globalData(response);
 		}
 
-		else if (request.getPathInfo().contains("leaguetable")) {
+		else if (head.contains("leaguetable")) {
 
 			currentLeagueTable(request, response);
 		}
 
-		else if (request.getPathInfo().contains("teams")) {
-			makeEntityList(response, Team.class);
-		}
-
-		else if (request.getPathInfo().contains("venues")) {
-			makeEntityList(response, Venue.class);
-		}
-
-		else if (request.getPathInfo().contains("seasons")) {
-			makeEntityList(response, Season.class);
-		}
-
-		else if (request.getPathInfo().contains("season-views")) {
+		else if (head.contains("season-views")) {
 			makeSeasonViews(response);
 		}
 
-		else if (request.getPathInfo().contains("team-extras")) {
+		else if (head.contains("team-extras")) {
 			teamExtras(request, response);
 		}
 
-		else if (request.getPathInfo().contains("team")) {
-			entityByKey(request, response, Team.class);
-		}
-
-		else if (request.getPathInfo().contains("venue")) {
-			entityByKey(request, response, Venue.class);
-		}
-
-		else if (request.getPathInfo().contains("all-results")) {
+		else if (head.contains("all-results")) {
 			allResults(request, response);
 		}
 
-		else if (request.getPathInfo().endsWith("fixtures-for-email")) {
+		else if (head.endsWith("fixtures-for-email")) {
 			fixturesForEmail(request, response);
 		}
 
-		else if (request.getPathInfo().contains("competitions-view")) {
+		else if (head.contains("competitions-view")) {
 			competitionsForSeason(request, response);
-		} else if (request.getPathInfo().contains("text")) {
+		} 
+		
+		else if (head.contains("text")) {
 			textForName(request, response);
-		}
+		} 
+		
+		else {
 
+			handleEntities(response, parts, head);
+		}
 	}
 
 	private void textForName(HttpServletRequest request,
@@ -235,37 +225,6 @@ public class ViewServices extends HttpServlet {
 		}
 	}
 
-	private <T> void entityByKey(HttpServletRequest req,
-			HttpServletResponse resp, Class<T> clazz) throws IOException {
-
-		final long id = Long.parseLong(getLastPathPart(req));
-		T entity = ofy().load().now(Key.create(clazz, id));
-		objectMapper.writeValue(System.out, entity);
-		objectMapper.writeValue(resp.getWriter(), entity);
-
-	}
-
-	private <T extends BaseEntity> void makeEntityList(
-			HttpServletResponse resp, Class<T> clazz) throws IOException {
-		final List<T> items = new ArrayList<>();
-
-		for (T item : ofy().load().type(clazz).list()) {
-
-			if (!item.isRetired()) {
-				items.add(item);
-			}
-		}
-
-		objectMapper.writeValue(resp.getWriter(), items);
-
-	}
-
-	private String getLastPathPart(HttpServletRequest req) {
-		final String[] split = req.getPathInfo().split("\\/");
-
-		return split[split.length - 1];
-	}
-
 	private void globalData(HttpServletResponse resp) throws IOException {
 
 		final GlobalApplicationData data = ofy().load().now(
@@ -306,7 +265,10 @@ public class ViewServices extends HttpServlet {
 		TeamExtras extras = new TeamExtras(team,
 				getTeamFixtures(teamId, season), getTeamResults(teamId, season));
 
-		objectMapper.writeValue(System.out, extras);
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine(objectMapper.writeValueAsString(extras));
+
+		}
 
 		objectMapper.writeValue(resp.getWriter(), extras);
 
@@ -398,16 +360,31 @@ public class ViewServices extends HttpServlet {
 
 	private void submitResults(HttpServletRequest request) throws IOException {
 
-		
 		final ResultSubmission[] submissions = objectMapper.readValue(
 				request.getReader(), ResultSubmission[].class);
 
 		for (final ResultSubmission submission : submissions) {
-			new ResultHandler(submission.getResult(),submission.getEmail(), submission.getSeasonId(),
-					submission.getCompetitionType()).commit();
-			
-			}
+			new ResultHandler(submission.getResult(), submission.getEmail(),
+					submission.getSeasonId(), submission.getCompetitionType())
+					.commit();
 
+		}
+
+	}
+
+	@Override
+	protected <T extends BaseEntity> List<T> filterEntityList(List<T> entities) {
+		
+		final List<T> retval = new ArrayList<>();
+		
+		for(T item : entities){
+			
+			if(!item.isRetired()){
+				retval.add(item);
+			}
+		}
+		
+		return retval;
 	}
 
 }

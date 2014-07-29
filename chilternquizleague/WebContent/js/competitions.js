@@ -18,7 +18,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 					$scope.headerText = viewService.text("league-comp", $scope.global);
 					
-					viewService.list("season-views", function(seasons) {
+					viewService.view("season-views",{isArray:true} ,function(seasons) {
 						$scope.seasons = seasons;
 
 						for (idx in seasons) {

@@ -3,90 +3,40 @@ package org.chilternquizleague.web;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
-import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.chilternquizleague.domain.Fixture;
-import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
-import org.chilternquizleague.domain.GlobalText;
-import org.chilternquizleague.domain.LeagueCompetition;
-import org.chilternquizleague.domain.LeagueTable;
-import org.chilternquizleague.domain.LeagueTableRow;
-import org.chilternquizleague.domain.Season;
-import org.chilternquizleague.domain.Team;
-import org.chilternquizleague.domain.User;
-import org.chilternquizleague.domain.Venue;
 import org.chilternquizleague.views.CompetitionTypeView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
-public class EntityServices extends HttpServlet {
-
-	private ObjectMapper objectMapper;
+public class EntityServices extends BaseRESTService {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		if (req.getPathInfo().endsWith("venue-list")) {
+		final String[] parts = getParts(req);
 
-			makeEntityList(resp, Venue.class);
-		}
+		final String head = parts[0];
 
-		else if (req.getPathInfo().contains("venue")) {
-			entityByKey(req, resp, Venue.class);
-		}
-		
-		else if (req.getPathInfo().endsWith("text-list")) {
-
-			makeEntityList(resp, GlobalText.class);
-		}
-		
-		else if (req.getPathInfo().contains("text")) {
-			entityByKey(req, resp, GlobalText.class);
-		}
-
-		else if (req.getPathInfo().endsWith("team-list")) {
-
-			makeEntityList(resp, Team.class);
-		} else if (req.getPathInfo().contains("team")) {
-			entityByKey(req, resp, Team.class);
-		}
-
-		else if (req.getPathInfo().endsWith("season-list")) {
-
-			makeEntityList(resp, Season.class);
-		} else if (req.getPathInfo().contains("season")) {
-			entityByKey(req, resp, Season.class);
-		}
-
-		else if (req.getPathInfo().endsWith("user-list")) {
-
-			makeEntityList(resp, User.class);
-		} else if (req.getPathInfo().contains("user")) {
-			entityByKey(req, resp, User.class);
-		} else if (req.getPathInfo().contains("leagueCompetition")) {
-			entityByKey(req, resp, LeagueCompetition.class);
-		} else if (req.getPathInfo().contains("leagueTableRow")) {
-			entityByKey(req, resp, LeagueTableRow.class);
-		} else if (req.getPathInfo().contains("leagueTable")) {
-			entityByKey(req, resp, LeagueTable.class);
-
-		} else if (req.getPathInfo().contains("global")) {
+		// first deal with any non-standard bits
+		if (head.equals("global")) {
 			globalDetails(resp);
 		}
 
-		else if (req.getPathInfo().endsWith("competitionType-list")) {
+		else if (head.equals("competitionType-list")) {
 
 			objectMapper.writeValue(resp.getWriter(),
 					CompetitionTypeView.getList());
+		} else {
+
+			handleEntities(resp, parts, head);
 		}
 
 	}
@@ -100,103 +50,16 @@ public class EntityServices extends HttpServlet {
 		objectMapper.writeValue(resp.getWriter(), data);
 	}
 
-	private <T> void entityByKey(HttpServletRequest req,
-			HttpServletResponse resp, Class<T> clazz) throws IOException {
-
-		try {
-			final long id = Long.parseLong(getLastPathPart(req));
-			T entity = ofy().load().now(Key.create(clazz, id));
-			objectMapper.writeValue(System.out, entity);
-			objectMapper.writeValue(resp.getWriter(), entity);
-		} catch (NumberFormatException e) {
-			try {
-
-				T entity = clazz.newInstance();
-				objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-						resp.getWriter(), entity);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-
-	private String getLastPathPart(HttpServletRequest req) {
-		final String[] split = req.getPathInfo().split("\\/");
-
-		return split[split.length - 1];
-	}
-
-	private <T> void makeEntityList(HttpServletResponse resp, Class<T> clazz)
-			throws IOException {
-		final List<T> venues = ofy().load().type(clazz).list();
-
-		objectMapper.writeValue(resp.getWriter(), venues);
-
-	}
-
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		if (req.getPathInfo().endsWith("venue")) {
 
-			saveUpdate(req, resp, Venue.class);
+		final String[] parts = getParts(req);
 
-		} else if (req.getPathInfo().endsWith("team")) {
+		final String entityName = getEntityName(parts[0]);
 
-			saveUpdate(req, resp, Team.class);
-
-		} else if (req.getPathInfo().endsWith("season")) {
-
-			saveUpdate(req, resp, Season.class);
-
-		}
-
-		else if (req.getPathInfo().endsWith("user")) {
-
-			saveUpdate(req, resp, User.class);
-
-		}
-
-		else if (req.getPathInfo().endsWith("leagueCompetition")) {
-
-			saveUpdate(req, resp, LeagueCompetition.class);
-
-		}
-
-		else if (req.getPathInfo().endsWith("fixture")) {
-
-			saveUpdate(req, resp, Fixture.class);
-
-		}
-
-		else if (req.getPathInfo().endsWith("fixtures")) {
-
-			saveUpdate(req, resp, Fixtures.class);
-
-		}
-
-		else if (req.getPathInfo().endsWith("global")) {
-			saveUpdate(req, resp, GlobalApplicationData.class);
-		}
+		saveUpdate(req, resp, getClassFromPart(entityName));
 		
-		else if (req.getPathInfo().endsWith("text")) {
-			saveUpdate(req, resp, GlobalText.class);
-		}
-
-	}
-
-	private <T> void saveUpdate(final HttpServletRequest req,
-			final HttpServletResponse resp, final Class<T> clazz)
-			throws IOException {
-
-		T entity = objectMapper.readValue(req.getReader(), clazz);
-
-		Key<T> key = ofy().save().entity(entity).now();
-
-		T reloaded = ofy().load().key(key).now();
-		System.out.println("out:" + objectMapper.writeValueAsString(reloaded));
-
-		objectMapper.writeValue(resp.getWriter(), reloaded);
 
 	}
 
@@ -204,7 +67,9 @@ public class EntityServices extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 
-		objectMapper = new ObjectMapper();
+		aliases.put("text", "globalText");
+		aliases.put("global", "GlobalApplicationData");
+
 	}
 
 	@Override
@@ -218,6 +83,14 @@ public class EntityServices extends HttpServlet {
 			throws ServletException, IOException {
 
 		doPost(req, resp);
+	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		
+		
+
 	}
 
 }

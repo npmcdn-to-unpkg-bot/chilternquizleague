@@ -103,7 +103,7 @@
 
 				};
 
-				viewService.list("season-views", function(seasons) {
+				viewService.list("season-views",{isArray:true}, function(seasons) {
 					$scope.seasons = seasons;
 
 					for (idx in seasons) {

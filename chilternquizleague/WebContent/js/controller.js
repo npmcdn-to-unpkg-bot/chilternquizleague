@@ -60,7 +60,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate"]).factory(
 
 						list : function(type, callback) {
 
-							return doLoad(type, "", callback, true);
+							return doLoad(type + "-list", "", callback, true);
 						},
 
 						post : function(type, payload, callback) {

@@ -30,7 +30,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 
 		viewService
 				.list(
-						listName,
+						type,
 						function(items) {
 							$scope[listName] = items.sort(sortFunction);
 							if (itemId && itemId > 0) {
