@@ -68,8 +68,12 @@ function listAndSelection(type, $scope, viewService, options){
 	
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
 	var setName = "set" + camelName;
-	var listName = options && options.listName ? options.listName : (type + "s");
-	var remoteListName = options && options.listName ? options.listName : listName;
+	var localOptions = {listName:type+"s", remoteListName:type+"s"};
+	
+	angular.extend(localOptions,options);
+	
+	var listName = localOptions.listName;
+	var remoteListName = localOptions.remoteListName;
 	
 	return function (id){
 		

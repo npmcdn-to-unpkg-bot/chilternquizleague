@@ -41,7 +41,7 @@ public class LeagueCompetition extends TeamCompetition{
 	}
 
 	@Override
-	public void addResult(Result result) {
+	public Results addResult(Result result) {
 		final Results results = getResultsForDate(result.getFixture().getStart());
 		
 		if(results.addResult(result)){
@@ -60,6 +60,8 @@ public class LeagueCompetition extends TeamCompetition{
 				}
 			}
 		}
+		
+		return results;
 
 	}
 	

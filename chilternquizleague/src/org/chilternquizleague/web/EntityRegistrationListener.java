@@ -3,9 +3,11 @@ package org.chilternquizleague.web;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
 import org.chilternquizleague.domain.GlobalText;
 import org.chilternquizleague.domain.LeagueCompetition;
+import org.chilternquizleague.domain.Results;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.User;
@@ -38,6 +40,9 @@ public class EntityRegistrationListener implements ServletContextListener {
         ObjectifyService.register(User.class);
         ObjectifyService.register(GlobalApplicationData.class);
         ObjectifyService.register(GlobalText.class);
+        ObjectifyService.register(Fixtures.class);
+        ObjectifyService.register(Results.class);
+        
         
 
     }

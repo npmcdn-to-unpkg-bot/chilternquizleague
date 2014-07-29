@@ -5,7 +5,7 @@
 </thead>
 <tbody ng-repeat-end>
 <tr ng-repeat="result in resultSet.results | orderBy :'fixture.home.shortName'">
-	<td>{{result.fixture.home.shortName}}</td><td>{{result.homeScore}}</td><td>{{result.awayScore}}</td><td>{{result.fixture.away.shortName}}</td><td><a href="" ng-click="showReports(result)">Reports</a></td>
+	<td>{{result.fixture.home.shortName}}</td><td>{{result.homeScore}}</td><td>{{result.awayScore}}</td><td>{{result.fixture.away.shortName}}</td><td><a href="" ng-click="showReports(result)">reports</a></td>
 </tr>
 </tbody>
 </table>

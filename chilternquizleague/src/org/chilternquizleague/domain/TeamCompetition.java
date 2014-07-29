@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.googlecode.objectify.Ref;
+
 public abstract class TeamCompetition extends Competition {
 
-	private List<Fixtures> fixtures = new ArrayList<>();
-	private List<Results> results = new ArrayList<>();
+	private List<Ref<Fixtures>> fixtures = new ArrayList<>();
+	private List<Ref<Results>> results = new ArrayList<>();
 
 	protected TeamCompetition(final CompetitionType type) {
 		this(type, false);
@@ -22,24 +24,24 @@ public abstract class TeamCompetition extends Competition {
 	}
 
 	public List<Fixtures> getFixtures() {
-		return fixtures;
+		return Utils.refsToEntities(fixtures);
 	}
 
 	public void setFixtures(List<Fixtures> fixtures) {
-		this.fixtures = fixtures;
+		this.fixtures = Utils.entitiesToRefs(fixtures);
 	}
 
 	public List<Results> getResults() {
-		return results;
+		return Utils.refsToEntities(results);
 	}
 
 	public void setResults(List<Results> results) {
-		this.results = results;
+		this.results = Utils.entitiesToRefs(results);
 	}
 
 	protected final Results getResultsForDate(Date date) {
 
-		for (Results resultSet : results) {
+		for (Results resultSet : getResults()) {
 
 			if (Utils.isSameDay(date, resultSet.getDate())) {
 
@@ -54,13 +56,14 @@ public abstract class TeamCompetition extends Competition {
 				: getDescription());
 
 		newResults.setDate(date);
-		results.add(newResults);
+		
+		results.add(Utils.entityToRef(newResults));
 
 		return newResults;
 	}
 
 	private Fixtures getFixturesForDate(Date date) {
-		for (Fixtures fixtureSet : fixtures) {
+		for (Fixtures fixtureSet : getFixtures()) {
 
 			if (Utils.isSameDay(date, fixtureSet.getStart())) {
 
@@ -71,6 +74,6 @@ public abstract class TeamCompetition extends Competition {
 		return null;
 	}
 
-	public abstract void addResult(Result result);
+	public abstract Results addResult(Result result);
 
 }

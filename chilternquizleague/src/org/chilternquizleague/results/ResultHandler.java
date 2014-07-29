@@ -4,6 +4,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.Result;
+import org.chilternquizleague.domain.Results;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.TeamCompetition;
 import org.chilternquizleague.domain.User;
@@ -35,19 +36,22 @@ public class ResultHandler {
 			
 			result.setFirstSubmitter(user);
 		}
+		final Season season = ofy().load().key(Key.create(Season.class,seasonId)).now();
+
 		
 		ofy().transact(new VoidWork() {
 			
 			@Override
 			public void vrun() {
-				final Season season = ofy().load().key(Key.create(Season.class,seasonId)).now();
 				final TeamCompetition competition = season.getCompetition(competitionType);
 				
 				if(competition != null){
-					competition.addResult(result);
+					Results results = competition.addResult(result);
+					
+					ofy().save().entities(results, season);
 				}
 				
-				ofy().save().entity(season);
+				
 				
 				System.out.println("Result " + result + " committed");
 				

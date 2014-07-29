@@ -103,7 +103,7 @@
 
 				};
 
-				viewService.list("season-views",{isArray:true}, function(seasons) {
+				viewService.view("season-views",{isArray:true}, function(seasons) {
 					$scope.seasons = seasons;
 
 					for (idx in seasons) {
@@ -119,6 +119,13 @@
 				});
 
 			} ]);
+	
+	mainApp.controller('ResultsTable', [ '$scope', '$interval', 'viewService',
+	                            			'$location', function($scope) {
+		
+		$scope.$watch("allResults.length", function(length){
+			$scope.results = $scope.allResults;});
+	}]);
 
 
 })();

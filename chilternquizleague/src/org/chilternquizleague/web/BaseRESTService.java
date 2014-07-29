@@ -42,9 +42,9 @@ abstract class BaseRESTService extends HttpServlet {
 
 		if (head.contains("-list")) {
 
-			makeEntityList(resp, getClassFromPart(entityName));
+			makeEntityList(resp, entityName);
 		} else {
-			entityByKey(resp, getClassFromPart(entityName), parts[1]);
+			entityByKey(resp, entityName, parts[1]);
 		}
 	}
 
@@ -61,7 +61,7 @@ abstract class BaseRESTService extends HttpServlet {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T extends BaseEntity> Class<T> getClassFromPart(String part) {
+	protected <T> Class<T> getClassFromPart(String part) {
 
 		final String className = part.substring(0, 1).toUpperCase()
 				+ part.substring(1);
@@ -82,9 +82,11 @@ abstract class BaseRESTService extends HttpServlet {
 
 	}
 
-	private <T extends BaseEntity> void entityByKey(HttpServletResponse resp,
-			Class<T> clazz, String idPart) throws IOException {
+	private <T> void entityByKey(HttpServletResponse resp,
+			String entityName, String idPart) throws IOException {
 
+		final Class<T> clazz = getClassFromPart(entityName);
+		
 		try {
 			final long id = Long.parseLong(idPart);
 			final T entity = ofy().load().now(Key.create(clazz, id));
@@ -108,7 +110,10 @@ abstract class BaseRESTService extends HttpServlet {
 	}
 
 	private <T extends BaseEntity> void makeEntityList(
-			HttpServletResponse resp, Class<T> clazz) throws IOException {
+			HttpServletResponse resp, String entityName) throws IOException {
+		
+		final Class<T> clazz = getClassFromPart(entityName);
+		
 		final List<T> items = filterEntityList(ofy().load().type(clazz).list());
 
 		if (LOG.isLoggable(Level.FINE)) {

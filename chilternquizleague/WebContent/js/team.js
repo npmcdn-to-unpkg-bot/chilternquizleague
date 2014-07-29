@@ -10,7 +10,8 @@
 	var templateMap = {
 		detail : "team-details.html",
 		results : "team-results.html",
-		fixtures : "team-fixtures.html"
+		fixtures : "team-fixtures.html",
+		reports: "/results/reports.html"
 			
 	};
 	
@@ -129,15 +130,14 @@
 			$scope.$watch("season", teamExtras);
 			$scope.$watch("team.id", teamExtras);
 			
-
+			$scope.showReports = function(result){
+				
+				//$scope.reports = viewService.view("result-reports", )
+				
+			};
+			
 		} ]);
 
-	mainApp.controller('ResultsTable', [ '$scope', '$interval', 'viewService',
-	                            			'$location', function($scope) {
-		
-		$scope.$watch("team.extras.results", function(results){
-			$scope.results = results;});
-	}]);
 
 
 })();
