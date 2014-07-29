@@ -13,12 +13,15 @@ import org.chilternquizleague.domain.utils.CompetitionTypeStringifier;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Stringify;
 
 @JsonAutoDetect(fieldVisibility = Visibility.PROTECTED_AND_PUBLIC)
+@JsonIgnoreProperties("teamCompetitions")
 @Cache
 @Entity
 public class Season extends BaseEntity {
@@ -30,15 +33,17 @@ public class Season extends BaseEntity {
 	@Index
 	private int endYear;
 	
+	@Stringify(CompetitionTypeStringifier.class)
+	private Map<CompetitionType, Ref<Competition>> competitions = new EnumMap<>(
+			CompetitionType.class);
+	
 	public Season()
 	{
 		startYear = Calendar.getInstance().get(Calendar.YEAR);
 		endYear = startYear + 1;
 	}
 
-	@Stringify(CompetitionTypeStringifier.class)
-	private Map<CompetitionType, Competition> competitions = new EnumMap<>(
-			CompetitionType.class);
+
 
 	public int getStartYear() {
 		return startYear;
@@ -57,11 +62,11 @@ public class Season extends BaseEntity {
 	}
 
 	public Map<CompetitionType, Competition> getCompetitions() {
-		return competitions; 
+		return Utils.refToEntityMap(competitions); 
 	}
 
 	public void setCompetitions(Map<CompetitionType, Competition> competitions) {
-		this.competitions = competitions;
+		this.competitions = Utils.entityToRefMap(competitions, this);
 	}
 	
 	public String getDescription(){
@@ -79,13 +84,15 @@ public class Season extends BaseEntity {
 		return (T)type.castTo(getCompetitions().get(type));
 	}
 	
+	
+
 	public List<TeamCompetition> getTeamCompetitions(){
 		
 		final Set<CompetitionType> types = new HashSet<>(Arrays.asList(CompetitionType.LEAGUE,CompetitionType.BEER_LEG, CompetitionType.CUP, CompetitionType.PLATE));
 		
 		final List<TeamCompetition> competitions = new ArrayList<>();
 		
-		for(Competition competition : this.competitions.values()){
+		for(Competition competition : getCompetitions().values()){
 			
 			if(types.contains(competition.getType())){
 				
@@ -95,5 +102,6 @@ public class Season extends BaseEntity {
 		
 		return competitions;
 	}
+
 
 }

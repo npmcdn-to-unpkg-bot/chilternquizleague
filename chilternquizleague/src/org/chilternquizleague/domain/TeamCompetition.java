@@ -1,5 +1,7 @@
 package org.chilternquizleague.domain;
 
+import static org.chilternquizleague.domain.Utils.persist;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,15 +30,18 @@ public abstract class TeamCompetition extends Competition {
 	}
 
 	public void setFixtures(List<Fixtures> fixtures) {
-		this.fixtures = Utils.entitiesToRefs(fixtures, getSeason());
+		this.fixtures = Utils.entitiesToRefs(fixtures,this);
+		persist(this);
 	}
 
 	public List<Results> getResults() {
 		return Utils.refsToEntities(results);
+		
 	}
 
 	public void setResults(List<Results> results) {
-		this.results = Utils.entitiesToRefs(results, getSeason());
+		this.results = Utils.entitiesToRefs(results, this);
+		persist(this);
 	}
 
 	protected final Results getResultsForDate(Date date) {
@@ -57,7 +62,7 @@ public abstract class TeamCompetition extends Competition {
 
 		newResults.setDate(date);
 		
-		results.add(Utils.entityToRef(newResults, getSeason()));
+		results.add(Utils.entityToRef(newResults, this));
 
 		return newResults;
 	}

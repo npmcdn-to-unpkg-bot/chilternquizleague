@@ -2,13 +2,17 @@ package org.chilternquizleague.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.googlecode.objectify.annotation.Container;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Parent;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @JsonTypeInfo(use=JsonTypeInfo.Id.MINIMAL_CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
-public abstract class Competition {
+@Entity
+@Cache
+public abstract class Competition extends BaseEntity {
 
 
 	private final CompetitionType type;
@@ -17,10 +21,10 @@ public abstract class Competition {
 	private String endTime;
 	private boolean subsidiary = false;
 	
+	@Parent
+	private Ref<BaseEntity> parent;
 	
-	@JsonIgnore
-	@Container
-	private Season season;
+
 
 	protected Competition(CompetitionType type)
 	{
@@ -80,10 +84,10 @@ public abstract class Competition {
 		//noop
 	}
 
-	public Season getSeason() {
-		return season;
+	@Override
+	void setParent(final BaseEntity parent) {
+		this.parent = Utils.entityToRef(parent);
+		
 	}
-
-
 
 }

@@ -12,7 +12,7 @@ import com.googlecode.objectify.annotation.Entity;
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Entity
 @Cache
-public class Results extends SeasonChild{
+public class Results extends CompetitionChild{
 	
 	private Date date;
 	private String description;

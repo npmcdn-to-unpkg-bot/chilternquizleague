@@ -22,7 +22,7 @@ public abstract class BaseEntity {
 		this.retired = retired;
 	}
 	
-	void setParent(Object parent){
+	void setParent(BaseEntity parent){
 		//noop
 	}
 
@@ -52,7 +52,7 @@ public abstract class BaseEntity {
 		return true;
 	}
 	
-	public void postSerialise(){
+	public void prePersist(){
 		
 	}
 

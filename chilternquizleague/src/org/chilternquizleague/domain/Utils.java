@@ -22,7 +22,7 @@ public class Utils {
 		return entityToRef(entity, null);
 	}
 	
-	public static <T extends BaseEntity> Ref<T> entityToRef(final T entity, final Object parent){
+	public static <T extends BaseEntity> Ref<T> entityToRef(final T entity, final BaseEntity parent){
 		
 		if (entity.id == null){
 			if(parent != null)
@@ -41,7 +41,7 @@ public class Utils {
 	
 	
 	public static <T extends BaseEntity> List<Ref<T>> entitiesToRefs(
-			List<T> entities, final Object parent) {
+			List<T> entities, final BaseEntity parent) {
 
 		final List<Ref<T>> refs = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class Utils {
 
 			refs.add(entityToRef(entity, parent));
 		}
-
+		
 		return refs;
 	}
 	
@@ -89,33 +89,26 @@ public class Utils {
 		return refs;
 	}
 	
-
-
-	public static <U, T extends BaseEntity> Map<U, List<T>> refsToEntities(
-			Map<U, List<Ref<T>>> refs) {
-
-		final Map<U, List<T>> entities = new HashMap<>();
-
-		for (Map.Entry<U, List<Ref<T>>> entry : refs.entrySet()) {
-
-			entities.put(entry.getKey(), refsToEntities(entry.getValue()));
-		}
-
-		return entities;
-	}
-
 	public static <U, T extends BaseEntity> Map<U, Ref<T>> entityToRefMap(
-			Map<U, T> entities) {
+			Map<U, T> entities, BaseEntity parent) {
 
 		final Map<U, Ref<T>> refs = new HashMap<>();
 
 		for (Map.Entry<U, T> entry : entities.entrySet()) {
 
-			refs.put(entry.getKey(), Ref.create(entry.getValue()));
+			refs.put(entry.getKey(), entityToRef(entry.getValue(), parent));
 		}
 
 		return refs;
 	}
+	
+	public static <U, T extends BaseEntity> Map<U, Ref<T>> entityToRefMap(
+			Map<U, T> entities) {
+		
+		return entityToRefMap(entities, null);
+	}
+
+
 
 	public static <U, T extends BaseEntity> Map<U, T> refToEntityMap(
 			Map<U, Ref<T>> refs) {
@@ -133,6 +126,10 @@ public class Utils {
 	public static boolean isSameDay(Date date1, Date date2) {
 
 		return format.format(date1).compareTo(format.format(date2)) == 0;
+	}
+	
+	public static void persist(BaseEntity entity){
+		ofy().save().entity(entity);
 	}
 
 }
