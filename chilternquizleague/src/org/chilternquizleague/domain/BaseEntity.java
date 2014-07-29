@@ -51,5 +51,9 @@ public abstract class BaseEntity {
 			return false;
 		return true;
 	}
+	
+	public void postSerialise(){
+		
+	}
 
 }
