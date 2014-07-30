@@ -15,6 +15,12 @@ public abstract class CompetitionChild extends BaseEntity {
 	}
 
 
+	@Override
+	public void prePersist() {
+		Utils.persist(this);
+	}
+
+
 	
 
 }

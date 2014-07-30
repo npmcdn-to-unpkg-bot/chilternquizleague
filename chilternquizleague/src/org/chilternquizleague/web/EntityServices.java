@@ -3,6 +3,8 @@ package org.chilternquizleague.web;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,10 +15,13 @@ import org.chilternquizleague.domain.GlobalApplicationData;
 import org.chilternquizleague.views.CompetitionTypeView;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.VoidWork;
 
 @SuppressWarnings("serial")
 public class EntityServices extends BaseRESTService {
 
+	private final static Logger LOG = Logger.getLogger(EntityServices.class.getName());
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -51,16 +56,16 @@ public class EntityServices extends BaseRESTService {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		final String[] parts = getParts(req);
 
 		final String entityName = getEntityName(parts[0]);
 
-		saveUpdate(req, resp, getClassFromPart(entityName));
-		
-
+	
+		saveUpdate(req, resp,entityName);
+	
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 
 public class Utils {
@@ -24,18 +23,12 @@ public class Utils {
 	
 	public static <T extends BaseEntity> Ref<T> entityToRef(final T entity, final BaseEntity parent){
 		
-		if (entity.id == null){
-			if(parent != null)
-			{
-				entity.setParent(parent);
-			}
-			final Key<T> key = ofy().save().entity(entity).now();
-			return Ref.create(key);
-		}
-		else
+		if(parent != null)
 		{
-			return Ref.create(entity);
+			entity.setParent(parent);
 		}
+
+		return persist(entity);
 		
 	}
 	
@@ -76,18 +69,6 @@ public class Utils {
 		return entities;
 	}
 
-	public static <U, T extends BaseEntity> Map<U, List<Ref<T>>> entitiesToRefs(
-			Map<U, List<T>> entities) {
-
-		final Map<U, List<Ref<T>>> refs = new HashMap<>();
-
-		for (Map.Entry<U, List<T>> entry : entities.entrySet()) {
-
-			refs.put(entry.getKey(), entitiesToRefs(entry.getValue()));
-		}
-
-		return refs;
-	}
 	
 	public static <U, T extends BaseEntity> Map<U, Ref<T>> entityToRefMap(
 			Map<U, T> entities, BaseEntity parent) {
@@ -128,8 +109,8 @@ public class Utils {
 		return format.format(date1).compareTo(format.format(date2)) == 0;
 	}
 	
-	public static void persist(BaseEntity entity){
-		ofy().save().entity(entity);
+	public static <T  extends BaseEntity> Ref<T> persist(T entity){
+		return Ref.create(ofy().save().entity(entity).now());
 	}
 
 }

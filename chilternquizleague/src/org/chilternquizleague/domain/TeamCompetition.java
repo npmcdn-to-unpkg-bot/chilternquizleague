@@ -1,17 +1,21 @@
 package org.chilternquizleague.domain;
 
-import static org.chilternquizleague.domain.Utils.persist;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Ignore;
 
 public abstract class TeamCompetition extends Competition {
 
 	private List<Ref<Fixtures>> fixtures = new ArrayList<>();
 	private List<Ref<Results>> results = new ArrayList<>();
+	
+	@Ignore
+	private List<Fixtures> fixturesEnts = new ArrayList<>();
+	@Ignore
+	private List<Results> resultsEnts = new ArrayList<>();
 	
 	protected TeamCompetition(final CompetitionType type) {
 		this(type, false);
@@ -26,22 +30,21 @@ public abstract class TeamCompetition extends Competition {
 	}
 
 	public List<Fixtures> getFixtures() {
-		return Utils.refsToEntities(fixtures);
+		return fixturesEnts = fixturesEnts.isEmpty() ? Utils.refsToEntities(fixtures) : fixturesEnts;
 	}
 
 	public void setFixtures(List<Fixtures> fixtures) {
-		this.fixtures = Utils.entitiesToRefs(fixtures,this);
-		persist(this);
+		fixturesEnts = fixtures;
 	}
 
 	public List<Results> getResults() {
-		return Utils.refsToEntities(results);
+		return resultsEnts = resultsEnts.isEmpty()?Utils.refsToEntities(results): resultsEnts;
 		
 	}
 
 	public void setResults(List<Results> results) {
-		this.results = Utils.entitiesToRefs(results, this);
-		persist(this);
+		this.resultsEnts = results;
+
 	}
 
 	protected final Results getResultsForDate(Date date) {
@@ -84,5 +87,14 @@ public abstract class TeamCompetition extends Competition {
 	public void addResults(Results results){
 		
 		this.results.add(Ref.create(results));
+	}
+
+	@Override
+	public void prePersist() {
+		
+		fixtures = Utils.entitiesToRefs(fixturesEnts, this);
+		results = Utils.entitiesToRefs(resultsEnts, this);
+		
+		Utils.persist(this);
 	}
 }

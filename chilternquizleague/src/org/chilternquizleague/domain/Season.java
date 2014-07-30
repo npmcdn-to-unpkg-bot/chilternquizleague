@@ -1,5 +1,6 @@
 package org.chilternquizleague.domain;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Stringify;
 
@@ -36,6 +38,9 @@ public class Season extends BaseEntity {
 	@Stringify(CompetitionTypeStringifier.class)
 	private Map<CompetitionType, Ref<Competition>> competitions = new EnumMap<>(
 			CompetitionType.class);
+	
+	@Ignore
+	private Map<CompetitionType, Competition> competitionEnts = new EnumMap<>(CompetitionType.class);
 	
 	public Season()
 	{
@@ -62,11 +67,11 @@ public class Season extends BaseEntity {
 	}
 
 	public Map<CompetitionType, Competition> getCompetitions() {
-		return Utils.refToEntityMap(competitions); 
+		return competitionEnts = competitionEnts.isEmpty() ? Utils.refToEntityMap(competitions) : competitionEnts; 
 	}
 
 	public void setCompetitions(Map<CompetitionType, Competition> competitions) {
-		this.competitions = Utils.entityToRefMap(competitions, this);
+		this.competitionEnts = competitions;
 	}
 	
 	public String getDescription(){
@@ -101,6 +106,21 @@ public class Season extends BaseEntity {
 		}
 		
 		return competitions;
+	}
+
+
+
+	@Override
+	public void prePersist() {
+		
+		Utils.persist(this);
+		
+		for(Competition competition : competitionEnts.values()){
+			competition.setParent(this);
+			competition.prePersist();
+		}
+		
+		competitions = Utils.entityToRefMap(competitionEnts, this);
 	}
 
 

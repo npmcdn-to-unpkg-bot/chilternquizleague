@@ -128,19 +128,23 @@ abstract class BaseRESTService extends HttpServlet {
 		return entities;
 	}
 
-	protected <T> void saveUpdate(final HttpServletRequest req,
-			final HttpServletResponse resp, final Class<T> clazz)
+	protected <T extends BaseEntity> void saveUpdate(final HttpServletRequest req,
+			final HttpServletResponse resp, final String entityName)
 			throws IOException {
 
-		T entity = objectMapper.readValue(req.getReader(), clazz);
+		final Class<T> clazz =  getClassFromPart(entityName);
+		
+		final T entity = objectMapper.readValue(req.getReader(),clazz);
 
+		entity.prePersist();
+		
 		if (LOG.isLoggable(Level.FINE)) {
 			LOG.fine("in:" + objectMapper.writeValueAsString(entity));
 		}
 
-		Key<T> key = ofy().save().entity(entity).now();
+		final Key<T> key = ofy().save().entity(entity).now();
 
-		T reloaded = ofy().load().key(key).now();
+		final T reloaded = ofy().load().key(key).now();
 
 		if (LOG.isLoggable(Level.FINE)) {
 			LOG.fine("out:" + objectMapper.writeValueAsString(reloaded));
