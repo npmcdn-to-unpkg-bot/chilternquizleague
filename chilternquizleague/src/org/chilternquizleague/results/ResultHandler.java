@@ -52,9 +52,10 @@ public class ResultHandler {
 				final TeamCompetition competition = season.getCompetition(competitionType);
 				
 				if(competition != null){
-					Results results = competition.addResult(result);
-
-					ofy().save().entities(results, season);
+					competition.addResult(result);
+					
+					season.prePersist();
+					ofy().save().entities(season);
 					
 					LOG.fine("Committed result submission :" + result );
 				}

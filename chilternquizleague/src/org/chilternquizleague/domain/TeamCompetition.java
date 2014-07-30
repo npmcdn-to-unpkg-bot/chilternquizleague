@@ -65,7 +65,7 @@ public abstract class TeamCompetition extends Competition {
 
 		newResults.setDate(date);
 		
-		results.add(Utils.entityToRef(newResults, this));
+		resultsEnts.add(newResults);
 
 		return newResults;
 	}
@@ -92,8 +92,8 @@ public abstract class TeamCompetition extends Competition {
 	@Override
 	public void prePersist() {
 		
-		fixtures = Utils.entitiesToRefs(fixturesEnts, this);
-		results = Utils.entitiesToRefs(resultsEnts, this);
+		fixtures = Utils.entitiesToRefs(getFixtures(), this);
+		results = Utils.entitiesToRefs(getResults(), this);
 		
 		Utils.persist(this);
 	}
