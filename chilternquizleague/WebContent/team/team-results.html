@@ -1,31 +1,33 @@
 <div ng-controller="TeamExtrasController">
-	<span>Season</span><select ng-model="season"
-		ng-options="season as season.description for season in seasons"></select>
-</div>
-<div>
-	<table class="league-table-tbl">
-		<thead>
-			<tr>
-				<th>Date</th>
-				<th>Comp.</th>
-				<th colspan="2">Home</th>
-				<th colspan="2">Away</th>
-			</tr>
-		</thead>
-		<tbody
-			ng-repeat="results in team.extras.results | orderBy : 'date' : true">
+	<div>
+		<span>Season</span><select ng-model="season"
+			ng-options="season as season.description for season in seasons"></select>
+	</div>
+	<div>
+		<table class="league-table-tbl">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Comp.</th>
+					<th colspan="2">Home</th>
+					<th colspan="2">Away</th>
+				</tr>
+			</thead>
+			<tbody
+				ng-repeat="results in team.extras.results | orderBy : 'date' : true">
 
-			<tr ng-repeat="result in results.results">
-				<td>{{results.date | date : 'dd MMMM yyyy'}}</td>
-				<td>{{results.description}}</td>
-				<td>{{result.fixture.home.shortName}}</td>
-				<td>{{result.homeScore}}</td>
-				<td>{{result.awayScore}}</td>
-				<td>{{result.fixture.away.shortName}}</td>
-				<td><a href="" ng-click="showReports(result)">reports</a></td>
-			</tr>
-		</tbody>
-	</table>
+				<tr ng-repeat="result in results.results">
+					<td>{{results.date | date : 'dd MMMM yyyy'}}</td>
+					<td>{{results.description}}</td>
+					<td>{{result.fixture.home.shortName}}</td>
+					<td>{{result.homeScore}}</td>
+					<td>{{result.awayScore}}</td>
+					<td>{{result.fixture.away.shortName}}</td>
+					<td><a href="" ng-click="showReports(results,result)">reports</a></td>
+				</tr>
+			</tbody>
+		</table>
 
+	</div>
 </div>
 

@@ -7,6 +7,10 @@ public abstract class BaseEntity {
 	@Id
 	protected Long id;
 	
+	//Only needed for serialisation of nested entities
+	protected String key;
+	
+	
 	private boolean retired;
 	
 	public Long getId()

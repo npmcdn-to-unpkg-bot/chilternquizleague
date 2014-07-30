@@ -20,8 +20,9 @@ public class Results extends CompetitionChild{
 
 	public Results(){}
 	
-	public Results(Results template){
+	public Results(Results template, String key){
 		
+		this.key = key;
 		this.date = template.date;
 		this.description = template.description;
 	}
@@ -49,6 +50,18 @@ public class Results extends CompetitionChild{
 		for(Result row : results){
 			
 			if(row.getFixture().isSame(fixture)){
+				return row;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Result findRow(Team homeTeam){
+		
+		for(Result row : results){
+			
+			if(row.getFixture().getHome().equals(homeTeam)){
 				return row;
 			}
 		}

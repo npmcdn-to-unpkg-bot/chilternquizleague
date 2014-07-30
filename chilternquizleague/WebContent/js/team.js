@@ -130,13 +130,26 @@
 			$scope.$watch("season", teamExtras);
 			$scope.$watch("team.id", teamExtras);
 			
-			$scope.showReports = function(result){
+			$scope.showReports = function(results, result){
+			
+				viewService.view("reports", {resultsKey:results.key,homeTeamId:result.fixture.home.id,isArray:true}, function(reports){
+					
+					$scope.$parent.reports = reports;
+				});
 				
-				//$scope.reports = viewService.view("result-reports", )
-				
+				$scope.setTemplate("reports");
 			};
 			
 		} ]);
+	
+
+		mainApp.controller("ReportsController", [ '$scope', '$interval',
+			'viewService', '$location',
+			function($scope, $interval, viewService, $location) {
+			
+			$scope.reports = $scope.$parent.reports;
+			
+			} ]);
 
 
 

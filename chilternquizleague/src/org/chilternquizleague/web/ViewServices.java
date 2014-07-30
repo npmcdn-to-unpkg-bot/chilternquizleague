@@ -36,6 +36,7 @@ import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 import org.chilternquizleague.views.PreSubmissionView;
 import org.chilternquizleague.views.ResultSubmission;
+import org.chilternquizleague.views.ResultsReportsView;
 import org.chilternquizleague.views.SeasonView;
 import org.chilternquizleague.views.TeamExtras;
 
@@ -137,12 +138,35 @@ public class ViewServices extends BaseRESTService {
 		
 		else if (head.contains("text")) {
 			textForName(request, response);
+		}
+		
+		else if (head.contains("reports")) {
+			resultReports(request, response);
 		} 
 		
 		else {
 
 			handleEntities(response, parts, head);
 		}
+	}
+
+	private void resultReports(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		final String resultsKey = request.getParameter("resultsKey");
+		final Long homeTeamId = Long.parseLong(request.getParameter("homeTeamId"));
+		
+		Results results = (Results) ofy().load().key(Key.create(resultsKey)).now();
+		Team homeTeam = ofy().load().key(Key.create(Team.class, homeTeamId)).now();
+		
+		ResultsReportsView view = new ResultsReportsView(results.findRow(homeTeam));
+		
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("reports : " + objectMapper.writeValueAsString(view));
+
+		}
+		
+		objectMapper.writeValue(response.getWriter(), view);
+		
 	}
 
 	private void textForName(HttpServletRequest request,
@@ -335,7 +359,7 @@ public class ViewServices extends BaseRESTService {
 
 				for (Results resultSet : competition.getResults()) {
 
-					final Results newResultSet = new Results(resultSet);
+					final Results newResultSet = new Results(resultSet, Key.create(resultSet).getString());
 
 					for (Result result : resultSet.getResults()) {
 

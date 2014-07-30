@@ -1,0 +1,7 @@
+<div ng-controller="ReportsController">
+	Something {{reports | json}}
+	<div class="show-thin standard-margins" ng-repeat="report in reports">
+		By {{report.team.name}}
+		<div>{{report.text | htmlify}}</div>
+	</div>
+</div>
