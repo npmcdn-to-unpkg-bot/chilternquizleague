@@ -1,7 +1,7 @@
 <div ng-controller="ReportsController">
-	Something {{reports | json}}
-	<div class="show-thin standard-margins" ng-repeat="report in reports">
+	{{reportsData.results.date | date:'dd MMMM yyyy'}} - {{reportsData.result.fixture.home.shortName}} : {{reportsData.result.fixture.away.shortName}}
+	<div ng-repeat="report in reports.reports">
 		By {{report.team.name}}
-		<div>{{report.text | htmlify}}</div>
+		<div class="show-thin standard-margins">{{report.text | htmlify}}</div>
 	</div>
 </div>

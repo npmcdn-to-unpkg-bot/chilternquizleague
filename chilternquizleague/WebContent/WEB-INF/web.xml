@@ -42,4 +42,19 @@
 		<servlet-name>ViewServices</servlet-name>
 		<url-pattern>/view/*</url-pattern>
 	</servlet-mapping>
+	<security-constraint>
+        <web-resource-collection>
+            <web-resource-name>maintainance</web-resource-name>
+            <url-pattern>/maintain.html/</url-pattern>
+            <url-pattern>/maintain.html</url-pattern>
+            <url-pattern>/entity/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+
+    </security-constraint>
 </web-app>

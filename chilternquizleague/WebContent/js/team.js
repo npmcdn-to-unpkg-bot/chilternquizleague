@@ -104,6 +104,8 @@
 				return team1.shortName.localeCompare(team2.shortName);
 			}, extraStuff) ]);
 	
+	var reportsData={};
+	
 	mainApp.controller("TeamExtrasController", [ '$scope','$interval' ,'viewService',
 		'$location',  function($scope, $interval,viewService, $location) {
 			
@@ -132,10 +134,7 @@
 			
 			$scope.showReports = function(results, result){
 			
-				viewService.view("reports", {resultsKey:results.key,homeTeamId:result.fixture.home.id,isArray:true}, function(reports){
-					
-					$scope.$parent.reports = reports;
-				});
+				reportsData = {results:results,result:result};
 				
 				$scope.setTemplate("reports");
 			};
@@ -147,7 +146,8 @@
 			'viewService', '$location',
 			function($scope, $interval, viewService, $location) {
 			
-			$scope.reports = $scope.$parent.reports;
+			$scope.reportsData = reportsData;
+			$scope.reports = viewService.view("reports", {resultsKey:reportsData.results.key,homeTeamId:reportsData.result.fixture.home.id});
 			
 			} ]);
 
