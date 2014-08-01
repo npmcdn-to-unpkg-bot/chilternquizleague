@@ -104,8 +104,6 @@
 				return team1.shortName.localeCompare(team2.shortName);
 			}, extraStuff) ]);
 	
-	var reportsData={};
-	
 	mainApp.controller("TeamExtrasController", [ '$scope','$interval' ,'viewService',
 		'$location',  function($scope, $interval,viewService, $location) {
 			
@@ -134,21 +132,35 @@
 			
 			$scope.showReports = function(results, result){
 			
-				reportsData = {results:results,result:result};
+				$scope.reportsData = {results:results,result:result};
+				$scope.popupclass="popup";
 				
-				$scope.setTemplate("reports");
+			};
+			
+			$scope.closeWindow = function() {
+				$scope.popupclass = "popdown";
+				$scope.reports = null;
 			};
 			
 		} ]);
 	
 
-		mainApp.controller("ReportsController", [ '$scope', '$interval',
+
+			mainApp.controller("ReportsController", [ '$scope', '$interval',
 			'viewService', '$location',
 			function($scope, $interval, viewService, $location) {
-			
-			$scope.reportsData = reportsData;
-			$scope.reports = viewService.view("reports", {resultsKey:reportsData.results.key,homeTeamId:reportsData.result.fixture.home.id});
-			
+
+				$scope.$watch("reportsData", function(reportsData) {
+					if (reportsData) {
+						$scope.reports = viewService.view("reports", {
+							resultsKey : reportsData.results.key,
+							homeTeamId : reportsData.result.fixture.home.id
+						});
+					}
+				});
+
+
+
 			} ]);
 
 

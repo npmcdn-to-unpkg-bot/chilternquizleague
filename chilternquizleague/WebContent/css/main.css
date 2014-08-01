@@ -67,7 +67,7 @@ table{
 		-.063em -.063em .125em .031em aliceblue inset, -.063em .063em .125em
 		.031em aliceblue inset, .063em -.063em .125em .031em aliceblue inset;
 	padding: .25em;
-	transition: all .5s ease-in;
+	transition: box-shadow .5s ease-out;
 
 }
 
@@ -77,7 +77,7 @@ table{
 		.125em .031em #c1dff8, .063em .063em .125em .031em #c1dff8 inset, -.063em
 		-.063em .125em .031em #c1dff8 inset, -.063em .063em .125em .031em #c1dff8
 		inset, .063em -.063em .125em .031em #c1dff8 inset;
-	transition: all .5s ease-in;
+	transition: box-shadow .5s ease-in;
 	z-index:1;
 }
 
@@ -119,24 +119,27 @@ table{
 .highlit-border> div.ng-move.ng-move-active {
   height:1.5em;
  }
+ 
+@-webkit-keyframes my_animation {
+  from { height:1.5em; }
+  to { height:0; }
+}
 
 @keyframes my_animation {
   from { height:1.5em; }
   to { height:0; }
 }
 
-@-webkit-keyframes my_animation {
-  from { height:1.5em; }
-  to { height:0; }
-}
+
 /*
   We're using CSS keyframe animations for when
   the leave event is triggered for the element
   that has the .repeated-item class
 */
 .highlit-border> div.ng-leave {
-  animation:0.5s my_animation;
   -webkit-animation:0.5s my_animation;
+  animation:0.5s my_animation;
+
 }
  
  
@@ -224,3 +227,67 @@ table{
 	border-radius: .25em;
 	padding: .25em;
 }
+
+@-webkit-keyframes popupani {
+  0% {top:12em;margin-left:15em;opacity:0;}
+  30% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;}
+  60% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;}
+  100% {top:0;opacity:1;height:24em;width:30em;overflow:auto;}
+}
+
+@keyframes popupani {
+  0% {top:12em;margin-left:15em;opacity:0;}
+  30% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;}
+  60% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;}
+  100% {top:0;opacity:1;height:24em;width:30em;overflow:auto;}
+}
+
+
+
+.reports-popup{
+	position:absolute;
+	top:0;
+	width:0;
+	height:0;
+	opacity:0;
+	color:transparent;
+	overflow:hidden;
+
+}
+
+.popdown{
+	z-index:100;
+	color:initial;
+
+}
+
+.popdown .x-button{
+	
+	color:transparent
+	
+}
+
+
+
+.popup{
+	 z-index:100;
+	 background-color: white;
+	 -webkit-animation:popupani 1s linear;
+	 -webkit-animation-fill-mode:forwards;
+	 animation:popupani 1s linear;
+	 animation-fill-mode:forwards;
+     color:initial;
+
+}
+
+
+
+.x-button{
+	position:absolute;
+	top:0;
+	right:0;
+
+
+
+}
+

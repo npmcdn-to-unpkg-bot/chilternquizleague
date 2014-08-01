@@ -2,6 +2,6 @@
 	{{reportsData.results.date | date:'dd MMMM yyyy'}} - {{reportsData.result.fixture.home.shortName}} : {{reportsData.result.fixture.away.shortName}}
 	<div ng-repeat="report in reports.reports">
 		By {{report.team.name}}
-		<div class="show-thin standard-margins">{{report.text | htmlify}}</div>
+		<div class="standard-margins text-block" ng-bind-html="report.text | htmlify"></div>
 	</div>
 </div>
