@@ -27,9 +27,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div ng-class="popupclass" class="show-thin reports-popup">
-			<div class="x-button"><a href="" ng-click="closeWindow()">x</a></div>
-			<div ng-include="'/results/reports.html'"></div>
+		<div ng-include="'/common/popup.html'" ng-init="popupContents='/results/reports.html'">
 		</div>
 
 	</div>

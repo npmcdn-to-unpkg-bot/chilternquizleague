@@ -1,8 +1,12 @@
 package org.chilternquizleague.domain;
 
+import static org.chilternquizleague.domain.Utils.isEmpty;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.mortbay.util.StringUtil;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -75,10 +79,13 @@ public class Results extends CompetitionChild{
 		
 		if(row == null){
 			return results.add(incoming);
-		}else{
+		}else if(!incoming.getReports().isEmpty() && !isEmpty(incoming.getReports().iterator().next().getText().getText())){
+			
 			row.getReports().addAll(incoming.getReports());
-			return false;
+
 		}
+		
+		return false;
 		
 	}
 

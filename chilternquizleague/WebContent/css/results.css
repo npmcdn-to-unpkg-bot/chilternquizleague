@@ -68,3 +68,10 @@
 	transition:all .5s ease-in;
 }
 
+.popup div.reports-popup-header{
+	font-weight: 600;
+	color:darkblue;
+	border-bottom: solid thin #99ccff;
+	margin-bottom:.25em;
+}
+

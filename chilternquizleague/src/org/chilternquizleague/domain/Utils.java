@@ -112,5 +112,10 @@ public class Utils {
 	public static <T  extends BaseEntity> Ref<T> persist(T entity){
 		return Ref.create(ofy().save().entity(entity).now());
 	}
+	
+	public static boolean isEmpty(String string){
+		
+		return string == null || string.trim().isEmpty();
+	}
 
 }
