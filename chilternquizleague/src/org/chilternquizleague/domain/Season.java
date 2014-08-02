@@ -93,7 +93,7 @@ public class Season extends BaseEntity {
 
 	public List<TeamCompetition> getTeamCompetitions(){
 		
-		final Set<CompetitionType> types = new HashSet<>(Arrays.asList(CompetitionType.LEAGUE,CompetitionType.BEER_LEG, CompetitionType.CUP, CompetitionType.PLATE));
+		final Set<CompetitionType> types = new HashSet<>(Arrays.asList(CompetitionType.LEAGUE,CompetitionType.BEER, CompetitionType.CUP, CompetitionType.PLATE));
 		
 		final List<TeamCompetition> competitions = new ArrayList<>();
 		

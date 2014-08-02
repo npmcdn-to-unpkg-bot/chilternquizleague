@@ -70,7 +70,7 @@
 						email: $scope.email,
 						result : $scope.beerResult,
 						seasonId : $scope.global.currentSeasonId,
-						competitionType : "BEER_LEG"
+						competitionType : "BEER"
 
 					} ]);
 

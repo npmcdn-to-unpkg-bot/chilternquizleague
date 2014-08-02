@@ -15,14 +15,14 @@
 			<tr>
 				<td>Competitions</td>
 				<td><button ng-click="addCompetition(addCompType)">Add</button><select ng-model="addCompType"
-					ng-options="value as value.description for value in competitionTypes">
+					ng-options="value as value.description for value in competitionTypes | orderBy : 'description'">
 				</td>
 			</tr>
 			<tr>
 				<td></td>
 				<td><div class="show team-username-box standard-margins">
 					<table>
-					<tr ng-repeat="(type,competition) in season.competitions" class="entity-row"><td class="entity-link"><a href="#/seasons/{{seasonId}}/{{type}}">{{type}} - {{competition.description}}</a></td><td class="entity-remove-button"><button ng-click="removeCompetition(competition)">Remove</button></td></tr>
+					<tr ng-repeat="(type,competition) in season.competitions" class="entity-row"><td class="entity-link"><a href="#/seasons/{{seasonId}}/{{type}}">{{competition.description}}</a></td><td class="entity-remove-button"><button ng-click="removeCompetition(competition)">Remove</button></td></tr>
 					</table>
 					</div></td>
 			</tr>

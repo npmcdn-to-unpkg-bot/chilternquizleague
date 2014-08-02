@@ -35,6 +35,7 @@ public abstract class Competition extends BaseEntity {
 	{
 		this(type);
 		this.subsidiary = subsidiary;
+		this.description = type.getDescription();
 		
 	}
 	

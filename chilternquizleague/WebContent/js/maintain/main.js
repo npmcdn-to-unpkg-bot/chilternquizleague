@@ -31,10 +31,19 @@ maintainApp.config([ '$routeProvider', function($routeProvider) {
 	}).when('/seasons/:seasonId/LEAGUE', {
 		templateUrl : 'maintain/competition/league-detail.html',
 		controller : 'LeagueCompCtrl'
+	}).when('/seasons/:seasonId/BEER', {
+		templateUrl : 'maintain/competition/beer-detail.html',
+		controller : 'BeerCompCtrl'
+	}).when('/seasons/:seasonId/CUP', {
+		templateUrl : 'maintain/competition/cup-detail.html',
+		controller : 'CupCompCtrl'
+	}).when('/seasons/:seasonId/PLATE', {
+		templateUrl : 'maintain/competition/plate-detail.html',
+		controller : 'PlateCompCtrl'
 	}).when('/seasons/:seasonId/:compType/fixtures', {
 		templateUrl : 'maintain/competition/fixtures.html',
 		controller : 'FixturesCtrl'
-	}).when('/seasons/:seasonId/LEAGUE/results', {
+	}).when('/seasons/:seasonId/:compType/results', {
 		templateUrl : 'maintain/competition/results.html',
 		controller : 'ResultsCtrl'
 	}).when('/seasons/:seasonId/:compType/tables', {

@@ -1,0 +1,37 @@
+<div>
+	<div class="box-title">Plate Details</div>
+	<form>
+		<table>
+			<tr>
+				<td>Description</td>
+				<td><input ng-model="plateCompetition.description"></td>
+			</tr>
+			<tr>
+				<td>Start Time</td>
+				<td><input required  ng-model="plateCompetition.startTime" ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
+			</tr>
+			<tr>
+				<td>End Time</td>
+				<td><input required ng-model="plateCompetition.endTime"  ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#/seasons/{{seasonId}}/PLATE/fixtures">Fixtures</a></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#/seasons/{{seasonId}}/PLATE/results">Results</a></td>
+			</tr>
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="resetPlateCompetition()">Reset</button>
+						<button ng-click="addPlateCompetition(plateCompetition)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

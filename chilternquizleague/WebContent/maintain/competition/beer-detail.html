@@ -1,0 +1,29 @@
+<div>
+	<div class="box-title">Beer Leg Details</div>
+	<form>
+		<table>
+			<tr>
+				<td>Description</td>
+				<td><input ng-model="beerCompetition.description"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#/seasons/{{seasonId}}/BEER/results">Results</a></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#/seasons/{{seasonId}}/BEER/tables">Tables</a></td>
+			</tr>
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="resetBeerCompetition()">Reset</button>
+						<button ng-click="addBeerCompetition(beerCompetition)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

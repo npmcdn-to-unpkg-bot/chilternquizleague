@@ -55,7 +55,7 @@ maintainApp
 maintainApp
 .controller(
 		'BeerCompCtrl',
-		getCommonParams(teamCompetitionControllerFactory("BEER_LEG")));
+		getCommonParams(teamCompetitionControllerFactory("BEER")));
 
 maintainApp
 .controller(

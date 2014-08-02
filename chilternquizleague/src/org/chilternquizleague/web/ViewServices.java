@@ -306,7 +306,7 @@ public class ViewServices extends BaseRESTService {
 		for (TeamCompetition competition : competitions) {
 
 			if (competition != null
-					&& competition.getType() != CompetitionType.BEER_LEG) {
+					&& competition.getType() != CompetitionType.BEER) {
 
 				for (Fixtures fixtureSet : competition.getFixtures()) {
 

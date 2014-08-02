@@ -19,15 +19,12 @@ public class LeagueCompetition extends TeamCompetition{
 
 	public LeagueCompetition()
 	{
-		this(CompetitionType.LEAGUE,"League", false);
+		super(CompetitionType.LEAGUE, false);
 
 	}
 	
-	protected LeagueCompetition(CompetitionType type, String description, boolean subsidiary){
-		
-		super(type, subsidiary);
-		setDescription(description);
-		
+	protected LeagueCompetition(CompetitionType type, boolean subsidiary){
+		super(type,subsidiary);
 	}
 	
 	private List<LeagueTable> leagueTables = new ArrayList<>();

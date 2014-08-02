@@ -1,0 +1,37 @@
+<div>
+	<div class="box-title">Knockout Cup Details</div>
+	<form>
+		<table>
+			<tr>
+				<td>Description</td>
+				<td><input ng-model="cupCompetition.description"></td>
+			</tr>
+			<tr>
+				<td>Start Time</td>
+				<td><input required  ng-model="cupCompetition.startTime" ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
+			</tr>
+			<tr>
+				<td>End Time</td>
+				<td><input required ng-model="cupCompetition.endTime"  ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#/seasons/{{seasonId}}/CUP/fixtures">Fixtures</a></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#/seasons/{{seasonId}}/CUP/results">Results</a></td>
+			</tr>
+
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="resetCupCompetition()">Reset</button>
+						<button ng-click="addCupCompetition(cupCompetition)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>

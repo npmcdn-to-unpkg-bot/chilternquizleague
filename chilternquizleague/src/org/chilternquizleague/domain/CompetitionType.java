@@ -9,7 +9,7 @@ public enum CompetitionType {
 			return LeagueCompetition.class.cast(competition);
 		}
 	},
-	BEER_LEG("Beer Leg") {
+	BEER("Beer Leg") {
 		@Override
 		public LeagueCompetition castTo(Competition competition) {
 
@@ -31,7 +31,7 @@ public enum CompetitionType {
 			return KnockoutCompetition.class.cast(competition);
 		}
 	},
-	BUZZER_QUIZ("Buzzer Quiz");
+	BUZZER("Buzzer Quiz");
 
 	private final String description;
 
