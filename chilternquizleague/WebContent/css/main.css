@@ -250,10 +250,10 @@ table{
 }
 
 @keyframes popdownani {
-  100% {top:12em;margin-left:15em;opacity:0;}
-  60% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;}
-  30% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;}
-  0% {top:0;opacity:1;height:24em;width:30em;}
+  100% {top:12em;margin-left:15em;opacity:0;background-color: white;}
+  60% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;background-color: white;}
+  30% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;background-color: white;}
+  0% {top:0;opacity:1;height:24em;width:30em;background-color: white;}
 }
 
 

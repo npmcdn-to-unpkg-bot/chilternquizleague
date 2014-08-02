@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.Result;
-import org.chilternquizleague.domain.Results;
 import org.chilternquizleague.domain.Season;
 import org.chilternquizleague.domain.TeamCompetition;
 import org.chilternquizleague.domain.User;

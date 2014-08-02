@@ -18,9 +18,9 @@ public class LeagueTableView {
 	
 	protected String description;
 	
-	public LeagueTableView(Season season){
+	public LeagueTableView(Season season, CompetitionType type){
 		
-		final LeagueCompetition competition =  season.getCompetition(CompetitionType.LEAGUE);
+		final LeagueCompetition competition =  season.getCompetition(type);
 		
 		tables = competition != null ? competition.getLeagueTables() : Collections.<LeagueTable>emptyList();
 		description = season.getDescription();

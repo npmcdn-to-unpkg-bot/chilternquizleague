@@ -113,7 +113,12 @@ public class ViewServices extends BaseRESTService {
 
 		else if (head.contains("leaguetable")) {
 
-			currentLeagueTable(request, response);
+			currentLeagueTable(request, response, CompetitionType.LEAGUE);
+		}
+		
+		else if (head.contains("beertable")) {
+
+			currentLeagueTable(request, response, CompetitionType.BEER);
 		}
 
 		else if (head.contains("season-views")) {
@@ -262,7 +267,7 @@ public class ViewServices extends BaseRESTService {
 	}
 
 	private void currentLeagueTable(HttpServletRequest req,
-			HttpServletResponse resp) throws IOException {
+			HttpServletResponse resp, CompetitionType type) throws IOException {
 
 		final Long seasonId = Long.parseLong(req.getParameter("id"));
 
@@ -271,10 +276,12 @@ public class ViewServices extends BaseRESTService {
 
 		if (season != null) {
 			objectMapper.writeValue(resp.getWriter(), new LeagueTableView(
-					season));
+					season, type));
 
 		}
 	}
+	
+	
 
 	private void teamExtras(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
