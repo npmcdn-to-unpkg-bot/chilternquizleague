@@ -9,6 +9,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 		var parts = $location.path().split("/");
 		
 		var tail = "/" + parts.slice(2).join("/");
+		$scope.tail = tail;
 		
 		var itemId = parts[1];
 

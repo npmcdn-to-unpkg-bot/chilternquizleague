@@ -1,41 +1,71 @@
+function teamCompetitionControllerFactory(name){
+	
+	var ucName = name.toUpperCase();
+	name = name.toLowerCase();
+	var competitionName = name + "Competition";
+	var masterName = "master" + competitionName.charAt(0).toUpperCase() + competitionName.substr(1);
+	var addName = "add" + competitionName.charAt(0).toUpperCase() + competitionName.substr(1);
+	
+	return function($scope, entityService, $routeParams,
+			$rootScope, $location) {
+
+		var seasonId = $routeParams.seasonId;
+		$scope.seasonId = seasonId;
+		makeUpdateFnWithCallback(
+				"season",
+				null,
+				function(ret) {
+					if (!ret.competitions[ucName]) {
+
+						$scope
+								.$watch(
+										competitionName,
+										function(comp) {
+
+											$scope.masterSeason.competitions[ucName] = comp;
+										});
+						makeUpdateFnWithCallback(
+								competitionName)($scope,
+								entityService, $routeParams,
+								$rootScope, $location);
+					} else {
+						$scope[masterName] = ret.competitions[ucName];
+						$scope[competitionName] = angular
+								.copy(ret.competitions[ucName]);
+					}
+				})($scope, entityService, $routeParams, $rootScope,
+				$location);
+
+		$scope[addName] = function(competition) {
+			$scope.masterSeason.competitions[ucName] = $scope[competitionName];
+			$location.url("/seasons/" + seasonId);
+		};
+
+	};
+	
+	
+}
+
+
 maintainApp
 		.controller(
 				'LeagueCompCtrl',
-				getCommonParams(function($scope, entityService, $routeParams,
-						$rootScope, $location) {
+				getCommonParams(teamCompetitionControllerFactory("LEAGUE")));
 
-					var seasonId = $routeParams.seasonId;
-					$scope.seasonId = seasonId;
-					makeUpdateFnWithCallback(
-							"season",
-							null,
-							function(ret) {
-								if (!ret.competitions.LEAGUE) {
-									$scope
-											.$watch(
-													"leagueCompetition",
-													function(comp) {
+maintainApp
+.controller(
+		'BeerCompCtrl',
+		getCommonParams(teamCompetitionControllerFactory("BEER_LEG")));
 
-														$scope.masterSeason.competitions.LEAGUE = comp;
-													});
-									makeUpdateFnWithCallback(
-											"leagueCompetition")($scope,
-											entityService, $routeParams,
-											$rootScope, $location);
-								} else {
-									$scope.masterLeagueCompetion = ret.competitions.LEAGUE;
-									$scope.leagueCompetition = angular
-											.copy(ret.competitions.LEAGUE);
-								}
-							})($scope, entityService, $routeParams, $rootScope,
-							$location);
+maintainApp
+.controller(
+		'CupCompCtrl',
+		getCommonParams(teamCompetitionControllerFactory("CUP")));
 
-					$scope.addLeagueCompetition = function(competition) {
-						$scope.masterSeason.competitions.LEAGUE = $scope.leagueCompetition;
-						$location.url("/seasons/" + seasonId);
-					};
-
-				}));
+maintainApp
+.controller(
+		'PlateCompCtrl',
+		getCommonParams(teamCompetitionControllerFactory("PLATE")));
 
 function UsedTeamsControl(teams, $scope) {
 
@@ -92,6 +122,22 @@ maintainApp
 					var compType = $routeParams.compType;
 					var seasonId = $routeParams.seasonId;
 
+					
+					$scope.$watch("currentDate", function(date){
+						if(date && $scope.season){
+							
+							date = new Date(date.getTime()); 
+							var newDate = makeDateWithTime(
+										date,
+										$scope.season.competitions[compType].startTime);
+							 
+							 if(date.toUTCString() != newDate.toUTCString()){
+								 $scope.currentDate = newDate;
+							 }
+						}
+						
+					});
+					
 					$scope.setCurrentDate = function(date) {
 						$scope.currentDate = new Date(date);
 					};
@@ -164,7 +210,7 @@ maintainApp
 						var date = new Date(baseDate);
 
 						return new Date(date.getFullYear(), date.getMonth(),
-								date.getUTCDate(), timeString.substring(0, 2),
+								date.getDate(), timeString.substring(0, 2),
 								timeString.substring(3));
 
 					}
