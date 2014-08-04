@@ -21,16 +21,16 @@
 					<a href="" ng-click="setVenue(item)">{{item.name}}</a>
 				</div>
 			</div>
-			<div class="show team-pane standard-margins venue-container">
+			<div class="team-pane standard-margins venue-container">
 				<div class="venue-details">
 					<div>{{venue.name}}</div>
 					<div ng-bind-html="venue.address | htmlify"></div>
-					<div><a href="{{venue.website}}" target="_blank">Website</a></div>
+					<div>Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a></div>
 					<div>email : <a href="mailto:{{venue.email}}">{{venue.email}}</a></div>
 					<div>phone : {{venue.phone}}</div>
 					
 				</div>
-				<div class="venue-picture"><div><img alt="" ng-src="{{venue.imageURL}}"></div></div>
+				<div ng-if="venue.imageURL" class="venue-picture"><div><img alt="" ng-src="{{venue.imageURL}}"></div></div>
 			</div>
 		</div>
 	</div>

@@ -37,6 +37,11 @@ select:focus,input:focus,textarea:focus{
 	
 }
 
+span~select{
+	
+	margin-left:.5em;
+}
+
 input{
 	padding-left:.25em;
 	padding-right:.25em;

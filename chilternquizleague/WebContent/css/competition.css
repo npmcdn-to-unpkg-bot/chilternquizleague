@@ -1,2 +1,14 @@
 @import url('/css/top.css');
 @import url('/css/results.css');
+@import url('/css/team.css');
+
+.league-table-container{
+	
+	display:inline-block;
+}
+
+.comp-text{
+	
+	margin-top:.5em;
+	margin-bottom:.5em;
+}

@@ -14,7 +14,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 	var type = $location.path().substr(1);
 	
 	$scope.getTemplate = function(type){return templates[type];};
-	$scope.setCompetition = function(comp){$scope.competition = comp;};
+	$scope.setCompetition = function(comp){$scope.competition = comp;$location.path(comp.type.name);};
 	
 	$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {
