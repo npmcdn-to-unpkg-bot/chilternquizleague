@@ -8,27 +8,27 @@
 				<th colspan="8">{{table.description}}</th>
 			</tr>
 			<tr>
-				<th>Pos.</th>
-				<th>Team</th>
-				<th>Played</th>
-				<th>Won</th>
-				<th>Lost</th>
-				<th>Drawn</th>
-				<th>Scored</th>
-				<th>Points</th>
+				<th><div>Pos.</div></th>
+				<th><div>Team</div></th>
+				<th><div>Played</div></th>
+				<th><div>Won</div></th>
+				<th><div>Lost</div></th>
+				<th><div>Drawn</div></th>
+				<th><div>Scored</div></th>
+				<th><div>Points</div></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
-				<td class="numeric">{{item.position ? item.position : ($index +
-					1)}}</td>
-				<td class="team-name"><a href="/team/team.html#{{item.team.id}}">{{item.team.shortName}}</a></td>
-				<td class="numeric">{{item.played}}</td>
-				<td class="numeric">{{item.won}}</td>
-				<td class="numeric">{{item.lost}}</td>
-				<td class="numeric">{{item.drawn}}</td>
-				<td class="numeric">{{item.matchPointsFor}}</td>
-				<td class="numeric">{{item.leaguePoints}}</td>
+				<td class="numeric"><div>{{item.position ? item.position : ($index +
+					1)}}</div></td>
+				<td><div class="team-name"><a href="/team/team.html#{{item.team.id}}">{{item.team.shortName}}</a></div></td>
+				<td ><div>{{item.played}}</div></td>
+				<td><div class="numeric">{{item.won}}</div></td>
+				<td><div class="numeric">{{item.lost}}</div></td>
+				<td><div class="numeric">{{item.drawn}}</div></td>
+				<td><div class="numeric">{{item.matchPointsFor}}</div></td>
+				<td><div class="numeric">{{item.leaguePoints}}</div></td>
 			</tr>
 		</tbody>
 	</table>
