@@ -1,2 +1,8 @@
 @import url('/css/top.css');
 @import url('/css/results.css');
+@import url('/css/team.css');
+
+.league-table-container{
+	
+	min-width:2em;
+}

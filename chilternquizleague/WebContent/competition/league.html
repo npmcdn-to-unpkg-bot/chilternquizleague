@@ -1,4 +1,7 @@
 <div ng-controller="LeagueCompetitionController">
 <div class="league-text" ng-bind-html="headerText.text | htmlify"></div>
-<div class="league-table-container show-thin" ng-include="'/results/league-table.html'" ></div>
+<div><a>All Fixtures</a></div>
+<div><a>All Results</a></div>
+<div class="league-table-container show-thin"><div ng-include="'/results/league-table.html'" ></div>
+</div>
 </div>
