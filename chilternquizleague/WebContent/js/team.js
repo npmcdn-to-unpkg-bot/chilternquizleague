@@ -113,7 +113,7 @@
 			
 			function teamExtras(){
 				
-				if($scope.team && $scope.season){
+				if($scope.team && $scope.season && !$scope.team.extras){
 					viewService.view("team-extras", {
 						seasonId : $scope.season.id,
 						teamId : $scope.team.id

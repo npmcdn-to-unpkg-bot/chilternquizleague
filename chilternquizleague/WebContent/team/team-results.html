@@ -1,8 +1,5 @@
 <div ng-controller="TeamExtrasController">
-	<div>
-		<span>Season</span><select ng-model="season"
-			ng-options="season as season.description for season in seasons"></select>
-	</div>
+	<div ng-include="'/common/season-dropdown.html'"></div>
 	<div>
 		<table class="league-table-tbl">
 			<thead>

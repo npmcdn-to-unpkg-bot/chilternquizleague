@@ -4,5 +4,11 @@
 
 .league-table-container{
 	
-	min-width:2em;
+	display:inline-block;
+}
+
+.comp-text{
+	
+	margin-top:.5em;
+	margin-bottom:.5em;
 }
