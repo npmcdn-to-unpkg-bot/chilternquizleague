@@ -1,3 +1,8 @@
+var b = document.documentElement;
+  b.setAttribute('data-useragent',  navigator.userAgent);
+  b.setAttribute('data-platform', navigator.platform );
+  b.className += ((!!('ontouchstart' in window) || !!('onmsgesturechange' in window))?' touch':'');
+alert( navigator.userAgent);
 function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);

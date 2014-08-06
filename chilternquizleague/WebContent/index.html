@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
-<script type="text/javascript" src="/js/view.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/leagueTable.js"></script>
 <title ng-cloak>{{global.leagueName}}</title>
@@ -35,7 +35,7 @@
 					data-stream="true" data-show-border="true"></div>
 			</div>
 			<div class="body-content">
-				<div><div class="league-table-container show-thin narrow" ng-include="'/results/league-table.html'" ></div></div>
+				<div><div class="league-table-container show-thin" ng-include="'/results/league-table.html'" ></div></div>
 				<div class="front-page-text" ng-bind-html="global.frontPageText | htmlify" ></div>
 			</div>
 		</div>

@@ -18,81 +18,222 @@
 		font-family: 'Helvetica', "Lucida Sans Unicode", "Bitstream Vera Sans",
 	"Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica,
 	sans-serif;
-	border-collapse:collapse;
-}
-
-.league-table-tbl td,th{
-	
-	margin:0;
-	padding:0;
-}
-
-.league-table-tbl td,th>div{
-	
-	margin:2px;
-	padding:0;
-}
-
-.league-table-container.narrow .league-table-tbl tr *:nth-child(4)>div,.league-table-container.narrow .league-table-tbl tr *:nth-child(5)>div,.league-table-container.narrow .league-table-tbl tr *:nth-child(6)>div,.league-table-container.narrow .league-table-tbl tr *:nth-child(7)>div{
-	
-	display:none;
-    #max-width:0;
-    #overflow:hidden;
-    #transition: width 1s ease-out;
-    #opacity:0;
-    #border:none;
-	
-}
-
-.league-table-container:hover.narrow .league-table-tbl tr *:nth-child(4)>div,.league-table-container:hover.narrow .league-table-tbl tr *:nth-child(5)>div,.league-table-container:hover.narrow .league-table-tbl tr *:nth-child(6)>div,.league-table-container:hover.narrow .league-table-tbl tr *:nth-child(7)>div{
-	
-	display:block;
-	
-	#min-width:3em;
-	#border: solid thin lightgray;
-	#border-radius: .25em;
-	#transition: width 1s ease-in;
-	#opacity:1;
-}
-
-
-
-.league-table-tbl tr>td>div {
-
-	border: solid thin lightgray;
-	border-radius: .25em;
-	transition:background-color .2s ease-in;
 	
 }
 
 
-.league-table-tbl tr:hover>td>div {
+.league-table-tbl{
+    display:table;
+    table-layout:fixed;
+    border-spacing: 0 .125em;
+
+}
+
+.league-table-tbl .header{
+    display:table-header-group;
+}
+.league-table-tbl .header>div{
+    display:table-row;
+}
+.league-table-tbl .header>div>span{
+    display:table-cell;
+}
+.league-table-tbl .body{
+    display:table-row-group;
+}
+
+.league-table-tbl .body>div{
+    display:table-row;
+}
+.league-table-tbl .body>div>span{
+    display:table-cell;
+}
+
+
+.league-table .body>div:hover span:not(.spacer) {
 	background-color: lightgray;
 	transition:background-color .2s ease-in;
 }
 
-.league-table-tbl .numeric {
+.league-table .numeric {
 	text-align: right;
 	min-width: 3em;
-	padding-right: .25em;
 	
 }
 
-.league-table-tbl .team-name {
+.league-table .team-name {
 	min-width: 6em;
 }
 
-.league-table-tbl thead th>div {
+@-webkit-keyframes column_in{
+    0%{
+       #min-width:3em;
+       max-width:10em;
+       padding-left:.0675em;
+       padding-right:.0675em;
+       border-width:thin;
+       
+    }
+
+    99%{
+        padding-left:.0675em;
+        padding-right:.0675em;
+        border-width:thin; 
+
+    }
+    100%{
+        padding-left:0;
+        padding-right:0;
+        border-width:0;
+        max-width:0;
+        min-width:0;
+    }
+}
+
+@-webkit-keyframes column_out{
+    0%{
+       padding-left:0.0675em;
+       padding-right:0.0675em;
+       border-width:thin;
+    }
+
+    100%{
+        padding-left:0.0675em;
+        padding-right:0.0675em;
+        border-width:thin;
+        #min-width:3em;
+        max-width:10em;
+
+    }
+}
+
+
+@keyframes ie_column_out{
+    0%{
+       padding-left:0.0675em;
+       padding-right:0.0675em;
+       border-width:0;
+    }
+
+    100%{
+        padding-left:0.0675em;
+        padding-right:0.0675em;
+        border-width:thin;
+
+
+    }
+}
+	
+
+
+@keyframes column_in{
+    0%{
+       min-width:3em;
+       padding-left:.0675em;
+       padding-right:.0675em;
+       border-width:thin;
+       
+    }
+
+    99%{
+        padding-left:.0675em;
+        padding-right:.0675em; 
+
+    }
+    100%{
+        padding-left:0;
+        padding-right:0;
+        border-width:0;
+        max-width:0;
+        min-width:0;
+    }
+}
+
+@keyframes column_out{
+    0%{
+       padding-left:0.0675em;
+       padding-right:0.0675em;
+       border-width:0;
+    }
+
+    100%{
+        padding-left:0.0675em;
+        padding-right:0.0675em;
+        border-width:thin;
+        min-width:3em;
+
+    }
+}
+
+
+.league-table .league-table-tbl div>span.optional+span.spacer,.league-table .league-table-tbl div>span.optional{
+    padding-left:0;
+    padding-right:0;
+    overflow:hidden;
+    border-width:0;
+    max-width:0;
+    min-width:0;
+}
+
+
+
+html[data-useragent*='Trident'] .league-table.reveal .optional,html[data-useragent*='Trident'] .league-table.reveal .optional+.spacer {
+
+    animation:ie_column_out 1s linear;
+    animation-fill-mode: forwards;
+ 
+}
+
+.league-table.hide .optional, .league-table.hide .optional+.spacer{
+    -webkit-animation:column_in 1s linear;
+    -webkit-animation-fill-mode: forwards;
+    animation:column_in 1s linear;
+    animation-fill-mode: forwards;
+    
+}
+
+.league-table.reveal .optional, .league-table.reveal .optional+.spacer {
+    
+    -webkit-animation:column_out 1s linear;
+    -webkit-animation-fill-mode: forwards;
+    animation:column_out 1s linear;
+    animation-fill-mode: forwards;
+ 
+}
+
+.league-table .body span {
+
+	border: solid thin lightgray;
+	border-radius: .25em;
+    padding-left:0.0675em;
+    padding-right:0.0675em;
+	transition:background-color .2s ease-in;
+	
+}
+
+
+.league-table .header span {
 	background: #c1dff8;
 	border: medium solid #c1dff8;
 	border-radius: .25em;
 	font-weight: normal;
+	text-align:center;
 }
 
-.league-table-tbl thead tr.league-table-description th {
+.league-table .header div.league-table-description span {
 	background: #99ccff;
 	border: medium solid #99ccff;
 }
+
+.league-table .spacer{
+    border:none !important;
+    padding-right:.0675em;
+    padding-left:.0675em;
+    max-width:0 !important;
+    min-width:0 !important;
+    background:transparent !important;
+}
+
 
 .results:hover div{
 

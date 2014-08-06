@@ -9,7 +9,7 @@ mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 						},function(leagueTable){$scope.leagueTable=leagueTable;});
 					}
 					loadTable();
-					$interval(loadTable, 3000, 60)["catch"](function() {
+					$interval(loadTable, 30000, 60)["catch"](function() {
 						$interval.cancel(this);
 					});
 				}
