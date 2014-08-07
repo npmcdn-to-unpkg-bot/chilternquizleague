@@ -1,0 +1,133 @@
+@import url('/css/results.css');
+
+@-webkit-keyframes column_in{
+    0%{
+
+       max-width:10em;
+       padding-left:.0675em;
+       padding-right:.0675em;
+       border-width:thin;
+       opacity:1;
+       
+    }
+
+    99%{
+        padding-left:.0675em;
+        padding-right:.0675em;
+        border-width:thin;
+        opacity:1;
+        
+    }
+    100%{
+        padding-left:0;
+        padding-right:0;
+        border-width:0;
+        max-width:0;
+        min-width:0;
+        opacity:0;
+        
+    }
+}
+
+@-webkit-keyframes column_out{
+    0%{
+       padding-left:0.0675em;
+       padding-right:0.0675em;
+       border-width:thin;
+       opacity:1;
+    }
+
+    100%{
+        padding-left:0.0675em;
+        padding-right:0.0675em;
+        border-width:thin;
+        max-width:10em;
+        opacity:1;
+
+    }
+}
+
+
+@keyframes column_in{
+    0%{
+       min-width:3em;
+       padding-left:.0675em;
+       padding-right:.0675em;
+       border-width:thin;
+       opacity:1;
+       
+    }
+
+    99%{
+        padding-left:.0675em;
+        padding-right:.0675em; 
+        opacity:1;
+
+    }
+    100%{
+        padding-left:0;
+        padding-right:0;
+        border-width:0;
+        max-width:0;
+        min-width:0;
+        opacity:0;
+    }
+}
+
+@keyframes column_out{
+    0%{
+       padding-left:0.0675em;
+       padding-right:0.0675em;
+       border-width:0;
+       opacity:1;
+    }
+
+    100%{
+        padding-left:0.0675em;
+        padding-right:0.0675em;
+        border-width:thin;
+        min-width:3em;
+        opacity:1;
+
+    }
+}
+
+
+.league-table .league-table-tbl div>span.optional{
+    padding-left:0;
+    padding-right:0;
+    overflow:hidden;
+    border-width:0;
+    max-width:0;
+    min-width:0;
+    opacity:0;
+}
+
+
+.optional+.spacer{
+	
+	display:none !important;
+}
+
+
+.league-table:hover .optional{
+    
+    -webkit-animation:column_out 1s linear;
+    -webkit-animation-fill-mode: forwards;
+    animation:column_out 1s linear;
+    animation-fill-mode: forwards;
+ 
+}
+
+.league-table:hover .optional+.spacer{
+    display:table-cell !important;
+}
+
+.league-table:not(:hover) .optional{
+    -webkit-animation:column_in 1s linear;
+    -webkit-animation-fill-mode: forwards;
+    animation:column_in 1s linear;
+    animation-fill-mode: forwards;
+    
+}
+
