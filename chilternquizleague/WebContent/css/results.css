@@ -86,9 +86,19 @@
 	text-align:center;
 }
 
-.league-table .header div.league-table-description span {
+.league-table .league-table-description{
+	
+	padding-right: .375em
+}
+.league-table .league-table-description span {
 	background: #99ccff;
 	border: medium solid #99ccff;
+	border-radius: .25em;
+	width:100%;
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+	
 }
 
 .league-table .spacer{

@@ -1,5 +1,5 @@
 
-<div class="league-table" ng-controller="LeagueTableController">
+<div class="league-table" ng-controller="LeagueTableController" onmouseover="this.className='league-table flag'">
 	<div class="header">League Table {{leagueTable.description}}</div>
 	<div class="league-table-tbl" 
 		ng-repeat="table in leagueTable.tables">

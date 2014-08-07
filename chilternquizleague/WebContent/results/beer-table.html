@@ -1,34 +1,50 @@
 
 <div class="league-table" ng-controller="BeerTableController">
-	<table class="league-table-tbl"
-		ng-repeat="table in leagueTable.tables">
-		<thead>
-			<tr class="league-table-description" ng-if="table.description">
-				<th colspan="8">{{table.description}}</th>
-			</tr>
-			<tr>
-				<th>Pos.</th>
-				<th>Team</th>
-				<th>Played</th>
-				<th>Won</th>
-				<th>Lost</th>
-				<th>Drawn</th>
-				<th>Scored</th>
-				<th>Points</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
-				<td class="numeric">{{item.position ? item.position : ($index +
-					1)}}</td>
-				<td class="team-name"><a href="/team/team.html#{{item.team.id}}">{{item.team.shortName}}</a></td>
-				<td class="numeric">{{item.played}}</td>
-				<td class="numeric">{{item.won}}</td>
-				<td class="numeric">{{item.lost}}</td>
-				<td class="numeric">{{item.drawn}}</td>
-				<td class="numeric">{{item.matchPointsFor}}</td>
-				<td class="numeric">{{item.leaguePoints}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div ng-repeat="table in leagueTable.tables">
+	<div class="league-table-description" ng-if="table.description">
+		<span>{{table.description}}</span>
+	</div>
+	<div class="league-table-tbl" >
+		<div class="header">
+
+			<div>
+				<span>Pos.</span>
+				<span class="spacer"></span>
+				<span>Team</span>
+				<span class="spacer"></span>
+				<span>Played</span>
+				<span class="spacer"></span>
+				<span class="optional">Won</span>
+				<span class="spacer"></span>
+				<span class="optional">Lost</span>
+				<span class="spacer"></span>
+				<span class="optional">Drawn</span>
+				<span class="spacer"></span>
+				<span class="optional">Scored</span>
+				<span class="spacer"></span>
+				<span>Points</span>
+			</div>
+		</div>
+		<div class="body">
+			<div ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
+				<span class="numeric">{{item.position ? item.position : ($index +
+					1)}}</span>
+					<span class="spacer"></span>
+				<span  class="team-name"><a href="/team/team.html#{{item.team.id}}">{{item.team.shortName}}</a></span>
+				<span class="spacer"></span>
+				<span class="numeric">{{item.played}}</span>
+				<span class="spacer"></span>
+				<span class="optional numeric">{{item.won}}</span>
+				<span class="spacer"></span>
+				<span class="optional numeric">{{item.lost}}</span>
+				<span class="spacer"></span>
+				<span class="optional numeric">{{item.drawn}}</span>
+				<span class="spacer"></span>
+				<span class="optional numeric">{{item.matchPointsFor}}</span>
+				<span class="spacer"></span>
+				<span class="numeric">{{item.leaguePoints}}</span>
+			
+		</div>
+	</div>
+	</div>
 </div>

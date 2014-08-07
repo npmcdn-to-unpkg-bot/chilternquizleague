@@ -25,6 +25,7 @@
         max-width:0;
         min-width:0;
         opacity:0;
+
         
     }
 }
@@ -107,6 +108,7 @@
 .optional+.spacer{
 	
 	display:none !important;
+
 }
 
 
@@ -123,7 +125,7 @@
     display:table-cell !important;
 }
 
-.league-table:not(:hover) .optional{
+.league-table.flag:not(:hover) .optional{
     -webkit-animation:column_in 1s linear;
     -webkit-animation-fill-mode: forwards;
     animation:column_in 1s linear;
