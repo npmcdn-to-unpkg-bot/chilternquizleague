@@ -116,7 +116,7 @@
     -webkit-animation-fill-mode: forwards;
     animation:column_out 1s linear;
     animation-fill-mode: forwards;
- 
+
 }
 
 .league-table:hover .optional+.spacer{
