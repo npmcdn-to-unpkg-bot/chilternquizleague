@@ -1,49 +1,5 @@
 
 <div class="league-tables" ng-controller="LeagueTableController" >
 	<div class="header">League Table {{leagueTable.description}}</div>
-	<div class="league-table" ng-repeat="table in leagueTable.tables" onmouseover="this.className='league-table flag'">
-		<div class="standard-table" >
-			<div class="league-table-description" ng-if="table.description">
-			{{table.description}}</div>
-			<div class="table-header">
-				<div>
-					<span>Pos.</span>
-					<span class="spacer"></span>
-					<span>Team</span>
-					<span class="spacer"></span>
-					<span>Played</span>
-					<span class="spacer"></span>
-					<span class="optional">Won</span>
-					<span class="spacer"></span>
-					<span class="optional">Lost</span>
-					<span class="spacer"></span>
-					<span class="optional">Drawn</span>
-					<span class="spacer"></span>
-					<span class="optional">Scored</span>
-					<span class="spacer"></span>
-					<span>Points</span>
-				</div>
-			</div>
-			<div class="table-body">
-				<div ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
-					<span class="numeric">{{item.position ? item.position : ($index +
-						1)}}</span>
-					<span class="spacer"></span>
-					<span  class="team-name"><a href="/team/team.html#{{item.team.id}}">{{item.team.shortName}}</a></span>
-					<span class="spacer"></span>
-					<span class="numeric">{{item.played}}</span>
-					<span class="spacer"></span>
-					<span class="optional numeric">{{item.won}}</span>
-					<span class="spacer"></span>
-					<span class="optional numeric">{{item.lost}}</span>
-					<span class="spacer"></span>
-					<span class="optional numeric">{{item.drawn}}</span>
-					<span class="spacer"></span>
-					<span class="optional numeric">{{item.matchPointsFor}}</span>
-					<span class="spacer"></span>
-					<span class="numeric">{{item.leaguePoints}}</span>
-				</div>
-			</div>
-		</div>
-	</div>
+	<div ng-include="'/results/league-table-content.html'"></div>
 </div>
