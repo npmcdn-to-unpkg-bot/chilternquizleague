@@ -7,6 +7,46 @@
 			CUP:"cup.html",
 			PLATE:"plate.html"	
 	};
+	
+	function fetchHeaderText($scope,textKey){
+		
+		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
+			if (currentSeasonId) {
+
+				$scope.headerText = viewService.text(textKey, $scope.global);
+			}
+		});
+	}
+	
+	function loadTable($scope, tableName){
+		
+		 function func(season) {
+			if (season) {
+				$scope.leagueTable = viewService.view(tableName, {
+					id : $scope.season.id
+				});
+			}
+		};
+		
+		func($scope.season);
+		$scope.$watch("season", func);
+	}
+	
+	function loadResults($scope, type){
+		
+		function func(season) {
+			if (season) {
+				$scope.results = viewService.view("competition-results", {
+					id : $scope.season.id,
+					type : type
+				});
+			}
+		};
+		
+		func($scope);
+		$scope.$watch("season", func);
+		
+	}
 
 mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		'viewService', function($scope, $location, viewService) {
@@ -62,19 +102,10 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 	mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 			'viewService', function($scope, $interval, viewService) {
-				function loadTable(season) {
+				
 
-					if (season) {
+		      loadTable($scope,"leaguetable");
 
-						$scope.leagueTable = viewService.view("leaguetable", {
-							id : $scope.season.id
-						});
-					}
-				}
-
-				loadTable($scope.season);
-
-				$scope.$watch("season", loadTable);
 			} ]);
 
 	mainApp.controller('LeagueCompetitionController', [
@@ -82,46 +113,44 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'$location',
 			'viewService',
 			function($scope, $location, viewService) {
-
-				$scope.$watch("global.currentSeasonId", function(
-						currentSeasonId) {
-					if (currentSeasonId) {
-
-						$scope.headerText = viewService.text("league-comp",
-								$scope.global);
-					}
-				});
-
+				fetchHeaderText($scope, "league-comp");
 			} ]);
 	
 
 		mainApp.controller('BeerTableController', [ '$scope', '$interval',
 			'viewService', function($scope, $interval, viewService) {
-				function loadTable(season) {
-
-					if (season) {
-
-						$scope.leagueTable = viewService.view("beertable", {
-							id : $scope.season.id
-						});
-					}
-				}
-
-				loadTable($scope.season);
-
-				$scope.$watch("season", loadTable);
+				
+		      loadTable($scope,"beertable");
 			} ]);
 	
 
 		mainApp.controller('BeerCompetitionController', [ '$scope', '$location',
 			'viewService', function($scope, $location, viewService) {
 
-				$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
-					if (currentSeasonId) {
-
-						$scope.headerText = viewService.text("beer-comp", $scope.global);
-					}
-				});
-
+				fetchHeaderText($scope, "beer-comp");
 			} ]);
+		
+
+		mainApp.controller('CupCompetitionController', [
+			'$scope',
+			'$location',
+			'viewService',
+			function($scope, $location, viewService) {
+
+				fetchHeaderText($scope, "cup-comp");
+				
+			} ]);
+		
+		mainApp.controller('ResultsController', [
+			'$scope',
+			'$location',
+			'viewService',
+			function($scope, $location, viewService) {
+
+				fetchHeaderText($scope, "cup-comp");
+
+				$scope.$watch("competition", function(competition){loadResults($scope, competition.type.name);});
+				
+			} ]);
+		
 })();

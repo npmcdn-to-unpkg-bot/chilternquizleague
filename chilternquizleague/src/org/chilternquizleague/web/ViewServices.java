@@ -132,6 +132,14 @@ public class ViewServices extends BaseRESTService {
 		else if (head.contains("all-results")) {
 			allResults(request, response);
 		}
+		
+		else if (head.contains("competition-results")) {
+			competitionResults(request, response);
+		}
+		
+		else if (head.contains("competition-fixtures")) {
+			competitionFixtures(request, response);
+		}
 
 		else if (head.endsWith("fixtures-for-email")) {
 			fixturesForEmail(request, response);
@@ -221,6 +229,40 @@ public class ViewServices extends BaseRESTService {
 		}
 
 		objectMapper.writeValue(response.getWriter(), results);
+	}
+	
+	private void competitionResults(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		final Long seasonId = Long.parseLong(request.getParameter("id"));
+		final CompetitionType type = CompetitionType.valueOf(request.getParameter("type"));
+		
+		
+
+		final Season season = ofy().load()
+				.key(Key.create(Season.class, seasonId)).now();
+
+		final TeamCompetition competition = season.getCompetition(type);
+
+		if(competition != null){
+			objectMapper.writeValue(response.getWriter(), competition.getResults());
+		}
+		
+	}
+	
+	private void competitionFixtures(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		final Long seasonId = Long.parseLong(request.getParameter("id"));
+		final CompetitionType type = CompetitionType.valueOf(request.getParameter("type"));
+
+		final Season season = ofy().load()
+				.key(Key.create(Season.class, seasonId)).now();
+
+		final TeamCompetition competition = season.getCompetition(type);
+
+		if(competition != null){
+			objectMapper.writeValue(response.getWriter(), competition.getFixtures());
+		}
+		
 	}
 
 	private void fixturesForEmail(HttpServletRequest request,
