@@ -14,7 +14,7 @@
 		}
 
 		return ret.sort(function(item1, item2) {
-			return item1.start - item2.start;
+			return item2.start - item1.start;
 		});
 	}
 
@@ -31,7 +31,7 @@
 
 						if(preSubmission.fixtures)
 						{
-							fixtures = nowOrBefore(preSubmission.fixtures);
+							var fixtures = nowOrBefore(preSubmission.fixtures);
 													
 							$scope.fixture = null;
 	

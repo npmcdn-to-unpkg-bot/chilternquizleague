@@ -215,7 +215,9 @@ public class ViewServices extends BaseRESTService {
 
 		for (TeamCompetition competition : season.getTeamCompetitions()) {
 
-			results.addAll(competition.getResults());
+			if(!competition.isSubsidiary()){
+				results.addAll(competition.getResults());
+			}
 		}
 
 		objectMapper.writeValue(response.getWriter(), results);
