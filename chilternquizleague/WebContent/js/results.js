@@ -125,7 +125,37 @@
 		
 		$scope.$watch("allResults.length", function(length){
 			$scope.results = $scope.allResults;});
+		
+		$scope.showReports = function(results, result){
+			
+			$scope.reportsData = {results:results,result:result};
+			$scope.popupclass="popup";
+			
+		};
+		
+		$scope.closeWindow = function() {
+			$scope.popupclass = "popdown";
+			$scope.reports = null;
+		};
 	}]);
+	
+
+	mainApp.controller("ReportsController", [ '$scope', '$interval',
+	'viewService', '$location',
+	function($scope, $interval, viewService, $location) {
+
+		$scope.$watch("reportsData", function(reportsData) {
+			if (reportsData) {
+				$scope.reports = viewService.view("reports", {
+					resultsKey : reportsData.results.key,
+					homeTeamId : reportsData.result.fixture.home.id
+				});
+			}
+		});
+
+
+
+	} ]);
 
 
 })();

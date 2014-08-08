@@ -366,7 +366,7 @@ public class ViewServices extends BaseRESTService {
 
 				for (Results resultSet : competition.getResults()) {
 
-					final Results newResultSet = new Results(resultSet, Key.create(resultSet).getString());
+					final Results newResultSet = new Results(resultSet);
 
 					for (Result result : resultSet.getResults()) {
 

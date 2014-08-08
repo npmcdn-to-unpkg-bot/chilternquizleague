@@ -29,7 +29,7 @@
 					<a href="" ng-click="setCurrentResults(results)">{{results.date | date : 'dd MMMM yyyy'}} - {{results.description}}</a>
 					<div ng-repeat="result in results.results"><span>{{result.fixture.home.shortName}} {{result.homeScore}} : {{result.awayScore}} {{result.fixture.away.shortName}}</span></div>
 				</div-->
-				<div ng-include="'results-table.html'"></div>
+				<div ng-include="'results-table.html'" style="position:absolute;"></div>
 			</div>
 		</div>
 	</div>

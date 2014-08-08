@@ -293,8 +293,9 @@ table{
 
 
 
+
 .popup{
-	 z-index:100;
+	 z-index:1000000;
 	 background-color: white;
 	 -webkit-animation:popupani 1.2s ease-in;
 	 -webkit-animation-fill-mode:forwards;
@@ -317,9 +318,12 @@ table{
 	position:absolute;
 	top:.125em;
 	right:.375em;
-
-
 }
+
+.x-button>a:before{
+	content:"x";
+}
+
 .x-button > a:hover{
 	color:darkblue;
 	text-shadow:0 0 1px blue,0 0 2px blue,0 0 3px blue;

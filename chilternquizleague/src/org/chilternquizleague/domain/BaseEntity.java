@@ -1,6 +1,8 @@
 package org.chilternquizleague.domain;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
 
 public abstract class BaseEntity {
 	
@@ -8,7 +10,8 @@ public abstract class BaseEntity {
 	protected Long id;
 	
 	//Only needed for serialisation of nested entities
-	protected String key;
+	@Ignore
+	private String key;
 	
 	
 	private boolean retired;
@@ -60,4 +63,16 @@ public abstract class BaseEntity {
 		
 	}
 
+	public String getKey(){
+		
+		return key = key == null && id != null ? Key.create(this).getString() : key; 
+	}
+	
+	public void setKey(String key){
+		//noop
+	}
+	
+	protected void internalSetKey(String key){
+		this.key = key; 
+	}
 }
