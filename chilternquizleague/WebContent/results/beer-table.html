@@ -1,11 +1,10 @@
 
 <div class="league-table" ng-controller="BeerTableController">
 	<div ng-repeat="table in leagueTable.tables">
-	<div class="league-table-description" ng-if="table.description">
-		<span>{{table.description}}</span>
-	</div>
-	<div class="league-table-tbl" >
-		<div class="header">
+	<div class="league-table-tbl standard-table" >
+		<div class="league-table-description" ng-if="table.description">
+			{{table.description}}</div>
+		<div class="table-header">
 
 			<div>
 				<span>Pos.</span>
@@ -25,7 +24,7 @@
 				<span>Points</span>
 			</div>
 		</div>
-		<div class="body">
+		<div class="table-body">
 			<div ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
 				<span class="numeric">{{item.position ? item.position : ($index +
 					1)}}</span>

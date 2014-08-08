@@ -1,6 +1,5 @@
 package org.chilternquizleague.domain;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;

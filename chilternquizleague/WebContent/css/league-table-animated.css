@@ -94,7 +94,7 @@
 }
 
 
-.league-table .league-table-tbl div>span.optional{
+.league-table .standard-table div>span.optional{
     padding-left:0;
     padding-right:0;
     overflow:hidden;
@@ -105,14 +105,14 @@
 }
 
 
-.optional+.spacer{
+.league-table .standard-table .optional+.spacer{
 	
 	display:none !important;
 
 }
 
 
-.league-table-tbl:hover .optional{
+.league-table:hover .optional{
     
     -webkit-animation:column_out 1s linear;
     -webkit-animation-fill-mode: forwards;
@@ -121,11 +121,11 @@
 
 }
 
-.league-table-tbl:hover .optional+.spacer{
+.league-table:hover .optional+.spacer{
     display:table-cell !important;
 }
 
-.league-table .flag:not(:hover) .optional{
+.league-table.flag:not(:hover) .optional{
     -webkit-animation:column_in 1s linear;
     -webkit-animation-fill-mode: forwards;
     animation:column_in 1s linear;

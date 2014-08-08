@@ -1,20 +1,20 @@
-<div ng-controller="ResultsTable">
-	<table>
+<div ng-controller="ResultsTable" style="position:relative">
+	<table class="standard-table collapsible-results-table">
 
 		<thead ng-repeat-start="resultSet in results | orderBy: 'date' : true">
 			<tr>
 				<th>{{resultSet.description}}</th>
-				<th colspan="8">{{resultSet.date | date:'dd MMMM yyyy'}}</th>
+				<th colspan="3">{{resultSet.date | date:'dd MMMM yyyy'}}</th>
 			</tr>
 		</thead>
 		<tbody ng-repeat-end>
 			<tr
 				ng-repeat="result in resultSet.results | orderBy :'fixture.home.shortName'">
 				<td>{{result.fixture.home.shortName}}</td>
-				<td>{{result.homeScore}}</td>
-				<td>{{result.awayScore}}</td>
+				<td class="numeric">{{result.homeScore}}</td>
+				<td class="left-align">{{result.awayScore}}</td>
 				<td>{{result.fixture.away.shortName}}</td>
-				<td><a href="" ng-click="showReports(resultSet,result)">reports</a></td>
+				<td class="row-annotation"><a href="" ng-click="showReports(resultSet,result)">reports</a></td>
 			</tr>
 		</tbody>
 	</table>
