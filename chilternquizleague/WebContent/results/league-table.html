@@ -1,12 +1,13 @@
 
-<div class="league-table" ng-controller="LeagueTableController" onmouseover="this.className='league-table flag'">
+<div class="league-table" ng-controller="LeagueTableController" >
 	<div class="header">League Table {{leagueTable.description}}</div>
-	<div class="league-table-tbl" 
-		ng-repeat="table in leagueTable.tables">
+	<div ng-repeat="table in leagueTable.tables" onmouseover="this.className='league-table flag'">
+	<div class="league-table-description" ng-if="table.description">
+		<span>{{table.description}}</span>
+	</div>
+	<div class="league-table-tbl" >
 		<div class="header">
-			<div class="league-table-description" ng-if="table.description">
-				<span colspan="8">{{table.description}}</span>
-			</div>
+
 			<div>
 				<span>Pos.</span>
 				<span class="spacer"></span>
@@ -45,5 +46,6 @@
 				<span class="numeric">{{item.leaguePoints}}</span>
 			
 		</div>
+	</div>
 	</div>
 </div>

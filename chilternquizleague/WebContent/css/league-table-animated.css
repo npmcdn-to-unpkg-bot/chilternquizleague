@@ -112,7 +112,7 @@
 }
 
 
-.league-table:hover .optional{
+.league-table-tbl:hover .optional{
     
     -webkit-animation:column_out 1s linear;
     -webkit-animation-fill-mode: forwards;
@@ -121,11 +121,11 @@
 
 }
 
-.league-table:hover .optional+.spacer{
+.league-table-tbl:hover .optional+.spacer{
     display:table-cell !important;
 }
 
-.league-table.flag:not(:hover) .optional{
+.league-table .flag:not(:hover) .optional{
     -webkit-animation:column_in 1s linear;
     -webkit-animation-fill-mode: forwards;
     animation:column_in 1s linear;
