@@ -1,7 +1,8 @@
 <div ng-controller="LeagueCompetitionController">
-<div class="league-text comp-text" ng-bind-html="headerText.text | htmlify"></div>
-<div><a href="">Results</a></div>
-<div><a href="">Fixtures</a></div>
-<div class="league-table-container show-thin" ng-include="'/results/league-table.html'" ></div>
-<div ng-include="'/results/results-table.html'"></div>
+	<div class="league-text comp-text"
+		ng-bind-html="headerText.text | htmlify"></div>
+	<div class="league-table-container show-thin"
+		ng-include="'/results/league-table.html'"></div>
+	<div ng-include="'/competition/latest-results.html'"></div>
+	<div ng-include="'/competition/next-fixtures.html'"></div>
 </div>

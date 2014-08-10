@@ -73,25 +73,32 @@ div.league-table>div.standard-table{
 	border-bottom: solid thin #99ccff;
 	margin-bottom:.25em;
 }
-
-.collapsible-results-table tbody>tr>td{
-	/*doesn't work with <table>. Prob. need to use CSS table  */ 
-	overflow:hidden;
-	max-height:0;
-	min-height:0;
-}
-
-.collapsible-results-table thead:hover~tbody>tr>td,.results-table tbody:hover>tr>td {
-	overflow:initial;
-	max-height:2em;
-	transition:max-height 1s;
-}
-
-.collapsible-results-table .numeric{
+.results-table .numeric{
 	min-width:3em;
+	text-align:right;
 }
-.collapsible-results-table .left-align{
+.results-table .left-align{
 	text-align:left;
 	min-width:3em;
 }
+
+.results-table>thead>tr{
+	display:none;
+}
+
+.date-header .results-table>thead>tr:nth-child(3){
+	
+	display:inherit;
+}
+
+.comp-header .results-table>thead>tr:nth-child(2){
+	
+	display:inherit;
+}
+
+.full-header .results-table>thead>tr:nth-child(1){
+	
+	display:inherit;
+}
+
 

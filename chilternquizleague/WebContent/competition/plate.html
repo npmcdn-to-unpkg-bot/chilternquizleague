@@ -1,10 +1,8 @@
 <div ng-controller="PlateCompetitionController">
 	<div class="league-text comp-text"
 		ng-bind-html="headerText.text | htmlify"></div>
-	<div>
-		<a href="">Results</a>
+	<div ng-include="'/competition/latest-results.html'">
 	</div>
-	<div>
-		<a href="">Fixtures</a>
+	<div ng-include="'/competition/next-fixtures.html'">
 	</div>
 </div>

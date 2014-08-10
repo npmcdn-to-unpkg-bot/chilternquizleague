@@ -24,9 +24,6 @@
 			if (season) {
 				$scope.leagueTable = viewService.view(tableName, {
 					id : $scope.season.id
-				}, function(leagueTable){
-					$scope.leagueTable = leagueTable;
-					
 				});
 			}
 		};
@@ -40,6 +37,23 @@
 		function func(season) {
 			if (season) {
 				$scope.results = viewService.view("competition-results", {
+					id : $scope.season.id,
+					type : type,
+					isArray:true
+				});
+			}
+		};
+		
+		func($scope.season);
+		$scope.$watch("season", func);
+		
+	}
+	
+	function loadFixtures($scope, viewService, type){
+		
+		function func(season) {
+			if (season) {
+				$scope.fixtures = viewService.view("competition-fixtures", {
 					id : $scope.season.id,
 					type : type,
 					isArray:true
@@ -145,6 +159,14 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 				
 			} ]);
 		
+
+		mainApp.controller('PlateCompetitionController', [ '$scope', '$location',
+			'viewService', function($scope, $location, viewService) {
+
+				fetchHeaderText($scope, viewService, "plate-comp");
+
+			} ]);
+		
 		mainApp.controller('ResultsTable', [
 			'$scope',
 			'$location',
@@ -165,6 +187,16 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 					$scope.reports = null;
 				};
 				
+			} ]);
+		
+
+			mainApp.controller('FixturesTable', [ '$scope', '$location', 'viewService',
+			function($scope, $location, viewService) {
+
+				$scope.$watch("competition", function(competition) {
+					loadFixtures($scope, viewService, competition.type.name);
+				});
+
 			} ]);
 		
 		mainApp.controller("ReportsController", [ '$scope', '$interval',

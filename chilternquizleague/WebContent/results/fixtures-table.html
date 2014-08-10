@@ -1,0 +1,30 @@
+<div ng-controller="FixturesTable" style="position: relative">
+	<table class="results-table">
+
+		<thead
+			ng-repeat-start="fixtureSet in fixtures | afterNow | orderBy: 'start' | limitTo:fixturesCount">
+			<tr>
+				<th colspan="8">{{fixtureSet.description}} - {{fixtureSet.start
+					| date:'dd MMMM yyyy'}}</th>
+			</tr>
+
+			<tr>
+				<th colspan="8">{{fixtureSet.description}}</th>
+			</tr>
+
+			<tr>
+				<th colspan="8">{{fixtureSet.start | date:'dd MMMM yyyy'}}</th>
+			</tr>
+
+
+		</thead>
+		<tbody ng-repeat-end>
+			<tr
+				ng-repeat="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
+				<td class="home-team">{{fixture.home.shortName}}</td>
+				<td>:</td>
+				<td class="away-team">{{fixture.away.shortName}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

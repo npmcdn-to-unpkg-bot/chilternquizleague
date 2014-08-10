@@ -88,6 +88,20 @@ mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
 	return text ?  $sce.trustAsHtml(text.replace(/\n/g, "<br/>")) : "";
 };}]);
 
+mainApp.filter('afterNow', function() {
+	return function(input) {
+		var now = new Date().getTime();
+		var ret = [];
+		for (idx in input) {
+			if (input[idx].start >= now) {
+				ret.push(input[idx]);
+			}
+		}
+
+		return ret;
+	};
+});
+
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService',
 		function($scope, $interval, viewService) {
 
