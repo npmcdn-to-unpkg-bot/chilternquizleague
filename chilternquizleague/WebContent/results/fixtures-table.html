@@ -2,7 +2,7 @@
 	<table class="results-table">
 
 		<thead
-			ng-repeat-start="fixtureSet in fixtures | afterNow | orderBy: 'start' | limitTo:fixturesCount">
+			ng-repeat-start="fixtureSet in fixtures | afterNow | orderBy: 'start' | limitTo:(rowCount?rowCount:10000)">
 			<tr>
 				<th colspan="8">{{fixtureSet.description}} - {{fixtureSet.start
 					| date:'dd MMMM yyyy'}}</th>

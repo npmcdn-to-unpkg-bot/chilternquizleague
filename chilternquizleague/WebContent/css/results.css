@@ -86,6 +86,11 @@ div.league-table>div.standard-table{
 	display:none;
 }
 
+.results-table .winner{
+	color:darkblue;
+	text-shadow: 0 0 5px blue;
+}
+
 .date-header .results-table>thead>tr:nth-child(3){
 	
 	display:inherit;
