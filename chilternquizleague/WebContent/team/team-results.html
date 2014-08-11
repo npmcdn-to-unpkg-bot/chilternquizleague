@@ -1,32 +1,5 @@
 <div ng-controller="TeamExtrasController">
 	<div ng-include="'/common/season-dropdown.html'"></div>
-	<div>
-		<table class="league-table-tbl">
-			<thead>
-				<tr>
-					<th>Date</th>
-					<th>Comp.</th>
-					<th colspan="2">Home</th>
-					<th colspan="2">Away</th>
-				</tr>
-			</thead>
-			<tbody
-				ng-repeat="results in team.extras.results | orderBy : 'date' : true">
-
-				<tr ng-repeat="result in results.results">
-					<td>{{results.date | date : 'dd MMMM yyyy'}}</td>
-					<td>{{results.description}}</td>
-					<td>{{result.fixture.home.shortName}}</td>
-					<td>{{result.homeScore}}</td>
-					<td>{{result.awayScore}}</td>
-					<td>{{result.fixture.away.shortName}}</td>
-					<td><a href="" ng-click="showReports(results,result)">reports</a></td>
-				</tr>
-			</tbody>
-		</table>
-		<div ng-include="'/common/popup.html'" ng-init="popupContents='/results/reports.html'">
-		</div>
-
-	</div>
+	<div class="full-header header-left" ng-include="'/results/results-table.html'"></div>
 </div>
 

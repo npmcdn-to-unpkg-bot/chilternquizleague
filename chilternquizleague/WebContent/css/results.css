@@ -82,28 +82,30 @@ div.league-table>div.standard-table{
 	min-width:3em;
 }
 
-.results-table>thead>tr{
-	display:none;
-}
+
 
 .results-table .winner{
 	color:darkblue;
 	text-shadow: 0 0 5px blue;
 }
 
-.date-header .results-table>thead>tr:nth-child(3){
-	
-	display:inherit;
+.header-left .results-table>thead>tr>th{
+	text-align: left;
 }
 
-.comp-header .results-table>thead>tr:nth-child(2){
+.date-header .results-table>thead>tr:not(.date-header){
 	
-	display:inherit;
+	display:none;
 }
 
-.full-header .results-table>thead>tr:nth-child(1){
+.comp-header .results-table>thead>tr:not(.comp-header){
 	
-	display:inherit;
+	display:none;
+}
+
+.full-header .results-table>thead>tr:not(.full-header){
+	
+	display:none;
 }
 
 .home-team{

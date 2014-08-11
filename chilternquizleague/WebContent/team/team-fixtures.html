@@ -1,9 +1,3 @@
 <div ng-controller="TeamExtrasController">
-	<span>Season</span><select ng-model="season"
-		ng-options="season as season.description for season in seasons"></select>
-</div>
-<div class="something" ng-repeat="fixtures in team.extras.fixtures | afterNow | orderBy:'start'">
-		<span ng-repeat="fixture in fixtures.fixtures">{{fixtures.description}}
-			- {{fixtures.start | date:'dd MMMM yyyy'}} -
-			{{fixture.home.shortName}} : {{fixture.away.shortName}}</span>
+	<div class="full-header header-left" ng-include="'/results/fixtures-table.html'"></div>
 </div>

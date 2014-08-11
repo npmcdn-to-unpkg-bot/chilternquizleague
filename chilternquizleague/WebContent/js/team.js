@@ -104,7 +104,8 @@
 						teamId : $scope.team.id
 					}, function(extras){
 						if($scope.team.id != extras.id){
-						$scope.team.extras = extras;}});
+						$scope.team.extras = extras;
+						$scope.results = extras.results;}});
 
 				}
 			}
@@ -115,21 +116,55 @@
 			$scope.$watch("season", teamExtras);
 			$scope.$watch("team.id", teamExtras);
 			
-			$scope.showReports = function(results, result){
-			
-				$scope.reportsData = {results:results,result:result};
-				$scope.popupclass="popup";
-				
-			};
-			
-			$scope.closeWindow = function() {
-				$scope.popupclass = "popdown";
-				$scope.reports = null;
-			};
+
 			
 		} ]);
 	
 
+
+	mainApp.controller("FixturesTable", [ '$scope', function($scope) {
+
+		function loadResults(fixtures) {
+
+			$scope.$watchCollection("team.extras.fixtures", function(fixtures) {
+				$scope.fixtures = fixtures;
+			});
+
+			$scope.fixtures = fixtures;
+
+		}
+
+		loadResults($scope.team.extras.fixtures);
+
+	} ]);
+
+	mainApp.controller("ResultsTable", [ '$scope', function($scope) {
+
+		function loadResults(results) {
+
+			$scope.$watchCollection("team.extras.results", function(results) {
+				$scope.results = results;
+			});
+
+			$scope.results = results;
+
+		}
+		
+		loadResults($scope.team.extras.results);
+		
+		$scope.showReports = function(results, result){
+			
+			$scope.reportsData = {results:results,result:result};
+			$scope.popupclass="popup";
+			
+		};
+		
+		$scope.closeWindow = function() {
+			$scope.popupclass = "popdown";
+			$scope.reports = null;
+		};
+	
+	}]);
 
 			mainApp.controller("ReportsController", [ '$scope', '$interval',
 			'viewService', '$location',

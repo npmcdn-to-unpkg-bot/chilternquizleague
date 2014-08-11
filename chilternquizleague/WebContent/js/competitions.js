@@ -5,7 +5,9 @@
 			LEAGUE:"league.html",
 			BEER:"beer-leg.html",
 			CUP:"cup.html",
-			PLATE:"plate.html"	
+			PLATE:"plate.html",
+			RESULTS:"results.html",
+			FIXTURES:"fixtures.html"
 	};
 	
 	function fetchHeaderText($scope, viewService, textKey){
@@ -69,10 +71,10 @@
 mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		'viewService', function($scope, $location, viewService) {
 	
-	var type = $location.path().substr(1);
+	var type = $location.path().split(/\//)[0];
 	
 	$scope.getTemplate = function(type){return templates[type];};
-	$scope.setCompetition = function(comp){$scope.competition = comp;$location.path(comp.type.name);};
+	$scope.setCompetition = function(comp){$scope.competition = comp;$location.path(comp.type.name);$scope.templateName=comp.type.name;};
 	
 	$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {
@@ -115,6 +117,13 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			});
 			}
 		});
+		
+		$scope.showOther = function(name){
+			
+			$location.path($location.path() + "/" + name);
+			$scope.templateName=name;
+			
+		};
 
 		} ]);
 
@@ -186,6 +195,8 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 					$scope.popupclass = "popdown";
 					$scope.reports = null;
 				};
+				
+
 				
 			} ]);
 		
