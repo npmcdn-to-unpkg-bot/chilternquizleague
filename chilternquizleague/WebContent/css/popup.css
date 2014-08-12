@@ -1,50 +1,49 @@
 /*Popup stuff*/
 
 @-webkit-keyframes popupani {
-  0% {top:12em;margin-left:15em;opacity:0;}
-  30% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;}
-  60% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;}
-  100% {top:0;opacity:1;height:24em;width:30em;}
+  0% {top:20em;margin-left:15em;opacity:0;}
+  30% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
+  60% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
+  100% {top:8;opacity:1;height:24em;width:30em;}
 }
 
 @keyframes popupani {
-  0% {top:12em;margin-left:15em;opacity:0;}
-  30% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;}
-  60% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;}
-  100% {top:0;opacity:1;height:24em;width:30em;}
+  0% {top:20em;margin-left:15em;opacity:0;}
+  30% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
+  60% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
+  100% {top:8;opacity:1;height:24em;width:30em;}
 }
 
 @-webkit-keyframes popdownani {
-  100% {top:12em;margin-left:15em;opacity:0;}
-  60% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;}
-  30% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;}
-  0% {top:0;opacity:1;height:24em;width:30em;}
+  100% {top:20em;margin-left:15em;opacity:0;}
+  60% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
+  30% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
+  0% {top:8;opacity:1;height:24em;width:30em;}
 }
 
 @keyframes popdownani {
-  100% {top:12em;margin-left:15em;opacity:0;background-color: white;}
-  60% {top:11em;margin-left:14em;opacity:1;height:2em;width:2em;background-color: white;}
-  30% {top:11em;margin-left:0;opacity:1;width:30em;height:2em;background-color: white;}
-  0% {top:0;opacity:1;height:24em;width:30em;background-color: white;}
+  100% {top:20em;margin-left:15em;opacity:0;}
+  60% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
+  30% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
+  0% {top:8;opacity:1;height:24em;width:30em;}
 }
 
 
 
 .popup-container{
-	position:absolute;
-	top:0;
+	position:fixed;
+	top:10em;
+	left:20em;
 	width:0;
 	height:0;
 	opacity:0;
-	color:transparent;
 	overflow:hidden;
 	padding-right:.5em;
+	background-color: white;
 
 }
 
 .popdown{
-	z-index:100;
-	color:initial;
 	-webkit-animation:popdownani 1.2s ease-out;
     -webkit-animation-fill-mode:forwards;
 	animation:popdownani 1.2s ease-in;
@@ -62,14 +61,14 @@
 
 
 .popup{
-	 z-index:1000000;
-	 background-color: white;
+	 z-index:1000;
+
 	 -webkit-animation:popupani 1.2s ease-in;
 	 -webkit-animation-fill-mode:forwards;
 	 animation:popupani 1.2s ease-in;
 	 animation-direction:alternate;
 	 animation-fill-mode:forwards;
-     color:inherit;
+
 
 
 }

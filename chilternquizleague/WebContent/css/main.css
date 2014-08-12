@@ -56,9 +56,10 @@ table{
 }
 
 .show {
-	border: solid thin aliceblue;
+	background: linear-gradient(aliceblue,white);
+	#border: solid thin aliceblue;
 	border-radius: .75em;
-	box-shadow: .25em .25em .5em .125em aliceblue, -.25em -.25em .5em .125em
+	#box-shadow: .25em .25em .5em .125em aliceblue, -.25em -.25em .5em .125em
 		aliceblue, -.25em .25em .5em .125em aliceblue, .25em -.25em .5em
 		.125em aliceblue;
 }
@@ -228,7 +229,7 @@ table{
 }
 
 .text-block {
-	background-color: aliceblue;
+	background: linear-gradient(aliceblue,white);
 	border-radius: .25em;
 	padding: .25em;
 }
