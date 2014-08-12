@@ -33,7 +33,7 @@
 .popup-container{
 	position:fixed;
 	top:10em;
-	left:20em;
+	left:calc((100% - 30em) / 2);
 	width:0;
 	height:0;
 	opacity:0;

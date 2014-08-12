@@ -1,9 +1,9 @@
 <div>
 	<div class="box-title">Text</div>
-	<button onclick="document.location='#texts/new'">Add New</button>
+	<button onclick="document.location='#/maintain/texts/new'">Add New</button>
 
 	<div ng-repeat="text in texts | orderBy : 'name'">
-		<div><a href="#texts/{{text.id}}" >{{text.name}}</a></div>
+		<div><a href="#/maintain/texts/{{text.id}}" >{{text.name}}</a></div>
 	</div>
 
 </div>

@@ -1,9 +1,9 @@
 <div>
 	<div class="box-title">Venues</div>
-	<button onclick="document.location='#venues/new'">Add New</button>
+	<button onclick="document.location='#/maintain/venues/new'">Add New</button>
 
 	<div ng-repeat="venue in venues | orderBy :'name'">
-		<div><a href="#venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</a></div>
+		<div><a href="#/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</a></div>
 	</div>
 
 </div>
