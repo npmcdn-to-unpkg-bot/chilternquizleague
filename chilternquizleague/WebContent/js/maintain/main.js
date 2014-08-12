@@ -1,66 +1,68 @@
 
-var maintainApp = angular.module('maintainApp', [ "ngRoute", "ngAnimate" ])
+var maintainApp = angular.module('maintainApp', [ "ngRoute", "ngAnimate"])
 		.factory('entityService', ENTITY_SERVICE_DEFN);
 ;
 
-maintainApp.config([ '$routeProvider', function($routeProvider) {
+maintainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider.when('/venues', {
-		templateUrl : 'maintain/venue/venue-list.html',
+		templateUrl : '/maintain/venue/venue-list.html',
 		controller : 'VenueListCtrl'
 	}).when('/venues/:venueId', {
-		templateUrl : 'maintain/venue/venue-detail.html',
+		templateUrl : '/maintain/venue/venue-detail.html',
 		controller : 'VenueDetailCtrl'
 	}).when('/teams', {
-		templateUrl : 'maintain/team/team-list.html',
+		templateUrl : '/maintain/team/team-list.html',
 		controller : 'TeamListCtrl'
 	}).when('/teams/:teamId', {
-		templateUrl : 'maintain/team/team-detail.html',
+		templateUrl : '/maintain/team/team-detail.html',
 		controller : 'TeamDetailCtrl'
 	}).when('/users', {
-		templateUrl : 'maintain/user/user-list.html',
+		templateUrl : '/maintain/user/user-list.html',
 		controller : 'UserListCtrl'
 	}).when('/users/:userId', {
-		templateUrl : 'maintain/user/user-detail.html',
+		templateUrl : '/maintain/user/user-detail.html',
 		controller : 'UserDetailCtrl'
 	}).when('/seasons', {
-		templateUrl : 'maintain/season/season-list.html',
+		templateUrl : '/maintain/season/season-list.html',
 		controller : 'SeasonListCtrl'
 	}).when('/seasons/:seasonId', {
-		templateUrl : 'maintain/season/season-detail.html',
+		templateUrl : '/maintain/season/season-detail.html',
 		controller : 'SeasonDetailCtrl'
 	}).when('/seasons/:seasonId/LEAGUE', {
-		templateUrl : 'maintain/competition/league-detail.html',
+		templateUrl : '/maintain/competition/league-detail.html',
 		controller : 'LeagueCompCtrl'
 	}).when('/seasons/:seasonId/BEER', {
-		templateUrl : 'maintain/competition/beer-detail.html',
+		templateUrl : '/maintain/competition/beer-detail.html',
 		controller : 'BeerCompCtrl'
 	}).when('/seasons/:seasonId/CUP', {
-		templateUrl : 'maintain/competition/cup-detail.html',
+		templateUrl : '/maintain/competition/cup-detail.html',
 		controller : 'CupCompCtrl'
 	}).when('/seasons/:seasonId/PLATE', {
-		templateUrl : 'maintain/competition/plate-detail.html',
+		templateUrl : '/maintain/competition/plate-detail.html',
 		controller : 'PlateCompCtrl'
 	}).when('/seasons/:seasonId/:compType/fixtures', {
-		templateUrl : 'maintain/competition/fixtures.html',
+		templateUrl : '/maintain/competition/fixtures.html',
 		controller : 'FixturesCtrl'
 	}).when('/seasons/:seasonId/:compType/results', {
-		templateUrl : 'maintain/competition/results.html',
+		templateUrl : '/maintain/competition/results.html',
 		controller : 'ResultsCtrl'
 	}).when('/seasons/:seasonId/:compType/tables', {
-		templateUrl : 'maintain/competition/tables.html',
+		templateUrl : '/maintain/competition/tables.html',
 		controller : 'LeagueTablesCtrl'
 	}).when('/global/current', {
-		templateUrl : 'maintain/global/global-detail.html',
+		templateUrl : '/maintain/global/global-detail.html',
 		controller : 'GlobalDetailCtrl'
 	}).when('/texts', {
-		templateUrl : 'maintain/text/text-list.html',
+		templateUrl : '/maintain/text/text-list.html',
 		controller : 'TextListCtrl'
 	}).when('/texts/:textId', {
-		templateUrl : 'maintain/text/text-detail.html',
+		templateUrl : '/maintain/text/text-detail.html',
 		controller : 'TextDetailCtrl'
 	}).otherwise({
 		redirectTo : ''
 	});
+	
+	//$locationProvider.html5Mode(true);
 } ]);
 
 function makeUpdateFn(typeName, noRedirect) {
