@@ -18,7 +18,7 @@
 			<div ng-include="'/top.html'"></div>
 			<div class="body-container" ng-controller="CompetitionsController">
 				<div class="show teams standard-margins">
-					<div class="selection-item" ng-repeat="item in competitions | orderBy : 'type'" ng-class="item.type == competition.type ? 'selected' : 'unselected'">
+					<div class="selection-item" ng-repeat="item in competitions | orderBy : 'type.name'" ng-class="item.type == competition.type ? 'selected' : 'unselected'">
 						<a href="" ng-click="setCompetition(item)">{{item.description}}</a>
 					</div>
 				</div>

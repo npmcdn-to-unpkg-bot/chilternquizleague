@@ -71,7 +71,7 @@
 mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		'viewService', function($scope, $location, viewService) {
 	
-	var type = $location.path().split(/\//)[0];
+	var type = $location.path().split("/")[1];
 	
 	$scope.getTemplate = function(type){return templates[type];};
 	$scope.setCompetition = function(comp){$scope.competition = comp;$location.path(comp.type.name);$scope.templateName=comp.type.name;};
@@ -98,9 +98,12 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		return null;
 	}    
 	
-	$scope.$watch("competitions[0]",function(first){
+	$scope.$watchCollection("competitions",function(competitions){
 	    	
-	    	if(first){
+		
+		if(competitions && competitions.length > 0){
+		    var first = competitions.sort(function(c1,c2){c1.type.name.localeCompare(c2.type.name);})[0];	
+			
 	    		if(type){
 	    			$scope.setCompetition(getForTypeName(type));
 	    			
