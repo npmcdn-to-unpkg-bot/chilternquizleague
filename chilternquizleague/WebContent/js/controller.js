@@ -1,6 +1,6 @@
 ;
 
-var mainApp = angular.module('mainApp', ["ngAnimate"]).factory(
+var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate"]).factory(
 		'viewService',
 		[
 				"$http",
@@ -82,6 +82,15 @@ var mainApp = angular.module('mainApp', ["ngAnimate"]).factory(
 					};
 					return service;
 				} ]);
+
+mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
+	$routeProvider.otherwise({
+			templateUrl : '/indexContents.html'}
+		);
+	
+
+	$locationProvider.html5Mode(true);
+}]);
 
 mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
 	

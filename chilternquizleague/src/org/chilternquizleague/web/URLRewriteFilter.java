@@ -30,9 +30,17 @@ public class URLRewriteFilter implements Filter {
 			FilterChain arg2) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		
-		if(context.getRealPath(request.getPathInfo()) == null){
+		final String pathInfo = request.getPathInfo();
+		if(context.getRealPath(pathInfo) == null){
 			
-			request.getRequestDispatcher("/maintain.html").forward(arg0, arg1);
+			if(pathInfo != null && pathInfo.startsWith("/maintain")){
+				request.getRequestDispatcher("/maintain.html").forward(arg0, arg1);
+			}
+			else{
+				request.getRequestDispatcher("/index.html").forward(arg0, arg1);
+			}
+			
+			
 		
 			return;
 		}

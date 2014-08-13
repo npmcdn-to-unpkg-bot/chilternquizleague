@@ -1,30 +1,35 @@
 (function() {
 	
+	mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
+		$routeProvider.when('/teams/:itemId?/:template?', {
+				templateUrl : '/team/teams.html'})
+			.when('/team/:itemId?/:template?', {
+				templateUrl : '/team/team.html'});
+		}]);
+	
 	mainApp.run(function ($rootScope) {
-    $rootScope.$on('$locationChangeSuccess', function () {
-        $rootScope.$broadcast("pathChanged");
-    });
-});
+	    $rootScope.$on('$locationChangeSuccess', function () {
+	        $rootScope.$broadcast("pathChanged");
+	    });
+	});
 	
 	
 	var templateMap = {
-		detail : "team-details.html",
-		results : "team-results.html",
-		fixtures : "team-fixtures.html",
+		detail : "/team/team-details.html",
+		results : "/team/team-results.html",
+		fixtures : "/team/team-fixtures.html",
 		reports: "/results/reports.html"
 			
 	};
 	
 
-	function extraStuff($scope, $interval, viewService, $location) {
+	function extraStuff($scope, $interval, viewService, $location,$routeParams) {
 
 		
 		
 		function getTemplateName(){
 			
-			var parts = $location.path().split("/");
-			
-			return parts[2] ? parts[2] : "detail";
+			return $routeParams.template ? $routeParams.template : "detail";
 		}
 		
 
@@ -35,7 +40,7 @@
 					$scope.template = template;
 					var parts = $location.path().split("/");
 	
-					$location.path(parts[1] + "/" + templateName);
+					//$location.path(parts[1] + "/" + $routeParams.itemId + "/" + templateName);
 				}
 			};
 		
@@ -44,7 +49,7 @@
 		$scope.setTemplate(getTemplateName());
 		
 		$scope.$on("pathChanged", function(){
-			$scope.setTemplate(getTemplateName());	
+			//$scope.setTemplate(getTemplateName());	
 		});
 		
 		$scope.makeICal = function(team) {
@@ -85,7 +90,7 @@
 	}
 
 	mainApp.controller('TeamsController', [ '$scope', '$interval', 'viewService',
-			'$location', cyclingListControllerFactory("team", function(team1, team2) {
+			'$location','$routeParams', cyclingListControllerFactory("team", function(team1, team2) {
 				return team1.shortName.localeCompare(team2.shortName);
 			}, extraStuff) ]);
 	

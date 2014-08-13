@@ -186,6 +186,8 @@ table{
 .body-container {
 	padding: .1em;
 	padding-top: .5em;
+	width:calc(100% - 20em);
+	position:absolute;
 }
 
 .footer {
@@ -230,10 +232,7 @@ table{
 
 .text-block {
 	background: linear-gradient(aliceblue,white);
-	border-radius: .25em;
-	padding: .25em;
+	border-radius: .5em;
+	padding: .5em;
 }
 
-
-
-/*Sta

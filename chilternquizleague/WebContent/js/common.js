@@ -7,32 +7,31 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
 	var listName = type + "s";
-	return function($scope, $interval, viewService, $location) {
+	return function($scope, $interval, viewService, $location, $routeParams) {
 
 		var promise = null;
 		
-		var parts = $location.path().split("/");
+		var parts = $location.path().split(/\//);
+		var root = parts[1];
 		
-		var tail = "/" + parts.slice(2).join("/");
-		$scope.tail = tail;
-		
-		var itemId = parts[1];
+		var itemId = $routeParams.itemId;
+		var template = $routeParams.template;
 
-		$scope["set" + camelName] = function(item) {
+		$scope["set" + camelName] = function(item, keepCycling) {
 
-			$interval.cancel(promise);
+			if(!keepCycling){$interval.cancel(promise);}
 			$scope[type] = item;
 		};
 
 		$scope.$watch(type, function(item) {
 
 			if (item) {
-				$location.path("/" + item.id + tail);
+				//$location.path("/" + root + "/" + item.id + (template ? ("/" + template) : ""));
 			}
 		});
 
 		otherFunctions ? otherFunctions($scope, $interval, viewService,
-				$location) : null;
+				$location, $routeParams) : null;
 
 		viewService
 				.list(
@@ -51,8 +50,9 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 								promise = $interval(
 										function() {
 
-											$scope[type] = $scope[listName][itemIndex = itemIndex >= (items.length - 1) ? 0
-													: (itemIndex + 1)];
+											$scope["set" + camelName]( $scope[listName][itemIndex = itemIndex >= (items.length - 1) ? 0
+													: (itemIndex + 1)], true);
+											//$location.path("/" + root + "/" + $scope[type].id + (template ? ("/" + template) : ""));
 										}, 5000);
 							}
 

@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html ng-app="mainApp" ng-controller="MainController">
 <head>
-<meta charset="UTF-8"><meta http-equiv="Cache-Control" content="no-store" />
+<meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-store" />
 <link type="text/css" rel="stylesheet" href="/css/index.css">
 <link rel="icon" type="image/gif" href="/favicon.gif" />
+<base href="/">
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
+<script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/leagueTable.js"></script>
+<script type="text/javascript" src="/js/team.js"></script>
 <title ng-cloak>{{global.leagueName}}</title>
 </head>
 <body>
@@ -28,17 +31,7 @@
 			}(document, 'script', 'facebook-jssdk'));
 		</script>
 		<div ng-include="'/top.html'"></div>
-		<div class="body-container">
-			<div class="feeds">
-				<div class="fb-like-box"
-					data-href="https://www.facebook.com/ChilternQuizLeague"
-					data-colorscheme="light" data-show-faces="false" data-header="true"
-					data-stream="true" data-show-border="true"></div>
-			</div>
-			<div class="body-content">
-				<div><div class="league-table-container show-thin" ng-include="'/results/league-table.html'"  ></div></div>
-				<div class="front-page-text" ng-bind-html="global.frontPageText | htmlify" ></div>
-			</div>
+		<div ng-view="mainView" class="body-container something">
 		</div>
 	</div>
 	<div class="footer show">
