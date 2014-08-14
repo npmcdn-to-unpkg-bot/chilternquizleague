@@ -1,38 +1,37 @@
 /*Popup stuff*/
 
 @-webkit-keyframes popupani {
-  0% {top:20em;margin-left:15em;opacity:0;}
-  30% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
-  60% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
-  100% {top:8;opacity:1;height:24em;width:30em;}
+  0% {top:50%;margin-left:15em;opacity:0;}
+  30% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
+  60% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
+  100% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
 }
 
 @keyframes popupani {
-  0% {top:20em;margin-left:15em;opacity:0;}
-  30% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
-  60% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
-  100% {top:8;opacity:1;height:24em;width:30em;}
+  0% {top:50%;margin-left:15em;opacity:0;}
+  30% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
+  60% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
+  100% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
 }
 
 @-webkit-keyframes popdownani {
-  100% {top:20em;margin-left:15em;opacity:0;}
-  60% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
-  30% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
-  0% {top:8;opacity:1;height:24em;width:30em;}
+  100% {top:50%;margin-left:15em;opacity:0;}
+  60% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
+  30% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
+  0% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
 }
 
 @keyframes popdownani {
-  100% {top:20em;margin-left:15em;opacity:0;}
-  60% {top:19em;margin-left:15em;opacity:1;height:2em;width:2em;}
-  30% {top:19em;margin-left:0;opacity:1;width:30em;height:2em;}
-  0% {top:8;opacity:1;height:24em;width:30em;}
+  100% {top:50%;margin-left:15em;opacity:0;}
+  60% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
+  30% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
+  0% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
 }
 
 
 
 .popup-container{
 	position:fixed;
-	top:10em;
 	left:calc((100% - 30em) / 2);
 	width:0;
 	height:0;

@@ -1,7 +1,7 @@
 <div ng-controller="TeamsController">
 	<div class="show teams standard-margins">
 		<div class="selection-item" ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : 'unselected'">
-			<a href="" ng-click="setTeam(item)">{{item.name}}</a>
+			<a href="#/team/{{item.id}}">{{item.name}}</a>
 		</div>
 	</div>
 	<div class="team-pane">

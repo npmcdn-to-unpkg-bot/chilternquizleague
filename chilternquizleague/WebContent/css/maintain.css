@@ -8,6 +8,13 @@
 
 .view-pane {
 	margin-left:10.5em;
+	position:relative;
+}
+
+.include-pane{
+	padding:.25em;
+	position: absolute;
+	width:calc(100% - 1em);
 	padding:.25em;
 }
 

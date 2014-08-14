@@ -139,7 +139,7 @@
 
 		}
 
-		loadResults($scope.team.extras.fixtures);
+		loadResults($scope.team && $scope.team.extras ? $scope.team.extras.fixtures:null);
 
 	} ]);
 
@@ -155,7 +155,7 @@
 
 		}
 		
-		loadResults($scope.team.extras.results);
+		loadResults($scope.team && $scope.team.extras ? $scope.team.extras.results : null);
 		
 		$scope.showReports = function(results, result){
 			

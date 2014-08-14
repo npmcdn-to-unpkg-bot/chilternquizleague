@@ -13,7 +13,7 @@
 			{{result.awayScore}} {{result.fixture.away.shortName}} </span>
 	</div>
 	<div>
-		<a href="" ng-click="setTemplate('results')">Show all</a>
+		<a href="/team/{{team.id}}/results">Show all</a>
 	</div>
 </div>
 <div class="show-thin titled-list">
@@ -25,6 +25,6 @@
 			{{fixture.home.shortName}} : {{fixture.away.shortName}}</span>
 	</div>
 		<div>
-		<a href="" ng-click="setTemplate('fixtures')">Show all</a>
+		<a href="/team/{{team.id}}/fixtures" >Show all</a>
 	</div>
 </div>

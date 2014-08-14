@@ -68,7 +68,7 @@ maintainApp.config([ '$routeProvider','$locationProvider', function($routeProvid
 function makeUpdateFn(typeName, noRedirect) {
 	return makeUpdateFnWithCallback(typeName, (noRedirect ? null : function(
 			ret, $location) {
-		$location.url("/" + typeName + "s");
+		$location.url("/maintain/" + typeName + "s");
 	}));
 }
 

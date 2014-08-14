@@ -186,7 +186,7 @@ table{
 .body-container {
 	padding: .1em;
 	padding-top: .5em;
-	width:calc(100% - 20em);
+	width:calc(100% - 1em);
 	position:absolute;
 }
 
