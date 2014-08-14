@@ -50,6 +50,14 @@
 		<servlet-name>ViewServices</servlet-name>
 		<url-pattern>/view/*</url-pattern>
 	</servlet-mapping>
+	<servlet>
+  <servlet-name>mailhandler</servlet-name>
+  <servlet-class>org.chilternquizleague.web.MailHandlerServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>mailhandler</servlet-name>
+  <url-pattern>/_ah/mail/*</url-pattern>
+</servlet-mapping>
 	<security-constraint>
         <web-resource-collection>
             <web-resource-name>maintainance</web-resource-name>

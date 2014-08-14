@@ -1,6 +1,6 @@
 <div>
 	<div class="box-title">Teams</div>
-	<button onclick="document.location='#/maintain/teams/new'">Add New</button>
+	<button ng-click="addScreen()">Add New</button>
 
 	<div ng-repeat="team in teams | orderBy:'shortName'">
 		<div><a href="#/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</a></div>

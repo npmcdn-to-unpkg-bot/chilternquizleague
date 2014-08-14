@@ -73,5 +73,10 @@ public class Team extends BaseEntity{
 				+ ", userRefs=" + userRefs + "]";
 	}
 
+	public String getEmailName() {
+		
+		return getShortName().replace(' ', '_').toLowerCase();
+	}
+
 
 }
