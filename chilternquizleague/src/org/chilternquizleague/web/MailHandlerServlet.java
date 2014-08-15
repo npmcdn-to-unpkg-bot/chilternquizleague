@@ -5,11 +5,9 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Address;
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -21,8 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.chilternquizleague.domain.Team;
 import org.chilternquizleague.domain.User;
-
-import com.googlecode.objectify.ObjectifyService;
 
 
 

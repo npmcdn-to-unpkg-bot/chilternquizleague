@@ -77,6 +77,8 @@ public class Team extends BaseEntity{
 		
 		return getShortName() == null ? null : getShortName().replace(' ', '_').toLowerCase();
 	}
+	
+	public void setEmailName(String dummy){}
 
 
 }

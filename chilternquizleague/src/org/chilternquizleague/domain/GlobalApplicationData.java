@@ -1,5 +1,8 @@
 package org.chilternquizleague.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -12,6 +15,7 @@ public class GlobalApplicationData extends BaseEntity{
 	private String leagueName = "Chiltern Quiz League";
 	private Ref<Season> currentSeason;
 	private Ref<GlobalText> globalText;
+	private Map<String, Ref<User>> emailAliases = new HashMap<>();
 	
 	public String getFrontPageText() {
 		return frontPageText;
@@ -41,6 +45,14 @@ public class GlobalApplicationData extends BaseEntity{
 	
 	public void setGlobalText(GlobalText globalText){
 		this.globalText = globalText == null ? null : Ref.create(globalText);
+	}
+	
+	public Map<String,User> getEmailAliases() {
+		return Utils.refToEntityMap(emailAliases);
+	}
+	
+	public void setEmailAliases(Map<String, User> emailAliases) {
+		this.emailAliases = Utils.entityToRefMap(emailAliases);
 	}
 	
 

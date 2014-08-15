@@ -6,7 +6,7 @@
 			<tbody>
 				<tr>
 					<td>League Name</td>
-					<td><input ng-model="global.leagueName" required/></td>
+					<td><input ng-model="global.leagueName" required size="60"/></td>
 				</tr>
 				<tr>
 					<td>Current Season</td>
@@ -24,6 +24,13 @@
 					<td><textarea ng-model="global.frontPageText" cols="60"
 							rows="15" required></textarea></td>
 				</tr>
+				
+			<tr><td><button ng-click="addAlias(global)">Add Alias</button></td></tr>
+			<tr ng-repeat="(alias, user) in global.emailAliases"><td><input ng-model="alias"></td><td><select ng-model="user" ng-options="user as user.name for user in users"/></td></tr>
+			
+			
+
+				
 			</tbody>
 
 

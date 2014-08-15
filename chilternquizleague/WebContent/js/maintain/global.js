@@ -12,5 +12,13 @@ maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
 		bindName : "globalText",
 		entityName : "global"
 	})($scope, entityService);
+	
+	entityService.loadList("user",function(users){$scope.users = users;});
+
+	
+	$scope.addAlias=function(global){
+		
+		global.emailAliases.changeMe = null;
+	};
 
 }));
