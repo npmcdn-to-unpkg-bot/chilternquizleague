@@ -143,7 +143,7 @@
 
 	} ]);
 
-	mainApp.controller("ResultsTable", [ '$scope', function($scope) {
+	mainApp.controller("TeamResultsTable", [ '$scope', function($scope) {
 
 		function loadResults(results) {
 

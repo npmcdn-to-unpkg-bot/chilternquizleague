@@ -75,7 +75,7 @@ public class Team extends BaseEntity{
 
 	public String getEmailName() {
 		
-		return getShortName().replace(' ', '_').toLowerCase();
+		return getShortName() == null ? null : getShortName().replace(' ', '_').toLowerCase();
 	}
 
 

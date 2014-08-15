@@ -1,6 +1,6 @@
 <div>
 	<div class="box-title">Users</div>
-	<button onclick="document.location='#/maintain/users/new'">Add New</button>
+	<button ng-click="addScreen()">Add New</button>
 
 	<div ng-repeat="user in users | orderBy : 'name'">
 		<div><a href="#/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</a></div>

@@ -1,6 +1,8 @@
 package org.chilternquizleague.web;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -30,23 +32,28 @@ public class URLRewriteFilter implements Filter {
 			FilterChain arg2) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) arg0;
 
-		final String pathInfo = request.getPathInfo();
+		try {
+			final String pathInfo = new URI(request.getRequestURI()).getPath();
 
-		if (pathInfo != null && !pathInfo.startsWith("_ah")) {
-
-			if (context.getRealPath(pathInfo) == null) {
+			if (pathInfo != null && !(pathInfo.contains("/_ah"))) {
 
 				if (pathInfo != null && pathInfo.startsWith("/maintain")) {
 					request.getRequestDispatcher("/maintain.html").forward(
 							arg0, arg1);
-				} else {
-					request.getRequestDispatcher("/index.html").forward(arg0,
-							arg1);
+					return;
+				} else if (context.getRealPath(request.getPathInfo()) == null) {
+					
+						request.getRequestDispatcher("/index.html").forward(
+								arg0, arg1);
+					
+
+					return;
 				}
 
-				return;
 			}
-
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		arg2.doFilter(arg0, arg1);

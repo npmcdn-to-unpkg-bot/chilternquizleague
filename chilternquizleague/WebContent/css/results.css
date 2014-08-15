@@ -108,6 +108,11 @@ div.league-table>div.standard-table{
 	display:none;
 }
 
+.inline-header .results-table>thead>tr:not(.inline-header){
+	
+	display:none;
+}
+
 .home-team{
 	
 	text-align:right;

@@ -1,13 +1,20 @@
 (function(){
 	
+	mainApp.config([ '$routeProvider', '$locationProvider',
+	         		function($routeProvider, $locationProvider) {
+	         			$routeProvider.when('/competitions/:comp', {
+	         				templateUrl : '/competition/competitions.html'
+	         			});
+	         		} ]);	
+	
 	var templates = {
 			
-			LEAGUE:"league.html",
-			BEER:"beer-leg.html",
-			CUP:"cup.html",
-			PLATE:"plate.html",
-			RESULTS:"results.html",
-			FIXTURES:"fixtures.html"
+			LEAGUE:"/competition/league.html",
+			BEER:"/competition/beer-leg.html",
+			CUP:"/competition/cup.html",
+			PLATE:"/competition/plate.html",
+			RESULTS:"/competition/results.html",
+			FIXTURES:"/competition/fixtures.html"
 	};
 	
 	function fetchHeaderText($scope, viewService, textKey){
@@ -69,20 +76,16 @@
 	}
 
 mainApp.controller('CompetitionsController', [ '$scope', '$location',
-		'viewService', function($scope, $location, viewService) {
+		'viewService','$routeParams', function($scope, $location, viewService, $routeParams) {
 	
-	var type = $location.path().split("/")[1];
+	var type = $routeParams.comp;
 	
 	$scope.getTemplate = function(type){return templates[type];};
-	$scope.setCompetition = function(comp){$scope.competition = comp;$location.path(comp.type.name);$scope.templateName=comp.type.name;};
+	$scope.setCompetition = function(comp){$scope.competition = comp;$scope.templateName=comp.type.name;};
 	
 	$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {
-
-
-					
 					var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
-					
 					loadSeasons(currentSeasonId);
 				}
 			});
@@ -123,14 +126,14 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		
 		$scope.showOther = function(name){
 			
-			$location.path($location.path() + "/" + name);
+			//$location.path($location.path() + "/" + name);
 			$scope.templateName=name;
 			
 		};
 
 		} ]);
 
-	mainApp.controller('LeagueTableController', [ '$scope', '$interval',
+	mainApp.controller('CompetitionLeagueTableController', [ '$scope', '$interval',
 			'viewService', function($scope, $interval, viewService) {
 				
 
@@ -147,7 +150,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			} ]);
 	
 
-		mainApp.controller('BeerTableController', [ '$scope', '$interval',
+		mainApp.controller('CompetitionBeerTableController', [ '$scope', '$interval',
 			'viewService', function($scope, $interval, viewService) {
 				
 		      loadTable($scope,viewService,"beertable");
@@ -179,7 +182,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 			} ]);
 		
-		mainApp.controller('ResultsTable', [
+		mainApp.controller('CompetitionResultsTable', [
 			'$scope',
 			'$location',
 			'viewService',

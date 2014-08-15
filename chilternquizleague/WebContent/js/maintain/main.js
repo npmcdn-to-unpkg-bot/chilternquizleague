@@ -112,8 +112,7 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 
 function makeListFn(typeName, config) {
 
-	return function($scope, entityService,$routeParams, $rootScope,
-			$location) {
+	return function($scope, entityService, $routeParams, $rootScope, $location) {
 		var collectionName = typeName + "s";
 		config = config ? config : {};
 
@@ -128,13 +127,15 @@ function makeListFn(typeName, config) {
 				syncToListItem($scope, $scope[config.entityName], collection,
 						config.bindName);
 			});
-
 		}
-		
-		$scope.addScreen = function(){$location.path("#/maintain/" + typename + "/new");};
 		entityService.loadList(typeName, function(ret) {
 			$scope[collectionName] = config.sort ? ret.sort(config.sort) : ret;
 		});
+
+		$scope.addScreen = function() {
+			$location.path("/maintain/" + collectionName + "/new");
+		};
+
 	};
 }
 

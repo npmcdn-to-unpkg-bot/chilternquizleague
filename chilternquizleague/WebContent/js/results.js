@@ -1,4 +1,14 @@
 (function() {
+	
+
+	mainApp.config([ '$routeProvider', '$locationProvider',
+		function($routeProvider, $locationProvider) {
+			$routeProvider.when('/results/all', {
+				templateUrl : '/results/results.html'
+			}).when('/results/submit', {
+				templateUrl : '/results/submit-results.html'
+			});
+		} ]);	
 
 	function nowOrBefore(input) {
 		function makeDateString(date) {
@@ -120,8 +130,7 @@
 
 			} ]);
 	
-	mainApp.controller('ResultsTable', [ '$scope', '$interval', 'viewService',
-	                            			'$location', function($scope) {
+	mainApp.controller('ResultsTable', [ '$scope', function($scope) {
 		
 		$scope.$watch("allResults.length", function(length){
 			$scope.results = $scope.allResults;});
@@ -140,9 +149,8 @@
 	}]);
 	
 
-	mainApp.controller("ReportsController", [ '$scope', '$interval',
-	'viewService', '$location',
-	function($scope, $interval, viewService, $location) {
+	mainApp.controller("ReportsController", [ '$scope','viewService',
+	function($scope,viewService) {
 
 		$scope.$watch("reportsData", function(reportsData) {
 			if (reportsData) {

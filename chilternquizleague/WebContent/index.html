@@ -14,6 +14,12 @@
 <script type="text/javascript" src="/js/controller.js"></script>
 <script type="text/javascript" src="/js/leagueTable.js"></script>
 <script type="text/javascript" src="/js/team.js"></script>
+<script type="text/javascript" src="/js/FileSaver.js"></script>
+<script type="text/javascript" src="/js/ical.js"></script>
+<script type="text/javascript" src="/js/venue.js"></script>
+<script type="text/javascript" src="/js/results.js"></script>
+<script type="text/javascript" src="/js/competitions.js"></script>
+
 <title ng-cloak>{{global.leagueName}}</title>
 </head>
 <body>
@@ -31,9 +37,8 @@
 			}(document, 'script', 'facebook-jssdk'));
 		</script>
 		<div ng-include="'/top.html'"></div>
-		<div style="position:relative;">
-		<div ng-view="mainView" class="body-container something">
-		</div>
+		<div style="position: relative;">
+			<div ng-view="mainView" class="body-container something"></div>
 		</div>
 	</div>
 	<div class="footer show">
