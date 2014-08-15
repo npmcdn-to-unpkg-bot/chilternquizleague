@@ -108,10 +108,20 @@ div.league-table>div.standard-table{
 	display:none;
 }
 
-.inline-header .results-table>thead>tr:not(.inline-header){
+ .results-table>tbody>tr>td.inline-header-cell{
+ 	display:none;
+ 	font-weight: bold;
+ }
+.inline-header .results-table>tbody>tr>td.inline-header-cell{
 	
+	display:table-cell;
+}
+
+
+.inline-header .results-table>thead>tr{
 	display:none;
 }
+
 
 .home-team{
 	

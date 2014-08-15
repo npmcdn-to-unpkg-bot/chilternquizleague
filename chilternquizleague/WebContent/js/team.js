@@ -127,7 +127,7 @@
 	
 
 
-	mainApp.controller("FixturesTable", [ '$scope', function($scope) {
+	mainApp.controller("TeamFixturesTable", [ '$scope', function($scope) {
 
 		function loadResults(fixtures) {
 
