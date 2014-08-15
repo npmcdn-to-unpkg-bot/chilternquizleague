@@ -93,6 +93,10 @@ div.league-table>div.standard-table{
 	text-align: left;
 }
 
+.no-header .results-table>thead>tr{
+ 	display:none;
+ }
+
 .date-header .results-table>thead>tr:not(.date-header){
 	
 	display:none;
@@ -111,6 +115,7 @@ div.league-table>div.standard-table{
  .results-table>tbody>tr>td.inline-header-cell{
  	display:none;
  	font-weight: bold;
+ 	padding-right:.5em;
  }
 .inline-header .results-table>tbody>tr>td.inline-header-cell{
 	
