@@ -1,8 +1,10 @@
 package org.chilternquizleague.domain;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -15,7 +17,7 @@ public class GlobalApplicationData extends BaseEntity{
 	private String leagueName = "Chiltern Quiz League";
 	private Ref<Season> currentSeason;
 	private Ref<GlobalText> globalText;
-	private Map<String, Ref<User>> emailAliases = new HashMap<>();
+	private List<EmailAlias> emailAliases = new ArrayList<>();
 	
 	public String getFrontPageText() {
 		return frontPageText;
@@ -47,12 +49,35 @@ public class GlobalApplicationData extends BaseEntity{
 		this.globalText = globalText == null ? null : Ref.create(globalText);
 	}
 	
-	public Map<String,User> getEmailAliases() {
-		return Utils.refToEntityMap(emailAliases);
+	public List<EmailAlias> getEmailAliases() {
+		return emailAliases;
 	}
 	
-	public void setEmailAliases(Map<String, User> emailAliases) {
-		this.emailAliases = Utils.entityToRefMap(emailAliases);
+	public void setEmailAliases(List<EmailAlias> emailAliases) {
+		this.emailAliases = emailAliases;
+	}
+	
+	@JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
+	public static class EmailAlias{
+		
+		public EmailAlias() {
+
+		}
+		private String alias;
+		private Ref<User> user;
+		
+		public String getAlias() {
+			return alias;
+		}
+		public void setAlias(String alias) {
+			this.alias = alias;
+		}
+		public User getUser() {
+			return user.get();
+		}
+		public void setUser(User user) {
+			this.user = Ref.create(user);
+		}
 	}
 	
 

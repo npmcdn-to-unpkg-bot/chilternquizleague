@@ -18,7 +18,7 @@ maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
 	
 	$scope.addAlias=function(global){
 		
-		global.emailAliases.changeMe = null;
+		global.emailAliases.push({alias:"change me",user:null});
 	};
 
 }));

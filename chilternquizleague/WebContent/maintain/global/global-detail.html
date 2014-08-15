@@ -26,11 +26,8 @@
 				</tr>
 				
 			<tr><td><button ng-click="addAlias(global)">Add Alias</button></td></tr>
-			<tr ng-repeat="(alias, user) in global.emailAliases"><td><input ng-model="alias"></td><td><select ng-model="user" ng-options="user as user.name for user in users"/></td></tr>
+			<tr ng-repeat="emailAlias in global.emailAliases"><td><input required ng-model="emailAlias.alias"></td><td><select required ng-model="emailAlias.user" ng-options="user as user.name for user in users track by user.id"/></td></tr>
 			
-			
-
-				
 			</tbody>
 
 
