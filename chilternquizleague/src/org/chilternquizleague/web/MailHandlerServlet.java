@@ -46,48 +46,43 @@ public class MailHandlerServlet extends HttpServlet {
 			final GlobalApplicationData globaldata = ofy().load().now(
 					Key.create(GlobalApplicationData.class,
 							AppStartListener.globalApplicationDataId));
+			final String[] recipientParts = req.getPathInfo().replaceFirst("/", "")
+					.split("@");
 
+			final String recipientName = recipientParts[0];
+			final String recipientHost = recipientParts[1];
 
+			for (EmailAlias alias : globaldata.getEmailAliases()) {
 
-			for (Address recip : message.getAllRecipients()) {
-
-				final String recipientName = recip.toString().split("@")[0];
-				final String recipientHost = recip.toString().split("@")[1];
-
-				for (EmailAlias alias : globaldata.getEmailAliases()) {
-
-					if (alias.getAlias().equals(recipientName)) {
-						sendMail(message, recipientHost, new MimeMessage(session),
-								new InternetAddress(alias.getUser().getEmail()));
-						return;
-					}
+				if (alias.getAlias().equals(recipientName)) {
+					sendMail(message, recipientHost, new MimeMessage(session),
+							new InternetAddress(alias.getUser().getEmail()));
+					return;
 				}
-
-				final List<Team> teams = ofy().load().type(Team.class).list();
-
-				for (Team team : teams) {
-
-					if (recipientName.equals(team.getEmailName())) {
-
-						MimeMessage outMessage = new MimeMessage(session);
-
-						final Address[] addresses = new Address[team.getUsers()
-								.size()];
-
-						int idx = 0;
-						for (User user : team.getUsers()) {
-							addresses[idx++] = new InternetAddress(
-									user.getEmail());
-						}
-
-						sendMail(message, recipientHost, outMessage, addresses);
-
-						return;
-					}
-				}
-
 			}
-			
+
+			final List<Team> teams = ofy().load().type(Team.class).list();
+
+			for (Team team : teams) {
+
+				if (recipientName.equals(team.getEmailName())) {
+
+					MimeMessage outMessage = new MimeMessage(session);
+
+					final Address[] addresses = new Address[team.getUsers()
+							.size()];
+
+					int idx = 0;
+					for (User user : team.getUsers()) {
+						addresses[idx++] = new InternetAddress(user.getEmail());
+					}
+
+					sendMail(message, recipientHost, outMessage, addresses);
+
+					return;
+				}
+			}
+
 			LOG.fine("No matching addressees for any recipients");
 
 		} catch (Exception e) {
