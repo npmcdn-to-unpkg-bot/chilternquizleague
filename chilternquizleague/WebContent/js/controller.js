@@ -94,7 +94,7 @@ mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, 
 
 mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
 	
-	return text ?  $sce.trustAsHtml(text.replace(/\n/g, "<br/>")) : "";
+	return text ?  $sce.trustAsHtml(text) : "";
 };}]);
 
 mainApp.filter('afterNow', function() {
