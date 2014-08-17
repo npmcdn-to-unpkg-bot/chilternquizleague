@@ -116,7 +116,7 @@
     
     -webkit-animation:column_out 1s linear;
     -webkit-animation-fill-mode: forwards;
-    animation:column_out 1s linear;
+    animation:column_out .5s linear;
     animation-fill-mode: forwards;
 
 }
@@ -128,7 +128,7 @@
 .collapse .league-table.flag:not(:hover) .optional{
     -webkit-animation:column_in 1s linear;
     -webkit-animation-fill-mode: forwards;
-    animation:column_in 1s linear;
+    animation:column_in .5s linear;
     animation-fill-mode: forwards;
     
 }

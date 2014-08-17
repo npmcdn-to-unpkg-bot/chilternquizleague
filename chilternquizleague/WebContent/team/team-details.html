@@ -3,7 +3,7 @@
 </div>
 <div ng-if="team.extras.text" class="text-block show-thin"
 	ng-bind-html="team.extras.text | htmlify"></div>
-<section>
+<div>
 <div class="show-thin titled-list shrink-to-fit">
 	<div>Last few results:</div>
 	<div class="inline-header" ng-include="'/team/results-table.html'" ng-init="rowCount=5"></div>
@@ -11,8 +11,8 @@
 		<a href="/team/{{team.id}}/results">Show all</a>
 	</div>
 </div>
-</section>
-<section>
+</div>
+<div>
 <div class="show-thin titled-list shrink-to-fit">
 
 	<div>Next few fixtures:</div>
@@ -22,4 +22,4 @@
 	</div>
 	<a href="" ng-click="makeICal(team)">Download Calendar</a>
 </div>
-</section>
+</div>
