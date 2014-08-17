@@ -1,4 +1,9 @@
 <div>
-	<div>All Results - {{competition.description}}</div>
-	<div class="date-header" ng-include="'/competition/results-table.html'"></div>
+	<section>
+		<div class="title-text">All Results - {{competition.description}}</div>
+	</section>
+	<section>
+		<div class="date-header header-highlight"
+			ng-include="'/competition/results-table.html'"></div>
+	</section>
 </div>

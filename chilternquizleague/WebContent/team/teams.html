@@ -5,10 +5,10 @@
 		</div>
 	</div>
 	<div class="team-pane">
-		<div class="text-block">{{headerText.text}}</div>
+		<div class="header-text"ng-bind-html="headerText.text | htmlify"></div>
 		<div>
-			<div>{{team.name}}</div>
-			<div class="something" style="position:absolute;" ng-include="template"></div>
+			<div class="title-text">{{team.name}}</div>
+			<div class="something" ng-include="template"></div>
 		</div>
 	</div>
 </div>

@@ -3,7 +3,6 @@ package org.chilternquizleague.web;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;

@@ -2,7 +2,7 @@
 	<thead ng-repeat-start="resultSet in results  | orderBy: 'date' : true | limitTo:(rowCount?rowCount:10000)">
 		<tr class="full-header">
 			<th colspan="8">{{resultSet.date |
-				date:'d MMMM yyyy'}} - {{resultSet.description}}</th>
+				date:'d MMMM yyyy'}} : {{resultSet.description}}</th>
 		</tr>
 		
 		<tr class="comp-header">	<th colspan="8">{{resultSet.description}}</th>
@@ -14,7 +14,7 @@
 	<tbody ng-repeat-end>
 		<tr
 			ng-repeat="result in resultSet.results | orderBy :'fixture.home.shortName'">
-			<td class="inline-header-cell">{{resultSet.date | date:'d MMMM yyyy'}} - {{resultSet.description}}</td>
+			<td class="inline-header-cell">{{resultSet.date | date:'d MMMM yyyy'}} : {{resultSet.description}}</td>
 			<td class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{result.fixture.home.shortName}}</td>
 			<td class="numeric">{{result.homeScore}}</td>
 			<td>-</td>

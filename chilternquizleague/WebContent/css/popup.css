@@ -92,14 +92,14 @@
 .x-button > a:hover{
 	color:darkblue;
 	text-shadow:0 0 1px blue,0 0 2px blue,0 0 3px blue;
-	transition:all .5s ease-in;
+	transition:all .2s ease-in;
 }
 
 .x-button > a {
 	text-shadow:0 0 1px darkblue,0 0 2px darkblue;
 	font-weight:bold;
 	color:#c1dff8;
-	transition:all .5s ease-out;
+	transition:all .2s ease-out;
 }
 .x-button > a:link{text-decoration: none;}
 .x-button > a:visited{text-decoration: none;}

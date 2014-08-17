@@ -37,7 +37,7 @@ div.standard-table{
 
 
 .standard-table .table-body>*:hover span:not(.row-annotation), .standard-table tbody>*:hover td:not(.row-annotation){
-	background-color: lightgray;
+	background-color: whitesmoke;
 	transition:background-color .2s ease-in;
 }
 
