@@ -95,7 +95,9 @@
         
         .navigation ul ul li{
             background-color:#c1dff8;
-            border: thin solid white;
+            border-left: thin solid white;
+            border-right: thin solid white;
+            border-bottom:thin solid white;
 			border-radius: .625em;
             width:10.5em;
             -webkit-transition: background-color 0.3s ease;
@@ -104,7 +106,9 @@
             -ms-transition: background-color 0.3s ease;
             transition: background-color 0.3s ease;
             margin-top:0px;
+            #box-shadow:0em .25em .5em .25em lightgray,.25em .25em .5em .25em lightgray,-.25em .25em .5em .25em lightgray;
         }
+
         
         .navigation ul ul li:hover {
             background-color:#99ccff;
