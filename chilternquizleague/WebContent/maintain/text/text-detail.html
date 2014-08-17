@@ -25,6 +25,7 @@
   to { height:0; }
 }
 </style>
+
 <div>
 	<div class="box-title">Text Details</div>
 	<form>
@@ -45,7 +46,7 @@
 						<a href="" ng-click="setCurrentEntry(entry)">{{entry.name}}</a> - <input
 							type="text" ng-model="entry.name" required>
 						<div >
-							<textarea ng-model="entry.text" rows="10" cols="60"></textarea>
+							<textarea ui-tinymce ng-model="entry.text" rows="10" cols="60"></textarea>
 						</div>
 					</div>
 				</td>

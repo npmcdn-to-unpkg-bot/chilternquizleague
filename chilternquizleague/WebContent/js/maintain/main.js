@@ -1,5 +1,5 @@
 
-var maintainApp = angular.module('maintainApp', [ "ngRoute", "ngAnimate"])
+var maintainApp = angular.module('maintainApp', [ "ngRoute", "ngAnimate","ui.tinymce"])
 		.factory('entityService', ENTITY_SERVICE_DEFN);
 ;
 
