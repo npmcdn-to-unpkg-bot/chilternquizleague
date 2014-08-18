@@ -5,7 +5,7 @@
 	</div>
 	<div class="popup-inner">
 		<div ng-repeat="report in reports.reports">
-			By {{report.team.name}}
+			By: {{report.team.name}}
 			<div class="standard-margins text-block"
 				ng-bind-html="report.text | htmlify"></div>
 		</div>

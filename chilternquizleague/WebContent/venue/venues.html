@@ -11,6 +11,11 @@
 			<div class="venue-details titled-list">
 				<div>{{venue.name}}</div>
 				<div class="venue-address" ng-bind-html="venue.address | lineBreaks | htmlify"></div>
+				<div ng-if="searchAddress">
+				<iframe width="300" height="225" frameborder="0" style="border:0"
+src="{{searchAddress}}"></iframe>
+				</div>
+				
 				<div>
 					Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>
 				</div>
@@ -20,11 +25,13 @@
 				<div>phone : {{venue.phone}}</div>
 
 			</div>
+
 			<div ng-if="venue.imageURL" class="venue-picture">
 				<div>
 					<img alt="" ng-src="{{venue.imageURL}}">
 				</div>
 			</div>
 		</div>
+
 	</div>
 </div>

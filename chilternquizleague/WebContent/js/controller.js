@@ -98,7 +98,7 @@ mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
 };}]);
 
 mainApp.filter("lineBreaks", [function(){return function(text){
-	return text ?  text.replace("\n", "<br/>") : "";
+	return text ?  text.replace(/\n/g, "<br/>") : "";
 };}]);
 
 mainApp.filter('afterNow', function() {

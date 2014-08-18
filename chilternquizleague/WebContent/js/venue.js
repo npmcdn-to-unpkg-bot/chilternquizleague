@@ -13,6 +13,23 @@
 			} ]);
 
 	mainApp.controller('VenuesController', [ '$scope', '$interval',
-			'viewService', '$location','$routeParams',
-			cyclingListControllerFactory("venue", sortVenues) ]);
+			'viewService', '$location','$routeParams','$sce',
+			cyclingListControllerFactory("venue", sortVenues, function($scope,$interval,
+					viewService, $location,$routeParams,$sce){
+				
+				$scope.$watch("venue", function(venue){
+				
+					if(venue){
+						
+						var parts=["https://www.google.com/maps/embed/v1/place?q=","", "&key=AIzaSyA8kxsrD-WbEklq5L2jr_mquEftsV9Gsgc"];
+					
+						parts[1] = venue.address.replace(/\s/g, "+");
+						
+						$scope.searchAddress = $sce.trustAsUrl(parts.join(parts));
+					}
+					
+					
+				});
+				
+			}) ]);
 })();

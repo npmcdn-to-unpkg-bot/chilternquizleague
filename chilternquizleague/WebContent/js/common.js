@@ -7,7 +7,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
 	var listName = type + "s";
-	return function($scope, $interval, viewService, $location, $routeParams) {
+	return function($scope, $interval, viewService, $location, $routeParams, $sce) {
 
 		var promise = null;
 		
@@ -31,7 +31,7 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 		});
 
 		otherFunctions ? otherFunctions($scope, $interval, viewService,
-				$location, $routeParams) : null;
+				$location, $routeParams, $sce) : null;
 
 		viewService
 				.list(
