@@ -256,6 +256,22 @@ section{
 	padding: .5em;
 }
 
+.header-text:first-child::first-letter,.drop-cap:first-child::first-letter{
+    letter-spacing:0;
+    text-transform:uppercase;
+    font-size:3.5em;
+    float:left;
+    margin:0.13em 0.1em 0 0;
+    line-height:0.7;
+}
+
+.header-text:first-child:first-line,.drop-cap:first-child:first-line
+{
+    text-transform:uppercase;
+    position:relative;
+
+}
+
 .shrink-to-fit{
 	display:inline-block;
 }

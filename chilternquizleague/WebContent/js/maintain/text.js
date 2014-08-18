@@ -17,5 +17,7 @@ maintainApp.controller('TextDetailCtrl', getCommonParams(function($scope,
 	$scope.setCurrentEntry = function(entry) {
 		$scope.currentEntry = entry;
 	};
+	
+	$scope.tinymceOptions={};
 
 }));

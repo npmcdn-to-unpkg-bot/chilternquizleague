@@ -48,9 +48,7 @@
 		
 		$scope.setTemplate(getTemplateName());
 		
-		$scope.$on("pathChanged", function(){
-			//$scope.setTemplate(getTemplateName());	
-		});
+		$scope.host = $location.host();
 		
 		$scope.makeICal = function(team) {
 

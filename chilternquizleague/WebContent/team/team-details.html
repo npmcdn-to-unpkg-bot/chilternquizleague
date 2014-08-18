@@ -1,25 +1,30 @@
 <div>
+	<a href="mailto:{{team.emailName}}@{{host}}">Contact Us!</a>
+</div>
+<div>
 	Venue: <a href="#/venues/{{team.venue.id}}">{{team.venue.name}}</a>
 </div>
 <div ng-if="team.extras.text" class="text-block show-thin"
 	ng-bind-html="team.extras.text | htmlify"></div>
 <div>
-<div class="show-thin titled-list shrink-to-fit">
-	<div>Last few results:</div>
-	<div class="inline-header" ng-include="'/team/results-table.html'" ng-init="rowCount=5"></div>
-	<div>
-		<a href="/team/{{team.id}}/results">Show all</a>
+	<div class="show-thin titled-list shrink-to-fit">
+		<div>Last few results:</div>
+		<div class="inline-header" ng-include="'/team/results-table.html'"
+			ng-init="rowCount=5"></div>
+		<div>
+			<a href="/team/{{team.id}}/results">Show all</a>
+		</div>
 	</div>
-</div>
 </div>
 <div>
-<div class="show-thin titled-list shrink-to-fit">
+	<div class="show-thin titled-list shrink-to-fit">
 
-	<div>Next few fixtures:</div>
-	<div class="inline-header" ng-include="'/team/fixtures-table.html'" ng-init="rowCount=5"></div>
-	<div>
-		<a href="/team/{{team.id}}/fixtures" >Show all</a>
+		<div>Next few fixtures:</div>
+		<div class="inline-header" ng-include="'/team/fixtures-table.html'"
+			ng-init="rowCount=5"></div>
+		<div>
+			<a href="/team/{{team.id}}/fixtures">Show all</a>
+		</div>
+		<a href="" ng-click="makeICal(team)">Download Calendar</a>
 	</div>
-	<a href="" ng-click="makeICal(team)">Download Calendar</a>
-</div>
 </div>
