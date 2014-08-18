@@ -1,19 +1,35 @@
-@import url('/css/top.css');
-@import url('/css/team.css');
-
 .venue-picture{
 
 }
 
 .venue-picture>div{
 	text-align:right;
+	vertical-align: top;
 
 }
 
 .venue-container{
-	display:flex;
+
 }
 
 .venue-details{
-	flex-grow:1;
+	width:100%;
+	vertical-align:top;
+}
+
+.venue-layout{
+	display:table;
+}
+.venue-layout>div{
+	display:table-row;
+}
+
+.venue-layout>div>div{
+	display:table-cell;
+
+}
+
+.venue-address{
+	margin-top:.5em;
+	margin-bottom:.5em;	
 }

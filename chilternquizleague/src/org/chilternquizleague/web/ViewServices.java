@@ -184,13 +184,10 @@ public class ViewServices extends BaseRESTService {
 
 	private void textForName(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		final Long id = Long.parseLong(request.getParameter("id"));
+		final GlobalApplicationData global = ofy().load().now(Key.create(GlobalApplicationData.class, AppStartListener.globalApplicationDataId));
 		final String name = request.getParameter("name");
 
-		final GlobalText text = ofy().load()
-				.key(Key.create(GlobalText.class, id)).now();
-
-		objectMapper.writeValue(response.getWriter(), text.getText(name));
+		objectMapper.writeValue(response.getWriter(), global.getGlobalText().getText(name));
 
 	}
 

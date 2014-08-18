@@ -19,12 +19,8 @@
 	
 	function fetchHeaderText($scope, viewService, textKey){
 		
-		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
-			if (currentSeasonId) {
+		$scope.headerText = viewService.text(textKey);
 
-				$scope.headerText = viewService.text(textKey, $scope.global);
-			}
-		});
 	}
 	
 	function loadTable($scope,viewService, tableName){

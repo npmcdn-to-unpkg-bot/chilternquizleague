@@ -4,7 +4,9 @@
 		$routeProvider.when('/teams/:itemId?/:template?', {
 				templateUrl : '/team/teams.html'})
 			.when('/team/:itemId?/:template?', {
-				templateUrl : '/team/team.html'});
+				templateUrl : '/team/team.html'})
+			.when('/find-team',	{
+				templatUrl:'/team/find-team.html'});
 		}]);
 	
 	mainApp.run(function ($rootScope) {
@@ -65,11 +67,12 @@
 
 		};
 	
+		$scope.headerText = viewService.text("teams-header");
+
 		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 
 			if (currentSeasonId) {
 				
-				$scope.headerText = viewService.text("teams-header", $scope.global);
 				
 				$scope.$watch("team", function(team) {
 
@@ -86,6 +89,14 @@
 			}
 		});
 	}
+
+	mainApp.controller('FindTeams',['$scope', 'viewService', function($scope,viewService){
+
+		$scope.headerText = viewService.text("find-teams-header");
+
+	}]);
+	
+
 
 	mainApp.controller('TeamsController', [ '$scope', '$interval', 'viewService',
 			'$location','$routeParams', cyclingListControllerFactory("team", function(team1, team2) {

@@ -67,12 +67,12 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate"]).factory(
 							return $http.post("/view/" + type, payload).success(callback);
 						},
 						
-						text : function(name,global) {
+						text : function(name) {
 							var textHolder = textCache[name] = textCache.hasOwnProperty(name) ? textCache[name] : {};
 							
 							if(!textHolder.text){
 								
-								this.view("text",{id:global.textId, name:name}, function(text){
+								this.view("text",{name:name}, function(text){
 									textHolder.text = text;
 								});
 							}
@@ -97,6 +97,10 @@ mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
 	return text ?  $sce.trustAsHtml(text.replace(/^<p>/,"").replace(/<\/p>$/,"")) : "";
 };}]);
 
+mainApp.filter("lineBreaks", [function(){return function(text){
+	return text ?  text.replace("\n", "<br/>") : "";
+};}]);
+
 mainApp.filter('afterNow', function() {
 	return function(input) {
 		var now = new Date().getTime();
@@ -110,6 +114,17 @@ mainApp.filter('afterNow', function() {
 		return ret;
 	};
 });
+
+mainApp.directive('cqlText', ['viewService',function(viewService) {
+    return {
+     restrict: 'E',
+      scope: {
+        name: '=name',
+        viewService:viewService
+      },
+      template: "ng-bind-html='viewService.text(name) | htmlify'"
+    };
+  }]);
 
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService',
 		function($scope, $interval, viewService) {
