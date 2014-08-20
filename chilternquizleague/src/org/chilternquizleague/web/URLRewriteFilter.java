@@ -35,7 +35,7 @@ public class URLRewriteFilter implements Filter {
 		try {
 			final String pathInfo = new URI(request.getRequestURI()).getPath();
 
-			if (pathInfo != null && !(pathInfo.contains("/_ah"))) {
+			if (pathInfo != null && !(pathInfo.contains("/_ah") || pathInfo.contains("."))) {
 
 				if (pathInfo != null && pathInfo.startsWith("/maintain")) {
 					request.getRequestDispatcher("/maintain.html").forward(

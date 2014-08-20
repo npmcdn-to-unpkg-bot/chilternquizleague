@@ -84,7 +84,9 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate"]).factory(
 				} ]);
 
 mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
-	$routeProvider.otherwise({
+	$routeProvider.when('/contact',{
+		templateUrl : '/contact/contact.html'}
+	).otherwise({
 			templateUrl : '/indexContents.html'}
 		);
 	
@@ -115,14 +117,23 @@ mainApp.filter('afterNow', function() {
 	};
 });
 
-mainApp.directive('cqlText', ['viewService',function(viewService) {
+mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,viewService) {
     return {
-     restrict: 'E',
-      scope: {
-        name: '=name',
-        viewService:viewService
-      },
-      template: "ng-bind-html='viewService.text(name) | htmlify'"
+     restrict: 'A',
+     scope:{},
+ 
+      link: function(scope, element, attrs){
+    	  
+    	  scope.$watch("text.text", function(text){
+    		  
+    		  if(text){
+    			  element.html(htmlify(text));
+    		  }
+    		  
+    	  });
+    	  
+    	  scope.text = viewService.text(attrs.cqlText);
+      }
     };
   }]);
 

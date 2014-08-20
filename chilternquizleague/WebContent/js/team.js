@@ -6,7 +6,9 @@
 			.when('/team/:itemId?/:template?', {
 				templateUrl : '/team/team.html'})
 			.when('/find-team',	{
-				templatUrl:'/team/find-team.html'});
+				templatUrl:'/team/find-team.html'})
+			.when('/start-team',	{
+				templatUrl:'/team/start-team.html'});
 		}]);
 	
 	mainApp.run(function ($rootScope) {
