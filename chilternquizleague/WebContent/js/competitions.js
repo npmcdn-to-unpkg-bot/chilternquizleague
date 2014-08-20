@@ -17,11 +17,6 @@
 			FIXTURES:"/competition/fixtures.html"
 	};
 	
-	function fetchHeaderText($scope, viewService, textKey){
-		
-		$scope.headerText = viewService.text(textKey);
-
-	}
 	
 	function loadTable($scope,viewService, tableName){
 		
@@ -142,7 +137,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'$location',
 			'viewService',
 			function($scope, $location, viewService) {
-				fetchHeaderText($scope, viewService, "league-comp");
+				
 			} ]);
 	
 
@@ -156,7 +151,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		mainApp.controller('BeerCompetitionController', [ '$scope', '$location',
 			'viewService', function($scope, $location, viewService) {
 
-				fetchHeaderText($scope,viewService, "beer-comp");
+				
 			} ]);
 		
 
@@ -166,7 +161,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'viewService',
 			function($scope, $location, viewService) {
 
-				fetchHeaderText($scope,viewService, "cup-comp");
+				
 				
 			} ]);
 		
@@ -174,7 +169,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		mainApp.controller('PlateCompetitionController', [ '$scope', '$location',
 			'viewService', function($scope, $location, viewService) {
 
-				fetchHeaderText($scope, viewService, "plate-comp");
+				
 
 			} ]);
 		
@@ -212,18 +207,5 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 			} ]);
 		
-		mainApp.controller("ReportsController", [ '$scope', '$interval',
-			'viewService', '$location',
-			function($scope, $interval, viewService, $location) {
-
-				$scope.$watch("reportsData", function(reportsData) {
-					if (reportsData) {
-						$scope.reports = viewService.view("reports", {
-							resultsKey : reportsData.results.key,
-							homeTeamId : reportsData.result.fixture.home.id
-						});
-					}
-				});
-			} ]);
 		
 })();

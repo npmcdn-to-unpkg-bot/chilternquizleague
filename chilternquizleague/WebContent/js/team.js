@@ -69,7 +69,6 @@
 
 		};
 	
-		$scope.headerText = viewService.text("teams-header");
 
 		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 
@@ -94,7 +93,7 @@
 
 	mainApp.controller('FindTeams',['$scope', 'viewService', function($scope,viewService){
 
-		$scope.headerText = viewService.text("find-teams-header");
+		
 
 	}]);
 	

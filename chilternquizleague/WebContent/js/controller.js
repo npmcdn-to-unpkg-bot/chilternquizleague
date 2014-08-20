@@ -124,6 +124,13 @@ mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,vie
  
       link: function(scope, element, attrs){
     	  
+    	  scope.$watch(attrs.cqlText, function(name){
+    		  if(name){
+        		  scope.text = viewService.text(name); 
+    		  }
+
+    	  });
+    	  
     	  scope.$watch("text.text", function(text){
     		  
     		  if(text){
@@ -132,7 +139,7 @@ mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,vie
     		  
     	  });
     	  
-    	  scope.text = viewService.text(attrs.cqlText);
+    	 
       }
     };
   }]);
