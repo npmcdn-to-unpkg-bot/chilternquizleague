@@ -38,7 +38,7 @@ function teamCompetitionControllerFactory(name){
 
 		$scope[addName] = function(competition) {
 			$scope.masterSeason.competitions[ucName] = $scope[competitionName];
-			$location.url("/seasons/" + seasonId);
+			$location.url("/maintain/seasons/" + seasonId);
 		};
 
 	};
@@ -295,7 +295,7 @@ maintainApp
 
 					$scope.updateFixtures = function(fixtures) {
 						$scope.masterSeason.competitions[compType].fixtures = fixtures;
-						$location.url("seasons/" + seasonId + "/" + compType);
+						$location.url("/maintain/seasons/" + seasonId + "/" + compType);
 					};
 
 					// $scope.setCurrentDate(new Date());
@@ -337,7 +337,7 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 
 	$scope.update = function(leagueTables) {
 		$scope.masterSeason.competitions[compType].leagueTables = leagueTables;
-		$location.url("seasons/" + seasonId + "/" + compType);
+		$location.url("/maintain/seasons/" + seasonId + "/" + compType);
 	};
 
 	function setTeams() {

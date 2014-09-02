@@ -105,7 +105,7 @@
             -o-transition: background-color 0.3s ease;
             -ms-transition: background-color 0.3s ease;
             transition: background-color 0.3s ease;
-            margin-top:0px;
+            margin-top:0;
             #box-shadow:0em .25em .5em .25em lightgray,.25em .25em .5em .25em lightgray,-.25em .25em .5em .25em lightgray;
         }
 
