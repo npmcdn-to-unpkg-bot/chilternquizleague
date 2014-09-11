@@ -170,3 +170,10 @@ function getCommonParams(constructorFn) {
 	return [ '$scope', 'entityService', '$routeParams', '$rootScope',
 			'$location', constructorFn ];
 }
+
+var tinymceOptions={ 
+		plugins: "link, image, autolink",
+		menubar:false,
+	    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image"
+	
+};

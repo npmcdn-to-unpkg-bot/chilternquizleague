@@ -20,5 +20,7 @@ maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
 		
 		global.emailAliases.push({alias:"change me",user:null});
 	};
+	
+	$scope.tinymceOptions = tinymceOptions;
 
 }));

@@ -20,4 +20,6 @@ maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope,
 	$scope.removeUser = function(user) {
 		removeFromListById($scope.team.users, user);
 	};
+	
+	$scope.tinymceOptions = tinymceOptions;
 }));

@@ -18,10 +18,6 @@ maintainApp.controller('TextDetailCtrl', getCommonParams(function($scope,
 		$scope.currentEntry = entry;
 	};
 	
-	$scope.tinymceOptions={ 
-			
-			    toolbar: "link undo redo | styleselect | bold italic | image"
-			
-	};
+	$scope.tinymceOptions = tinymceOptions;
 
 }));
