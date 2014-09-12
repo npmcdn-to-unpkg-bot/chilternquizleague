@@ -86,6 +86,8 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate"]).factory(
 mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider.when('/contact',{
 		templateUrl : '/contact/contact.html'}
+	).when('/rules',{
+		templateUrl : '/rules/rules.html'}
 	).otherwise({
 			templateUrl : '/indexContents.html'}
 		);
