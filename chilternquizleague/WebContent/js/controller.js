@@ -136,7 +136,7 @@ mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,vie
     	  scope.$watch("text.text", function(text){
     		  
     		  if(text){
-    			  element.html(htmlify(text));
+    			  element.html(htmlify(text.replace(/\\\"/g,"\"").replace(/\\n/g,"").replace(/^\"/,"").replace(/\"$/,"")));
     		  }
     		  
     	  });
