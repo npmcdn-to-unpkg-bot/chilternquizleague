@@ -1,46 +1,54 @@
 /*Popup stuff*/
 
 @-webkit-keyframes popupani {
-  0% {top:50%;margin-left:15em;opacity:0;}
-  30% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
-  60% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
-  100% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
+  0% {transform:scale(0,0);}
+  30% {transform:scale(.1,.1);}
+  60% {transform:scale(1,.1);}
+  100% {transform:scale(1,1);}
 }
 
 @keyframes popupani {
-  0% {top:50%;margin-left:15em;opacity:0;}
-  30% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
-  60% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
-  100% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
+  0% {transform:scale(0,0);}
+  30% {transform:scale(.1,.1);}
+  60% {transform:scale(1,.1);}
+  100% {transform:scale(1,1);}
 }
 
 @-webkit-keyframes popdownani {
-  100% {top:50%;margin-left:15em;opacity:0;}
-  60% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
-  30% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
-  0% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
+ 100% {transform:scale(0,0);}
+  60% {transform:scale(.1,.1);}
+  30% {transform:scale(1,.1);}
+  0% {transform:scale(1,1);}
 }
 
 @keyframes popdownani {
-  100% {top:50%;margin-left:15em;opacity:0;}
-  60% {top:calc(50% - 1em);margin-left:15em;opacity:1;height:2em;width:2em;}
-  30% {top:calc(50% - 1em);margin-left:0;opacity:1;width:30em;height:2em;}
-  0% {top:calc(50% - 12em);opacity:1;height:24em;width:30em;}
+  100% {transform:scale(0,0);}
+  60% {transform:scale(.1,.1);}
+  30% {transform:scale(1,.1);}
+  0% {transform:scale(1,1);}
 }
 
 
-
-.popup-container{
-	position:fixed;
-	left:calc((100% - 30em) / 2);
-	width:0;
-	height:0;
-	opacity:0;
-	overflow:hidden;
-	padding-right:.5em;
-	background-color: white;
-
+.modal::before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin: 0;
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  text-align: center;
+  display: none;
+}
+
+
 
 .popdown{
 	-webkit-animation:popdownani 1.2s ease-out;
@@ -56,7 +64,23 @@
 	
 }
 
+.modal {
+  display: block;
+  background-color: transparent;
+  #transform-origin: center center;
+  transform: scale(0, 0);
+}
+.modal > .popup-container {
 
+   text-align: left;
+   display: inline-block;
+   box-sizing: border-box;
+   position: relative;
+   height:24em;
+   width:32em;
+   background-color:white;
+   vertical-align: middle;
+}
 
 
 .popup{
@@ -68,11 +92,9 @@
 	 animation-direction:alternate;
 	 animation-fill-mode:forwards;
 
-
-
 }
 
-.popup div.popup-inner{
+.popup-inner{
 	     overflow:auto;
 	     height:inherit;
 }
