@@ -67,6 +67,11 @@ maintainApp
 		'PlateCompCtrl',
 		getCommonParams(teamCompetitionControllerFactory("PLATE")));
 
+maintainApp
+.controller(
+		'BuzzerCompCtrl',
+		getCommonParams(teamCompetitionControllerFactory("BUZZER")));
+
 function UsedTeamsControl(teams, $scope) {
 
 	this.teams = teams;

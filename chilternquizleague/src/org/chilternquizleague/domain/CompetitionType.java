@@ -31,7 +31,13 @@ public enum CompetitionType {
 			return KnockoutCompetition.class.cast(competition);
 		}
 	},
-	BUZZER("Buzzer Quiz");
+	BUZZER("Buzzer Quiz"){
+		@Override
+		public BuzzerCompetition castTo(Competition competition) {
+
+			return BuzzerCompetition.class.cast(competition);
+		}
+	};
 
 	private final String description;
 

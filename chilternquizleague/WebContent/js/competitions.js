@@ -14,7 +14,8 @@
 			CUP:"/competition/cup.html",
 			PLATE:"/competition/plate.html",
 			RESULTS:"/competition/results.html",
-			FIXTURES:"/competition/fixtures.html"
+			FIXTURES:"/competition/fixtures.html",
+			BUZZER:"/competition/team-buzzer.html"
 	};
 	
 	
