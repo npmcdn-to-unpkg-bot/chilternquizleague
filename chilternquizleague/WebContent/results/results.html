@@ -1,7 +1,7 @@
 <div ng-controller="AllResultsController">
 	<div class="show teams standard-margins">
 		<div class="selection-item" ng-repeat="item in seasons | orderBy:'startYear'" ng-class="item.id == season.id ? 'selected' : 'unselected'">
-			<a href="" ng-click="setSeason(item)">{{season.description}}</a>
+			<a href="" ng-click="setSeason(item)">{{item.description}}</a>
 		</div>
 	</div>
 	<div class="team-pane">
