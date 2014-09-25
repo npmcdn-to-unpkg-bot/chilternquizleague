@@ -8,7 +8,7 @@
 			<table class="league-table-tbl">
 				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Points</td></tr></thead>
 				<tbody >
-				<tr ng-repeat="item in table.rows"><td><input type="number" min="0" ng-model="item.position" ng-init="setRowTeam(item)"></td><td><select ng-model="item.team"  ng-options="team as team.shortName for team in teams"></td><td><input type="number" min="0" ng-model="item.played"></td><td><input type="number" min="0" ng-model="item.won"></td><td><input type="number" min="0" ng-model="item.lost"></td><td><input type="number" min="0" ng-model="item.drawn"></td><td><input type="number" min="0" ng-model="item.matchPointsFor"></td><td><input type="number" min="0" ng-model="item.leaguePoints"></td></tr>
+				<tr ng-repeat="item in table.rows"><td><input type="number" min="0" ng-model="item.position" ng-init="setRowTeam(item)"></td><td><select ng-model="item.team"  ng-options="team as team.shortName for team in teams track by team.id"></td><td><input type="number" min="0" ng-model="item.played"></td><td><input type="number" min="0" ng-model="item.won"></td><td><input type="number" min="0" ng-model="item.lost"></td><td><input type="number" min="0" ng-model="item.drawn"></td><td><input type="number" min="0" ng-model="item.matchPointsFor"></td><td><input type="number" min="0" ng-model="item.leaguePoints"></td></tr>
 				</tbody>
 			</table>
 		</div>

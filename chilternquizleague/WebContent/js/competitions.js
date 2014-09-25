@@ -72,12 +72,16 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 	
 	var type = $routeParams.comp;
 	
+	$scope.$watch("season.id", function(season){season ? console.log(season): null;})
+	
 	$scope.getTemplate = function(type){return templates[type];};
 	$scope.setCompetition = function(comp){$scope.competition = comp;$scope.templateName=comp.type.name;};
 	
+	var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
+	
 	$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {
-					var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
+					
 					loadSeasons(currentSeasonId);
 				}
 			});

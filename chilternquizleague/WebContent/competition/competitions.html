@@ -3,6 +3,7 @@
 		<div class="selection-item" ng-repeat="item in competitions | orderBy : 'type.name'" ng-class="item.type == competition.type ? 'selected' : 'unselected'">
 			<a href="#/competitions/{{item.type.name}}">{{item.description}}</a>
 		</div>
+
 	</div>
 	<div class="team-pane" >
 		<div ng-include="'/common/season-dropdown.html'"></div>
