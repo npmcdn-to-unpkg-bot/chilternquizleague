@@ -29,7 +29,9 @@
 
 	function extraStuff($scope, $interval, viewService, $location,$routeParams) {
 
-		
+		$scope.showContact = function(){
+			$scope.show = null;
+			$scope.show = true;};
 		
 		function getTemplateName(){
 			

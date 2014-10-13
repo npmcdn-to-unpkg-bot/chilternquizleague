@@ -146,6 +146,41 @@ mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,vie
     };
   }]);
 
+mainApp.directive('cqlResults', function() {
+    return {
+    	scope:{results:"="},
+    	restrict:'E',
+    	templateUrl:'/results/results-table-content.html'
+    	
+    };
+  });
+
+
+mainApp.directive('cqlDialog', function() {
+	  return {
+	    restrict: 'E',
+	    scope: {
+	      show: '='
+	    },
+	    replace: true, // Replace with the template below
+	    transclude: true, // we want to insert custom content inside the directive
+	    link: function(scope, element, attrs) {
+	      scope.hideModal = function() {
+	        scope.show = false;
+	      };
+	      scope.$watch("show", function(show){
+	    	  scope.popup = (show===false) ? 'popdown' : (show === true ? 'popup' : '');});
+	    },
+	    template: "<div ng-class='popup' class='modal'>" +
+	    		"  <div  class='show-thin nofade popup-container'>" +
+	    		" <div class='x-button'><a href='' ng-click='hideModal()'></a></div>" +
+	    		"		<div style='height:98%;' ng-transclude></div>" +
+	    		"	</div>	</div>"
+	  };
+	});
+
+
+
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService',
 		function($scope, $interval, viewService) {
 
