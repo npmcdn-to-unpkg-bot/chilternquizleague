@@ -40,6 +40,9 @@ maintainApp.config([ '$routeProvider','$locationProvider', function($routeProvid
 	}).when('/maintain/seasons/:seasonId/PLATE', {
 		templateUrl : '/maintain/competition/plate-detail.html',
 		controller : 'PlateCompCtrl'
+	}).when('/maintain/seasons/:seasonId/BUZZER', {
+		templateUrl : '/maintain/competition/buzzer-detail.html',
+		controller : 'BuzzerCompCtrl'
 	}).when('/maintain/seasons/:seasonId/:compType/fixtures', {
 		templateUrl : '/maintain/competition/fixtures.html',
 		controller : 'FixturesCtrl'

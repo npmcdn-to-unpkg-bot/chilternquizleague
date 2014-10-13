@@ -1,0 +1,20 @@
+<div>
+	<div class="box-title">Team Buzzer Details</div>
+	<form>
+		<table>
+			<tr>
+				<td>Description</td>
+				<td><input ng-model="buzzerCompetition.description"></td>
+			</tr>
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>
+						<button ng-click="resetBuzzerCompetition()">Reset</button>
+						<button ng-click="addBuzzerCompetition(buzzerCompetition)">Save</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>
