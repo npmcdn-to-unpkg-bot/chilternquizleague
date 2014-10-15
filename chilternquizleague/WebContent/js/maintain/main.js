@@ -175,8 +175,8 @@ function getCommonParams(constructorFn) {
 }
 
 var tinymceOptions={ 
-		plugins: "link, image, autolink",
-		menubar:false,
+		plugins: "link, image, autolink, table, code, charmap, searchreplace, contextmenu",
+		menubar:true,
 	    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image"
 	
 };
