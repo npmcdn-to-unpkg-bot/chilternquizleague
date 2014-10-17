@@ -29,9 +29,12 @@
 
 	function extraStuff($scope, $interval, viewService, $location,$routeParams) {
 
+		$scope.modalShown = null;
+		
 		$scope.showContact = function(){
-			$scope.show = null;
-			$scope.show = true;};
+			//$scope.modalShown = $scope.modalShown == null ? null : !$scope.modalShown;
+			$scope.modalShown = true;	
+		};
 		
 		function getTemplateName(){
 			

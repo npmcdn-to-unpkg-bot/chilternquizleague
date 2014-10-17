@@ -168,8 +168,9 @@ mainApp.directive('cqlDialog', function() {
 	      scope.hideModal = function() {
 	        scope.show = false;
 	      };
+	      scope.popup='';
 	      scope.$watch("show", function(show){
-	    	  scope.popup = (show===false) ? 'popdown' : (show === true ? 'popup' : '');});
+	    	  scope.popup = show ? "popup" : "popdown"});
 	    },
 	    template: "<div ng-class='popup' class='modal'>" +
 	    		"  <div  class='show-thin nofade popup-container'>" +
