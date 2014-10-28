@@ -13,36 +13,36 @@ body {
 	padding-top: .25em;
 }
 
-select,input,textarea{
+#select,input,textarea{
 	border-radius: .5em;
 	border:solid 2px aliceblue;
 	transition:border-color .3s ease-out;
 	
 }
 
-select{
+#select{
 	border-radius: .5em 0 0 .5em;
 }
 
-select:hover,input:hover,textarea:hover{
+#select:hover,input:hover,textarea:hover{
 	border-color: #c1dff8;
 	transition:border-color .3s ease-in;
 	
 }
 
-select:focus,input:focus,textarea:focus{
+#select:focus,input:focus,textarea:focus{
 	outline:none;
 	border-color: #a0bff8;
 	transition:border-color .3s ease-in;
 	
 }
 
-span~select{
+#span~select{
 	
 	margin-left:.5em;
 }
 
-input{
+#input{
 	padding-left:.25em;
 	padding-right:.25em;
 }
@@ -192,7 +192,7 @@ section{
 .body-container {
 	padding: .1em;
 	padding-top: .5em;
-	position:absolute;
+	#position:absolute;
 	width:calc(100% - 1em);
 
 }

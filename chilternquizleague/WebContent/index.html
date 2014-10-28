@@ -8,11 +8,13 @@
 <meta name="keywords" content="quiz,league,chiltern,south bucks,pub quiz,buckinghamshire,amersham,chesham">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" rel="stylesheet" href="/css/index.css">
+<link type="text/css" rel="stylesheet" href="/css/angular-material.css">
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
 <script type="text/javascript" src="/js/angular-route.js"></script>
+<script type="text/javascript" src="/js/angular-material.js"></script>
 <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
@@ -26,15 +28,14 @@
 
 <title ng-cloak>Chiltern Quiz League</title>
 </head>
-<body>
-	<div>
-		<div ng-include="'/top.html'"></div>
-		<div style="position: relative;">
-			<div ng-view="mainView" class="body-container something"></div>
-		</div>
-	</div>
-	<div class="footer show">
+<body layout="vertical" layout-fill>
+
+	<header ng-include="'/top.html'"></header>
+	<main flex ng-view="mainView" class="body-container">
+	</main>
+
+	<footer>
 		<div>footer</div>
-	</div>
+	</footer>
 </body>
 </html>

@@ -1,46 +1,14 @@
 @import url('/css/top.css');
 @import url('/css/league-table-animated.css');
 
-.body-content {
-	margin-right: 310px;
-	display: flex;
-}
+
 .front-page-text {
 	margin-right: .25em;
 	margin-left: .5em;
-	flex-shrink: 400;
 }
 .league-table-container{
 	margin-left:0;
 }
 
-.feeds {
-	float: right;
-}
 
-@media screen and (max-width: 1000px) {
-	.feeds {
-		display: none;
-	}
-	.league-table-container { 
-		margin-right: .25em;
-		
-		
-	}
-	.body-content {
-		margin-right: 0;
-		
-	}
-}
 
-@media screen and (max-width: 500px) {
-	.league-table {
-		width: 100%;
-	}
-	.front-page-text {
-	}
-		.body-content {
-		margin-right: 0;
-		display: block
-	}
-}
