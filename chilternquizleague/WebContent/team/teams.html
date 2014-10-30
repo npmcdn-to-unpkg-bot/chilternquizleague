@@ -1,15 +1,15 @@
 <div ng-controller="TeamsController" layout="horizontal" layout-sm="vertical" layout-fill>
-	<aside flex-sm="33" flex-md="20" class="show standard-margins">
+	<div class="show standard-margins">
 		<div class="selection-item" ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : 'unselected'">
 			<a href="#/team/{{item.id}}">{{item.name}}</a>
 		</div>
-	</aside>
-	<main flex class="team-pane">
+	</div>
+	<div flex class="team-pane">
 		<div class="header-text" cql-text="'teams-header'"></div>
 		<div>
 			<div class="title-text">{{team.name}}</div>
 			<div class="something" ng-include="template"></div>
 		</div>
-	</main>
+	</div>
 </div>
 
