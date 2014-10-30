@@ -1,20 +1,20 @@
-<div flex layout="horizontal" layout-sm="vertical" layout-fill>
+<div flex layout="vertical" layout-sm="horizontal" layout-fill>
 
-	<main flex layout="vertical" layout-sm="horizontal">
-		<aside flex>
+	<div flex layout="vertical" layout-sm="horizontal">
+		<div>
 			<div class="league-table-container show-thin collapse"
 				ng-include="'/results/league-table.html'"></div>
-		</aside>
-		<main flex class="front-page-text">
-			<div class="drop-cap text-block"
+		</div>
+		<div flex class="front-page-text">
+			<div class="drop-cap text-block" 
 				ng-bind-html="global.frontPageText | htmlify"></div>
-		</main>
-	</main>
-	<aside flex hide>
+		</div>
+	</div>
+	<div hide block-md>
 		<iframe
 			src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FChilternQuizLeague&amp;width&amp;height=427&amp;colorscheme=light&amp;show_faces=false&amp;header=true&amp;stream=true&amp;show_border=true"
 			scrolling="no" frameborder="0"
 			style="border: none; overflow: hidden; height: 427px;"
 			allowTransparency="true"></iframe>
-	</aside>
+	</div>
 </div>
