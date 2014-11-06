@@ -3,7 +3,7 @@
 	<cql-dialog show="modalShown">Some text here</cql-dialog>
 </div>
 <div>
-	Venue: <a href="#/venues/{{team.venue.id}}">{{team.venue.name}}</a>
+	Venue: <a href="/venues/{{team.venue.id}}">{{team.venue.name}}</a>
 </div>
 <div ng-if="team.extras.text" class="text-block show-thin"
 	ng-bind-html="team.extras.text | htmlify"></div>

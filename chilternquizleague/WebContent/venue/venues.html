@@ -3,7 +3,7 @@
 		<div class="selection-item"
 			ng-repeat="item in venues | orderBy:'name'"
 			ng-class="item.id == venue.id ? 'selected' : 'unselected'">
-			<a href="#/venues/{{item.id}}">{{item.name}}</a>
+			<a href="/venues/{{item.id}}">{{item.name}}</a>
 		</div>
 	</div>
 	<div class="team-pane venue-layout">

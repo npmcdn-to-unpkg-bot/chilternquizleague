@@ -3,7 +3,7 @@
 	<button ng-click="addScreen()">Add New</button>
 
 	<div ng-repeat="venue in venues | orderBy :'name'">
-		<div><a href="#/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</a></div>
+		<div><a href="/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</a></div>
 	</div>
 
 </div>

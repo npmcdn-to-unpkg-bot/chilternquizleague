@@ -3,7 +3,7 @@
 	<button ng-click="addScreen()">Add New</button>
 
 	<div ng-repeat="text in texts | orderBy : 'name'">
-		<div><a href="#/maintain/texts/{{text.id}}" >{{text.name}}</a></div>
+		<div><a href="/maintain/texts/{{text.id}}" >{{text.name}}</a></div>
 	</div>
 
 </div>

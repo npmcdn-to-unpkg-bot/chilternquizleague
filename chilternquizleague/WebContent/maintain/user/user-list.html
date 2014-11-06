@@ -3,7 +3,7 @@
 	<button ng-click="addScreen()">Add New</button>
 
 	<div ng-repeat="user in users | orderBy : 'name'">
-		<div><a href="#/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</a></div>
+		<div><a href="/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</a></div>
 	</div>
 
 </div>

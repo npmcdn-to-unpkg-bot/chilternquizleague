@@ -3,7 +3,7 @@
 	<button ng-click="addScreen()">Add New</button>
 
 	<div ng-repeat="team in teams | orderBy:'shortName'">
-		<div><a href="#/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</a></div>
+		<div><a href="/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</a></div>
 	</div>
 
 </div>

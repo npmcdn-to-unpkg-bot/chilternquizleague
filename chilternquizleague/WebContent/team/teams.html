@@ -1,15 +1,24 @@
-<div ng-controller="TeamsController" layout="vertical" layout-sm="horizontal" layout-fill>
-	<div class="show standard-margins">
-		<div class="selection-item" ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : 'unselected'">
-			<a href="#/team/{{item.id}}">{{item.name}}</a>
-		</div>
+<section layout="vertical" layout-sm="horizontal">
+
+
+	<md-sidenav class="md-sidenav-left md-whiteframe-z2" component-id="left" is-locked-open="$media('md')"
+		ng-controller="TeamsController"> <md-toolbar
+		class="md-theme-indigo">
+	<h1 class="md-toolbar-tools">Sidenav Left</h1>
+	</md-toolbar>
+	<div class="selection-item"
+		ng-repeat="item in teams | orderBy:'shortName'"
+		ng-class="item.id == team.id ? 'selected' : 'unselected'">
+		<a href="/team/{{item.id}}">{{item.name}}</a>
 	</div>
-	<div flex class="team-pane">
+	</md-sidenav>
+
+	<md-content flex class="team-pane">
 		<div class="header-text" cql-text="'teams-header'"></div>
 		<div>
 			<div class="title-text">{{team.name}}</div>
 			<div class="something" ng-include="template"></div>
 		</div>
-	</div>
-</div>
+	</md-content>
+</section>
 
