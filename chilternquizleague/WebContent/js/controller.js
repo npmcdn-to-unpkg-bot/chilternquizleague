@@ -1,6 +1,6 @@
 ;
 
-var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate"]).factory(
+var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial']).factory(
 		'viewService',
 		[
 				"$http",
