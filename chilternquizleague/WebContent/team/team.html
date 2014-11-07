@@ -1,10 +1,6 @@
-<div ng-controller="TeamsController">
-	<div class="show teams standard-margins">
-		<div class="selection-item" ng-repeat="item in teams | orderBy:'shortName'" ng-class="item.id == team.id ? 'selected' : 'unselected'">
-			<a href="/team/{{item.id}}">{{item.name}}</a>
-		</div>
-	</div>
-	<div class="team-pane">
+<div layout="horizontal" ng-controller="TeamsController" flex layout-fill>
+	<ng-include src="'/team/sidenav.html'"></ng-include>
+	<div flex style="margin-left:1em;">
 		<div itemscope itemtype="http://schema.org/SportsTeam">
 			<div itemprop="name" class="title-text">{{team.name}}</div>
 			<div class="something" ng-include="template"></div>
