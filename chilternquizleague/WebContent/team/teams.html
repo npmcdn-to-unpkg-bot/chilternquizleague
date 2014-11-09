@@ -1,11 +1,6 @@
-<section layout="horizontal" ng-controller="TeamsController" flex layout-fill>
+<section layout-sm="horizontal" layout="vertical"  ng-controller="TeamsController">
 	<div ng-include="'/team/sidenav.html'"></div>
-	<div flex md-padding style="margin-left:1em;">
-		<div class="header-text" cql-text="'teams-header'"></div>
-		<div>
-			<div class="title-text">{{team.name}}</div>
-			<div class="something" ng-include="template"></div>
-		</div>
+	<div flex style="margin-left:1em;" ui-view layout-fill>
 	</div>
 </section>
 

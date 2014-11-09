@@ -1,12 +1,27 @@
-<md-toolbar hide block-sm>
+<md-toolbar hide show-sm>
 	<div class="md-toolbar-tools">
-		<md-button class="md-raised" md-theme="indigo" href="/">Home</md-button>
-		<md-button class="md-raised" md-theme="indigo" href="/teams">Teams</md-button>
-		<md-button class="md-raised" md-theme="indigo" href="/competitions/LEAGUE">Competitions</md-button>
-		<md-button class="md-raised" md-theme="indigo" href="/results/all">Results</md-button>
-		<md-button class="md-raised" md-theme="indigo" href="/venues">Venues</md-button>
-		<md-button class="md-raised" md-theme="indigo" href="/rules">Rules</md-button>
-		<md-button class="md-raised" md-theme="indigo" href="/contact">Contact Us</md-button>
+		<md-button class="#md-raised"  href="/">Home</md-button>
+		<md-button class="#md-raised"  href="/teams/all">Teams</md-button>
+		<md-button class="#md-raised"  href="/competitions/LEAGUE">Competitions</md-button>
+		<md-button class="#md-raised"  href="/results/all">Results</md-button>
+		<md-button class="#md-raised"  href="/venues">Venues</md-button>
+		<md-button class="#md-raised"  href="/rules">Rules</md-button>
+		<md-button class="#md-raised"  href="/contact">Contact Us</md-button>
 	</div>
 </md-toolbar>
+<md-toolbar hide-sm >
+<div class="md-toolbar-tools">
+	<span><md-button ng-click="toggleLeft()"><md-icon icon="/images/icons/ic_more_horiz.svg"></md-icon></md-button></span><span center flex>{{global.leagueName}}</span><span style="align-content:flex-end;"><md-button class="#md-fab" aria-label="Main menu" ng-click="toggleRight()"><md-icon icon="/images/icons/ic_menu.svg" style="width: 24px; height: 24px;"></md-icon></md-button></span>
+</div>
+</md-toolbar>
+<md-sidenav class="md-sidenav-right md-whiteframe-z2"
+	component-id="right"  md-padding>
+		<div><md-button class="#md-raised"  href="/" ng-click="toggleRight()">Home</md-button></div>
+		<div><md-button class="#md-raised"  href="/teams/all" ng-click="toggleRight()">Teams</md-button></div>
+		<div><md-button class="#md-raised"  href="/competitions/LEAGUE" ng-click="toggleRight()">Competitions</md-button></div>
+		<div><md-button class="#md-raised"  href="/results/all" ng-click="toggleRight()">Results</md-button></div>
+		<div><md-button class="#md-raised"  href="/venues" ng-click="toggleRight()">Venues</md-button></div>
+		<div><md-button class="#md-raised"  href="/rules" ng-click="toggleRight()">Rules</md-button></div>
+		<div><md-button class="#md-raised"  href="/contact" ng-click="toggleRight()">Contact Us</md-button></div>
+</md-sidenav>
 

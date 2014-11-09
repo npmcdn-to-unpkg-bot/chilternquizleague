@@ -1,31 +1,34 @@
-<div>
-	<a href="" ng-click="showContact()">Contact Us!</a>
-	<cql-dialog show="modalShown">Some text here</cql-dialog>
-</div>
-<div>
-	Venue: <a href="/venues/{{team.venue.id}}">{{team.venue.name}}</a>
-</div>
-<div ng-if="team.extras.text" class="text-block show-thin"
-	ng-bind-html="team.extras.text | htmlify"></div>
-<div>
-	<div class="show-thin titled-list shrink-to-fit">
+<div flex layout="vertical">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+		<span itemprop="name" class="title-text">{{team.name}}</span>
+		<md-button class="right" aria-label="contact us">
+		<md-icon icon="/images/icons/ic_email.svg"></md-icon>
+		<md-tooltip>Contact Us!</md-tooltip></md-button>
+		</div>
+	</md-toolbar>
+	<div>
+		Venue: <a href="/venues/{{team.venue.id}}">{{team.venue.name}}</a>
+	</div>
+	<div hide block-sm ng-if="team.extras.text" class=""
+		ng-bind-html="team.extras.text | htmlify"></div>
+	<div class="show-thin titled-list">
 		<div>Last few results:</div>
 		<div class="inline-header" ng-include="'/team/results-table.html'"
 			ng-init="rowCount=5"></div>
 		<div>
-			<a href="/team/{{team.id}}/results">Show all</a>
+			<a href="/teams/team/{{team.id}}/results">Show all</a>
 		</div>
 	</div>
-</div>
-<div>
 	<div class="show-thin titled-list shrink-to-fit">
 
 		<div>Next few fixtures:</div>
 		<div class="inline-header" ng-include="'/team/fixtures-table.html'"
 			ng-init="rowCount=5"></div>
 		<div>
-			<a href="/team/{{team.id}}/fixtures">Show all</a>
+			<a href="/teams/team/{{team.id}}/fixtures">Show all</a>
 		</div>
 		<a href="" ng-click="makeICal(team)">Download Calendar</a>
 	</div>
 </div>
+

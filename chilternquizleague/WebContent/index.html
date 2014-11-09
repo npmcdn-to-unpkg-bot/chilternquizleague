@@ -15,6 +15,7 @@
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
 <script type="text/javascript" src="/js/angular-route.js"></script>
+<script type="text/javascript" src="/js/angular-ui-router.js"></script>
 <script type="text/javascript" src="/js/angular-aria.min.js"></script>
 <script type="text/javascript" src="/js/angular-material.js"></script>
 <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
@@ -33,11 +34,8 @@
 <body layout="vertical" layout-fill>
 
 	<header ng-include="'/top.html'"></header>
-	<main flex ng-view="mainView" >
-	</main>
+	<md-content flex ui-view >
+	</md-content>
 
-	<footer>
-		<div>footer</div>
-	</footer>
 </body>
 </html>

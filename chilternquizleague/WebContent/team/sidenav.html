@@ -1,7 +1,10 @@
 <md-sidenav class="md-sidenav-left md-whiteframe-z2"
 	component-id="left" is-locked-open="$media('sm')" md-padding>
+
+		<div><md-button ng-click="$media('sm') && toggleLeft()" href="/teams/start-team" >Start a team</md-button></div>
+		<md-divider></md-divider>
 		<div ng-repeat="item in teams | orderBy:'shortName'">
-			<md-button  ng-class="item.id == team.id ? 'md-raised' : ''" ng-href="/team/{{item.id}}">{{item.name}}</md-button>
+			<md-button ng-click="$media('sm') && toggleLeft()" ng-href="/teams/team/{{item.id}}">{{item.name}}</md-button>
 		</div>
-		<div><md-button href="/start-team">Start a team</md-button></div>
-</md-sidenav>
+
+	</md-sidenav>

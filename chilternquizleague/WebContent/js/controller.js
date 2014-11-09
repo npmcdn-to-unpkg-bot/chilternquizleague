@@ -1,6 +1,6 @@
 ;
 
-var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial']).factory(
+var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial','ui.router']).factory(
 		'viewService',
 		[
 				"$http",
@@ -83,17 +83,50 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial']).fa
 					return service;
 				} ]);
 
-mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
-	$routeProvider.when('/contact',{
-		templateUrl : '/contact/contact.html'}
-	).when('/rules',{
-		templateUrl : '/rules/rules.html'}
-	).otherwise({
-			templateUrl : '/indexContents.html'}
-		);
-	
+mainApp.run(
+	  [          '$rootScope', '$state', '$stateParams',
+	             function ($rootScope,   $state,   $stateParams) {
 
-	$locationProvider.html5Mode(true);
+	             // It's very handy to add references to $state and $stateParams to the $rootScope
+	             // so that you can access them from any scope within your applications.For example,
+	             // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
+	             // to active whenever 'contacts.list' or one of its decendents is active.
+	             $rootScope.$state = $state;
+	             $rootScope.$stateParams = $stateParams;
+	             }
+	           ]
+	         )
+
+mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
+	             function ($stateProvider,   $urlRouterProvider, $locationProvider){
+	
+	
+	$stateProvider.state("home", {
+
+    // Use a url of "/" to set a state as the "index".
+    url: "/",
+
+    // Example of an inline template string. By default, templates
+    // will populate the ui-view within the parent state's template.
+    // For top level states, like this one, the parent template is
+    // the index.html file. So this template will be inserted into the
+    // ui-view within index.html.
+    templateUrl: '/indexContents.html'
+
+  })
+  .state("rules", {
+  	url:"/rules",
+  	templateUrl : "/rules/rules.html"
+  })
+  .state("contact", {
+  	url:"/contact",
+  	templateUrl : "/contact/contact.html"
+  })
+  
+  
+  ;
+	
+$locationProvider.html5Mode(true);
 }]);
 
 mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
@@ -182,9 +215,17 @@ mainApp.directive('cqlDialog', function() {
 
 
 
-mainApp.controller('MainController', [ '$scope', '$interval', 'viewService',
-		function($scope, $interval, viewService) {
+mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',
+		function($scope, $interval, viewService, $mdSidenav) {
 
 			$scope.global = viewService.view("globaldata");
+			
+		  $scope.toggleRight = function() {
+		    $mdSidenav('right').toggle();
+		  };
+		  
+		  $scope.toggleLeft = function() {
+		    $mdSidenav('left').toggle();
+		  };
 
 		} ]);

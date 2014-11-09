@@ -1,64 +1,51 @@
 (function() {
 	
-	mainApp.config([ '$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
-		$routeProvider.when('/teams/:itemId?/:template?', {
-				templateUrl : '/team/teams.html'})
-			.when('/team/:itemId?/:template?', {
-				templateUrl : '/team/team.html'})
-			.when('/find-team',	{
-				templateUrl:'/team/find-team.html'})
-			.when('/start-team',	{
-				templateUrl:'/team/start-team.html'});
-		}]);
-	
-	mainApp.run(function ($rootScope) {
-	    $rootScope.$on('$locationChangeSuccess', function () {
-	        $rootScope.$broadcast("pathChanged");
-	    });
-	});
-	
-	
-	var templateMap = {
-		detail : "/team/team-details.html",
-		results : "/team/team-results.html",
-		fixtures : "/team/team-fixtures.html",
-		reports: "/results/reports.html"
+	mainApp.config([ '$stateProvider', function($stateProvider) {
+		
+		$stateProvider
+		.state("teams", {
 			
-	};
-	
+			url:"/teams",
+			templateUrl : '/team/teams.html'
+			
+		})
+		.state("teams.all", {
+			
+			url:"/all",
+			templateUrl : '/team/teams-header.html'
+			
+		})
+		.state("teams.team",{
+			
+			url:"/team/:itemId",
+			templateUrl : '/team/team.html'
+		})
+		.state("teams.results",{
+			
+			url:"/team/:itemId/results",
+			templateUrl : '/team/team-results.html'
+		})
+		.state("teams.fixtures",{
+			
+			url:"/team/:itemId/fixtures",
+			templateUrl : '/team/team-fixtures.html'
+		})
+		.state("teams.start",{
+			
+			url:"/start-team",
+			templateUrl:'/team/start-team.html'
+		});
+		
 
-	function extraStuff($scope, $interval, viewService, $location,$routeParams) {
+	}]);
 
-		$scope.modalShown = null;
+	function extraStuff($scope, $interval, viewService, $location,$stateParams) {
 		
 		$scope.showContact = function(){
-			//$scope.modalShown = $scope.modalShown == null ? null : !$scope.modalShown;
-			$scope.modalShown = true;	
+	
 		};
 		
-		function getTemplateName(){
-			
-			return $routeParams.template ? $routeParams.template : "detail";
-		}
-		
-
-			$scope.setTemplate = function(templateName) {
-				var template = templateMap[templateName];
-				if (template != $scope.template) {
 	
-					$scope.template = template;
-					var parts = $location.path().split("/");
-	
-					//$location.path(parts[1] + "/" + $routeParams.itemId + "/" + templateName);
-				}
-			};
-		
-
-		
-		$scope.setTemplate(getTemplateName());
-		
-		$scope.host = $location.host();
-		
 		$scope.makeICal = function(team) {
 
 			var contents = generateICalContent(team.extras.fixtures);
@@ -105,9 +92,10 @@
 
 
 	mainApp.controller('TeamsController', [ '$scope', '$interval', 'viewService',
-			'$location','$routeParams', cyclingListControllerFactory("team", function(team1, team2) {
+			'$location', '$stateParams',			cyclingListControllerFactory("team", function(team1, team2) {
 				return team1.shortName.localeCompare(team2.shortName);
 			}, extraStuff) ]);
+
 	
 	mainApp.controller("TeamExtrasController", [ '$scope','$interval' ,'viewService',
 		'$location',  function($scope, $interval,viewService, $location) {

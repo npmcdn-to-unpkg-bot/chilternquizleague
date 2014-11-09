@@ -1,10 +1,5 @@
-<div layout="horizontal" ng-controller="TeamsController" flex layout-fill>
-	<ng-include src="'/team/sidenav.html'"></ng-include>
-	<div flex style="margin-left:1em;">
-		<div itemscope itemtype="http://schema.org/SportsTeam">
-			<div itemprop="name" class="title-text">{{team.name}}</div>
-			<div class="something" ng-include="template"></div>
-		</div>
-	</div>
+<div itemscope itemtype="http://schema.org/SportsTeam">
+	<div ng-include="'/team/team-details.html'" flex></div>
 </div>
+
 
