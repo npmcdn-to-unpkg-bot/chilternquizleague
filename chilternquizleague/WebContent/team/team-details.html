@@ -2,8 +2,8 @@
 	<div>
 		Venue: <a href="/venues/{{team.venue.id}}">{{team.venue.name}}</a>
 	</div>
-	<div hide block-sm ng-if="team.extras.text" class=""
-		ng-bind-html="team.extras.text | htmlify"></div>
+	<md-card><div hide block-sm ng-if="team.extras.text"
+		ng-bind-html="team.extras.text | htmlify"></div></md-card>
 	<div class="show-thin titled-list">
 		<div>Last few results:</div>
 		<div class="inline-header" ng-include="'/team/results-table.html'"
