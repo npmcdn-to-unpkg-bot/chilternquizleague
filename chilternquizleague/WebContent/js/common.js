@@ -3,19 +3,13 @@ var b = document.documentElement;
   b.setAttribute('data-platform', navigator.platform );
   b.className += ((!!('ontouchstart' in window) || !!('onmsgesturechange' in window))?' touch':'');
 
-function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
+function cyclingListControllerFactory(type, otherFunctions) {
 
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
 	var listName = type + "s";
 	return function($scope, $interval, viewService, $location, $stateParams, $sce) {
 
-		var promise = null;
-		
-		var itemId = $stateParams.itemId;
-
-		$scope["set" + camelName] = function(item, keepCycling) {
-
-			if(!keepCycling){$interval.cancel(promise);}
+		$scope["set" + camelName] = function(item) {
 			$scope[type] = item;
 		};
 
@@ -27,25 +21,39 @@ function cyclingListControllerFactory(type, sortFunction, otherFunctions) {
 				.list(
 						type,
 						function(items) {
-							$scope[listName] = items.sort(sortFunction);
-							if (itemId && itemId > 0) {
-								for (idx in items) {
-									if (items[idx].id == itemId) {
-										$scope[type] = items[idx];
-									}
-								}
-							} else {
-								var itemIndex = 0;
-								$scope[type] = items[0];
-//								promise = $interval(
-//										function() {
-//
-//											$scope["set" + camelName]( $scope[listName][itemIndex = itemIndex >= (items.length - 1) ? 0
-//													: (itemIndex + 1)], true);
-//											}, 5000);
-							}
-
+							$scope[listName] = items;
 						});
+	
+		
+		$scope.setCurrentItem = function(){
+			
+			var id = $stateParams.itemId;
+			
+			function findItem(id) {
+			for (idx in $scope[listName]) {
+
+				if ($scope[listName][idx].id == id) {
+					$scope["set" + camelName]($scope[listName][idx]);
+					break;
+				}
+			}
+		}
+				
+		if($scope[listName]){
+			
+			findItem(id)
+		}
+		else{
+			var destr = $scope.$watchCollection(listName, function(items) {
+				if(items && items.length > 0){
+					findItem(id);
+					destr();
+				}
+			});
+
+			
+		}
+		}
 	};
 }
 

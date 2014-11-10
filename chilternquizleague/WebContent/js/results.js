@@ -1,11 +1,15 @@
 (function() {
 	
 
-	mainApp.config([ '$routeProvider', '$locationProvider',
-		function($routeProvider, $locationProvider) {
-			$routeProvider.when('/results/all', {
+	mainApp.config([ '$stateProvider',
+		function($stateProvider) {
+			$stateProvider
+			.state('results', {
+				url : "/results/all",
 				templateUrl : '/results/results.html'
-			}).when('/results/submit', {
+			})
+			.state('resultsubmit', {
+				url : "/results/submit",
 				templateUrl : '/results/submit-results.html'
 			});
 		} ]);	

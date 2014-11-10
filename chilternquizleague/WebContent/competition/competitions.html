@@ -1,13 +1,9 @@
-<div ng-controller="CompetitionsController">
-	<div class="show teams standard-margins">
-		<div class="selection-item" ng-repeat="item in competitions | orderBy : 'type.name'" ng-class="item.type == competition.type ? 'selected' : 'unselected'">
-			<a href="/competitions/{{item.type.name}}">{{item.description}}</a>
-		</div>
-
-	</div>
-	<div class="team-pane" >
+<section layout-sm="horizontal" layout="vertical"
+	ng-controller="CompetitionsController">
+	<div ng-include="'/competition/sidenav.html'"></div>
+	<section flex layout="vertical" layout-fill style="margin-left:1em;">
 		<div ng-include="'/common/season-dropdown.html'"></div>
-		<div class="something standard-margins" ng-include="getTemplate(templateName)" ></div>
-	</div>
-</div>
+		<div flex ui-view layout-fill></div>
+	</section>
+</section>
 

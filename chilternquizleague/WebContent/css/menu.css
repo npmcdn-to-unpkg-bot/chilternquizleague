@@ -1,145 +1,53 @@
-.navigation {
-            width:100%;
-        }
-        .navigation ul{
-        /* positioning */
-        	position:relative;
-            z-index:100;
-        /* remove the dots next to list items: */
-            list-style:none; 
-        /* get rid of any default or inherited margins and padding: */
-            margin:0; 
-            padding:0; 
-            
-        /* styling: */
-            	font-family: 'Raleway','Helvetica', "Lucida Sans Unicode", "Bitstream Vera Sans",
-		"Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica,
-		sans-serif;
-            font-weight: 550;
-            font-size: 10pt;
-        }
-        
-        /* we're using the direct descendant selectors > to ONLY affect the main menu items */
-        .navigation > ul > li {
-        /* positioning */ 
-            position: relative;
-            float: left;
-        /* styling: */
-            margin-right: .625em;
-            
-		 	border: thin solid #c1dff8;
-		 	background-color: #c1dff8; 
-			border-radius: .625em;
-        }
-        .navigation > ul > li > a {
-        /* positioning */ 
-            display:block;
-        /* styling: */
-            background-color: #c1dff8; 
-            border: thin solid #c1dff8;
-			border-radius: .625em;
-            padding:.25em .5em;
-            text-decoration:none;
-            color:darkblue; 
-            
-        }
-        .navigation > ul > li > a:hover{
-        /* styling: */
-        	border-color:#99ccff;
-            background-color:#99ccff; 
-            color:blue; 
-        }
-        
-         .navigation > ul > li:hover{
-        /* styling: */
-            border-color:#99ccff; 
-            background-color: #99ccff;
-        }
-        
-        .navigation ul ul{
-            
-            width:21em; /* you need a width to accommodate tertiary menus */
-            
-            position:absolute;
-            z-index:100;
-            
-            height: 0;
-            overflow: hidden;
-            
-            -webkit-transition: height 0.3s ease-in;
-            -moz-transition: height 0.3s ease-in;
-            -o-transition: height 0.3s ease-in;
-            -ms-transition: height 0.3s ease-in;
-            transition: height 0.3s ease-in;
-        }
-        
-
-        /* don't display tertiary box yet */
-        .navigation > ul > li:hover ul ul, .navigation > ul > li > a:hover ul ul{
-            height:0;
-            
-        }
-        /* tertiary drop-down box */
-        .navigation ul ul ul{
-            left:10.5em;
-            width:10.5em;
-        }
-        
-        .navigation > ul > li:hover ul, .navigation > ul > li > a:hover ul,
-        .navigation ul ul li:hover > ul, .navigation ul ul li a:hover > ul{
-            height:15em; /* need a height to accommodate any tertiary menus */
-        }
-        
-        /* drop-down item styles */
-        /* if you want different styling for tertiary menus, just copy the 4 rules below and insert an additional ul: for example: ".navigation ul ul li", becomes: ".navigation ul ul ul li" */
-        
-        .navigation ul ul li{
-            background-color:#c1dff8;
-            border-left: thin solid white;
-            border-right: thin solid white;
-            border-bottom:thin solid white;
-			border-radius: .625em;
-            width:10.5em;
-            -webkit-transition: background-color 0.3s ease;
-            -moz-transition: background-color 0.3s ease;
-            -o-transition: background-color 0.3s ease;
-            -ms-transition: background-color 0.3s ease;
-            transition: background-color 0.3s ease;
-            margin-top:0;
-            #box-shadow:0em .25em .5em .25em lightgray,.25em .25em .5em .25em lightgray,-.25em .25em .5em .25em lightgray;
-        }
 
         
-        .navigation ul ul li:hover {
-            background-color:#99ccff;
-        }
-        
-        .navigation ul ul li a {
-            display:block;
-            text-decoration:none;
-            margin:0 .7em;
-            padding:.31em 0;
-            color:#4c4c4c; /* grey */
-        }
-        .navigation ul ul li a:hover, .navigation ul ul li:hover > a {
-            color:#ffffff; /* white */
-        }
-        
-        .navigation ul ul ul li a{
-            border:0 !important;
-        }
-        .navigation ul ul ul li + li a{
-           #border-top:1px dotted #999 !important;
-        }
-        .navigation ul ul li + li a{
-            #border-top:1px dotted #999;
-        }
-        .navigation ul ul li:hover + li a{
-           # border-top:1px solid #eaeaea;
-        }
-        .navigation ul ul ul li:hover + li a{
-            border: 0 !important;
-        }
-        .navigation ul ul ul li:hover + li{
-            #border-top:1px solid #999 !important;
-        }
+.menu-item {
+  background: none;
+  border-width: 0;
+  cursor: pointer;
+  display: block;
+  color: #333;
+  font-size: inherit;
+  line-height: 40px;
+  max-height: 40px;
+  opacity: 1;
+  margin: 0;
+  outline: none;
+  padding: 0px 28px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+  z-index: 1;
+  -webkit-transition: 0.2s ease-in-out;
+  -webkit-transition-property: max-height, background-color, opacity;
+  -moz-transition: 0.2s ease-in-out;
+  -moz-transition-property: max-height, background-color, opacity;
+  transition: 0.2s ease-in-out;
+  transition-property: max-height, background-color, opacity;
+}
+.menu-item.ng-hide {
+  max-height: 0;
+  opacity: 0;
+}
+.menu-item:hover, .menu-item:focus {
+  color: #999;
+}
+.menu-item.menu-sub-item.active {
+  background-color: #eeeeee;
+  font-weight: bold;
+  color: #4285f4;
+}
+.menu-item.menu-title {
+  color: #888;
+  font-size: 16px;
+  padding-left: 16px;
+  text-align: left;
+  text-transform: uppercase;
+}
+.menu-item.menu-title.active {
+  font-weight: bold;
+}
+.menu-item.menu-title:hover,
+.menu-item.menu-title:focus {
+  color: #AAA;
+}

@@ -1,0 +1,18 @@
+<div layout="horizontal">
+	<div flex>
+		<div>{{venue.name}}</div>
+		<div class="venue-address" ng-bind-html="venue.address | lineBreaks | htmlify"></div>
+		<div>
+			Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>
+		</div>
+		<div>
+			email : <a href="mailto:{{venue.email}}">{{venue.email}}</a>
+		</div>
+		<div>phone : {{venue.phone}}</div>
+	</div>
+	<div ng-if="venue.imageURL" class="venue-picture">
+		<div>
+			<img alt="" ng-src="{{venue.imageURL}}">
+		</div>
+	</div>
+</div>

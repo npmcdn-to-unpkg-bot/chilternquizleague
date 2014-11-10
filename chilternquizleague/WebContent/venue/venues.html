@@ -1,32 +1,12 @@
-<div ng-controller="VenuesController">
-	<div class="show teams standard-margins">
-		<div class="selection-item"
-			ng-repeat="item in venues | orderBy:'name'"
-			ng-class="item.id == venue.id ? 'selected' : 'unselected'">
-			<a href="/venues/{{item.id}}">{{item.name}}</a>
-		</div>
-	</div>
-	<div class="team-pane venue-layout">
-		<div class="venue-container">
-			<div class="venue-details titled-list">
-				<div>{{venue.name}}</div>
-				<div class="venue-address" ng-bind-html="venue.address | lineBreaks | htmlify"></div>
-				<div>
-					Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>
-				</div>
-				<div>
-					email : <a href="mailto:{{venue.email}}">{{venue.email}}</a>
-				</div>
-				<div>phone : {{venue.phone}}</div>
+<div ng-controller="VenuesController" flex layout="vertical" layout-sm="horizontal">
+<md-sidenav class="md-sidenav-left md-whiteframe-z2"
+	component-id="left" is-locked-open="$media('sm')" md-padding>
 
-			</div>
-
-			<div ng-if="venue.imageURL" class="venue-picture">
-				<div>
-					<img alt="" ng-src="{{venue.imageURL}}">
-				</div>
-			</div>
+		<div ng-repeat="item in venues | orderBy:'name'">
+			<md-button class="menu-item menu-title" ng-click="closeLeft()" href="/venues/{{item.id}}">{{item.name}}</md-button>
 		</div>
 
-	</div>
+	</md-sidenav>
+	<div flex ui-view style="margin-left:1em;"></div>
+	
 </div>

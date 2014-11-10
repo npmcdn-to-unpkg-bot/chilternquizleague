@@ -5,17 +5,19 @@
 	}
 	;
 
-	mainApp.config([ '$routeProvider', '$locationProvider',
-			function($routeProvider, $locationProvider) {
-				$routeProvider.when('/venues/:itemId?/:template?', {
-					templateUrl : '/venue/venues.html'
-				});
-			} ]);
+	mainApp.config([ '$stateProvider', function($stateProvider) {
+		$stateProvider.state("venues", {
+			url : "/venues",
+			templateUrl : '/venue/venues.html'
+		}).state("venues.detail", {
+			url : "/venues/:itemId",
+			templateUrl : '/venue/venue-detail.html'
+		});
+	} ]);
 
-	mainApp.controller('VenuesController', [ '$scope', '$interval',
-			'viewService', '$location','$routeParams','$sce',
-			cyclingListControllerFactory("venue", sortVenues, function($scope,$interval,
-					viewService, $location,$routeParams,$sce){
+	mainApp.controller('VenuesController', [  '$scope', '$interval',
+	                              			'viewService', '$location', '$stateParams','$sce',
+			cyclingListControllerFactory("venue", function($scope, $interval, viewService, $location, $stateParams,$sce){
 				
 				$scope.$watch("venue", function(venue){
 				

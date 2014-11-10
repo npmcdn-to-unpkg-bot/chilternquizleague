@@ -1,22 +1,61 @@
 (function(){
 	
-	mainApp.config([ '$routeProvider', '$locationProvider',
-	         		function($routeProvider, $locationProvider) {
-	         			$routeProvider.when('/competitions/:comp', {
-	         				templateUrl : '/competition/competitions.html'
-	         			});
-	         		} ]);	
-	
-	var templates = {
+	mainApp.config([ '$stateProvider',function($stateProvider) {
+		$stateProvider
+		.state("competitions", {
 			
-			LEAGUE:"/competition/league.html",
-			BEER:"/competition/beer-leg.html",
-			CUP:"/competition/cup.html",
-			PLATE:"/competition/plate.html",
-			RESULTS:"/competition/results.html",
-			FIXTURES:"/competition/fixtures.html",
-			BUZZER:"/competition/team-buzzer.html"
-	};
+			url:"/competitions",
+			templateUrl : '/competition/competitions.html'
+			
+		})
+		.state("competitions.league", {
+			
+			url:"/LEAGUE",
+			templateUrl : '/competition/league.html'
+			
+		})
+		.state("competitions.beer", {
+			
+			url:"/BEER",
+			templateUrl : '/competition/beer-leg.html'
+			
+		})
+		
+		.state("competitions.cup", {
+			
+			url:"/CUP",
+			templateUrl : '/competition/cup.html'
+			
+		})
+		.state("competitions.plate", {
+			
+			url:"/PLATE",
+			templateUrl : '/competition/plate.html'
+			
+		})
+		
+		.state("competitions.buzzer", {
+			
+			url:"/BUZZER",
+			templateUrl : '/competition/team-buzzer.html'
+			
+		})
+		
+		.state("competitions.results", {
+			
+			url:"/:type/results",
+			templateUrl : '/competition/results.html'
+			
+		})
+		.state("competitions.fixtures", {
+			
+			url:"/:type/fixtures",
+			templateUrl : '/competition/fixtures.html'
+			
+		})
+
+	 } ]);	
+	
 	
 	
 	function loadTable($scope,viewService, tableName){
@@ -68,14 +107,37 @@
 	}
 
 mainApp.controller('CompetitionsController', [ '$scope', '$location',
-		'viewService','$routeParams', function($scope, $location, viewService, $routeParams) {
-	
-	var type = $routeParams.comp;
+		'viewService','$stateParams', function($scope, $location, viewService, $stateParams) {
+
+	function getForTypeName(name){
+		
+		for(idx in $scope.competitions){
+			if($scope.competitions[idx].type.name == name){
+				return $scope.competitions[idx];
+			}			
+		}
+		
+		return null;
+	}
 	
 	$scope.$watch("season.id", function(season){season ? console.log(season): null;})
-	
-	$scope.getTemplate = function(type){return templates[type];};
-	$scope.setCompetition = function(comp){$scope.competition = comp;$scope.templateName=comp.type.name;};
+	$scope.setCompetition = function(comp){$scope.competition = comp;};
+	$scope.setCompetitionByType = function(type){
+		
+		if($scope.competitions){
+			$scope.setCompetition(getForTypeName(type));
+		} 
+		else{
+			var dereg = $scope.$watchCollection("competitions",function(competitions){
+				if(competitions && competitions.length > 0){
+					$scope.setCompetition(getForTypeName(type));
+					dereg();
+			    }
+			});
+			
+		}
+	}
+		
 	
 	var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
 	
@@ -86,29 +148,15 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 				}
 			});
 	
-	function getForTypeName(name){
-		
-		for(idx in $scope.competitions){
-			if($scope.competitions[idx].type.name == name){
-				return $scope.competitions[idx];
-			}			
-		}
-		
-		return null;
-	}    
+    
 	
 	$scope.$watchCollection("competitions",function(competitions){
 	    	
 		
 		if(competitions && competitions.length > 0){
 		    var first = competitions.sort(function(c1,c2){c1.type.name.localeCompare(c2.type.name);})[0];	
-			
-	    		if(type){
-	    			$scope.setCompetition(getForTypeName(type));
-	    			
-	    		}else{
 	    	$scope.setCompetition(first);}
-	    	}
+
 	    });
 
 		$scope.$watch("season", function(season) {
@@ -122,7 +170,6 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		
 		$scope.showOther = function(name){
 			
-			//$location.path($location.path() + "/" + name);
 			$scope.templateName=name;
 			
 		};
@@ -142,7 +189,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'$location',
 			'viewService',
 			function($scope, $location, viewService) {
-				
+				$scope.setCompetitionByType("LEAGUE");
 			} ]);
 	
 
@@ -155,7 +202,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 		mainApp.controller('BeerCompetitionController', [ '$scope', '$location',
 			'viewService', function($scope, $location, viewService) {
-
+			$scope.setCompetitionByType("BEER");
 				
 			} ]);
 		
@@ -166,7 +213,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'viewService',
 			function($scope, $location, viewService) {
 
-				
+				$scope.setCompetitionByType("CUP");
 				
 			} ]);
 		
@@ -174,9 +221,17 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		mainApp.controller('PlateCompetitionController', [ '$scope', '$location',
 			'viewService', function($scope, $location, viewService) {
 
-				
+			$scope.setCompetitionByType("PLATE");
 
 			} ]);
+		mainApp.controller('CompetitionAllResults', [
+   			'$scope',
+   			'$stateParams',
+   			function($scope, $stateParams) {
+   				
+   				$scope.setCompetitionByType($stateParams.type);
+		                                   				
+		}]);
 		
 		mainApp.controller('CompetitionResultsTable', [
 			'$scope',
@@ -184,7 +239,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'viewService',
 			function($scope, $location, viewService) {
 
-				$scope.$watch("competition", function(competition){loadResults($scope, viewService,competition.type.name);});
+				$scope.$watch("competition", function(competition){competition && loadResults($scope, viewService,competition.type.name);});
 				
 				$scope.showReports = function(results, result){
 					
@@ -207,7 +262,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			function($scope, $location, viewService) {
 
 				$scope.$watch("competition", function(competition) {
-					loadFixtures($scope, viewService, competition.type.name);
+					competition && loadFixtures($scope, viewService, competition.type.name);
 				});
 
 			} ]);

@@ -215,8 +215,8 @@ mainApp.directive('cqlDialog', function() {
 
 
 
-mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',
-		function($scope, $interval, viewService, $mdSidenav) {
+mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia',
+		function($scope, $interval, viewService, $mdSidenav, $mdMedia) {
 
 			$scope.global = viewService.view("globaldata");
 			
@@ -227,5 +227,9 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 		  $scope.toggleLeft = function() {
 		    $mdSidenav('left').toggle();
 		  };
+		  
+		  $scope.closeLeft = function() {
+			    $mdSidenav('left').close();
+			  };
 
 		} ]);
