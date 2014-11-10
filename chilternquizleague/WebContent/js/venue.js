@@ -10,7 +10,7 @@
 			url : "/venues",
 			templateUrl : '/venue/venues.html'
 		}).state("venues.detail", {
-			url : "/venues/:itemId",
+			url : "/:itemId",
 			templateUrl : '/venue/venue-detail.html'
 		});
 	} ]);
@@ -18,6 +18,14 @@
 	mainApp.controller('VenuesController', [  '$scope', '$interval',
 	                              			'viewService', '$location', '$stateParams','$sce',
 			cyclingListControllerFactory("venue", function($scope, $interval, viewService, $location, $stateParams,$sce){
+				
+//				$scope.$watchCollection("venues",function(venues){
+//					
+//					if(venues && venues.length > 0){
+//						
+//						$location.url("/venues/" + venues[Math.floor(Math.random() * venues.length)].id);
+//					}
+//				});
 				
 				$scope.$watch("venue", function(venue){
 				
@@ -34,4 +42,9 @@
 				});
 				
 			}) ]);
+	
+	mainApp.controller("VenueController", ["$scope", function($scope){
+		
+		$scope.setCurrentItem();
+	}]);
 })();

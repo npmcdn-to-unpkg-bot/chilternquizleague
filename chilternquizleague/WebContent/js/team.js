@@ -88,7 +88,7 @@
 			'viewService', '$location', '$stateParams',
 			 cyclingListControllerFactory("team", extraStuff)]);
 
-	mainApp.controller('TeamController', [ '$scope', '$stateParams',
+	mainApp.controller('TeamController', [ '$scope', 
 			function($scope) {
 
 		$scope.setCurrentItem();

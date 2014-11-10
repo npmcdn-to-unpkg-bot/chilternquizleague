@@ -3,7 +3,8 @@
 	<div ng-include="'/competition/sidenav.html'"></div>
 	<section flex layout="vertical" layout-fill style="margin-left:1em;">
 		<div ng-include="'/common/season-dropdown.html'"></div>
-		<div flex ui-view layout-fill></div>
+		<md-toolbar ><div class="md-toolbar-tools">{{competition.type.description}}</div></md-toolbar>
+		<div flex ui-view></div>
 	</section>
 </section>
 

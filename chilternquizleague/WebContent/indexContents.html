@@ -5,10 +5,9 @@
 			<div class="league-table-container show-thin collapse"
 				ng-include="'/results/league-table.html'"></div>
 		</div>
-		<div flex class="front-page-text">
-			<div class="drop-cap text-block" 
-				ng-bind-html="global.frontPageText | htmlify"></div>
-		</div>
+		<md-card flex >
+			<div ng-bind-html="global.frontPageText | htmlify"></div>
+		</md-card>
 	</div>
 	<div hide show-md>
 		<iframe

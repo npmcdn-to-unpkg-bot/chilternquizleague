@@ -1,7 +1,7 @@
-<div ng-controller="LeagueCompetitionController">
-<div class="league-text comp-text header-text" cql-text="'league-comp'"></div>
-	<div class="league-table-container show-thin"
+<div ng-controller="LeagueCompetitionController" layout="vertical">
+<md-card cql-text="'league-comp'"></md-card>
+	<div flex class="league-table-container show-thin"
 		ng-include="'/competition/league-table.html'"></div>
-	<div ng-include="'/competition/latest-results.html'"></div>
-	<div ng-include="'/competition/next-fixtures.html'"></div>
+	<div flex ng-include="'/competition/latest-results.html'"></div>
+	<div flex ng-include="'/competition/next-fixtures.html'"></div>
 </div>

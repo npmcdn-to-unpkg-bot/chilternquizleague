@@ -1,18 +1,22 @@
-<div layout="horizontal">
-	<div flex>
-		<div>{{venue.name}}</div>
-		<div class="venue-address" ng-bind-html="venue.address | lineBreaks | htmlify"></div>
-		<div>
-			Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>
+<div layout="vertical" ng-controller="VenueController">
+	<md-toolbar class="md-toolbar-tools">{{venue.name}}</md-toolbar>
+	<div flex layout="horizontal">
+
+		<div flex layout="vertical">
+			<div class="venue-address"
+				ng-bind-html="venue.address | lineBreaks | htmlify"></div>
+			<div>
+				Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>
+			</div>
+			<div>
+				email : <a href="mailto:{{venue.email}}">{{venue.email}}</a>
+			</div>
+			<div>phone : {{venue.phone}}</div>
 		</div>
-		<div>
-			email : <a href="mailto:{{venue.email}}">{{venue.email}}</a>
-		</div>
-		<div>phone : {{venue.phone}}</div>
-	</div>
-	<div ng-if="venue.imageURL" class="venue-picture">
-		<div>
-			<img alt="" ng-src="{{venue.imageURL}}">
+		<div ng-if="venue.imageURL">
+			<div>
+				<img alt="" ng-src="{{venue.imageURL}}">
+			</div>
 		</div>
 	</div>
 </div>

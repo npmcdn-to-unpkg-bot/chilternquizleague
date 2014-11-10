@@ -41,7 +41,7 @@ function cyclingListControllerFactory(type, otherFunctions) {
 				
 		if($scope[listName]){
 			
-			findItem(id)
+			findItem(id);
 		}
 		else{
 			var destr = $scope.$watchCollection(listName, function(items) {
