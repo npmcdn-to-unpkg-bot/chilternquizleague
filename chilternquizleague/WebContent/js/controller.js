@@ -205,6 +205,7 @@ mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     	link: function(scope, element, attrs){
     		scope.setSeason = function(season){scope.season = season;}
     		scope.seasons = viewService.list("season-views");
+    		scope.$watch("season", function(season){scope.$alert(season.description)})
     	},
     	templateUrl:'/common/season-dropdown.html'
     	
