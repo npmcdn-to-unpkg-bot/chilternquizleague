@@ -120,7 +120,6 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		return null;
 	}
 	
-	$scope.$watch("season.id", function(season){season ? console.log(season): null;})
 	$scope.setCompetition = function(comp){$scope.competition = comp;};
 	$scope.setCompetitionByType = function(type){
 		
@@ -237,23 +236,11 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'$scope',
 			'$location',
 			'viewService',
+			
 			function($scope, $location, viewService) {
 
 				$scope.$watch("competition", function(competition){competition && loadResults($scope, viewService,competition.type.name);});
 				
-				$scope.showReports = function(results, result){
-					
-					$scope.reportsData = {results:results,result:result};
-					$scope.popupclass="popup";
-					
-				};
-				
-				$scope.closeWindow = function() {
-					$scope.popupclass = "popdown";
-					$scope.reports = null;
-				};
-				
-
 				
 			} ]);
 		

@@ -144,28 +144,18 @@
 
 			} ]);
 	
-	mainApp.controller('ResultsTable', [ '$scope', function($scope) {
+	mainApp.controller('ResultsTable', [ '$scope','$mdDialog','$rootScope', function($scope,$mdDialog,$rootScope) {
 		
 		$scope.$watchCollection("allResults", function(allResults){
 			$scope.results = allResults;});
 		
-		$scope.showReports = function(results, result){
-			
-			$scope.reportsData = {results:results,result:result};
-			$scope.popupclass="popup";
-			
-		};
-		
-		$scope.closeWindow = function() {
-			$scope.popupclass = "popdown";
-			$scope.reports = null;
-		};
 	}]);
 	
 
 	mainApp.controller("ReportsController", [ '$scope','viewService',
 	function($scope,viewService) {
 
+		
 		$scope.$watch("reportsData", function(reportsData) {
 			if (reportsData) {
 				$scope.reports = viewService.view("reports", {

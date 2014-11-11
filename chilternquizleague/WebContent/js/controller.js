@@ -1,5 +1,3 @@
-;
-
 var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial','ui.router']).factory(
 		'viewService',
 		[
@@ -84,8 +82,8 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial','ui.
 				} ]);
 
 mainApp.run(
-	  [          '$rootScope', '$state', '$stateParams',
-	             function ($rootScope,   $state,   $stateParams) {
+	  [          '$rootScope', '$state', '$stateParams','$mdDialog',
+	             function ($rootScope, $state, $stateParams, $mdDialog) {
 
 	             // It's very handy to add references to $state and $stateParams to the $rootScope
 	             // so that you can access them from any scope within your applications.For example,
@@ -93,6 +91,18 @@ mainApp.run(
 	             // to active whenever 'contacts.list' or one of its decendents is active.
 	             $rootScope.$state = $state;
 	             $rootScope.$stateParams = $stateParams;
+	             
+	             $rootScope.showReports = function(results, result){
+					
+					$rootScope.reportsData={results:results,result:result};
+					
+					$mdDialog.show({
+						templateUrl:'/results/reports.html',
+						controller:"ReportsController",
+						locals:{reportsData:{results:results,result:result}}
+					});
+					
+				};
 	             }
 	           ]
 	         )
@@ -215,10 +225,10 @@ mainApp.directive('cqlDialog', function() {
 
 
 
-mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia',
-		function($scope, $interval, viewService, $mdSidenav, $mdMedia) {
+mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia','$mdDialog','$rootScope',
+		function($scope, $interval, viewService, $mdSidenav, $mdMedia, $mdDialog, $rootScope) {
 
-			$scope.global = viewService.view("globaldata");
+		  $scope.global = viewService.view("globaldata");
 			
 		  $scope.toggleRight = function() {
 		    $mdSidenav('right').toggle();
@@ -231,5 +241,7 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 		  $scope.closeLeft = function() {
 			    $mdSidenav('left').close();
 			  };
+			  
+
 
 		} ]);

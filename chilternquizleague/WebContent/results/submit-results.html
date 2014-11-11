@@ -7,56 +7,53 @@
 
 	<form>
 		<div>
-			 <md-text-float label="Enter your email address" type="email" ng-model="email"
-				ng-change="fixturesForEmail(email)" size="50" required />
+			<md-text-float label="Enter your email address" type="email"
+				ng-model="email" ng-change="fixturesForEmail(email)" size="50"
+				required />
 		</div>
 		<div ng-if="fixture">
 			<div>{{fixture.start | date :'dd MMMM yyyy'}} :
 				{{fixture.home.name}} - {{fixture.away.name}}</div>
-			<table>
-				<thead>
-					<tr>
-						<td colspan="2">{{fixtures.description}}</td>
-					</tr>
-				</thead>
-				<tr>
 
-					<td><md-text-float label="{{mainResult.fixture.home.shortName}} - Home" type="number" ng-model="mainResult.homeScore"
-						/></td>
-				</tr>
-				<tr>
-					<td><md-text-float label="{{mainResult.fixture.away.shortName}} - Away" type="number" ng-model="mainResult.awayScore"
-						/></td>
-				</tr>
-				<thead>
-					<tr>
-						<td colspan="2">Beer Leg</td>
-					</tr>
-				</thead>
-				<tr>
 
-					<td><md-text-float label="{{mainResult.fixture.home.shortName}} - Home" type="number" ng-model="beerResult.homeScore"
-						/></td>
-				</tr>
-				<tr>
+			<md-subheader class="md-primary">{{fixtures.description}}</md-subheader>
 
-					<td><md-text-float label="{{mainResult.fixture.away.shortName}} - Away" type="number" ng-model="beerResult.awayScore"
-						/></td>
-				</tr>
-				<thead>
-					<tr>
-						<td colspan="2">Report</td>
-					</tr>
-				</thead>
-				<tr>
-					<td colspan="2"><div>
-							<textarea ui-tinymce="tinymceOptions" cols="60" rows="10"
-								ng-model="mainResult.reports[0].text.text"></textarea>
-						</div></td>
-				</tr>
-				<tr>
-					<td colspan="2"><button ng-click="submitResults()">Submit</button>
-			</table>
+
+			<div>
+				<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
+					type="number" ng-model="mainResult.homeScore" />
+			</div>
+
+			<div>
+				<md-text-float label="{{mainResult.fixture.away.shortName}} - Away"
+					type="number" ng-model="mainResult.awayScore" />
+			</div>
+
+			<md-subheader class="md-primary">Beer Leg</md-subheader>
+
+
+			<div>
+				<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
+					type="number" ng-model="beerResult.homeScore" />
+			</div>
+
+
+			<div>
+				<md-text-float label="{{mainResult.fixture.away.shortName}} - Away"
+					type="number" ng-model="beerResult.awayScore" />
+			</div>
+
+			<div colspan="2">Report</div>
+
+			<div>
+				<textarea ui-tinymce="tinymceOptions" cols="60" rows="10"
+					ng-model="mainResult.reports[0].text.text"></textarea>
+			</div>
+
+			<div style="margin-top:.25em;">
+				<md-button ng-click="submitResults()" class="md-primary md-raised">Submit</md-button>
+			</div>
+
 		</div>
 	</form>
 </div>
