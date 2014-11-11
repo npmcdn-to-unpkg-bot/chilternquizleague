@@ -198,6 +198,19 @@ mainApp.directive('cqlResults', function() {
     };
   });
 
+mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
+    return {
+    	scope:{season:"="},
+    	restrict:'E',
+    	link: function(scope, element, attrs){
+    		scope.setSeason = function(season){scope.season = season;}
+    		scope.seasons = viewService.list("season-views");
+    	},
+    	templateUrl:'/common/season-dropdown.html'
+    	
+    };
+  }]);
+
 
 mainApp.directive('cqlDialog', function() {
 	  return {

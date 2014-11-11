@@ -61,37 +61,9 @@ section{
 	margin-bottom: 2.50em;
 }
 
-.show {
-	background: linear-gradient(aliceblue,white);
-	#border: solid thin aliceblue;
-	border-radius: .75em;
-	#box-shadow: .25em .25em .5em .125em aliceblue, -.25em -.25em .5em .125em
-		aliceblue, -.25em .25em .5em .125em aliceblue, .25em -.25em .5em
-		.125em aliceblue;
-}
 
-.show-thin {
-	position:relative;
-	border-radius: .25em;
-	box-shadow: .063em .063em .125em .031em transparent, -.063em -.063em .125em
-		.031em transparent, -.063em .063em .125em .031em transparent, .063em -.063em
-		.125em .031em transparent, .063em .063em .125em .031em transparent inset,
-		-.063em -.063em .125em .031em transparent inset, -.063em .063em .125em
-		.031em transparent inset, .063em -.063em .125em .031em transparent inset;
-	padding: .25em;
-	transition: box-shadow .5s ease-out;
 
-}
 
-.show-thin:hover,.show-thin.nofade {
-	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
-		.031em #c1dff8, -.063em .063em .125em .031em #c1dff8, .063em -.063em
-		.125em .031em #c1dff8, .063em .063em .125em .031em #c1dff8 inset, -.063em
-		-.063em .125em .031em #c1dff8 inset, -.063em .063em .125em .031em #c1dff8
-		inset, .063em -.063em .125em .031em #c1dff8 inset;
-	transition: box-shadow .5s ease-in;
-	z-index:1;
-}
 
 .highlit-border{
 	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
@@ -243,40 +215,9 @@ section{
 	font-weight: 700;
 }
 
-.text-block {
-	background: linear-gradient(aliceblue,white);
-	border-radius: .5em;
-	padding: .5em;
-	margin-top:.5em;
-}
-
-.header-text {
-	background: linear-gradient(aliceblue,white,aliceblue);
-	border-radius: .5em;
-	padding: .5em;
-}
-
-.header-text:first-child::first-letter,.drop-cap:first-child::first-letter{
-    letter-spacing:0;
-    text-transform:uppercase;
-    font-size:3.5em;
-    float:left;
-    margin:0.10em 0.05em 0 0;
-    line-height:0.7;
-    color: darkblue;
-	text-shadow: 0 0 5px darkblue, 0 0 10px darkblue, 0 0 15px darkblue, 0 0
-	20px #c1dff8, 0 0 30px #c1dff8, 0 0 40px #c1dff8, 0 0 50px #c1dff8;
-
-}
-
-.header-text:first-child:first-line,.drop-cap:first-child:first-line
-{
-    position:relative;
-
-}
 
 
-.shrink-to-fit{
-	display:inline-block;
-}
+
+
+
 

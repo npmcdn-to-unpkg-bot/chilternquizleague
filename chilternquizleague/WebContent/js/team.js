@@ -104,10 +104,6 @@
 
 				$scope.setCurrentItem();
 				
-				$scope.setSeason = function(season) {
-					$scope.season = season;
-				};
-
 				var loadSeasons = listAndSelection("season", $scope,
 						viewService, {
 							remoteListName : "season-views"
@@ -128,8 +124,6 @@
 
 					}
 				}
-
-				loadSeasons($scope.global.currentSeasonId);
 
 				$scope.$watch("global.currentSeasonId", loadSeasons);
 				$scope.$watch("season", teamExtras);
