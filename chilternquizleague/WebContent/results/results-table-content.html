@@ -20,7 +20,7 @@
 			<td>-</td>
 			<td class="left-align">{{result.awayScore}}</td>
 			<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{result.fixture.away.shortName}}</td>
-			<td class="row-annotation"><md-button class="" aria-label="Reports" ng-click="showReports(resultSet,result)"><md-icon icon="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
+			<td class="row-annotation"><md-button class="" aria-label="match reports" ng-click="showReports(resultSet,result)"><md-icon icon="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
 		</tr>
 	</tbody>
 </table>

@@ -1,3 +1,11 @@
-<div ng-controller="ResultsTable" style="position:relative">
-	<div ng-include="'/results/results-table-content.html'"/>
+<div class="full-header header-highlight"
+	ng-controller="AllResultsController" flex layout="vertical" >
+	<md-toolbar>
+	<div class="md-toolbar-tools">
+		<span class="title-text">All Results</span>
+	</div>
+	</md-toolbar>
+	<div ng-include="'/common/season-dropdown.html'"></div>
+	<md-card flex layout-fill ng-controller="ResultsTable"
+		ng-include="'/results/results-table-content.html'" ></md-card>
 </div>

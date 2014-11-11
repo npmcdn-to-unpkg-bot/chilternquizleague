@@ -18,14 +18,16 @@
 	mainApp.controller('VenuesController', [  '$scope', '$interval',
 	                              			'viewService', '$location', '$stateParams','$sce',
 			cyclingListControllerFactory("venue", function($scope, $interval, viewService, $location, $stateParams,$sce){
-				
-//				$scope.$watchCollection("venues",function(venues){
-//					
-//					if(venues && venues.length > 0){
-//						
-//						$location.url("/venues/" + venues[Math.floor(Math.random() * venues.length)].id);
-//					}
-//				});
+			
+				if(!$stateParams.itemId){
+					$scope.$watchCollection("venues",function(venues){
+						
+						if(venues && venues.length > 0){
+							
+							$scope.$state.go(".detail",{itemId:venues[Math.floor(Math.random() * venues.length)].id});
+						}
+					});
+				}
 				
 				$scope.$watch("venue", function(venue){
 				

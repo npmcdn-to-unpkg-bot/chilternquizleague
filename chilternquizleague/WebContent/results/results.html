@@ -1,10 +1,4 @@
-<div ng-controller="AllResultsController">
-	<div class="show teams standard-margins">
-		<div class="selection-item" ng-repeat="item in seasons | orderBy:'startYear'" ng-class="item.id == season.id ? 'selected' : 'unselected'">
-			<a href="" ng-click="setSeason(item)">{{item.description}}</a>
-		</div>
-	</div>
-	<div class="team-pane">
-		<div class="full-header header-highlight" ng-include="'/results/results-table.html'" style="position:absolute;"></div>
-	</div>
+<div flex layout="horizontal">
+	<div ng-include="'/results/sidenav.html'"></div>
+	<div flex ui-view layout-fill style="margin-left:1em;margin-top:.25em;"></div>
 </div>

@@ -5,10 +5,13 @@
 		function($stateProvider) {
 			$stateProvider
 			.state('results', {
-				url : "/results/all",
 				templateUrl : '/results/results.html'
 			})
-			.state('resultsubmit', {
+			.state('results.all', {
+				url : "/results/all",
+				templateUrl : '/results/results-table.html'
+			})
+			.state('results.submit', {
 				url : "/results/submit",
 				templateUrl : '/results/submit-results.html'
 			});
@@ -37,6 +40,10 @@
 
 				$scope.fixturesForEmail = function(email) {
 
+					if(!email) return;
+					
+					$scope.fixture = null;
+					
 					viewService.view("fixtures-for-email", {
 						email : email,
 						seasonId : $scope.global.currentSeasonId,
@@ -69,8 +76,11 @@
 							}
 						}
 
+
 					});
 				};
+				
+				$scope.$watch("email",$scope.fixturesForEmail);
 
 				$scope.submitResults = function() {
 
@@ -112,8 +122,8 @@
 					
 					$scope.season = season;
 					
-					$scope.$watch("allResults.length",function(length){
-						$scope.setCurrentResults($scope.allResults && $scope.allResults.length > 0 ? $scope.allResults[0] : null);});
+					$scope.$watchCollection("allResults",function(allResults){
+						$scope.setCurrentResults(allResults && allResults.length > 0 ? allResults[0] : null);});
 
 				};
 
@@ -136,8 +146,8 @@
 	
 	mainApp.controller('ResultsTable', [ '$scope', function($scope) {
 		
-		$scope.$watch("allResults.length", function(length){
-			$scope.results = $scope.allResults;});
+		$scope.$watchCollection("allResults", function(allResults){
+			$scope.results = allResults;});
 		
 		$scope.showReports = function(results, result){
 			
