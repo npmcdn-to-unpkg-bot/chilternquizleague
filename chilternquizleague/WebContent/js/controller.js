@@ -104,7 +104,6 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog',
 				$mdDialog.show({
 					templateUrl : '/results/reports.html',
 					controller : "ReportsController",
-					clickOutsideToClose :false,
 					locals : {
 						reportsData : {
 							results : results,
@@ -209,12 +208,16 @@ mainApp.directive('cqlResults', function() {
 
 mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     return {
-    	scope:{season:"="},
+    	scope:{},
     	restrict:'E',
-    	link: function(scope, element, attrs){
+    	require:"?ngModel",
+    	link: function(scope, element, attrs, ngModel){
     		scope.setSeason = function(season){scope.season = season;}
     		scope.seasons = viewService.list("season-views");
-    		scope.$watch("season", function(season){scope.$alert(season.description)})
+    		scope.season = ngModel.$viewValue
+    		scope.$watch("season", function(season){
+    			ngModel.$setViewValue(season);
+     		});
     	},
     	templateUrl:'/common/season-dropdown.html'
     	

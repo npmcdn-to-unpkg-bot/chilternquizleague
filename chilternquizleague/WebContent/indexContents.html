@@ -1,10 +1,10 @@
 <div flex layout="vertical" layout-sm="horizontal" layout-fill>
 
 	<div flex layout="vertical" layout-sm="horizontal">
-		<div>
-			<div class="league-table-container show-thin collapse"
+		<md-card>
+			<div class="league-table-container collapse"
 				ng-include="'/results/league-table.html'"></div>
-		</div>
+		</md-card>
 		<md-card flex >
 			<div ng-bind-html="global.frontPageText | htmlify" class="fix-text"></div>
 		</md-card>

@@ -108,6 +108,7 @@
 					
 					$mdDialog.show({
 						templateUrl:'/results/results-confirm-dialog.html',
+						clickOutsideToClose:false,
 						controller: ['$scope', function($scope) { 
 							    $scope.submissions = submissions;
 							    $scope.commit = commit;
@@ -173,7 +174,9 @@
 	mainApp.controller("ReportsController", [ '$scope','viewService','reportsData',
 	function($scope,viewService,reportsData) {
 
-			if (reportsData) {
+		$scope.reportsData = reportsData;	
+		
+		if (reportsData) {
 				$scope.reports = viewService.view("reports", {
 					resultsKey : reportsData.results.key,
 					homeTeamId : reportsData.result.fixture.home.id

@@ -1,6 +1,7 @@
 <div class="show-thin shrink-to-fit titled-list">
-	<div>Latest Results</div>
-	<a ng-href="/competitions/{{competition.type.name}}/results" >All Results</a>
+	<md-subheader>Latest Results</md-subheader>
+
 	<div class="date-header header-left" ng-include="'/competition/results-table.html'"
 		ng-init="rowCount=1"></div>
+	<a ng-href="/competitions/{{competition.type.name}}/results" >All Results</a>
 </div>
