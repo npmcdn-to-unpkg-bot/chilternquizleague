@@ -84,42 +84,39 @@
 
 				$scope.submitResults = function() {
 
+					var submissions =  [ {
+						email: $scope.email,
+						result : $scope.mainResult,
+						seasonId : $scope.global.currentSeasonId,
+						competitionType :  $scope.fixtures.competitionType
+
+					}, {
+						email: $scope.email,
+						result : $scope.beerResult,
+						seasonId : $scope.global.currentSeasonId,
+						competitionType : "BEER"
+
+					} ];
+					
+
+				 function commit() {
+						viewService.post("submit-results", submissions);
+						$mdDialog.hide();
+
+						$scope.fixture = null;
+					}
+					
 					$mdDialog.show({
 						templateUrl:'/results/results-confirm-dialog.html',
-						locals:{submissions: [ {
-							email: $scope.email,
-							result : $scope.mainResult,
-							seasonId : $scope.global.currentSeasonId,
-							competitionType :  $scope.fixtures.competitionType
-
-						}, {
-							email: $scope.email,
-							result : $scope.beerResult,
-							seasonId : $scope.global.currentSeasonId,
-							competitionType : "BEER"
-
-						} ]},
-						controller: ['$scope', 'submissions', function($scope, submissions) { 
+						controller: ['$scope', function($scope) { 
 							    $scope.submissions = submissions;
+							    $scope.commit = commit;
+							    
 							  }]
 					});
 					
 					
-//					viewService.post("submit-results", [ {
-//						email: $scope.email,
-//						result : $scope.mainResult,
-//						seasonId : $scope.global.currentSeasonId,
-//						competitionType :  $scope.fixtures.competitionType
-//
-//					}, {
-//						email: $scope.email,
-//						result : $scope.beerResult,
-//						seasonId : $scope.global.currentSeasonId,
-//						competitionType : "BEER"
-//
-//					} ]);
-//
-//					$scope.fixture = null;
+
 				};
 			} ]);
 
@@ -173,20 +170,15 @@
 	}]);
 	
 
-	mainApp.controller("ReportsController", [ '$scope','viewService',
-	function($scope,viewService) {
+	mainApp.controller("ReportsController", [ '$scope','viewService','reportsData',
+	function($scope,viewService,reportsData) {
 
-		
-		$scope.$watch("reportsData", function(reportsData) {
 			if (reportsData) {
 				$scope.reports = viewService.view("reports", {
 					resultsKey : reportsData.results.key,
 					homeTeamId : reportsData.result.fixture.home.id
-				});
-			}
-		});
 
-
+			});}
 
 	} ]);
 

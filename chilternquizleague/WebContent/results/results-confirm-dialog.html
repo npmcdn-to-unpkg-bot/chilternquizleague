@@ -1,17 +1,18 @@
 <md-dialog>
 	<md-content>
-		<md-subheader>Check Your Results!</md-subheader>
+		<md-toolbar><div class="md-toolbar-tools">Check Your Results!</div></md-toolbar>
 		<div>Please check that all values are correct.  You will not be able to change them once submitted.<br/>If a mistake <em>is</em> made, please contact the webmaster.</div>
 		<div ng-repeat="submission in submissions">
-			<div>{{submission.competitionType}}</div>
+			<md-subheader>{{submission.competitionType}}</md-subheader>
+			<md-list>
+			<md-item>
+			<div class="md-tile-content">
 			<div>Home Score ({{submission.result.fixture.home.shortName}}) - {{submission.result.homeScore}}</div>
 			<div>Away Score ({{submission.result.fixture.away.shortName}}) - {{submission.result.awayScore}}</div>
-			<div ng-repeat="report in submission.result.reports" ng-if="report.text.text">
-				<md-card>
-					<md-subheader>Report</md-subheader>
-					<div ng-bind-html="report.text.text | lineBreaks | htmlify"></div>
-				</md-card>
 			</div>
+			</md-item>
+			</md-list>
 		</div>
+		<div class="md-toolbar-tools" layout-align="space-between"><md-button ng-click="commit()" class="md-primary md-raised">Confirm</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></div>
 	</md-content>
 </md-dialog>
