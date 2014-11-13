@@ -208,16 +208,14 @@ mainApp.directive('cqlResults', function() {
 
 mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     return {
-    	scope:{},
+    	scope:{season:"="},
     	restrict:'E',
-    	require:"?ngModel",
-    	link: function(scope, element, attrs, ngModel){
+    	link: function(scope, element, attrs){
     		scope.setSeason = function(season){scope.season = season;}
     		scope.seasons = viewService.list("season-views");
-    		scope.season = ngModel.$viewValue
     		scope.$watch("season", function(season){
-    			ngModel.$setViewValue(season);
-     		});
+    			scope.$parent.season = season;
+    		});
     	},
     	templateUrl:'/common/season-dropdown.html'
     	
