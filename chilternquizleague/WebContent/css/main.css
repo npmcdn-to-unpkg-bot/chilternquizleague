@@ -13,6 +13,10 @@ body {
 	padding-top: .25em;
 }
 
+.fix-text > p {
+	line-height: initial;
+}
+
 #select,#input,#textarea{
 	border-radius: .5em;
 	border:solid 2px aliceblue;

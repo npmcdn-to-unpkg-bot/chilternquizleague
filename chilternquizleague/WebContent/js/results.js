@@ -36,7 +36,7 @@
 	}
 
 	mainApp.controller('ResultsSubmitController', [ '$scope', 'viewService',
-			'$location', function($scope, viewService, $location) {
+			'$mdDialog', function($scope, viewService, $mdDialog) {
 
 				$scope.fixturesForEmail = function(email) {
 
@@ -84,21 +84,42 @@
 
 				$scope.submitResults = function() {
 
-					viewService.post("submit-results", [ {
-						email: $scope.email,
-						result : $scope.mainResult,
-						seasonId : $scope.global.currentSeasonId,
-						competitionType :  $scope.fixtures.competitionType
+					$mdDialog.show({
+						templateUrl:'/results/results-confirm-dialog.html',
+						locals:{submissions: [ {
+							email: $scope.email,
+							result : $scope.mainResult,
+							seasonId : $scope.global.currentSeasonId,
+							competitionType :  $scope.fixtures.competitionType
 
-					}, {
-						email: $scope.email,
-						result : $scope.beerResult,
-						seasonId : $scope.global.currentSeasonId,
-						competitionType : "BEER"
+						}, {
+							email: $scope.email,
+							result : $scope.beerResult,
+							seasonId : $scope.global.currentSeasonId,
+							competitionType : "BEER"
 
-					} ]);
-
-					$scope.fixture = null;
+						} ]},
+						controller: ['$scope', 'submissions', function($scope, submissions) { 
+							    $scope.submissions = submissions;
+							  }]
+					});
+					
+					
+//					viewService.post("submit-results", [ {
+//						email: $scope.email,
+//						result : $scope.mainResult,
+//						seasonId : $scope.global.currentSeasonId,
+//						competitionType :  $scope.fixtures.competitionType
+//
+//					}, {
+//						email: $scope.email,
+//						result : $scope.beerResult,
+//						seasonId : $scope.global.currentSeasonId,
+//						competitionType : "BEER"
+//
+//					} ]);
+//
+//					$scope.fixture = null;
 				};
 			} ]);
 

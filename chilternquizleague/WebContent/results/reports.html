@@ -7,7 +7,7 @@
 	<md-content>
 		<md-card ng-repeat="report in reports.reports" ng-if="report.text">
 			<md-subheader>By: {{report.team.name}}</md-subheader>
-			<div ng-bind-html="report.text | htmlify"></div>
+			<div ng-bind-html="report.text | lineBreaks | htmlify"></div>
 		</md-card>
 	</md-content>
 </md-dialog>

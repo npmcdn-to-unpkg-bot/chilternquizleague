@@ -18,21 +18,25 @@
 
 			<md-subheader class="md-primary">{{fixtures.description}}</md-subheader>
 
-
-			<div>
-				<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
-					type="number" ng-model="mainResult.homeScore" />
-			</div>
-
-			<div>
-				<md-text-float label="{{mainResult.fixture.away.shortName}} - Away"
-					type="number" ng-model="mainResult.awayScore" />
+			<div layout="vertical" layout-sm="horizontal" padding>
+			
+				<div style="margin-right:1em;">
+					<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
+						type="number" ng-model="mainResult.homeScore"  />
+				</div>
+	
+				<div>
+					<md-text-float label="{{mainResult.fixture.away.shortName}} - Away"
+						type="number" ng-model="mainResult.awayScore" />
+				</div>
+			
 			</div>
 
 			<md-subheader class="md-primary">Beer Leg</md-subheader>
 
 
-			<div>
+			<div layout="vertical" layout-sm="horizontal" padding>
+			<div style="margin-right:1em;">
 				<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
 					type="number" ng-model="beerResult.homeScore" />
 			</div>
@@ -40,7 +44,8 @@
 
 			<div>
 				<md-text-float label="{{mainResult.fixture.away.shortName}} - Away"
-					type="number" ng-model="beerResult.awayScore" />
+					type="number" ng-model="beerResult.awayScore"  />
+			</div>
 			</div>
 
 			<div colspan="2">Report</div>

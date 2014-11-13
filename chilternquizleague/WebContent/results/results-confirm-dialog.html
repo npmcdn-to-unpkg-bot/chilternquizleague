@@ -1,0 +1,17 @@
+<md-dialog>
+	<md-content>
+		<md-subheader>Check Your Results!</md-subheader>
+		<div>Please check that all values are correct.  You will not be able to change them once submitted.<br/>If a mistake <em>is</em> made, please contact the webmaster.</div>
+		<div ng-repeat="submission in submissions">
+			<div>{{submission.competitionType}}</div>
+			<div>Home Score ({{submission.result.fixture.home.shortName}}) - {{submission.result.homeScore}}</div>
+			<div>Away Score ({{submission.result.fixture.away.shortName}}) - {{submission.result.awayScore}}</div>
+			<div ng-repeat="report in submission.result.reports" ng-if="report.text.text">
+				<md-card>
+					<md-subheader>Report</md-subheader>
+					<div ng-bind-html="report.text.text | lineBreaks | htmlify"></div>
+				</md-card>
+			</div>
+		</div>
+	</md-content>
+</md-dialog>
