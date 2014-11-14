@@ -5,7 +5,7 @@
 		<span class="title-text">All Results</span>
 	</div>
 	</md-toolbar>
-	<div ng-include="'/common/season-dropdown.html'"></div>
+	<cql-seasons season="season"></cql-seasons>
 	<md-card flex layout-fill ng-controller="ResultsTable"
 		ng-include="'/results/results-table-content.html'" ></md-card>
 </div>

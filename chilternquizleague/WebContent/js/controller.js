@@ -228,6 +228,8 @@ mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     	replace:true,
     	link: function(scope, element, attrs){
     		scope.seasons = viewService.list("season-views");
+    		scope.labelStyle = attrs.hasOwnProperty("hidelabel") ? "display:none;" : "";
+    		scope.selectStyle = attrs.hasOwnProperty("toolstyle") ? "background:transparent;border:none;":"";
      	},
     	templateUrl:'/common/season-dropdown.html'
     	
