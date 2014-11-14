@@ -111,12 +111,12 @@
 
 				function teamExtras() {
 
-					if ($scope.team && $scope.season && !$scope.team.extras) {
+					if ($scope.team && $scope.season ) {
 						viewService.view("team-extras", {
 							seasonId : $scope.season.id,
 							teamId : $scope.team.id
 						}, function(extras) {
-							if ($scope.team.id != extras.id) {
+							if ($scope.team.id == extras.id) {
 								$scope.team.extras = extras;
 								$scope.results = extras.results;
 							}
@@ -126,7 +126,7 @@
 				}
 
 				$scope.$watch("global.currentSeasonId", loadSeasons);
-				$scope.$watch("season", teamExtras);
+				$scope.$watch("season.id", teamExtras);
 				$scope.$watch("team.id", teamExtras);
 
 			} ]);
