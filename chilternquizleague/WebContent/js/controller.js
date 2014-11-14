@@ -122,13 +122,13 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 						    
 						    $scope.send = function(){
 						    	
-						    	console.log($scope.recipient);
-						    	
 						    	viewService.post("submit-contact",{
 						    		recipient:$scope.recipient,
 						    		sender:$scope.sender,
 						    		text:$scope.text
 						    	});
+						    	
+						    	$mdDialog.hide();
 						    	
 						    }
 						    
