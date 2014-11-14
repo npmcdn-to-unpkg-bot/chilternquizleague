@@ -1,7 +1,7 @@
 <div layout="vertical" ng-controller="VenueController">
-	<md-toolbar ><div class="md-toolbar-tools title-text">{{venue.name}}</div></md-toolbar>
+	<md-toolbar><div class="md-toolbar-tools"><span class="title-text">{{venue.name}}</span></div></md-toolbar>
+	<md-card>
 	<div flex layout="vertical" layout-sm="horizontal">
-
 		<div flex layout="vertical">
 			<div class="venue-address"
 				ng-bind-html="venue.address | lineBreaks | htmlify"></div>
@@ -13,10 +13,11 @@
 			</div>
 			<div>phone : {{venue.phone}}</div>
 		</div>
-		<div ng-if="venue.imageURL">
+		<div ng-if="venue.imageURL" hide show-sm>
 			<div>
 				<img alt="" ng-src="{{venue.imageURL}}">
 			</div>
 		</div>
 	</div>
+	</md-card>
 </div>

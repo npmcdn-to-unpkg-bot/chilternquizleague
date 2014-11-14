@@ -216,7 +216,12 @@ mainApp.directive('cqlResults', function() {
     return {
     	scope:{results:"="},
     	restrict:'E',
-    	templateUrl:'/results/results-table-content.html'
+    	templateUrl:'/results/results-table-content.html',
+    	link : function(scope, element, attrs){
+    		
+    		scope.rowCount = attrs.rows ? attrs.rows :10000;
+    		
+    	}
     	
     };
   });
@@ -228,8 +233,8 @@ mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     	replace:true,
     	link: function(scope, element, attrs){
     		scope.seasons = viewService.list("season-views");
-    		scope.labelStyle = attrs.hasOwnProperty("hidelabel") ? "display:none;" : "";
-    		scope.selectStyle = attrs.hasOwnProperty("toolstyle") ? "background:transparent;border:none;":"";
+    		scope.labelStyle = attrs.hasOwnProperty("hidelabel") ? {display:"none"}:{"margin-right":".25em"};
+    		scope.selectStyle = attrs.hasOwnProperty("toolstyle") ? {background:"transparent",border:"none"}:{};
      	},
     	templateUrl:'/common/season-dropdown.html'
     	

@@ -1,7 +1,7 @@
-<div class="show-thin shrink-to-fit titled-list">
-	<div>Next Fixtures</div>
+<div >
+	<md-subheader>Next Fixtures</md-subheader>
 
 	<div class="date-header header-left" ng-include="'/results/fixtures-table.html'"
 		ng-init="rowCount=1"></div>
-	<a ng-href="/competitions/{{competition.type.name}}/fixtures">Remaining Fixtures</a>
+	<md-button ng-href="/competitions/{{competition.type.name}}/fixtures">Remaining Fixtures</md-button>
 </div>

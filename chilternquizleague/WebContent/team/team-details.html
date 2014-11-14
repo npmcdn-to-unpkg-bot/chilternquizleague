@@ -1,26 +1,23 @@
 <div flex layout="vertical" ng-controller="TeamController">
-	<div>
-		Venue: <a href="/venues/{{team.venue.id}}">{{team.venue.name}}</a>
-	</div>
-	<md-card hide block-sm ng-if="team.extras.text"><div
+	<md-card hide show-sm ng-if="team.extras.text"><div class="fix-text"
 		ng-bind-html="team.extras.text | htmlify"></div></md-card>
-	<div class="show-thin titled-list">
-		<div>Last few results:</div>
-		<div class="inline-header" ng-include="'/team/results-table.html'"
-			ng-init="rowCount=5"></div>
+	<md-card>
+		<md-subheader>Last few results:</md-subheader>
+		<cql-results ng-controller="TeamResultsTable" class="inline-header" rows="5" results="results"></cql-results>
 		<div>
-			<a href="/teams/team/{{team.id}}/results">Show all</a>
+			<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/results">Show all</md-button>
 		</div>
-	</div>
-	<div class="show-thin titled-list shrink-to-fit">
+	</md-card>
+	<md-card>
 
-		<div>Next few fixtures:</div>
+		<md-subheader>Next few fixtures:</md-subheader>
 		<div class="inline-header" ng-include="'/team/fixtures-table.html'"
 			ng-init="rowCount=5"></div>
+
 		<div>
-			<a href="/teams/team/{{team.id}}/fixtures">Show all</a>
+			<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/fixtures">Show all</md-button>
+			<md-button class="md-primary" ng-click="makeICal(team)">Download Calendar</md-button>
 		</div>
-		<a href="" ng-click="makeICal(team)">Download Calendar</a>
-	</div>
+	</md-card>
 </div>
 
