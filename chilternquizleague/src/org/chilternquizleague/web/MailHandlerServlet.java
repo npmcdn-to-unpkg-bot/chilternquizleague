@@ -49,13 +49,11 @@ public class MailHandlerServlet extends HttpServlet {
 					.split("@");
 
 			final String recipientName = recipientParts[0];
-			final String recipientHost = recipientParts[1];
 
 			for (EmailAlias alias : globaldata.getEmailAliases()) {
 
 				if (alias.getAlias().equals(recipientName)) {
-					sendMail(message, recipientHost, new MimeMessage(session),
-							new InternetAddress(alias.getUser().getEmail()));
+					sendMail(message, globaldata, new InternetAddress(alias.getUser().getEmail()));
 					return;
 				}
 			}
@@ -66,8 +64,6 @@ public class MailHandlerServlet extends HttpServlet {
 
 				if (recipientName.equals(team.getEmailName())) {
 
-					MimeMessage outMessage = new MimeMessage(session);
-
 					final Address[] addresses = new Address[team.getUsers()
 							.size()];
 
@@ -76,7 +72,7 @@ public class MailHandlerServlet extends HttpServlet {
 						addresses[idx++] = new InternetAddress(user.getEmail());
 					}
 
-					sendMail(message, recipientHost, outMessage, addresses);
+					sendMail(message,  globaldata, addresses);
 
 					return;
 				}
@@ -89,17 +85,15 @@ public class MailHandlerServlet extends HttpServlet {
 		}
 	}
 
-	private void sendMail(final MimeMessage message, final String localHost,
-			final MimeMessage outMessage, final Address... addresses)
+	private void sendMail(final MimeMessage message, GlobalApplicationData globaldata,
+			 final Address... addresses)
 			throws MessagingException, AddressException, IOException {
+		
 		try {
-
+			
 			message.setRecipients(RecipientType.TO, addresses);
-//			//outMessage
-//					.setSender(new InternetAddress("forwarding@" + localHost));
-//			outMessage.setContent(message.getContent(),
-//					message.getContentType());
-//			outMessage.setSubject(message.getSubject());
+			
+			message.setSubject("via " + globaldata.getLeagueName() + " : " + message.getSubject());
 
 			LOG.fine(message.getFrom()[0] + " to "
 					+ message.getAllRecipients()[0].toString());
@@ -107,6 +101,16 @@ public class MailHandlerServlet extends HttpServlet {
 			Transport.send(message);
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "Failure sending mail", e);
+			
+			Session session = Session.getDefaultInstance(new Properties(), null);
+			
+			MimeMessage notification = new MimeMessage(session);
+			notification.addRecipient(RecipientType.TO, message.getFrom()[0]);
+			notification.setSender(message.getAllRecipients()[0]);
+			notification.setSubject(globaldata.getLeagueName() + " : Message delivery failed");
+			notification.setText("Message delivery failed, probably due to an attachment.\nThis mail service does not allow attachments.  Try resending as text only.");
+			
+			Transport.send(notification);
 		}
 	}
 }

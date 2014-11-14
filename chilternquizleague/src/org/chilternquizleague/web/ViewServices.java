@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.chilternquizleague.contact.EmailSender;
 import org.chilternquizleague.domain.BaseEntity;
 import org.chilternquizleague.domain.Competition;
 import org.chilternquizleague.domain.CompetitionType;
@@ -302,6 +303,8 @@ public class ViewServices extends BaseRESTService {
 	private void submitContact(HttpServletRequest request) throws IOException {
 		final ContactSubmission submission = objectMapper.readValue(
 				request.getReader(), ContactSubmission.class);
+		
+		new EmailSender().sendMail(submission.getSender(), submission.getRecipient(), submission.getText());
 		
 	}
 

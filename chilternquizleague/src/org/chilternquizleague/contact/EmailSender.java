@@ -2,7 +2,6 @@ package org.chilternquizleague.contact;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -33,11 +32,9 @@ public class EmailSender {
 	public EmailSender() {}
 	
 	public void sendMail(String sender, String recipientName, String text){
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
+
 		try {
-			final MimeMessage message = new MimeMessage(session,
-					new ByteArrayInputStream(text.getBytes()));
+
 
 			final GlobalApplicationData globaldata = ofy().load().now(
 					Key.create(GlobalApplicationData.class,
@@ -46,7 +43,7 @@ public class EmailSender {
 			for (EmailAlias alias : globaldata.getEmailAliases()) {
 
 				if (alias.getAlias().equals(recipientName)) {
-					sendMail(message, sender, new MimeMessage(session),
+					sendMail(sender, text, globaldata,
 							new InternetAddress(alias.getUser().getEmail()));
 					return;
 				}
@@ -58,8 +55,6 @@ public class EmailSender {
 
 				if (recipientName.equals(team.getEmailName())) {
 
-					MimeMessage outMessage = new MimeMessage(session);
-
 					final Address[] addresses = new Address[team.getUsers()
 							.size()];
 
@@ -68,7 +63,7 @@ public class EmailSender {
 						addresses[idx++] = new InternetAddress(user.getEmail());
 					}
 
-					sendMail(message, sender, outMessage, addresses);
+					sendMail(sender, text, globaldata, addresses);
 
 					return;
 				}
@@ -81,17 +76,20 @@ public class EmailSender {
 		}
 	}
 	
-	private void sendMail(final MimeMessage message, final String sender,
-			final MimeMessage outMessage, final Address... addresses)
+	private void sendMail(final String sender, String text, GlobalApplicationData globalApplicationData,
+			 final Address... addresses)
 			throws MessagingException, AddressException, IOException {
+		
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props, null);
+		
 		try {
-
+			MimeMessage outMessage = new MimeMessage(session);
 			outMessage.addRecipients(RecipientType.TO, addresses);
 			outMessage
 					.setSender(new InternetAddress(sender));
-			outMessage.setContent(message.getContent(),
-					message.getContentType());
-			outMessage.setSubject(message.getSubject());
+			outMessage.setText(text);
+			outMessage.setSubject("Sent via " + globalApplicationData.getLeagueName());
 
 			LOG.fine(outMessage.getFrom()[0] + " to "
 					+ outMessage.getAllRecipients()[0].toString());
