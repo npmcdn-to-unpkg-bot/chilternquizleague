@@ -1,11 +1,12 @@
 <div itemscope itemtype="http://schema.org/SportsTeam">
 	<md-toolbar>
-		<div class="md-toolbar-tools">
+	<div class="md-toolbar-tools">
 		<span itemprop="name" class="title-text">{{team.name}}</span>
-		<md-button class="right" aria-label="contact us">
-		<md-icon icon="/images/icons/ic_email.svg"></md-icon>
-		<md-tooltip>Contact Us!</md-tooltip></md-button>
-		</div>
+		<md-button aria-label="contact us"
+			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
+			icon="/images/icons/ic_email.svg"></md-icon> <md-tooltip>Contact
+		Us!</md-tooltip></md-button>
+	</div>
 	</md-toolbar>
 	<div ui-view flex></div>
 </div>

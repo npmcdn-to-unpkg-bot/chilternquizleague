@@ -22,7 +22,6 @@ import org.chilternquizleague.domain.CompetitionType;
 import org.chilternquizleague.domain.Fixture;
 import org.chilternquizleague.domain.Fixtures;
 import org.chilternquizleague.domain.GlobalApplicationData;
-import org.chilternquizleague.domain.GlobalText;
 import org.chilternquizleague.domain.Result;
 import org.chilternquizleague.domain.Results;
 import org.chilternquizleague.domain.Season;
@@ -32,6 +31,7 @@ import org.chilternquizleague.domain.Text;
 import org.chilternquizleague.domain.User;
 import org.chilternquizleague.results.ResultHandler;
 import org.chilternquizleague.views.CompetitionView;
+import org.chilternquizleague.views.ContactSubmission;
 import org.chilternquizleague.views.GlobalApplicationDataView;
 import org.chilternquizleague.views.LeagueTableView;
 import org.chilternquizleague.views.PreSubmissionView;
@@ -293,6 +293,16 @@ public class ViewServices extends BaseRESTService {
 		if (request.getPathInfo().endsWith("submit-results")) {
 			submitResults(request);
 		}
+		else if(request.getPathInfo().endsWith("submit-contact")){
+			submitContact(request);
+		}
+
+	}
+
+	private void submitContact(HttpServletRequest request) throws IOException {
+		final ContactSubmission submission = objectMapper.readValue(
+				request.getReader(), ContactSubmission.class);
+		
 	}
 
 	private void globalData(HttpServletResponse resp) throws IOException {

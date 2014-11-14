@@ -81,16 +81,9 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial','ui.
 					return service;
 				} ]);
 
-mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog',
-		function($rootScope, $state, $stateParams, $mdDialog) {
+mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService',
+		function($rootScope, $state, $stateParams, $mdDialog, viewService) {
 
-			// It's very handy to add references to $state and $stateParams to the
-			// $rootScope
-			// so that you can access them from any scope within your applications.For
-			// example,
-			// <li ng-class="{ active: $state.includes('contacts.list') }"> will set
-			// the <li>
-			// to active whenever 'contacts.list' or one of its decendents is active.
 			$rootScope.$state = $state;
 			$rootScope.$stateParams = $stateParams;
 
@@ -113,6 +106,36 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog',
 				});
 
 			};
+			
+			$rootScope.showContactForm = function(title, recipient){
+				
+				$mdDialog.show({
+					
+					templateUrl : "/common/contact-dialog.html",
+					clickOutsideToClose:false,
+					locals : {title:title, recipient:recipient},
+					controller: ['$scope',"title","recipient", function($scope, title, recipient) { 
+						    $scope.title = title;
+						    $scope.recipient = recipient;
+						    $scope.sender = "";
+						    $scope.text = "";
+						    
+						    $scope.send = function(){
+						    	
+						    	console.log($scope.recipient);
+						    	
+						    	viewService.post("submit-contact",{
+						    		recipient:$scope.recipient,
+						    		sender:$scope.sender,
+						    		text:$scope.text
+						    	});
+						    	
+						    }
+						    
+						  }]
+					
+				});
+			};
 		} ]);
 
 mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
@@ -120,15 +143,7 @@ mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
 	
 	
 	$stateProvider.state("home", {
-
-    // Use a url of "/" to set a state as the "index".
     url: "/",
-
-    // Example of an inline template string. By default, templates
-    // will populate the ui-view within the parent state's template.
-    // For top level states, like this one, the parent template is
-    // the index.html file. So this template will be inserted into the
-    // ui-view within index.html.
     templateUrl: '/indexContents.html'
 
   })
