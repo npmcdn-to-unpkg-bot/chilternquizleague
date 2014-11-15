@@ -17,7 +17,7 @@
 	<tbody ng-repeat-end>
 		<tr
 			ng-repeat="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
-			<td class="inline-header-cell">{{fixtureSet.start | date:'d MMMM yyyy'}} : {{fixtureSet.description}}</td>
+			<td class="inline-header-cell">{{fixtureSet.start | date:'d MMM yy'}} : {{fixtureSet.description}}</td>
 			<td class="home-team">{{fixture.home.shortName}}</td>
 			<td>:</td>
 			<td class="away-team">{{fixture.away.shortName}}</td>

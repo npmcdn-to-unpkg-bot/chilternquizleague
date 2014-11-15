@@ -67,19 +67,14 @@ div.league-table>div.standard-table{
 	transition:all .5s ease-in;
 }
 
-.popup div.reports-popup-header{
-	font-weight: 600;
-	color:darkblue;
-	border-bottom: solid thin #99ccff;
-	margin-bottom:.25em;
-}
+
 .results-table .numeric{
-	min-width:3em;
+	min-width:2em;
 	text-align:right;
 }
 .results-table .left-align{
 	text-align:left;
-	min-width:3em;
+	min-width:2em;
 }
 
 .results-table{
@@ -89,8 +84,9 @@ div.league-table>div.standard-table{
 
 
 .results-table .winner{
-	color:darkblue;
-	text-shadow: 0 0 5px blue;
+	color:darkred;
+	font-weight:600;
+	
 }
 
 .header-left .results-table>thead>tr>th{
@@ -125,7 +121,7 @@ div.league-table>div.standard-table{
 
  .results-table>tbody>tr>td.inline-header-cell{
  	display:none;
- 	font-weight: bold;
+ 	font-style: italic;
  	padding-right:.5em;
  }
  
@@ -136,27 +132,47 @@ div.league-table>div.standard-table{
 .inline-header .results-table>tbody>tr>td.inline-header-cell{
 	
 	display:table-cell;
+
 }
 
-.results-table>tbody>tr td:nth-child(2){
+
+.results-table>tbody>tr{
+	border-top-left-radius:.5em;
+	border-bottom-left-radius:.5em;
+		border-top-right-radius:.5em;
+	border-bottom-right-radius:.5em;
+}
+
+//.results-table>tbody>tr td:nth-child(2){
 	border-top-left-radius:.5em;
 	border-bottom-left-radius:.5em;
 	padding-left:.5em;
 }
 
-.results-table>tbody>tr td:last-child{
+//.inline-header .results-table>tbody>tr td:first-child{
+	border-top-left-radius:.5em;
+	border-bottom-left-radius:.5em;
+	padding-left:.5em;
+}
+
+//.inline-header .results-table>tbody>tr td:nth-child(2){
+	border-top-left-radius:none;
+	border-bottom-left-radius:none;
+}
+
+//.results-table>tbody>tr td:last-child{
 	border-top-right-radius:.5em;
 	border-bottom-right-radius:.5em;
 	padding-right:.5em;
 }
 
-.results-table>tbody>tr:hover td{
+.results-table>tbody>tr:hover{
 	
 	background-color:whitesmoke;
 	transition:background-color .2s ease-in;
 }
 
-.results-table>tbody>tr td{
+.results-table>tbody>tr{
 	transition:background-color .2s ease-out;
 }
 .results-table>tbody>tr td{
@@ -174,13 +190,13 @@ div.league-table>div.standard-table{
 .home-team{
 	
 	text-align:right;
-	padding-right:1em;
+	padding-right:.5em;
 
 }
 
 .away-team{
 	
 	text-align:left;
-	padding-left:1em;
+	padding-left:.5em;
 
 }

@@ -242,6 +242,14 @@ mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     };
   }]);
 
+mainApp.directive("cqlPageMenu",function(){
+	
+	return {
+		restrict:'E',
+		replace:true,
+		template : "<span hide-sm><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
+});
+
 
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',
 		function($scope, $interval, viewService, $mdSidenav) {
