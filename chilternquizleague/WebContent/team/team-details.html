@@ -4,7 +4,7 @@
 	<md-card>
 		<md-subheader>Last few results:</md-subheader>
 		<cql-results ng-controller="TeamResultsTable" class="inline-header" rows="5" results="results"></cql-results>
-		<div>
+		<div class="md-toolbar-tools">
 			<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/results">Show all</md-button>
 		</div>
 	</md-card>
@@ -14,7 +14,7 @@
 		<div class="inline-header" ng-include="'/team/fixtures-table.html'"
 			ng-init="rowCount=5"></div>
 
-		<div>
+		<div  class="md-toolbar-tools">
 			<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/fixtures">Show all</md-button>
 			<md-button class="md-primary" ng-click="makeICal(team)">Download Calendar</md-button>
 		</div>

@@ -91,21 +91,8 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 				
 				$mdDialog.hide();
 			};
-			
-			$rootScope.showReports = function(results, result) {
 
-				$mdDialog.show({
-					templateUrl : '/results/reports.html',
-					controller : "ReportsController",
-					locals : {
-						reportsData : {
-							results : results,
-							result : result
-						}
-					}
-				});
-
-			};
+			$rootScope.global = viewService.view("globaldata");
 			
 			$rootScope.showContactForm = function(title, recipient){
 				
@@ -130,7 +117,7 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 						    	
 						    	$mdDialog.hide();
 						    	
-						    }
+						    };
 						    
 						  }]
 					
@@ -212,7 +199,7 @@ mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,vie
     };
   }]);
 
-mainApp.directive('cqlResults', function() {
+mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     return {
     	scope:{results:"="},
     	restrict:'E',
@@ -220,11 +207,25 @@ mainApp.directive('cqlResults', function() {
     	link : function(scope, element, attrs){
     		
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
+    		scope.showReports = function(results, result) {
+
+  				$mdDialog.show({
+  					templateUrl : '/results/reports.html',
+  					controller : "ReportsController",
+  					locals : {
+  						reportsData : {
+  							results : results,
+  							result : result
+  						}
+  					}
+  				});
+
+  			};
     		
     	}
     	
     };
-  });
+  }]);
 
 mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
     return {
@@ -242,36 +243,8 @@ mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
   }]);
 
 
-mainApp.directive('cqlDialog', function() {
-	  return {
-	    restrict: 'E',
-	    scope: {
-	      show: '='
-	    },
-	    replace: true, // Replace with the template below
-	    transclude: true, // we want to insert custom content inside the directive
-	    link: function(scope, element, attrs) {
-	      scope.hideModal = function() {
-	        scope.show = false;
-	      };
-	      scope.popup='';
-	      scope.$watch("show", function(show){
-	    	  scope.popup = show ? "popup" : "popdown"});
-	    },
-	    template: "<div ng-class='popup' class='modal'>" +
-	    		"  <div  class='show-thin nofade popup-container'>" +
-	    		" <div class='x-button'><a href='' ng-click='hideModal()'></a></div>" +
-	    		"		<div style='height:98%;' ng-transclude></div>" +
-	    		"	</div>	</div>"
-	  };
-	});
-
-
-
-mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia','$mdDialog','$rootScope',
-		function($scope, $interval, viewService, $mdSidenav, $mdMedia, $mdDialog, $rootScope) {
-
-		  $scope.global = viewService.view("globaldata");
+mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',
+		function($scope, $interval, viewService, $mdSidenav) {
 			
 		  $scope.toggleRight = function() {
 		    $mdSidenav('right').toggle();

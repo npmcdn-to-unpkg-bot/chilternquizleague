@@ -1,8 +1,8 @@
 <md-dialog>
-	<section class="title-text">{{reportsData.results.date | date:'dd MMMM yyyy'}} -
+	<section><md-subheader>{{reportsData.results.date | date:'dd MMMM yyyy'}} -
 	{{reportsData.result.fixture.home.shortName}} :
 	{{reportsData.result.fixture.away.shortName}}
-	</section>
+	</md-subheader></section>
 	<md-content>
 		<md-card ng-repeat="report in reports.reports" ng-if="report.text">
 			<md-subheader>By: {{report.team.name}}</md-subheader>

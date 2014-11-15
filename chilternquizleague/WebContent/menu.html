@@ -1,5 +1,5 @@
 <md-toolbar hide show-sm class="md-medium-tall">
-	<div class="md-toolbar-tools" style="margin-left:.25em;">{{global.leagueName}}</div>
+	<div class="md-toolbar-tools title-text" style="margin-left:.25em;">{{global.leagueName}}</div>
 	<div class="md-toolbar-tools">
 		<md-button class="#md-raised"  href="/">Home</md-button>
 		<md-button class="#md-raised"  href="/teams/all">Teams</md-button>
@@ -12,7 +12,7 @@
 </md-toolbar>
 <md-toolbar hide-sm >
 <div class="md-toolbar-tools">
-	<span><md-button ng-click="toggleLeft()" aria-label="Page menu"><md-icon icon="/images/icons/ic_more_horiz.svg"></md-icon></md-button></span><span layout-align="center" flex>{{global.leagueName}}</span><span style="align-content:flex-end;"><md-button class="#md-fab" aria-label="Main menu" ng-click="toggleRight()"><md-icon icon="/images/icons/ic_menu.svg" style="width: 24px; height: 24px;"></md-icon></md-button></span>
+	<span><md-button ng-click="toggleLeft()" aria-label="Page menu"><md-icon icon="/images/icons/ic_more_horiz.svg"></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span><span layout-align="center" flex>{{global.leagueName}}</span><span style="align-content:flex-end;"><md-button class="#md-fab" aria-label="Main menu" ng-click="toggleRight()"><md-icon icon="/images/icons/ic_menu.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Main menu</md-tooltip></md-button></span>
 </div>
 </md-toolbar>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2"

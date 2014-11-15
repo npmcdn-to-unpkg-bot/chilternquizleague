@@ -52,7 +52,7 @@
 			url:"/:type/fixtures",
 			templateUrl : '/competition/fixtures.html'
 			
-		})
+		});
 
 	 } ]);	
 	
@@ -135,7 +135,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			});
 			
 		}
-	}
+	};
 		
 	
 	var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
@@ -221,6 +221,12 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			'viewService', function($scope, $location, viewService) {
 
 			$scope.setCompetitionByType("PLATE");
+
+			} ]);
+		
+		mainApp.controller('BuzzerCompetitionController', [ '$scope', function($scope) {
+
+				$scope.setCompetitionByType("BUZZER");
 
 			} ]);
 		mainApp.controller('CompetitionAllResults', [
