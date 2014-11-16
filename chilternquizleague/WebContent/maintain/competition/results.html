@@ -1,17 +1,36 @@
-<div>
+<div ng-controller="ResultsCtrl">
 	<div class="box-title">Results</div>
-	<form novalidate>
+	<form>
 		<table>
-			<tr ng-repeat="results">
-				<td>Name</td>
-				<td><input ng-model="competition.description"></td>
+			<tr>
+				<td>Results</td>
+				<td>
+					<div class="show-thin standard-margins"
+						ng-class="results.date == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'"
+						ng-repeat="results in resultsList | orderBy : 'date'">
+						<a href="" ng-click="setCurrentDate(results.date)">{{results.date
+							| date:'dd MMMM yyyy'}}</a> -
+						<input ng-model="results.description"></input>
+						<div
+							ng-repeat="result in results.results | orderBy : 'result.fixture.home.shortName'" >
+							<div>{{result.fixture.home.shortName}} <input type="number" style="width:3em;" ng-model="result.homeScore"  max="126"></input> - {{result.fixture.away.shortName}} <input type="number" style="width:3em;" ng-model="result.awayScore"  max="126"></input></div>
+							<div ng-repeat="report in result.reports" >
+								<div>{{report.team.name}}</div>
+								<div style="min-height: 15em;">
+									<textarea ng-model="report.text.text" rows="15" cols="150"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</td>
 			</tr>
+
 			<tfoot>
 				<tr>
 					<td></td>
 					<td>
 						<button ng-click="reset()">Reset</button>
-						<button ng-click="update(competition)">Save</button>
+						<button ng-click="updateResults(resultsList)">Save</button>
 					</td>
 				</tr>
 			</tfoot>
