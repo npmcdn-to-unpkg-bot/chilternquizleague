@@ -256,6 +256,7 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			
 		  $scope.toggleRight = function() {
 		    $mdSidenav('right').toggle();
+		    $mdSidenav('left').close();
 		  };
 		  
 		  $scope.toggleLeft = function() {

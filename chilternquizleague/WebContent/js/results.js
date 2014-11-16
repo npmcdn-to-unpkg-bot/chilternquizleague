@@ -126,10 +126,11 @@
 			'viewService',
 			'$location',
 			function($scope, viewService, $location) {
-
+				
 				$scope.setCurrentResults = function(results) {
 					$scope.currentResults = results;
 				};
+
 
 				$scope.setSeason = function(season) {
 
@@ -145,6 +146,10 @@
 						$scope.setCurrentResults(allResults && allResults.length > 0 ? allResults[0] : null);});
 
 				};
+				
+				$scope.$watch("season", function(season){
+					$scope.setSeason(season);
+				});
 
 				viewService.view("season-views",{isArray:true}, function(seasons) {
 					$scope.seasons = seasons;
@@ -163,7 +168,7 @@
 
 			} ]);
 	
-	mainApp.controller('ResultsTable', [ '$scope','$mdDialog','$rootScope', function($scope,$mdDialog,$rootScope) {
+	mainApp.controller('ResultsTable', [ '$scope', function($scope) {
 		
 		$scope.$watchCollection("allResults", function(allResults){
 			$scope.results = allResults;});

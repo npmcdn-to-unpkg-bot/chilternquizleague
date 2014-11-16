@@ -6,8 +6,8 @@
 			</div>
 		</md-toolbar>
 	</div>
-	<div>
-		<md-card flex ng-controller="ResultsTable">
+	<div ng-controller="ResultsTable">
+		<md-card flex  ng-if="results.length">
 			<cql-results class="full-header header-highlight" results="results"></cql-results>
 		</md-card>
 	</div>
