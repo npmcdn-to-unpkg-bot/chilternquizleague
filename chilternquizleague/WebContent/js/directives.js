@@ -66,11 +66,13 @@ mainApp.directive('cqlFixtures', function() {
 
 mainApp.directive('cqlLeagueTable', function() {
     return {
-    	scope:{leagueTable:"="},
+    	scope:{league:"=leaguetable"},
     	restrict:'E',
     	templateUrl:'/results/league-table-content.html',
     	link : function(scope, element, attrs){
-    		scope.collapse = attrs.hasOwnProperty("collapse");
+    		scope.clazz = "";
+    		scope.clazz = scope.clazz + attrs.hasOwnProperty("collapse")?"collapse" : "";
+    		scope.$watch("league", function(leagueTable){scope.leagueTable = leagueTable;})
      	}
     	
     };
