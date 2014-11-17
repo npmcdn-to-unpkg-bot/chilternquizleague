@@ -1,5 +1,33 @@
 <div ng-controller="ResultsCtrl">
 	<div class="box-title">Results</div>
+	<style>
+
+.highlit-border > div{
+	height:20em;
+}
+
+
+.lowlit-border a:hover ~div{
+	height:20em;
+}
+
+ 
+.highlit-border> div.ng-enter.ng-enter-active,
+.highlit-border> div.ng-move.ng-move-active {
+  height:20em;
+ }
+
+@keyframes my_animation {
+  from { height:20em; }
+  to { height:0; }
+}
+
+@-webkit-keyframes my_animation {
+  from { height:20em; }
+  to { height:0; }
+}
+</style>
+	
 	<form>
 		<table>
 			<tr>
@@ -16,7 +44,7 @@
 							<div>{{result.fixture.home.shortName}} <input type="number" style="width:3em;" ng-model="result.homeScore"  max="126"></input> - {{result.fixture.away.shortName}} <input type="number" style="width:3em;" ng-model="result.awayScore"  max="126"></input></div>
 							<div ng-repeat="report in result.reports" >
 								<div>{{report.team.name}}</div>
-								<div style="min-height: 15em;">
+								<div>
 									<textarea ng-model="report.text.text" rows="15" cols="150"></textarea>
 								</div>
 							</div>

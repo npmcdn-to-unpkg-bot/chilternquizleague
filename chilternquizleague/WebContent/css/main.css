@@ -80,7 +80,7 @@ section{
 }
 .highlit-border > div{
 	overflow: hidden;
-	height:initial;
+	height:1.5em;
 	transition:all .5s ease-in;
 }
 

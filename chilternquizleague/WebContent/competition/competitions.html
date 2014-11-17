@@ -1,7 +1,7 @@
 <section layout-sm="horizontal" layout="vertical"
 	ng-controller="CompetitionsController">
 	<div ng-include="'/competition/sidenav.html'" style="margin-right:1em;"></div>
-	<div flex layout="vertical" layout-fill >
+	<div flex layout="vertical">
 		<md-toolbar md-theme="cyan"><div class="md-toolbar-tools"><cql-page-menu></cql-page-menu><span class="title-text">{{competition.type.description}}</span><cql-seasons season="season" hideLabel toolStyle></cql-seasons></div></md-toolbar>
 		<div flex ui-view></div>
 	</div>

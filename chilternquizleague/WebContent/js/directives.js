@@ -53,7 +53,7 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     };
   }]);
 
-mainApp.directive('cqlFixtures',["$mdDialog", function($mdDialog) {
+mainApp.directive('cqlFixtures', function() {
     return {
     	scope:{fixtures:"="},
     	restrict:'E',
@@ -61,9 +61,20 @@ mainApp.directive('cqlFixtures',["$mdDialog", function($mdDialog) {
     	link : function(scope, element, attrs){
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
      	}
+    };
+  });
+
+mainApp.directive('cqlLeagueTable', function() {
+    return {
+    	scope:{leagueTable:"="},
+    	restrict:'E',
+    	templateUrl:'/results/league-table-content.html',
+    	link : function(scope, element, attrs){
+    		scope.collapse = attrs.hasOwnProperty("collapse");
+     	}
     	
     };
-  }]);
+  });
 
 mainApp.directive('cqlSeasons', ["viewService","$rootScope",function(viewService, $rootScope) {
     return {
