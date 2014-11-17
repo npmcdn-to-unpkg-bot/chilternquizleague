@@ -1,23 +1,26 @@
 <div flex layout="vertical" ng-controller="TeamController">
-	<md-card hide show-sm ng-if="team.extras.text"><div class="fix-text"
-		ng-bind-html="team.extras.text | htmlify"></div></md-card>
-	<md-card>
-		<md-subheader>Last few results:</md-subheader>
-		<cql-results ng-controller="TeamResultsTable" class="inline-header" rows="5" results="results"></cql-results>
-		<div class="md-toolbar-tools">
-			<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/results">Show all</md-button>
-		</div>
-	</md-card>
-	<md-card>
-
-		<md-subheader>Next few fixtures:</md-subheader>
-		<div class="inline-header" ng-include="'/team/fixtures-table.html'"
-			ng-init="rowCount=5"></div>
-
-		<div  class="md-toolbar-tools">
-			<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/fixtures">Show all</md-button>
-			<md-button class="md-primary" ng-click="makeICal(team)">Download Calendar</md-button>
-		</div>
-	</md-card>
+	<div ng-controller="TeamExtrasController">
+		<md-card hide show-sm ng-if="team.extras.text"><div class="fix-text"
+			ng-bind-html="team.extras.text | htmlify"></div></md-card>
+	
+		<md-card>
+			<md-subheader>Last few results:</md-subheader>
+			<cql-results class="inline-header" rows="5" results="team.extras.results"></cql-results>
+			<div class="md-toolbar-tools">
+				<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/results">Show all</md-button>
+			</div>
+		</md-card>
+		<md-card>
+			<md-subheader>Next few fixtures:</md-subheader>
+			<cql-fixtures class="inline-header" rows="5" fixtures="team.extras.fixtures"></cql-fixtures> 
+			<div class="inline-header" ng-include="'/team/fixtures-table.html'"
+				ng-init="rowCount=5"></div>
+	
+			<div  class="md-toolbar-tools">
+				<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/fixtures">Show all</md-button>
+				<md-button class="md-primary" ng-click="makeICal(team)">Download Calendar</md-button>
+			</div>
+		</md-card>
+	</div>
 </div>
 

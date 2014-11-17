@@ -114,6 +114,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		for(idx in $scope.competitions){
 			if($scope.competitions[idx].type.name == name){
 				return $scope.competitions[idx];
+				
 			}			
 		}
 		

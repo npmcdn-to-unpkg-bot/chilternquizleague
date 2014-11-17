@@ -1,5 +1,5 @@
 <table class="results-table">
-	<thead ng-repeat-start="resultSet in results  | orderBy: 'date' : true | limitTo:(rowCount?rowCount:10000)">
+	<thead ng-repeat-start="resultSet in results  | orderBy: 'date' : true | limitTo:rowCount">
 		<tr class="full-header">
 			<th colspan="8">{{resultSet.date |
 				date:'d MMMM yyyy'}} : {{resultSet.description}}</th>

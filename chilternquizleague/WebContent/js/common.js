@@ -3,7 +3,7 @@ var b = document.documentElement;
   b.setAttribute('data-platform', navigator.platform );
   b.className += ((!!('ontouchstart' in window) || !!('onmsgesturechange' in window))?' touch':'');
 
-function cyclingListControllerFactory(type, otherFunctions) {
+function listControllerFactory(type, otherFunctions) {
 
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
 	var listName = type + "s";

@@ -151,20 +151,6 @@
 					$scope.setSeason(season);
 				});
 
-				viewService.view("season-views",{isArray:true}, function(seasons) {
-					$scope.seasons = seasons;
-
-					for (idx in seasons) {
-
-						if (seasons[idx].id == $scope.global.currentSeasonId) {
-							$scope.setSeason(seasons[idx]);
-							return;
-						}
-
-						$scope.setSeason(seasons ? seasons[0] : null);
-					}
-
-				});
 
 			} ]);
 	

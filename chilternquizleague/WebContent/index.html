@@ -22,6 +22,8 @@
 <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
+<script type="text/javascript" src="/js/filters.js"></script>
+<script type="text/javascript" src="/js/directives.js"></script>
 <script type="text/javascript" src="/js/leagueTable.js"></script>
 <script type="text/javascript" src="/js/team.js"></script>
 <script type="text/javascript" src="/js/FileSaver.js"></script>
@@ -32,10 +34,10 @@
 
 <title ng-cloak>Chiltern Quiz League</title>
 </head>
-<body layout="vertical" layout-fill>
+<body layout="vertical" layout-fill md-swipe-left="toggleRight()">
 
 	<header ng-include="'/top.html'"></header>
-	<md-content flex ui-view md-swipe-right="openLeft()">
+	<md-content flex  md-swipe-right="openLeft()" ui-view>
 	</md-content>
 </body>
 </html>

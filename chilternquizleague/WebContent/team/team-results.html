@@ -1,9 +1,8 @@
-<div ng-controller="TeamExtrasController" flex layout="vertical" style="margin-top:.25em;">
+<section ng-controller="TeamExtrasController" flex layout="vertical">
 	<cql-seasons season="season"></cql-seasons>
 	<md-card> 
 		<md-subheader>All Results</md-subheader>
-		<div class="inline-header header-left"
-			ng-include="'/team/results-table.html'" flex></div>
+		<cql-results class="inline-header header-left" results="team.extras.results"></cql-results>
 	</md-card>
-</div>
+</section>
 
