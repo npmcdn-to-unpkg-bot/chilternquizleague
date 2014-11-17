@@ -267,6 +267,10 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			    $mdSidenav('left').close();
 			  };
 			  
+			  $scope.openLeft = function() {
+				    $mdSidenav('left').open();
+				  };
+			  
 
 
 		} ]);
