@@ -1,12 +1,14 @@
-<section ng-controller="VenuesController" flex layout="vertical" layout-sm="horizontal">
-<md-sidenav class="md-sidenav-left md-whiteframe-z2"
-	component-id="left" is-locked-open="$media('md')" >
-
-		<div ng-repeat="item in venues | orderBy:'name'">
-			<md-button class="menu-item menu-title" ng-click="closeLeft()" href="/venues/{{item.id}}">{{item.name}}</md-button>
-		</div>
-
-	</md-sidenav>
-	<div flex ui-view layout-fill></div>
+<section ng-controller="VenuesController" layout="vertical" layout-sm="horizontal">
+	<div>
+		<md-sidenav class="md-sidenav-left md-whiteframe-z2"
+		component-id="left" is-locked-open="$media('md')" >
+	
+			<div ng-repeat="item in venues | orderBy:'name'">
+				<md-button class="menu-item menu-title" ng-click="closeLeft()" href="/venues/{{item.id}}">{{item.name}}</md-button>
+			</div>
+	
+		</md-sidenav>
+	</div>
+	<div flex ui-view></div>
 	
 </section>

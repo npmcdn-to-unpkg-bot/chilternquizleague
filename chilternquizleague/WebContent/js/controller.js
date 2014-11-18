@@ -94,6 +94,23 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 
 			$rootScope.global = viewService.view("globaldata");
 			
+			$rootScope.seasons = viewService.list("season-views");
+			
+			var dereg = $rootScope.$watchGroup(["global.currentSeasonId","seasons.length"], function(){
+				
+				if($rootScope.global.currentSeasonId && $rootScope.seasons.length > 1){
+					
+					for(idx in $rootScope.seasons){
+						if($rootScope.seasons[idx].id == $rootScope.global.currentSeasonId){
+							$rootScope.global.currentSeason = $rootScope.seasons[idx];
+							dereg();
+							break;
+						}
+					}
+
+				}
+			});
+			
 			$rootScope.showContactForm = function(title, recipient){
 				
 				$mdDialog.show({

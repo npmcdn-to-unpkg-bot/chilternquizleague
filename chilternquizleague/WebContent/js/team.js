@@ -54,14 +54,11 @@
 			saveAs(blob, filename);
 
 		};
-
-		var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
 		
-		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
-			if (currentSeasonId) {
-				
-				loadSeasons(currentSeasonId);
-			}
+		$scope.season = {};
+		
+		$scope.$watch("global.currentSeason", function(currentSeason) {
+			$scope.season = currentSeason;
 		});
 	}
 
@@ -85,10 +82,10 @@
 			'viewService',
 			'$location',
 			function($scope, $interval, viewService, $location) {
-				
+				$scope.setCurrentItem();
 				function teamExtras() {
 
-					if ($scope.team && $scope.season ) {
+					if ($scope.team && $scope.season && $scope.season.id ) {
 						if(!($scope.team.extras && ($scope.team.extras.id == $scope.team.id) && ($scope.team.extras.seasonId == $scope.season.id))){ 
 
 						
@@ -107,8 +104,7 @@
 					}
 				}
 
-				$scope.$watch("season", teamExtras);
-				$scope.$watch("team", teamExtras);
+				$scope.$watchGroup(["team","season"], teamExtras);
 
 			} ]);
 

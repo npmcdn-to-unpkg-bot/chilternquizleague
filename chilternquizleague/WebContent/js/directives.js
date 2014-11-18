@@ -71,7 +71,7 @@ mainApp.directive('cqlLeagueTable', function() {
     	templateUrl:'/results/league-table-content.html',
     	link : function(scope, element, attrs){
     		scope.clazz = "";
-    		scope.clazz = scope.clazz + attrs.hasOwnProperty("collapse")?"collapse" : "";
+    		scope.clazz = scope.clazz + (attrs.hasOwnProperty("collapse")?"collapse" : "");
     		scope.$watch("league", function(leagueTable){scope.leagueTable = leagueTable;})
      	}
     	
@@ -98,7 +98,7 @@ mainApp.directive('cqlSeasons', ["viewService","$rootScope",function(viewService
 	    		});
 	    	}
     		
-    		scope.seasons = viewService.list("season-views");
+    		scope.seasons = $rootScope.seasons;
     		scope.labelStyle = attrs.hasOwnProperty("hidelabel") ? {display:"none"}:{"margin-right":".25em"};
     		scope.selectStyle = attrs.hasOwnProperty("toolstyle") ? {background:"transparent",border:"none"}:{};
     		
