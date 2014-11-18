@@ -1,4 +1,4 @@
-<md-toolbar hide show-sm class="md-medium-tall">
+<md-toolbar hide show-tablet-landscape show-pc class="md-medium-tall">
 	<div class="md-toolbar-tools title-text" style="margin-left:.25em;">{{global.leagueName}}</div>
 	<div class="md-toolbar-tools">
 		<md-button class="#md-raised"  href="/">Home</md-button>
@@ -10,13 +10,13 @@
 		<md-button class="#md-raised"  href="/contact">Contact Us</md-button>
 	</div>
 </md-toolbar>
-<md-toolbar hide-sm >
+<md-toolbar hide-tablet-landscape hide-pc >
 <div class="md-toolbar-tools">
-	<span layout-align="center" flex>{{global.leagueName}}</span><span style="align-content:flex-end;"><md-button class="#md-fab" aria-label="Main menu" ng-click="toggleRight()"><md-icon icon="/images/icons/ic_menu.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Main menu</md-tooltip></md-button></span>
+	<span layout-align="center" flex>{{global.leagueName}}</span><span style="align-content:flex-end;"><md-button aria-label="Main menu" ng-click="toggleRight()"><md-icon icon="/images/icons/ic_menu.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Main menu</md-tooltip></md-button></span>
 </div>
 </md-toolbar>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2"
-	component-id="right"  md-padding>
+	md-component-id="right"  md-padding>
 		<div><md-button class="#md-raised"  href="/" ng-click="toggleRight()">Home</md-button></div>
 		<div><md-button class="#md-raised"  href="/teams/all" ng-click="toggleRight()">Teams</md-button></div>
 		<div><md-button class="#md-raised"  href="/competitions/LEAGUE" ng-click="toggleRight()">Competitions</md-button></div>

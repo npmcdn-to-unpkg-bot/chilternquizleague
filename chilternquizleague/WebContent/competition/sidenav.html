@@ -1,5 +1,5 @@
 <md-sidenav class="md-sidenav-left md-whiteframe-z2"
-	component-id="left" is-locked-open="$media('md')" md-padding>
+	component-id="left" is-locked-open="$media('tablet')" md-padding>
 	<div ng-repeat="item in competitions | orderBy : 'type.name'">
 		<md-button ng-click="closeLeft()" href="/competitions/{{item.type.name}}">{{item.description}}</md-button>
 	</div>

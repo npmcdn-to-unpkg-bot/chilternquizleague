@@ -14,7 +14,6 @@
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
-<script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/angular-ui-router.js"></script>
 <script type="text/javascript" src="/js/angular-aria.min.js"></script>
 <script type="text/javascript" src="/js/angular-material.js"></script>
@@ -33,7 +32,7 @@
 
 <title ng-cloak>Chiltern Quiz League</title>
 </head>
-<body layout="vertical" layout-fill md-swipe-left="toggleRight()">
+<body layout="column" layout-fill md-swipe-left="toggleRight()">
 
 	<header ng-include="'/top.html'"></header>
 	<md-content flex  md-swipe-right="openLeft()" ui-view>
