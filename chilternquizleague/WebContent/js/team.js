@@ -40,7 +40,6 @@
 
 	function extraStuff($scope, $interval, viewService, $location, $stateParams) {
 
-
 		$scope.makeICal = function(team) {
 
 			var contents = generateICalContent(team.extras.fixtures);
@@ -77,7 +76,7 @@
 
 	mainApp.controller('TeamController', [ '$scope', 
 			function($scope) {
-
+		$scope.setCurrentItem();
 	} ]);
 
 	mainApp.controller("TeamExtrasController", [
@@ -86,20 +85,24 @@
 			'viewService',
 			'$location',
 			function($scope, $interval, viewService, $location) {
-
-				$scope.setCurrentItem();
 				
 				function teamExtras() {
 
 					if ($scope.team && $scope.season ) {
+						if(!($scope.team.extras && ($scope.team.extras.id == $scope.team.id) && ($scope.team.extras.seasonId == $scope.season.id))){ 
+
+						
 						viewService.view("team-extras", {
 							seasonId : $scope.season.id,
 							teamId : $scope.team.id
 						}, function(extras) {
+							extras.seasonId = $scope.season.id;
+							
 							if ($scope.team.id == extras.id) {
 								$scope.team.extras = extras;
 							}
 						});
+						}
 
 					}
 				}

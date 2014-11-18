@@ -17,6 +17,10 @@ body {
 	line-height: initial;
 }
 
+md-sidenav{
+	margin-right:1em;
+}
+
 #select,#input,#textarea{
 	border-radius: .5em;
 	border:solid 2px aliceblue;
