@@ -20,9 +20,9 @@
 
 			<md-subheader class="md-primary">{{fixtures.description}}</md-subheader>
 
-			<div layout="vertical" layout-sm="horizontal" padding>
+			<div layout="row" layout-phone="column" padding>
 			
-				<div style="margin-right:1em;">
+				<div >
 					<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
 						type="number" ng-model="mainResult.homeScore"  />
 				</div>
@@ -37,8 +37,8 @@
 			<md-subheader class="md-primary">Beer Leg</md-subheader>
 
 
-			<div layout="vertical" layout-sm="horizontal" padding>
-			<div style="margin-right:1em;">
+			<div layout="vertical" layout-phone="horizontal" padding>
+			<div >
 				<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
 					type="number" ng-model="beerResult.homeScore" />
 			</div>

@@ -1,7 +1,7 @@
-<section ng-controller="VenuesController" layout="vertical" layout-phone="horizontal">
+<section ng-controller="VenuesController" layout="row" layout-phone="column" layout-tablet="column">
 	<div>
 		<md-sidenav class="md-sidenav-left md-whiteframe-z2"
-		component-id="left" is-locked-open="$media('md')" >
+		md-component-id="left" md-is-locked-open="$media('md')" >
 	
 			<div ng-repeat="item in venues | orderBy:'name'">
 				<md-button class="menu-item menu-title" ng-click="closeLeft()" href="/venues/{{item.id}}">{{item.name}}</md-button>
