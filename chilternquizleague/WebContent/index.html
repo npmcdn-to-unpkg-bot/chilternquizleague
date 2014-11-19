@@ -34,8 +34,9 @@
 </head>
 <body layout="column" layout-fill md-swipe-left="toggleRight()">
 
-	<header ng-include="'/top.html'"></header>
+	<header ng-include="'/top.html'" style="margin-bottom:6px;"></header>
 	<md-content flex  md-swipe-right="openLeft()" ui-view>
 	</md-content>
+	<div ng-if="progress" style="position:fixed;top:80px;left:0;width:100%;"><md-progress-linear md-theme="amber" md-mode="indeterminate" ></md-progress-linear></div>
 </body>
 </html>

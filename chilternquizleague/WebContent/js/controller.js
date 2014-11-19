@@ -1,8 +1,8 @@
 var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router']).factory(
 		'viewService',
 		[
-				"$http",
-				function($http) {
+				"$http","$rootScope",
+				function($http,$rootScope) {
 					function loadFromServer(type, params, callback, isArray) {
 						
 						var paramString = "";
@@ -19,12 +19,16 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router']).
 
 					function doLoad(type, paramString, callback, isArray) {
 						
+						$rootScope.$broadcast("progress", true);
+						
 						var retval = isArray ? [] : {};
 						
 						function callbackWrapper(item){
 							
 							callback && item ? callback(item):null;
 							angular.copy(item,retval);
+							
+							$rootScope.$broadcast("progress", false);
 
 						}
 						
@@ -124,6 +128,10 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 						    $scope.sender = "";
 						    $scope.text = "";
 						    
+						    $scope.closeDialog = function(){
+						    	$mdDialog.hide();
+						    };
+						    
 						    $scope.send = function(){
 						    	
 						    	viewService.post("submit-contact",{
@@ -187,6 +195,6 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			    $mdSidenav('left').open();
 			  };
 			  
-
+			$scope.$on("progress", function(ev,value){$scope.progress = value;});
 
 		} ]);
