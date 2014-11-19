@@ -1,14 +1,2 @@
 @import url('/css/top.css');
 @import url('/css/league-table-animated.css');
-
-
-.front-page-text {
-	margin-right: .25em;
-	margin-left: .5em;
-}
-.league-table-container{
-	margin-left:0;
-}
-
-
-

@@ -1,16 +1,4 @@
 @font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Raleway'), url(/fonts/Raleway/raleway400.woff) format('woff');
-}
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Raleway SemiBold'), local('Raleway-SemiBold'), url(/fonts/Raleway/raleway600.woff) format('woff');
-}
-@font-face {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 700;

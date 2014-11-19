@@ -21,57 +21,10 @@ md-sidenav{
 	margin-right:1em;
 }
 
-#select,#input,#textarea{
-	border-radius: .5em;
-	border:solid 2px aliceblue;
-	transition:border-color .3s ease-out;
-	
-}
-
-#select{
-	border-radius: .5em 0 0 .5em;
-}
-
-#select:hover,#input:hover,#textarea:hover{
-	border-color: #c1dff8;
-	transition:border-color .3s ease-in;
-	
-}
-
-#select:focus,#input:focus,#textarea:focus{
-	outline:none;
-	border-color: #a0bff8;
-	transition:border-color .3s ease-in;
-	
-}
-
-#span~select{
-	
-	margin-left:.5em;
-}
-
-#input{
-	padding-left:.25em;
-	padding-right:.25em;
-}
-
-table{
-
-}
-
 section{
 	margin-top:.25em;
 	margin-bottom:.25em;
 }
-
-.navigation {
-	margin-top: .25em;
-	margin-bottom: 2.50em;
-}
-
-
-
-
 
 .highlit-border{
 	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
@@ -142,55 +95,29 @@ section{
 	padding: .125em;
 }
 
-.page-header {
-	font-family: 'Nunito', sans-serif;
-	font-size: 300%;
-	padding: .125em;
-	padding-left: .25em;
-	color: #c1dff8;
-	text-shadow: 0 0 5px #c1dff8, 0 0 10px #c1dff8, 0 0 15px #c1dff8, 0 0
-		20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue;
-	letter-spacing: .25em;
-	
+
+.page-header{
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 150% !important;
+	color: darkblue !important;
 	transition:all 1s ease-out;
 }
 
-
-.page-header text {
-	color: #c1dff8;
+.page-header-small{
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 100% !important;
+	color: darkblue !important;
+	transition:all 1s ease-out;
 }
 
 .page-header:hover {
 	
-	text-shadow: 0 0 5px darkblue, 0 0 10px darkblue, 0 0 15px darkblue, 0 0
-	20px #c1dff8, 0 0 30px #c1dff8, 0 0 40px #c1dff8, 0 0 50px #c1dff8;
-	color: darkblue;
-	transition:all 1s ease-in;
+	text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
+	20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue !important;
+	color: white !important;
 	
 }
 
-.body-container {
-	padding: .1em;
-	padding-top: .5em;
-	#position:absolute;
-	width:calc(100% - 1em);
-
-}
-
-.footer {
-	display: none;
-	position: fixed;
-	height: 40px;
-	bottom: 0;
-	left: 0;
-	z-index: 999999;
-}
-
-.footer div {
-	position: relative;
-	margin: 0 auto;
-	width: 100%;
-}
 
 
 .selected {
@@ -208,15 +135,6 @@ section{
 	transition: all 1s ease-out;
 }
 
-.titled-list {
-	margin-left: 0;
-	margin-top: .5em;
-}
-
-.titled-list>div:first-of-type {
-	color: darkblue;
-	font-weight: 600;
-}
 
 .title-text{
 	color: darkblue;
