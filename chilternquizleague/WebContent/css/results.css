@@ -41,8 +41,8 @@ div.league-table>div.standard-table{
 
 .league-table .spacer{
     border:none !important;
-    padding-right:.0675em;
-    padding-left:.0675em;
+    #padding-right:.0675em;
+    #padding-left:.0675em;
     max-width:0 !important;
     min-width:0 !important;
     background:transparent !important;
