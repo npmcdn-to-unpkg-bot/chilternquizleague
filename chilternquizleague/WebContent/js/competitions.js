@@ -59,7 +59,6 @@
 	
 	
 	function loadTable($scope,viewService, tableName){
-		
 		 function func(season) {
 			if (season) {
 				$scope.leagueTable = viewService.view(tableName, {
@@ -68,12 +67,10 @@
 			}
 		};
 		
-		func($scope.season);
 		$scope.$watch("season", func);
 	}
 	
 	function loadResults($scope, viewService, type){
-		
 		function func(season) {
 			if (season) {
 				$scope.results = viewService.view("competition-results", {
@@ -84,13 +81,11 @@
 			}
 		};
 		
-		func($scope.season);
 		$scope.$watch("season", func);
 		
 	}
 	
 	function loadFixtures($scope, viewService, type){
-		
 		function func(season) {
 			if (season) {
 				$scope.fixtures = viewService.view("competition-fixtures", {
@@ -101,7 +96,6 @@
 			}
 		};
 		
-		func($scope.season);
 		$scope.$watch("season", func);
 		
 	}
@@ -114,6 +108,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		for(idx in $scope.competitions){
 			if($scope.competitions[idx].type.name == name){
 				return $scope.competitions[idx];
+				
 			}			
 		}
 		
@@ -136,19 +131,12 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			
 		}
 	};
-		
 	
-	var loadSeasons = listAndSelection("season", $scope, viewService,{remoteListName:"season-views"});
+	$scope.$watch("global.currentSeason",function(season){
+		$scope.season = season;
+	});
 	
-	$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
-				if (currentSeasonId) {
-					
-					loadSeasons(currentSeasonId);
-				}
-			});
-	
-    
-	
+
 	$scope.$watchCollection("competitions",function(competitions){
 	    	
 		

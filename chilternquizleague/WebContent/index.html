@@ -9,19 +9,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" rel="stylesheet" href="/css/index.css">
 <link type="text/css" rel="stylesheet" href="/css/angular-material.css">
-<link type="text/css" rel="stylesheet" href="/css/themes/amber-theme.css">
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <script type="text/javascript" src="/js/hammer.js"></script>
 <script type="text/javascript" src="/js/angular.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script>
 <script type="text/javascript" src="/js/angular-animate.js"></script>
-<script type="text/javascript" src="/js/angular-route.js"></script>
 <script type="text/javascript" src="/js/angular-ui-router.js"></script>
 <script type="text/javascript" src="/js/angular-aria.min.js"></script>
 <script type="text/javascript" src="/js/angular-material.js"></script>
 <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/controller.js"></script>
+<script type="text/javascript" src="/js/filters.js"></script>
+<script type="text/javascript" src="/js/directives.js"></script>
 <script type="text/javascript" src="/js/leagueTable.js"></script>
 <script type="text/javascript" src="/js/team.js"></script>
 <script type="text/javascript" src="/js/FileSaver.js"></script>
@@ -32,10 +32,10 @@
 
 <title ng-cloak>Chiltern Quiz League</title>
 </head>
-<body layout="vertical" layout-fill>
-
+<body layout="column" layout-fill md-swipe-left="toggleRight()">
 	<header ng-include="'/top.html'"></header>
-	<md-content flex ui-view md-swipe-right="openLeft()">
+	<md-content flex  md-swipe-right="openLeft()" ui-view>
 	</md-content>
+	<md-progress-linear ng-show="progress" style="position:fixed;bottom:5px;left:0;width:100%;z-index:1000000;" md-mode="indeterminate" ></md-progress-linear>
 </body>
 </html>

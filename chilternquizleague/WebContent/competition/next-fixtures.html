@@ -1,7 +1,6 @@
 <div >
 	<md-subheader>Next Fixtures</md-subheader>
 
-	<div class="date-header header-left" ng-include="'/results/fixtures-table.html'"
-		ng-init="rowCount=1"></div>
+	<cql-fixtures class="date-header header-left" fixtures="fixtures" rows="1" ng-controller="FixturesTable"></cql-fixtures>
 	<div class="md-toolbar-tools"><md-button class="md-primary" ng-href="/competitions/{{competition.type.name}}/fixtures">Show All</md-button></div>
 </div>

@@ -1,4 +1,4 @@
-<div flex layout-sm="horizontal" layout="vertical" >
-	<div ng-include="'/results/sidenav.html'" style="margin-right:1em;"></div>
-	<div flex ui-view layout-fill></div>
+<div flex layout="row" layout-phone="column" layout-tablet="column">
+	<div ng-include="'/results/sidenav.html'" ></div>
+	<div flex ui-view></div>
 </div>

@@ -17,7 +17,7 @@
 
 	mainApp.controller('VenuesController', [  '$scope', '$interval',
 	                              			'viewService', '$location', '$stateParams','$sce',
-			cyclingListControllerFactory("venue", function($scope, $interval, viewService, $location, $stateParams,$sce){
+			listControllerFactory("venue", function($scope, $interval, viewService, $location, $stateParams,$sce){
 			
 				if(!$stateParams.itemId){
 					$scope.$watchCollection("venues",function(venues){

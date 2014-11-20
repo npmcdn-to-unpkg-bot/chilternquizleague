@@ -40,10 +40,6 @@
 
 	function extraStuff($scope, $interval, viewService, $location, $stateParams) {
 
-		$scope.showContact = function() {
-
-		};
-
 		$scope.makeICal = function(team) {
 
 			var contents = generateICalContent(team.extras.fixtures);
@@ -58,24 +54,11 @@
 			saveAs(blob, filename);
 
 		};
-
-		$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
-
-			if (currentSeasonId) {
-
-				$scope.$watch("team", function(team) {
-
-					if (team) {
-						if (!team.extras) {
-							team.extras = viewService.view("team-extras", {
-								seasonId : currentSeasonId,
-								teamId : team.id
-							});
-						}
-					}
-				});
-
-			}
+		
+		$scope.season = {};
+		
+		$scope.$watch("global.currentSeason", function(currentSeason) {
+			$scope.season = currentSeason;
 		});
 	}
 
@@ -86,13 +69,11 @@
 
 	mainApp.controller('TeamsController', [ '$scope', '$interval',
 			'viewService', '$location', '$stateParams',
-			 cyclingListControllerFactory("team", extraStuff)]);
+			 listControllerFactory("team", extraStuff)]);
 
 	mainApp.controller('TeamController', [ '$scope', 
 			function($scope) {
-
 		$scope.setCurrentItem();
-
 	} ]);
 
 	mainApp.controller("TeamExtrasController", [
@@ -101,85 +82,30 @@
 			'viewService',
 			'$location',
 			function($scope, $interval, viewService, $location) {
-
 				$scope.setCurrentItem();
-				
-				var loadSeasons = listAndSelection("season", $scope,
-						viewService, {
-							remoteListName : "season-views"
-						});
-
 				function teamExtras() {
 
-					if ($scope.team && $scope.season ) {
+					if ($scope.team && $scope.season && $scope.season.id ) {
+						if(!($scope.team.extras && ($scope.team.extras.id == $scope.team.id) && ($scope.team.extras.seasonId == $scope.season.id))){ 
+
+						
 						viewService.view("team-extras", {
 							seasonId : $scope.season.id,
 							teamId : $scope.team.id
 						}, function(extras) {
+							extras.seasonId = $scope.season.id;
+							
 							if ($scope.team.id == extras.id) {
 								$scope.team.extras = extras;
-								$scope.results = extras.results;
 							}
 						});
+						}
 
 					}
 				}
 
-				$scope.$watch("global.currentSeasonId", loadSeasons);
-				$scope.$watch("season.id", teamExtras);
-				$scope.$watch("team.id", teamExtras);
+				$scope.$watchGroup(["team","season"], teamExtras);
 
 			} ]);
-
-	mainApp
-			.controller(
-					"TeamFixturesTable",
-					[
-							'$scope',
-							function($scope) {
-
-								function loadResults(fixtures) {
-
-									$scope.$watchCollection(
-											"team.extras.fixtures", function(
-													fixtures) {
-												$scope.fixtures = fixtures;
-											});
-
-									$scope.fixtures = fixtures;
-
-								}
-
-								loadResults($scope.team && $scope.team.extras ? $scope.team.extras.fixtures
-										: null);
-
-							} ]);
-
-	mainApp
-			.controller(
-					"TeamResultsTable",
-					[
-							'$scope',
-							function($scope) {
-
-								function loadResults(results) {
-
-									$scope.$watchCollection(
-											"team.extras.results", function(
-													results) {
-												$scope.results = results;
-											});
-
-									$scope.results = results;
-
-								}
-
-								loadResults($scope.team && $scope.team.extras ? $scope.team.extras.results
-										: null);
-
-
-							} ]);
-
-
 
 })();

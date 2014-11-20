@@ -6,7 +6,8 @@ mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 					function loadTable() {
 						viewService.view("leaguetable", {
 							id : currentSeasonId
-						},function(leagueTable){$scope.leagueTable=leagueTable;});
+						},function(leagueTable){
+							$scope.leagueTable=leagueTable;});
 					}
 					loadTable();
 					$interval(loadTable, 30000, 60)["catch"](function() {

@@ -1,5 +1,7 @@
-<md-card ng-controller="TeamExtrasController">
+<section ng-controller="TeamExtrasController">
+<md-card>
 	<md-subheader class="title-text">All Fixtures</md-subheader>
 	<md-button class="md-primary" ng-click="makeICal(team)">Download Calendar</md-button>
-	<div class="inline-header header-left" ng-include="'/team/fixtures-table.html'"></div>
+	<cql-fixtures class="inline-header header-left" fixtures="team.extras.fixtures"></div>
 </md-card>
+</section>

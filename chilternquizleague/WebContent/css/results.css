@@ -1,5 +1,4 @@
 @import url('/css/main.css');
-@import url('/css/popup.css');
 @import url('/css/standard-table.css');
 
 
@@ -50,7 +49,7 @@ div.league-table>div.standard-table{
 }
 
 .league-table .numeric{
-	min-width: 3em;
+	min-width: 2em;
 }
 
 

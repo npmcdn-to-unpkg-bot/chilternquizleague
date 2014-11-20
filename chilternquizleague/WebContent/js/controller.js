@@ -1,8 +1,8 @@
-var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial','ui.router']).factory(
+var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router']).factory(
 		'viewService',
 		[
-				"$http",
-				function($http) {
+				"$http","$rootScope",
+				function($http,$rootScope) {
 					function loadFromServer(type, params, callback, isArray) {
 						
 						var paramString = "";
@@ -19,12 +19,16 @@ var mainApp = angular.module('mainApp', ["ngRoute","ngAnimate",'ngMaterial','ui.
 
 					function doLoad(type, paramString, callback, isArray) {
 						
+						$rootScope.$broadcast("progress", true);
+						
 						var retval = isArray ? [] : {};
 						
 						function callbackWrapper(item){
 							
 							callback && item ? callback(item):null;
 							angular.copy(item,retval);
+							
+							$rootScope.$broadcast("progress", false);
 
 						}
 						
@@ -94,6 +98,23 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 
 			$rootScope.global = viewService.view("globaldata");
 			
+			$rootScope.seasons = viewService.list("season-views");
+			
+			var dereg = $rootScope.$watchGroup(["global.currentSeasonId","seasons.length"], function(){
+				
+				if($rootScope.global.currentSeasonId && $rootScope.seasons.length > 1){
+					
+					for(idx in $rootScope.seasons){
+						if($rootScope.seasons[idx].id == $rootScope.global.currentSeasonId){
+							$rootScope.global.currentSeason = $rootScope.seasons[idx];
+							dereg();
+							break;
+						}
+					}
+
+				}
+			});
+			
 			$rootScope.showContactForm = function(title, recipient){
 				
 				$mdDialog.show({
@@ -106,6 +127,10 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 						    $scope.recipient = recipient;
 						    $scope.sender = "";
 						    $scope.text = "";
+						    
+						    $scope.closeDialog = function(){
+						    	$mdDialog.hide();
+						    };
 						    
 						    $scope.send = function(){
 						    	
@@ -149,107 +174,6 @@ mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
 $locationProvider.html5Mode(true);
 }]);
 
-mainApp.filter("htmlify", ["$sce", function($sce){return function(text){
-	
-	return text ?  $sce.trustAsHtml(text.replace(/^<p>/,"").replace(/<\/p>$/,"")) : "";
-};}]);
-
-mainApp.filter("lineBreaks", [function(){return function(text){
-	return text ?  text.replace(/\n/g, "<br/>") : "";
-};}]);
-
-mainApp.filter('afterNow', function() {
-	return function(input) {
-		var now = new Date().getTime();
-		var ret = [];
-		for (idx in input) {
-			if (input[idx].start >= now) {
-				ret.push(input[idx]);
-			}
-		}
-
-		return ret;
-	};
-});
-
-mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,viewService) {
-    return {
-     restrict: 'A',
-     scope:{},
- 
-      link: function(scope, element, attrs){
-    	  
-    	  scope.$watch(attrs.cqlText, function(name){
-    		  if(name){
-        		  scope.text = viewService.text(name); 
-    		  }
-
-    	  });
-    	  
-    	  scope.$watch("text.text", function(text){
-    		  
-    		  if(text){
-    			  element.html(htmlify(text.replace(/\\\"/g,"\"").replace(/\\n/g,"").replace(/^\"/,"").replace(/\"$/,"")));
-    		  }
-    		  
-    	  });
-    	  
-    	 
-      }
-    };
-  }]);
-
-mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
-    return {
-    	scope:{results:"="},
-    	restrict:'E',
-    	templateUrl:'/results/results-table-content.html',
-    	link : function(scope, element, attrs){
-    		
-    		scope.rowCount = attrs.rows ? attrs.rows :10000;
-    		scope.showReports = function(results, result) {
-
-  				$mdDialog.show({
-  					templateUrl : '/results/reports.html',
-  					controller : "ReportsController",
-  					locals : {
-  						reportsData : {
-  							results : results,
-  							result : result
-  						}
-  					}
-  				});
-
-  			};
-    		
-    	}
-    	
-    };
-  }]);
-
-mainApp.directive('cqlSeasons', ["viewService",function(viewService) {
-    return {
-    	scope:{season:"="},
-    	restrict:'E',
-    	replace:true,
-    	link: function(scope, element, attrs){
-    		scope.seasons = viewService.list("season-views");
-    		scope.labelStyle = attrs.hasOwnProperty("hidelabel") ? {display:"none"}:{"margin-right":".25em"};
-    		scope.selectStyle = attrs.hasOwnProperty("toolstyle") ? {background:"transparent",border:"none"}:{};
-     	},
-    	templateUrl:'/common/season-dropdown.html'
-    	
-    };
-  }]);
-
-mainApp.directive("cqlPageMenu",function(){
-	
-	return {
-		restrict:'E',
-		replace:true,
-		template : "<span hide-sm><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
-});
-
 
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',
 		function($scope, $interval, viewService, $mdSidenav) {
@@ -267,10 +191,10 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			    $mdSidenav('left').close();
 			  };
 			  
-			  $scope.openLeft = function() {
-				    $mdSidenav('left').open();
-				  };
+		  $scope.openLeft = function() {
+			    $mdSidenav('left').open();
+			  };
 			  
-
+			$scope.$on("progress", function(ev,value){$scope.progress = value;});
 
 		} ]);
