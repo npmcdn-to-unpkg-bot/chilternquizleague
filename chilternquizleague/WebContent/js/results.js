@@ -112,6 +112,7 @@
 						controller: ['$scope', function($scope) { 
 							    $scope.submissions = submissions;
 							    $scope.commit = commit;
+							    $scope.closeDialog = $mdDialog.hide;
 							    
 							  }]
 					});
