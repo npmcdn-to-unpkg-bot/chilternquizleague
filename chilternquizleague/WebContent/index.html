@@ -33,10 +33,9 @@
 <title ng-cloak>Chiltern Quiz League</title>
 </head>
 <body layout="column" layout-fill md-swipe-left="toggleRight()">
-
 	<header ng-include="'/top.html'" style="margin-bottom:6px;"></header>
 	<md-content flex  md-swipe-right="openLeft()" ui-view>
 	</md-content>
-	<div ng-if="progress" style="position:fixed;top:80px;left:0;width:100%;"><md-progress-linear md-theme="amber" md-mode="indeterminate" ></md-progress-linear></div>
+	<md-progress-linear ng-show="progress" style="position:fixed;bottom:5px;left:0;width:100%;z-index:1000000;" md-mode="indeterminate" ></md-progress-linear>
 </body>
 </html>
