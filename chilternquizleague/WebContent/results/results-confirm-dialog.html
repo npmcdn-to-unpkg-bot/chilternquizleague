@@ -1,7 +1,8 @@
 <md-dialog>
 	<md-toolbar md-theme="red"><div class="md-toolbar-tools">Check Your Results!</div></md-toolbar>
-	<md-content layout="column" layout-padding>
-		<div>Please check that all values are correct.  You will not be able to change them once submitted.<br/>If a mistake <em>is</em> made, please contact the webmaster.</div>
+		<md-content>
+		<div>Please check that all values are correct.  You will not be able to change them once submitted. If a mistake <em>is</em> made, please contact the webmaster.</div>
+
 		<md-list>
 		<md-list-item ng-repeat="submission in submissions">
 			<md-subheader>{{submission.competitionType}}</md-subheader>
@@ -11,6 +12,7 @@
 			</div>
 		</md-list-item>
 		</md-list>
+
 		<div class="md-toolbar-tools" layout-align="space-between"><md-button ng-click="commit()" class="md-primary md-raised">Confirm</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></div>
-	</md-content>
+		</md-content>
 </md-dialog>
