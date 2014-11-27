@@ -117,7 +117,7 @@ mainApp.directive("cqlTitleBar",["$mdSidenav", function($mdSidenav){
 		restrict:'E',
 		replace:true,
 		transclude:true,
-		templateUrl : "/common/titleBar.html",
+		templateUrl : "/common/titlebar.html",
 		link: function(scope, element, attrs, ctrl, transclude){
 			scope.toggleRight = function(){
 				$mdSidenav('right').toggle();

@@ -1,7 +1,11 @@
 (function() {
 
-	mainApp.config([ '$stateProvider', function($stateProvider) {
+	mainApp.config([ '$stateProvider','$urlRouterProvider', function($stateProvider,$urlRouterProvider) {
 
+		 $urlRouterProvider
+		 //route from old-style to new-style team urls 
+	        .when('/teams/team/:id', '/teams/:id');
+		
 		$stateProvider.state("teams", {
 
 			url : "/teams",
