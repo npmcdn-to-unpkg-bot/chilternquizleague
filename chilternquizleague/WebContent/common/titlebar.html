@@ -1,0 +1,12 @@
+<div>
+<md-toolbar hide-sm hide-md class="md-medium-tall top-bar">
+	<div class="md-toolbar-tools" style="margin-left:.25em;" ng-transclude></div>
+	<div ng-include="'/common/menu-top.html'"></div>
+</md-toolbar>
+<md-toolbar hide-lg hide-gt-lg>
+<div class="md-toolbar-tools">
+	<cql-page-menu ng-if="pageMenu"></cql-page-menu><span class="md-toolbar-tools" flex ng-transclude></span><span style="align-content:flex-end;"><md-button aria-label="Main menu" ng-click="toggleRight()"><md-icon icon="/images/icons/ic_menu.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Main menu</md-tooltip></md-button></span>
+</div>
+</md-toolbar>
+<div ng-include="'/common/menu-side.html'"></div>
+</div>

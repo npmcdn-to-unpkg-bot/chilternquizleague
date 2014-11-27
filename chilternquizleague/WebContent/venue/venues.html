@@ -1,14 +1,16 @@
-<section ng-controller="VenuesController" layout="row" layout-phone="column" layout-tablet="column">
-	<div>
-		<md-sidenav class="md-sidenav-left md-whiteframe-z2"
+<div layout="column"  ng-controller="VenuesController">
+	<cql-title-bar page-menu md-theme="lime">{{venue.name}}</cql-title-bar>
+	<div layout="row">
+	<div>	<md-sidenav class="md-sidenav-left md-whiteframe-z2"
 		md-component-id="left" md-is-locked-open="$media('md')" >
 	
 			<div ng-repeat="item in venues | orderBy:'name'">
 				<md-button class="menu-item menu-title" ng-click="closeLeft()" href="/venues/{{item.id}}">{{item.name}}</md-button>
 			</div>
 	
-		</md-sidenav>
+		</md-sidenav></div>
+	<md-content flex ui-view></md-content>
 	</div>
-	<div flex ui-view></div>
-	
-</section>
+</div>
+
+

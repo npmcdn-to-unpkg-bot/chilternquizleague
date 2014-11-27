@@ -1,11 +1,4 @@
 <div ng-controller="ResultsSubmitController">
-	<section>
-		<md-toolbar md-theme="red">
-			<div class="md-toolbar-tools">
-				<span class="title-text">Submit Results</span>
-			</div>
-		</md-toolbar>
-	</section>
 	<section style="margin-left:.25em;">
 	<form>
 		<div>
@@ -20,7 +13,7 @@
 
 			<md-subheader class="md-primary">{{fixtures.description}}</md-subheader>
 
-			<div layout="row" layout-phone="column" padding>
+			<div layout="row" layout-sm="column" padding>
 			
 				<div >
 					<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
@@ -37,7 +30,7 @@
 			<md-subheader class="md-primary">Beer Leg</md-subheader>
 
 
-			<div layout="vertical" layout-phone="horizontal" padding>
+			<div layout="vertical" layout-sm="horizontal" padding>
 			<div >
 				<md-text-float label="{{mainResult.fixture.home.shortName}} - Home"
 					type="number" ng-model="beerResult.homeScore" />

@@ -1,6 +1,9 @@
-<section layout-phone="column" layout-tablet="column" layout="row"  ng-controller="TeamsController">
-	<div ng-include="'/team/sidenav.html'" ></div>
-	<div flex ui-view>
+<div layout="column"  ng-controller="TeamsController">
+	<div flex ui-view="menu">
 	</div>
-</section>
+	<div layout="row">
+	<div ng-include="'/team/sidenav.html'" ></div>
+	<md-content flex ui-view="content"></md-content>
+	</div>
+</div>
 

@@ -1,7 +1,6 @@
 <div layout="column" ng-controller="VenueController">
-	<md-toolbar md-theme="lime"><div class="md-toolbar-tools"><cql-page-menu></cql-page-menu><span class="title-text">{{venue.name}}</span></div></md-toolbar>
 	<md-card>
-	<div flex layout="row" layout-phone="column" layout-tablet="column">
+	<div flex layout="row" layout-sm="column" layout-md="column">
 		<div flex layout="column" >
 			<div class="venue-address"
 				ng-bind-html="venue.address | lineBreaks | htmlify"></div>
@@ -13,7 +12,7 @@
 			</div>
 			<div>phone : {{venue.phone}}</div>
 		</div>
-		<div ng-if="venue.imageURL" hide-phone >
+		<div ng-if="venue.imageURL" hide-sm >
 			<div>
 				<img alt="" ng-src="{{venue.imageURL}}">
 			</div>

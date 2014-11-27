@@ -11,46 +11,95 @@
 		.state("competitions.league", {
 			
 			url:"/LEAGUE",
-			templateUrl : '/competition/league.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/league.html'
+				}
+			}
 			
 		})
 		.state("competitions.beer", {
 			
 			url:"/BEER",
-			templateUrl : '/competition/beer-leg.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/beer-leg.html'
+				}
+			}
 			
 		})
 		
 		.state("competitions.cup", {
 			
 			url:"/CUP",
-			templateUrl : '/competition/cup.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/cup.html'
+				}
+			}
 			
 		})
 		.state("competitions.plate", {
 			
 			url:"/PLATE",
-			templateUrl : '/competition/plate.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/plate.html'
+				}
+			}
 			
 		})
 		
 		.state("competitions.buzzer", {
 			
 			url:"/BUZZER",
-			templateUrl : '/competition/team-buzzer.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/buzzer.html'
+				}
+			}
 			
 		})
 		
 		.state("competitions.results", {
 			
 			url:"/:type/results",
-			templateUrl : '/competition/results.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/results.html'
+				}
+			}
 			
 		})
 		.state("competitions.fixtures", {
 			
 			url:"/:type/fixtures",
-			templateUrl : '/competition/fixtures.html'
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/fixtures.html'
+				}
+			}
 			
 		});
 
@@ -132,6 +181,8 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 		}
 	};
 	
+
+	
 	$scope.$watch("global.currentSeason",function(season){
 		$scope.season = season;
 	});
@@ -145,7 +196,8 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 	    	$scope.setCompetition(first);}
 
 	    });
-
+	
+	
 		$scope.$watch("season", function(season) {
 			if(season){
 			$scope.competitions = viewService.view("competitions-view", {
@@ -155,13 +207,11 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			}
 		});
 		
-		$scope.showOther = function(name){
-			
-			$scope.templateName=name;
-			
-		};
-
-		} ]);
+		$scope.$on("season",function(evt, season){
+			$scope.season = season;
+		});
+		
+	} ]);
 
 	mainApp.controller('CompetitionLeagueTableController', [ '$scope', '$interval',
 			'viewService', function($scope, $interval, viewService) {
@@ -235,18 +285,17 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 				$scope.$watch("competition", function(competition){competition && loadResults($scope, viewService,competition.type.name);});
 				
-				
 			} ]);
 		
 
-			mainApp.controller('FixturesTable', [ '$scope', '$location', 'viewService',
-			function($scope, $location, viewService) {
+		mainApp.controller('FixturesTable', [ '$scope', '$location', 'viewService',
+		function($scope, $location, viewService) {
 
-				$scope.$watch("competition", function(competition) {
-					competition && loadFixtures($scope, viewService, competition.type.name);
-				});
+			$scope.$watch("competition", function(competition) {
+				competition && loadFixtures($scope, viewService, competition.type.name);
+			});
 
-			} ]);
+		} ]);
 		
 		
 })();

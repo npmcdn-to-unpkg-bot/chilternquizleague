@@ -110,6 +110,25 @@ mainApp.directive('cqlSeasons', ["viewService","$rootScope",function(viewService
     };
   }]);
 
+mainApp.directive("cqlTitleBar",["$mdSidenav", function($mdSidenav){
+	
+	return {
+		scope:{},
+		restrict:'E',
+		replace:true,
+		transclude:true,
+		templateUrl : "/common/titleBar.html",
+		link: function(scope, element, attrs, ctrl, transclude){
+			scope.toggleRight = function(){
+				$mdSidenav('right').toggle();
+				$mdSidenav('left').close();}
+			
+			scope.toggleLeft = function(){$mdSidenav('left').toggle()};
+			
+			scope.pageMenu = attrs.hasOwnProperty("pageMenu");
+		}};
+}]);
+
 mainApp.directive("cqlPageMenu",function(){
 	
 	return {

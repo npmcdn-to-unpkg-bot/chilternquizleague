@@ -9,11 +9,18 @@
 			})
 			.state('results.all', {
 				url : "/results/all",
-				templateUrl : '/results/results-table.html'
+				views:{
+					menu:{templateUrl:"/results/results-menu.html"},
+					content:{templateUrl:"/results/results-table.html"}
+				}
+
 			})
 			.state('results.submit', {
 				url : "/results/submit",
-				templateUrl : '/results/submit-results.html'
+				views:{
+					menu:{template:"<cql-title-bar page-menu md-theme='red'>Submit Results</cql-title-bar>"},
+					content:{templateUrl:"/results/submit-results.html"}
+				}
 			});
 		} ]);	
 
@@ -35,6 +42,9 @@
 		});
 	}
 
+
+
+	
 	mainApp.controller('ResultsSubmitController', [ '$scope', 'viewService',
 			'$mdDialog', function($scope, viewService, $mdDialog) {
 
@@ -148,7 +158,7 @@
 
 				};
 				
-				$scope.$watch("season", function(season){
+				$scope.$on("season", function(evt, season){
 					$scope.setSeason(season);
 				});
 

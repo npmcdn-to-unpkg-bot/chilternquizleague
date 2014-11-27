@@ -5,8 +5,8 @@
 		<form>
 			<md-text-float label="Your email address" type="email" ng-model="sender" required ></md-text-float>
 			<div>Your Message</div>
-			<textarea hide-phone rows="10" cols="50" ng-model="text"></textarea>
-			<textarea hide show-phone rows="8" cols="20" ng-model="text"></textarea>
+			<textarea hide-sm rows="10" cols="50" ng-model="text"></textarea>
+			<textarea hide show-sm rows="8" cols="20" ng-model="text"></textarea>
 			
 			<div class="md-toolbar-tools" layout-align="space-between"><md-button ng-click="send()" class="md-primary md-raised">Send</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></div>
 		</form>

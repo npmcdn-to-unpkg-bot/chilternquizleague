@@ -198,3 +198,17 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			$scope.$on("progress", function(ev,value){$scope.progress = value;});
 
 		} ]);
+
+mainApp.controller('SeasonBroadcastController',['$scope','$rootScope', function($scope, $rootScope){
+	
+	$scope.$watch("season", function(season){
+		
+		if(season && season.id){
+			$rootScope.$broadcast("season", season);
+		}
+
+		
+	});
+	
+	
+}]);

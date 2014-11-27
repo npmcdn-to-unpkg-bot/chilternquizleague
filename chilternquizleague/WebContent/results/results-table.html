@@ -1,14 +1,5 @@
-<section ng-controller="AllResultsController">
-	<div>
-		<md-toolbar md-theme="yellow">
-			<div class="md-toolbar-tools"><cql-page-menu></cql-page-menu>
-				<span class="title-text">All Results</span>	<cql-seasons season="season" hideLabel toolStyle></cql-seasons>
-			</div>
-		</md-toolbar>
-	</div>
-	<div ng-controller="ResultsTable">
-		<md-card flex  ng-if="results.length">
-			<cql-results class="full-header header-highlight" results="results"></cql-results>
-		</md-card>
-	</div>
-</section>
+<div ng-controller="AllResultsController">
+	<md-card flex  ng-if="allResults.length">
+		<cql-results class="full-header header-highlight" results="allResults"></cql-results>
+	</md-card>
+</div>

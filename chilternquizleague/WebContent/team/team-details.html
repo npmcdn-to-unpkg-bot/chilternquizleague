@@ -1,20 +1,19 @@
-<div flex ng-controller="TeamController">
+<div flex ng-controller="TeamController" itemscope itemtype="http://schema.org/SportsTeam">
 	<div ng-controller="TeamExtrasController">
-		<md-card hide-phone ng-if="team.extras.text"><div class="fix-text"
+		<md-card hide-sm ng-if="team.extras.text"><div class="fix-text"
 			ng-bind-html="team.extras.text | htmlify"></div></md-card>
-	
 		<md-card>
 			<md-subheader>Last few results:</md-subheader>
 			<cql-results class="inline-header" rows="5" results="team.extras.results"></cql-results>
 			<div class="md-toolbar-tools">
-				<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/results">Show all</md-button>
+				<md-button class="md-primary" ng-href="/teams/{{team.id}}/results">Show all</md-button>
 			</div>
 		</md-card>
 		<md-card>
 			<md-subheader>Next few fixtures:</md-subheader>
 			<cql-fixtures class="inline-header" rows="5" fixtures="team.extras.fixtures"></cql-fixtures> 
 			<div  class="md-toolbar-tools">
-				<md-button class="md-primary" ng-href="/teams/team/{{team.id}}/fixtures">Show all</md-button>
+				<md-button class="md-primary" ng-href="/teams/{{team.id}}/fixtures">Show all</md-button>
 				<md-button class="md-primary" ng-click="makeICal(team)">Download Calendar</md-button>
 			</div>
 		</md-card>

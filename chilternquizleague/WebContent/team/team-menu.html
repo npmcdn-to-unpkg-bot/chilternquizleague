@@ -1,7 +1,5 @@
-<div itemscope itemtype="http://schema.org/SportsTeam">
-	<md-toolbar md-theme="amber">
-	<div class="md-toolbar-tools"><cql-page-menu></cql-page-menu>
-		<span itemprop="name" class="title-text">{{team.name}}</span>
+<cql-title-bar page-menu md-theme="amber">
+	<span>{{team.name}}</span>
 		<md-button aria-label="contact us"
 			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
 			icon="/images/icons/ic_email.svg"></md-icon> <md-tooltip>Contact
@@ -9,11 +7,9 @@
 		<md-button aria-label="go to venue"
 			ng-href="/venues/{{team.venue.id}}"> <md-icon
 			icon="/images/icons/ic_location_on.svg"></md-icon> <md-tooltip>Venue</md-tooltip></md-button>
-		
-	</div>
-	</md-toolbar>
-	<div ui-view flex></div>
-</div>
+
+</cql-title-bar>
+
 
 
 

@@ -8,7 +8,7 @@
 <md-divider></md-divider>
 <div ng-repeat="item in teams | orderBy:'shortName'">
 	<md-button class="menu-item menu-title" ng-click="closeLeft()"
-		href="/teams/team/{{item.id}}">{{item.name}}</md-button>
+		href="/teams/{{item.id}}">{{item.name}}</md-button>
 </div>
 
 </md-sidenav>

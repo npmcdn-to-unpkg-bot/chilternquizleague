@@ -5,35 +5,52 @@
 		$stateProvider.state("teams", {
 
 			url : "/teams",
-			templateUrl : '/team/teams.html'
+			templateUrl:"/team/teams.html"
+
 
 		}).state("teams.all", {
 
 			url : "/all",
-			templateUrl : '/team/teams-header.html'
+			views : {
+				menu:{templateUrl:"/team/teams-menu.html"},
+				content: {templateUrl:"/team/teams-content.html"}
+		
+			}
 
-		}).state("teams.team", {
-
-			url : "/team",
-			templateUrl : '/team/team.html'
-		})
-
-		.state("teams.team.id", {
-
-			url : "/:itemId",
-			templateUrl : '/team/team-details.html'
-		}).state("teams.team.results", {
-
-			url : "/:itemId/results",
-			templateUrl : '/team/team-results.html'
-		}).state("teams.team.fixtures", {
-
-			url : "/:itemId/fixtures",
-			templateUrl : '/team/team-fixtures.html'
 		}).state("teams.start", {
 
 			url : "/start-team",
-			templateUrl : '/team/start-team.html'
+			views : {
+				menu:{templateUrl:"/team/start-team-menu.html"},
+				content: {templateUrl : '/team/start-team.html'}
+		
+			}
+
+		}).state("teams.id", {
+
+			url : "/:itemId",
+			views : {
+				menu:{templateUrl:"/team/team-menu.html"},
+				content: {templateUrl:"/team/team-details.html"}
+		
+			}
+		}).state("teams.results", {
+
+			url : "/:itemId/results",
+			views : {
+				menu:{templateUrl:"/team/team-menu.html"},
+				content: {templateUrl:"/team/team-results.html"}
+		
+			}
+		}).state("teams.fixtures", {
+
+			url : "/:itemId/fixtures",
+			views : {
+				menu:{templateUrl:"/team/team-menu.html"},
+				content: {templateUrl : '/team/team-fixtures.html'}
+		
+			}
+
 		});
 
 	} ]);

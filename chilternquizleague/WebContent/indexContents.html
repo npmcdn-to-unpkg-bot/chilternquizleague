@@ -1,17 +1,20 @@
-<section flex layout="row" layout-phone="column" layout-fill layout-padding>
+<cql-title-bar>
+	<span class="page-header">{{global.leagueName}}</span>
+</cql-title-bar>
+<md-content layout="row" layout-sm="column" layout-margin >
 		<section>
 			<div class="league-table-container collapse"
 				ng-include="'/results/league-table.html'"></div>
 		</section>
-		<md-card flex >
+		<md-card flex>
 			<div ng-bind-html="global.frontPageText | htmlify" class="fix-text"></div>
 		</md-card>
 
-	<section hide show-pc>
+	<section hide-sm hide-md>
 		<iframe
 			src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FChilternQuizLeague&amp;width&amp;height=427&amp;colorscheme=light&amp;show_faces=false&amp;header=true&amp;stream=true&amp;show_border=true"
 			scrolling="no" frameborder="0"
 			style="border: none; overflow: hidden; height: 427px;"
 			allowTransparency="true"></iframe>
 	</section>
-</section>
+</md-content>
