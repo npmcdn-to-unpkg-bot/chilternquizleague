@@ -33,11 +33,12 @@
 				
 					if(venue){
 						
-						var parts=["https://www.google.com/maps/embed/v1/place?q=","", "&key=AIzaSyA8kxsrD-WbEklq5L2jr_mquEftsV9Gsgc"];
+						var parts=["https://maps.google.com/maps?&q=","", "&output=embed"];
 					
-						parts[1] = venue.address.replace(/\s/g, "+");
+						parts[1] = encodeURIComponent((venue.name + " " +venue.address).replace(/\s/g, "+"));
 						
-						$scope.searchAddress = $sce.trustAsUrl(parts.join(parts));
+						$scope.embeddedUrl = $sce.trustAsResourceUrl(parts.join());
+						$scope.linkUrl = $sce.trustAsResourceUrl(parts.slice(0,2).join());
 					}
 					
 					
