@@ -6,19 +6,19 @@
 			<div class="table-header">
 				<div>
 					<span>Pos.</span>
-					<span class="spacer"></span>
+					
 					<span>Team</span>
-					<span class="spacer"></span>
+					
 					<span>Pl.</span>
-					<span class="spacer"></span>
+					
 					<span class="optional">W</span>
-					<span class="spacer"></span>
+					
 					<span class="optional">L</span>
-					<span class="spacer"></span>
+					
 					<span class="optional">D</span>
-					<span class="spacer"></span>
+					
 					<span class="optional">S</span>
-					<span class="spacer"></span>
+					
 					<span>Points</span>
 				</div>
 			</div>
@@ -26,19 +26,19 @@
 				<div ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
 					<span class="numeric">{{item.position ? item.position : ($index +
 						1)}}</span>
-					<span class="spacer"></span>
-					<span  class="team-name"><a href="/teams/{{item.team.id}}" title="{{item.team.name}}">{{item.team.shortName}}</a></span>
-					<span class="spacer"></span>
+					
+					<span  class="team-name"><md-button class="md-primary" href="/teams/{{item.team.id}}" title="{{item.team.name}}">{{item.team.shortName}}</md-button></span>
+					
 					<span class="numeric">{{item.played}}</span>
-					<span class="spacer"></span>
+					
 					<span class="optional numeric">{{item.won}}</span>
-					<span class="spacer"></span>
+					
 					<span class="optional numeric">{{item.lost}}</span>
-					<span class="spacer"></span>
+					
 					<span class="optional numeric">{{item.drawn}}</span>
-					<span class="spacer"></span>
+					
 					<span class="optional numeric">{{item.matchPointsFor}}</span>
-					<span class="spacer"></span>
+					
 					<span class="numeric">{{item.leaguePoints}}</span>
 				</div>
 			</div>

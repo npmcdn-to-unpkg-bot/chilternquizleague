@@ -16,13 +16,6 @@
 }
 
 
-div.league-table>div.standard-table{
-    border-spacing: 0 .125em;
-
-}
-
-
-
 .league-table .team-name {
 	min-width: 6em;
 }
@@ -30,8 +23,8 @@ div.league-table>div.standard-table{
 
 .league-table .league-table-description{
 	display:table-caption;
-	background: #99ccff;
-	border: medium solid #99ccff;
+	background: #c0c0c0;
+	border: medium solid #c0c0c0;
 	border-radius: .25em;
 	text-align:center;
 	margin-top:.5em;
@@ -40,18 +33,15 @@ div.league-table>div.standard-table{
 
 
 .league-table .spacer{
-    border:none !important;
-    #padding-right:.0675em;
-    #padding-left:.0675em;
-    max-width:0 !important;
-    min-width:0 !important;
-    background:transparent !important;
 }
 
 .league-table .numeric{
 	min-width: 2em;
 }
 
+.collapse .league-table .standard-table div>span.optional{
+   display:none;
+}
 
 .results:hover div{
 
