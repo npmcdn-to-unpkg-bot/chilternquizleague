@@ -10,10 +10,17 @@ mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 							$scope.leagueTable=leagueTable;});
 					}
 					loadTable();
-					$interval(loadTable, 30000, 60)["catch"](function() {
-						$interval.cancel(this);
+					var p = $interval(loadTable, 30000, 60);
+					p["catch"](function() {
+						$interval.cancel(p);
 					});
+					
+					$scope.$on("$destroy", function () {
+						$interval.cancel(p);
+					    });
+
 				}
 			});
+			
 
 		} ]);
