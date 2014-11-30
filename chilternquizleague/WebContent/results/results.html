@@ -1,8 +1,7 @@
 <div layout="column">
-	<div flex ui-view="menu">
-	</div>
+	<div ui-view="menu"></div>
 	<div layout="row">
-	<div ng-include="'/results/sidenav.html'" ></div>
-	<md-content flex ui-view="content"></md-content>
+		<div ng-include="'/results/sidenav.html'"></div>
+		<md-content flex ui-view="content" class="full-content"></md-content>
 	</div>
 </div>

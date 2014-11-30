@@ -121,9 +121,9 @@ mainApp.directive("cqlTitleBar",["$mdSidenav", function($mdSidenav){
 		link: function(scope, element, attrs, ctrl, transclude){
 			scope.toggleRight = function(){
 				$mdSidenav('right').toggle();
-				$mdSidenav('left').close();}
+				$mdSidenav('left').close();};
 			
-			scope.toggleLeft = function(){$mdSidenav('left').toggle()};
+			scope.toggleLeft = function(){$mdSidenav('left').toggle();};
 			
 			scope.pageMenu = attrs.hasOwnProperty("pageMenu");
 		}};

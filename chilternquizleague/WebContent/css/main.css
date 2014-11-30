@@ -148,6 +148,21 @@ section{
 
 }
 
+.full-content{
+	 max-height:calc(100vh - 112px);
+}
+
+@media screen and (max-width: 960px) {
+    .full-content {
+        max-height:calc(100vh - 64px);
+    }
+}
+
+body > div:first-child > div{
+	
+	overflow:visible;
+}
+
 
 
 

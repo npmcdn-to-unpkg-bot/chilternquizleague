@@ -1,9 +1,9 @@
 <div layout="column"  ng-controller="CompetitionsController">
-	<div flex ui-view="menu">
+	<div ui-view="menu">
 	</div>
 	<div layout="row">
 	<div ng-include="'/competition/sidenav.html'" ></div>
-	<md-content flex ui-view="content"></md-content>
+	<md-content class="full-content" flex ui-view="content"></md-content>
 	</div>
 </div>
 
