@@ -61,6 +61,42 @@
         <dependent-module archiveName="google-http-client-jackson-1.16.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r2lv1.16.0-rc/storage/libs/google-http-client-jackson-1.16.0-rc.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="google-api-client-servlet-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-api-client-servlet-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-oauth-client-appengine-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-oauth-client-appengine-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-oauth-client-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-oauth-client-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-api-client-appengine-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-api-client-appengine-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-http-client-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-http-client-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-http-client-jdo-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-http-client-jdo-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-http-client-gson-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-http-client-gson-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-oauth-client-servlet-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-oauth-client-servlet-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-api-client-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-api-client-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-http-client-jackson2-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-http-client-jackson2-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-api-services-storage-v1-rev22-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/google-api-services-storage-v1-rev22-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="google-http-client-appengine-1.18.0-rc.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/chilternquizleague/.google_apis/storage-v1r22lv1.18.0-rc/storage/libs/google-http-client-appengine-1.18.0-rc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="chilternquizleague"/>
         <property name="java-output-path" value="/chilternquizleague/build/classes"/>
     </wb-module>
