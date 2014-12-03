@@ -8,7 +8,7 @@
     <description>JAX-RS Tools Generated - Do not modify</description>
     <display-name>Entity REST Services</display-name>
     <servlet-name>EntityServices</servlet-name>
-    <servlet-class>org.chilternquizleague.web.EntityServices</servlet-class>
+    <servlet-class>org.chilternquizleague.web.EntityService</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
