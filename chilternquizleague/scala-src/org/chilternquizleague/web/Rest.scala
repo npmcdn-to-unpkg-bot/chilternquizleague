@@ -51,7 +51,7 @@ trait BaseRest extends HttpServlet {
   val packages: List[Package] = List(classOf[BaseEntity].getPackage(), classOf[IndividualQuiz].getPackage());
   def objectMapper: ObjectMapper = new ObjectMapper
   def parts(req: HttpServletRequest) = req.getPathInfo().split("\\/").tail;
-  def entityFilter[T<:BaseEntity]: T=>Boolean
+  def entityFilter[T <: BaseEntity]: T => Boolean
 
   def entityName(head: String) = {
     val stripped = head.replace("-list", "")
@@ -80,22 +80,21 @@ trait BaseRest extends HttpServlet {
 
   }
 
-  def makeEntityList[T<:BaseEntity](entityName: String) = Some(classFromPart(entityName).fold(new ArrayList[T]())((c: Class[T]) => (new ArrayList[T](ofy.load().`type`(c).list.filter(entityFilter[T])))))
+  def makeEntityList[T <: BaseEntity](entityName: String) = Some(classFromPart(entityName).fold(new ArrayList[T]())((c: Class[T]) => (new ArrayList[T](ofy.load().`type`(c).list.filter(entityFilter[T])))))
 
-  def entityByKey[T](idPart: String, entityName: String):Option[T] = classFromPart[T](entityName) flatMap { clazz: Class[T] => entityByKey(idPart.toLongOpt,clazz)}
-  
-  
-  def entityByKey[T](id:Option[Long], clazz:Class[T]):Option[T] = {
-    
-   Option[T](id match {
+  def entityByKey[T](idPart: String, entityName: String): Option[T] = classFromPart[T](entityName) flatMap { clazz: Class[T] => entityByKey(idPart.toLongOpt, clazz) }
 
-        case Some(idval) => ofy.load.now(Key.create(clazz, idval))
-        case None => clazz.newInstance
-      })
-        
+  def entityByKey[T](id: Option[Long], clazz: Class[T]): Option[T] = {
+
+    Option[T](id match {
+
+      case Some(idval) => ofy.load.now(Key.create(clazz, idval))
+      case None => clazz.newInstance
+    })
+
   }
 
-  def saveUpdate[T <: BaseEntity](req: HttpServletRequest, entityName: String):T = {
+  def saveUpdate[T <: BaseEntity](req: HttpServletRequest, entityName: String): T = {
 
     val retval = classFromPart[T](entityName) map { clazz =>
       {
@@ -114,39 +113,37 @@ trait BaseRest extends HttpServlet {
 
   def logJson[T](things: T, message: String = "") = {
     if (LOG.isLoggable(Level.FINE)) {
-      LOG.fine(message +"\n" +objectMapper.writeValueAsString(things));
+      LOG.fine(message + "\n" + objectMapper.writeValueAsString(things));
     }
 
     things
   }
-  
 
 }
 
 class EntityService extends BaseRest {
 
   override val aliases = Map(("text", "globalText"), ("global", "GlobalApplicationData"))
-  override def entityFilter[T] = {_ => true}
+  override def entityFilter[T] = { _ => true }
 
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
-    val item =  head match {
+    val item = head match {
 
       case "global" => entityByKey(Some(AppStartListener.globalApplicationDataId), classOf[GlobalApplicationData])
       case "competitionType-list" => Some(CompetitionTypeView.getList)
       case _ => handleEntities(bits, head)
 
     }
-    
+
     item.foreach(a => objectMapper.writeValue(resp.getWriter, logJson(a, "writing:")))
-   
 
   }
 
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
-    val item:BaseEntity = saveUpdate(req, entityName(parts(req).head))
-    
+    val item: BaseEntity = saveUpdate(req, entityName(parts(req).head))
+
     objectMapper.writeValue(resp.getWriter, logJson(item, "out:"))
   }
 
@@ -154,40 +151,39 @@ class EntityService extends BaseRest {
 
 }
 
-class ViewService extends BaseRest{
-  
-  override val aliases = Map[String,String]()
-  override def entityFilter[T<:BaseEntity] = {!_.isRetired()}
-  
-  class UserSerializer extends JsonSerializer[User]{
-     override def serialize(user:User, gen:JsonGenerator, prov:SerializerProvider) = {}
+class ViewService extends BaseRest {
+
+  override val aliases = Map[String, String]()
+  override def entityFilter[T <: BaseEntity] = { !_.isRetired() }
+
+  class UserSerializer extends JsonSerializer[User] {
+    override def serialize(user: User, gen: JsonGenerator, prov: SerializerProvider) = {}
   }
   class TextSerializer extends JsonSerializer[Text] {
-    override def serialize(text:Text, gen:JsonGenerator, prov:SerializerProvider) = {
+    override def serialize(text: Text, gen: JsonGenerator, prov: SerializerProvider) = {
       gen writeStartObject;
       gen writeNullField "text"
       gen writeEndObject
     }
-    
+
   }
-  
-  override def init(config:ServletConfig)  = {
+
+  override def init(config: ServletConfig) = {
     val module = new SimpleModule
     module.addSerializer(classOf[User], new UserSerializer)
     module.addSerializer(classOf[Text], new TextSerializer)
     objectMapper registerModule module
   }
-  
-  
-  override def doGet(req:HttpServletRequest, resp:HttpServletResponse) = {
+
+  override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
-    
-    val item:Option[_] = head match {
-      
+
+    val item: Option[_] = head match {
+
       case a if a.contains("globaldata") => Option(ofy().load().now(
-				Key.create(classOf[GlobalApplicationData],
-						AppStartListener.globalApplicationDataId)))
+        Key.create(classOf[GlobalApplicationData],
+          AppStartListener.globalApplicationDataId)))
       case a if a.contains("leaguetable") => currentLeagueTable(req, CompetitionType.LEAGUE)
       case a if a.contains("beertable") => currentLeagueTable(req, CompetitionType.BEER)
       case a if a.contains("season-views") => Some(ofy.load.`type`(classOf[Season]).map(new SeasonView(_)))
@@ -200,138 +196,136 @@ class ViewService extends BaseRest{
       case a if a.contains("text") => textForName(req)
       case a if a.contains("reports") => resultReports(req)
       case _ => handleEntities(bits, head)
-      
-    }
-    
-    item foreach {a => objectMapper.writeValue(resp.getWriter,logJson(item,"writing:"))}
-    
-  }
-  
-  override def doPost(req:HttpServletRequest, resp:HttpServletResponse) = {
-    
-	  val ret:Option[_] = req.getPathInfo() match {
-	    
-	    case a if a.endsWith("submit-results") => submitResults(req)
-	    case a if a.endsWith("submit-contact") => submitContact(req)
-	    case _ => None
-	      
-	  }
-	  
-	  ret.foreach(r=>objectMapper.writeValue(resp.getWriter, r))
- 
-  }
-  
-  def submitResults(req:HttpServletRequest) = {
-    
-    	val submissions = objectMapper.readValue(req.getReader(), classOf[Array[ResultSubmission]]);
 
-		submissions.foreach(sub=>new ResultHandler(sub.getResult,sub.getEmail, sub.getSeasonId, sub.getCompetitionType).commit)
-    	
-		None
+    }
+
+    item foreach { a => objectMapper.writeValue(resp.getWriter, logJson(item, "writing:")) }
+
   }
-  
-  def submitContact(req:HttpServletRequest) = {
-    	val submission = objectMapper.readValue(
-				req.getReader, classOf[ContactSubmission]);
-		
-		new EmailSender().sendMail(submission.getSender, submission.getRecipient, submission.getText);
-		None
+
+  override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
+
+    val ret: Option[_] = req.getPathInfo() match {
+
+      case a if a.endsWith("submit-results") => submitResults(req)
+      case a if a.endsWith("submit-contact") => submitContact(req)
+      case _ => None
+
+    }
+
+    ret.foreach(r => objectMapper.writeValue(resp.getWriter, r))
+
   }
-  
-  def currentLeagueTable(req:HttpServletRequest, compType:CompetitionType) = entityByKey(idParam(req), classOf[Season]) map( a => new LeagueTableView(a,compType))
-  
-  def teamExtras(req:HttpServletRequest):Option[TeamExtras] = {
+
+  def submitResults(req: HttpServletRequest) = {
+
+    val submissions = objectMapper.readValue(req.getReader(), classOf[Array[ResultSubmission]]);
+
+    submissions.foreach(sub => new ResultHandler(sub.getResult, sub.getEmail, sub.getSeasonId, sub.getCompetitionType).commit)
+
+    None
+  }
+
+  def submitContact(req: HttpServletRequest) = {
+    val submission = objectMapper.readValue(
+      req.getReader, classOf[ContactSubmission]);
+
+    new EmailSender().sendMail(submission.getSender, submission.getRecipient, submission.getText);
+    None
+  }
+
+  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType):Option[LeagueTableView] = entityByKey(idParam(req), classOf[Season]) map (a => new LeagueTableView(a, compType))
+
+  def teamExtras(req: HttpServletRequest): Option[TeamExtras] = {
 
     val teamId = idParam(req, "teamId")
-    
+
     val team = entityByKey(teamId, classOf[Team])
-    
-    team flatMap { t => {
-      
-      entityByKey(idParam(req, "seasonId"), classOf[Season]) flatMap { s => Some(new TeamExtras(t, teamFixtures(teamId,s), teamResults(teamId,s)))}
-    }}
+
+    team flatMap { t =>
+      {
+
+        entityByKey(idParam(req, "seasonId"), classOf[Season]) flatMap { s => Some(new TeamExtras(t, teamFixtures(teamId, s), teamResults(teamId, s))) }
+      }
+    }
   }
-  
-  def teamFixtures(teamId:Option[Long], season:Season):List[Fixtures] = {
-    
+
+  def teamFixtures(teamId: Option[Long], season: Season): List[Fixtures] = {
+
     val competitions = season.getTeamCompetitions.toList
-    
-    def flatMapFixtures(f:Fixtures):List[Fixtures] = {
-      
+
+    def flatMapFixtures(f: Fixtures): List[Fixtures] = {
+
       val newFix = new Fixtures(f);
-      newFix.setFixtures(f.getFixtures.toList filter {f => (teamId contains f.getHome.getId) || (teamId contains f.getAway.getId())})
-      
-      if(newFix.getFixtures.isEmpty) List() else List(newFix)
+      newFix.setFixtures(f.getFixtures.toList filter { f => (teamId contains f.getHome.getId) || (teamId contains f.getAway.getId()) })
+
+      if (newFix.getFixtures.isEmpty) List() else List(newFix)
     }
-    
-    competitions filter {_!=null} filter{_.getType != CompetitionType.BEER} flatMap {_.getFixtures flatMap flatMapFixtures}
-    
-    
+
+    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getFixtures flatMap flatMapFixtures }
+
   }
-  
-  def teamResults(teamId:Option[Long], season:Season):List[Results] = {
-      val competitions = season.getTeamCompetitions.toList
-    
-    def flatMapResults(f:Results):List[Results] = {
-      
+
+  def teamResults(teamId: Option[Long], season: Season): List[Results] = {
+    val competitions = season.getTeamCompetitions.toList
+
+    def flatMapResults(f: Results): List[Results] = {
+
       val newRes = new Results(f);
-      newRes.setResults(f.getResults filter {f => (teamId contains f.getFixture.getHome.getId) || (teamId contains f.getFixture.getAway.getId)})
-      
-      if(newRes.getResults.isEmpty) List() else List(newRes)
+      newRes.setResults(f.getResults filter { f => (teamId contains f.getFixture.getHome.getId) || (teamId contains f.getFixture.getAway.getId) })
+
+      if (newRes.getResults.isEmpty) List() else List(newRes)
     }
-    
-    competitions filter {_!=null} filter{_.getType != CompetitionType.BEER} flatMap {_.getResults flatMap flatMapResults}
-    
-    
-  }
-  
-  def competitionResults(req:HttpServletRequest) = {
 
-    val compType = req.parameter("type") map {t=>CompetitionType.valueOf(t)}
-    
-    entityByKey(idParam(req), classOf[Season]) flatMap {s=> compType map {t=>s.getCompetition(t)} map {a:TeamCompetition=>a.getResults()}}
+    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getResults flatMap flatMapResults }
 
   }
-  
-   def competitionFixtures(req:HttpServletRequest) = {
 
-    val compType = req.parameter("type") map {t=>CompetitionType.valueOf(t)}
-    
-    entityByKey(idParam(req), classOf[Season]) flatMap {s=> compType map {t=>s.getCompetition(t)} map {a:TeamCompetition=>a.getFixtures()}}
+  def competitionResults(req: HttpServletRequest): Option[List[Results]] = {
+
+    val compType = req.parameter("type") map { t => CompetitionType.valueOf(t) }
+
+    entityByKey(idParam(req), classOf[Season]) flatMap { s => compType map { t => s.getCompetition(t) } map { a: TeamCompetition => a.getResults().toList } }
 
   }
-  
-  def textForName(req:HttpServletRequest):Option[String] = {
-    
-    entityByKey(Option(AppStartListener.globalApplicationDataId), classOf[GlobalApplicationData]).flatMap(g => {req.parameter("name") map {n=>g.getGlobalText().getText(n)}})
+
+  def competitionFixtures(req: HttpServletRequest): Option[List[Fixtures]] = {
+
+    val compType = req.parameter("type") map { t => CompetitionType.valueOf(t) }
+
+    entityByKey(idParam(req), classOf[Season]) flatMap { s => compType map { t => s.getCompetition(t) } map { a: TeamCompetition => a.getFixtures().toList } }
+
   }
-  
-  def allResults(req:HttpServletRequest) = 
-    Some(entityByKey(idParam(req), classOf[Season]).fold(List[TeamCompetition]())(_.getTeamCompetitions.toList) filter {!_.isSubsidiary()} flatMap {_.getResults})
- 
-    
-  def fixturesForEmail(req:HttpServletRequest) = {
-    
+
+  def textForName(req: HttpServletRequest): Option[String] = {
+
+    entityByKey(Option(AppStartListener.globalApplicationDataId), classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText().getText(n) } })
+  }
+
+  def allResults(req: HttpServletRequest) =
+    Some(entityByKey(idParam(req), classOf[Season]).fold(List[TeamCompetition]())(_.getTeamCompetitions.toList) filter { !_.isSubsidiary() } flatMap { _.getResults })
+
+  def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
+
     val season = entityByKey(idParam(req, "seasonId"), classOf[Season])
     val email = req.parameter("email").map(_.trim())
-    
-    val teams = ofy.load.`type`(classOf[Team]).list()
-    
-    email flatMap {e=>teams.filter(!_.getUsers.filter(!_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a,t)=>season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId()),s))))}
-  }
-  
-  def competitionsForSeason(req:HttpServletRequest):Option[List[CompetitionView]] = 
-    entityByKey(idParam(req), classOf[Season]).map(_.getCompetitions.values.toList.map {a:Competition=>new CompetitionView(a)})
-  
-  def resultReports(req:HttpServletRequest):Option[ResultsReportsView] = {
-    
-    val team = entityByKey(idParam(req, "homeTeamId"), classOf[Team])
-    val results = req.parameter("resultsKey").map(a=> (ofy.load.key(Key.create(a)).now.asInstanceOf[Results]))
-    
-    team.flatMap(t=> results.map(r => new ResultsReportsView(r.findRow(t))))
-  }  
-    
 
-  protected def idParam(req:HttpServletRequest, name:String="id") = req parameter(name) flatMap {_ toLongOpt}
+    val teams = ofy.load.`type`(classOf[Team]).list()
+
+    email flatMap { e => teams.filter(!_.getUsers.filter(!_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a, t) => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId()), s)))) }
+  }
+
+  def competitionsForSeason(req: HttpServletRequest): Option[List[CompetitionView]] =
+    entityByKey(idParam(req), classOf[Season]).map(_.getCompetitions.values.toList.map { a: Competition => new CompetitionView(a) })
+
+  def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
+
+    val team = entityByKey(idParam(req, "homeTeamId"), classOf[Team])
+    val results = req.parameter("resultsKey").map(a => (ofy.load.key(Key.create(a)).now.asInstanceOf[Results]))
+
+    team.flatMap(t => results.map(r => new ResultsReportsView(r.findRow(t))))
+  }
+
+  protected def idParam(req: HttpServletRequest, name: String = "id") = req parameter (name) flatMap { _ toLongOpt }
 
 }
