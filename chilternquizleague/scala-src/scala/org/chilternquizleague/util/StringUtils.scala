@@ -1,4 +1,4 @@
-package org.chilternquizleague.util
+package scala.org.chilternquizleague.util
 
 object StringUtils {
      implicit class StringImprovements(val s: String) {

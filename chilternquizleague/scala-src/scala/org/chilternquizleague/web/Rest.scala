@@ -1,51 +1,58 @@
-package org.chilternquizleague.web
+package scala.org.chilternquizleague.web
 
+import java.util.logging.Level
+import java.util.logging.Logger
+
+import scala.collection.JavaConversions.asScalaBuffer
+import scala.collection.JavaConversions.bufferAsJavaList
+import scala.collection.JavaConversions.collectionAsScalaIterable
+import scala.collection.JavaConversions.seqAsJavaList
+import scala.collection.immutable.List
+import scala.util.control.Exception.catching
+
+import org.chilternquizleague.contact.EmailSender
+import org.chilternquizleague.domain.BaseEntity
+import org.chilternquizleague.domain.Competition
+import org.chilternquizleague.domain.CompetitionType
+import org.chilternquizleague.domain.Fixtures
+import org.chilternquizleague.domain.GlobalApplicationData
+import org.chilternquizleague.domain.Results
+import org.chilternquizleague.domain.Season
+import org.chilternquizleague.domain.Team
+import org.chilternquizleague.domain.TeamCompetition
+import org.chilternquizleague.domain.Text
+import org.chilternquizleague.domain.User
+import org.chilternquizleague.domain.individuals.IndividualQuiz
+import org.chilternquizleague.results.ResultHandler
+import scala.org.chilternquizleague.util.HttpUtils.RequestImprovements
+import scala.org.chilternquizleague.util.StringUtils.StringImprovements
+import org.chilternquizleague.views.CompetitionTypeView
+import org.chilternquizleague.views.CompetitionView
+import org.chilternquizleague.views.ContactSubmission
+import org.chilternquizleague.views.LeagueTableView
+import org.chilternquizleague.views.PreSubmissionView
+import org.chilternquizleague.views.ResultsReportsView
+import org.chilternquizleague.views.ResultSubmission
+import org.chilternquizleague.views.SeasonView
+import org.chilternquizleague.views.TeamExtras
+import org.chilternquizleague.web.AppStartListener;
+
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.JsonSerializer
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.googlecode.objectify.Key
+import com.googlecode.objectify.ObjectifyService.ofy
+
+import javax.servlet.ServletConfig
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import scala.collection.immutable.List
-import org.chilternquizleague.domain.BaseEntity
-import org.chilternquizleague.domain.individuals.IndividualQuiz
-import java.util.logging.Logger
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.googlecode.objectify.ObjectifyService.ofy
-import java.util.logging.Level
-import scala.collection.JavaConversions._
-import org.chilternquizleague.util.StringUtils._
-import org.chilternquizleague.util.HttpUtils._
-import com.googlecode.objectify.Key
-import org.chilternquizleague.views.CompetitionTypeView
-import org.chilternquizleague.domain.GlobalApplicationData
-import com.fasterxml.jackson.databind.JsonSerializer
-import org.chilternquizleague.domain.User
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.core.JsonGenerator
-import org.chilternquizleague.domain.Text
-import javax.servlet.ServletConfig
-import com.fasterxml.jackson.databind.module.SimpleModule
-import org.chilternquizleague.domain.Season
-import org.chilternquizleague.views.LeagueTableView
-import org.chilternquizleague.domain.CompetitionType
-import scala.collection.immutable.Iterable
-import org.chilternquizleague.views.SeasonView
-import org.chilternquizleague.domain.Team
-import org.chilternquizleague.views.TeamExtras
-import org.chilternquizleague.domain.Fixtures
-import org.chilternquizleague.domain.Results
-import org.chilternquizleague.domain.Competition
-import org.chilternquizleague.domain.TeamCompetition
-import org.chilternquizleague.views.PreSubmissionView
-import org.chilternquizleague.views.CompetitionView
-import org.chilternquizleague.views.ResultsReportsView
-import java.util.ArrayList
-import org.chilternquizleague.views.ResultSubmission
-import org.chilternquizleague.results.ResultHandler
-import org.chilternquizleague.views.ContactSubmission
-import org.chilternquizleague.contact.EmailSender
 
 trait BaseRest extends HttpServlet {
 
-  val LOG: Logger = Logger.getLogger(classOf[BaseRESTService].getName());
+  val LOG: Logger = Logger.getLogger(classOf[BaseRest].getName());
 
   def aliases: Map[String, String]
   val packages: List[Package] = List(classOf[BaseEntity].getPackage(), classOf[IndividualQuiz].getPackage());
@@ -62,7 +69,8 @@ trait BaseRest extends HttpServlet {
 
     val className = part.substring(0, 1).toUpperCase() + part.substring(1)
     def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
-      import scala.util.control.Exception._
+
+import scala.util.control.Exception._
 
       if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
     }
@@ -80,7 +88,8 @@ trait BaseRest extends HttpServlet {
 
   }
 
-  def makeEntityList[T <: BaseEntity](entityName: String) = Some(classFromPart(entityName).fold(new ArrayList[T]())((c: Class[T]) => (new ArrayList[T](ofy.load().`type`(c).list.filter(entityFilter[T])))))
+  def makeEntityList[T <: BaseEntity](entityName: String):Option[List[T]] = classFromPart(entityName) flatMap { c:Class[T] => makeEntityList(c) }
+  def makeEntityList[T <: BaseEntity](c:Class[T]):Option[List[T]] = Some(ofy.load.`type`(c).list.toList.filter(entityFilter[T]))
 
   def entityByKey[T](idPart: String, entityName: String): Option[T] = classFromPart[T](entityName) flatMap { clazz: Class[T] => entityByKey(idPart.toLongOpt, clazz) }
 
@@ -131,7 +140,7 @@ class EntityService extends BaseRest {
     val head = bits.head
     val item = head match {
 
-      case "global" => entityByKey(Some(AppStartListener.globalApplicationDataId), classOf[GlobalApplicationData])
+      case "global" => entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData])
       case "competitionType-list" => Some(CompetitionTypeView.getList)
       case _ => handleEntities(bits, head)
 
@@ -181,12 +190,10 @@ class ViewService extends BaseRest {
 
     val item: Option[_] = head match {
 
-      case a if a.contains("globaldata") => Option(ofy().load().now(
-        Key.create(classOf[GlobalApplicationData],
-          AppStartListener.globalApplicationDataId)))
+      case a if a.contains("globaldata") => entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData])
       case a if a.contains("leaguetable") => currentLeagueTable(req, CompetitionType.LEAGUE)
       case a if a.contains("beertable") => currentLeagueTable(req, CompetitionType.BEER)
-      case a if a.contains("season-views") => Some(ofy.load.`type`(classOf[Season]).map(new SeasonView(_)))
+      case a if a.contains("season-views") => makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}
       case a if a.contains("team-extras") => teamExtras(req)
       case a if a.contains("all-results") => allResults(req)
       case a if a.contains("competition-results") => competitionResults(req)
@@ -299,7 +306,7 @@ class ViewService extends BaseRest {
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
-    entityByKey(Option(AppStartListener.globalApplicationDataId), classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText().getText(n) } })
+    entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText().getText(n) } })
   }
 
   def allResults(req: HttpServletRequest) =

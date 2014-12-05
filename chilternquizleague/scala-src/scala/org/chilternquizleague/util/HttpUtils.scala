@@ -1,4 +1,4 @@
-package org.chilternquizleague.util
+package scala.org.chilternquizleague.util
 
 import javax.servlet.http.HttpServletRequest
 
