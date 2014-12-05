@@ -15,7 +15,10 @@ import java.util.HashMap
 import scala.collection.JavaConversions._
 import scala.org.chilternquizleague.domain.util.CompetitionTypeStringifier
 
-abstract class BasePersistentEntity(@Id var id: java.lang.Long = null, var retired: Boolean = false) {
+trait BasePersistentEntity {
+  @Id 
+  var id: java.lang.Long = null
+  var retired: Boolean = false
   @Ignore
   lazy val key = Key.create(this).getString
 }
@@ -123,7 +126,8 @@ object CompetitionTypes {
 
 @Entity
 @Cache
-abstract class Competition(var `type`: CompetitionType) extends BasePersistentEntity {
+abstract class Competition extends BasePersistentEntity {
+  var `type`: CompetitionType = null
   var description: String = null
   var startTime: String = null
   var subsidiary: Boolean = false
@@ -132,31 +136,47 @@ abstract class Competition(var `type`: CompetitionType) extends BasePersistentEn
 
 @Subclass
 @Cache
-class BuzzerCompetition extends Competition(BUZZER)
+case class BuzzerCompetition() extends Competition{ `type` = BUZZER}
 
-abstract class TeamCompetition(@Ignore var type1: CompetitionType, var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, var results: java.util.List[Ref[Results]] = new ArrayList) extends Competition(type1) {
-
-}
-
-abstract class BaseLeagueCompetition(@Ignore var type1: CompetitionType, var draw: Int = 1, var loss: Int = 0, var win: Int = 2, var leagueTables: java.util.List[LeagueTable] = new ArrayList, @Ignore var fixtures1: java.util.List[Ref[Fixtures]] = new ArrayList,  @Ignore var results1: java.util.List[Ref[Results]] = new ArrayList) extends TeamCompetition(type1,fixtures1,results1) {
+abstract class TeamCompetition extends Competition {
+  def fixtures: java.util.List[Ref[Fixtures]]
+  def results: java.util.List[Ref[Results]]
 
 }
 
-@Subclass
-@Cache
-case class LeagueCompetition(var leagueTables1: java.util.List[LeagueTable] = new ArrayList, var fixtures1: java.util.List[Ref[Fixtures]] = new ArrayList, var results1: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition(LEAGUE, leagueTables1,fixtures1, results1)
+abstract class  BaseLeagueCompetition extends TeamCompetition {
+	var draw: Int = 1
+	var loss: Int = 0
+	var win: Int = 2
+	def leagueTables: java.util.List[LeagueTable]
+}
 
 @Subclass
 @Cache
-case class BeerCompetition(var leagueTables: java.util.List[LeagueTable] = new ArrayList, var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, var results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition(BEER)
-
-abstract class KnockoutCompetition(var `type`: CompetitionType) extends TeamCompetition(`type`)
-
-@Subclass
-@Cache
-case class CupCompetition() extends KnockoutCompetition(CUP)
+case class LeagueCompetition(var leagueTables: java.util.List[LeagueTable] = new ArrayList, var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, var results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition{`type` = LEAGUE;
+// Only for Objectify creation
+  private def this(){this(leagueTables = new ArrayList)} 
+}
 
 @Subclass
 @Cache
-case class PlateCompetition() extends KnockoutCompetition(PLATE)
+case class BeerCompetition(leagueTables: java.util.List[LeagueTable] = new ArrayList, fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition{`type`=BEER;subsidiary = true
+// Only for Objectify creation
+  private def this(){this(leagueTables = new ArrayList)} }
+
+abstract class KnockoutCompetition extends TeamCompetition
+
+@Subclass
+@Cache
+case class CupCompetition(fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, results: java.util.List[Ref[Results]] = new ArrayList) extends KnockoutCompetition{`type` = CUP
+  // Only for Objectify creation
+  private def this(){this(results = new ArrayList)}
+}
+
+@Subclass
+@Cache
+case class PlateCompetition(fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, results: java.util.List[Ref[Results]] = new ArrayList) extends KnockoutCompetition{`type` = PLATE
+  // Only for Objectify creation
+  private def this(){this(results = new ArrayList)}
+}
 
