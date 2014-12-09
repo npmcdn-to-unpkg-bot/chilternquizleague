@@ -48,6 +48,8 @@ import javax.servlet.ServletConfig
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import scala.org.chilternquizleague.util.Storage.{entity => entityByKey}
+import scala.org.chilternquizleague.util.Storage.entityList
 
 trait BaseRest extends HttpServlet {
 
@@ -82,25 +84,15 @@ import scala.util.control.Exception._
     head match {
 
       case e if e.`contains`("-list") => makeEntityList(entName)
-      case _ => entityByKey(parts.tail.head, entName)
+      case _ => entityByParam(parts.tail.head, entName)
     }
 
   }
 
   def makeEntityList[T <: BaseEntity](entityName: String):Option[List[T]] = classFromPart(entityName) flatMap { c:Class[T] => makeEntityList(c) }
-  def makeEntityList[T <: BaseEntity](c:Class[T]):Option[List[T]] = Some(ofy.load.`type`(c).list.toList.filter(entityFilter[T]))
+  def makeEntityList[T <: BaseEntity](c:Class[T]):Option[List[T]] = Some(entityList(c).filter(entityFilter[T]))
 
-  def entityByKey[T](idPart: String, entityName: String): Option[T] = classFromPart[T](entityName) flatMap { clazz: Class[T] => entityByKey(idPart.toLongOpt, clazz) }
-
-  def entityByKey[T](id: Option[Long], clazz: Class[T]): Option[T] = {
-
-    Option[T](id match {
-
-      case Some(idval) => ofy.load.now(Key.create(clazz, idval))
-      case None => clazz.newInstance
-    })
-
-  }
+  def entityByParam[T](idPart: String, entityName: String): Option[T] = classFromPart[T](entityName) flatMap { clazz: Class[T] => entityByKey(idPart.toLongOpt, clazz) }
 
   def saveUpdate[T <: BaseEntity](req: HttpServletRequest, entityName: String): T = {
 

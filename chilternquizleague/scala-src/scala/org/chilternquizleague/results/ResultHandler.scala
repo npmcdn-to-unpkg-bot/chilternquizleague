@@ -7,6 +7,7 @@ import com.googlecode.objectify.VoidWork
 import org.chilternquizleague.domain._
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.Key
+import scala.org.chilternquizleague.util.Storage._
 
 class ResultHandler(result:Result, email:String, seasonId:Long, competitionType:CompetitionType) {
 
@@ -18,15 +19,13 @@ class ResultHandler(result:Result, email:String, seasonId:Long, competitionType:
 
 	   result.setFirstSubmitter(_);
 	    
-	    Option(ofy.load.key(Key.create(classOf[Season],seasonId)).now()).foreach {
+	    entity(Some(seasonId),classOf[Season]).foreach {
 	      
 	      season => {ofy.transact(new VoidWork() {
 	    
 	    	  override def vrun:Unit = {
 	    	    
-	    	  	val competition:Option[TeamCompetition] = Option(season.getCompetition(competitionType))
-				
-				competition.foreach {
+	    	  	Option[TeamCompetition](season.getCompetition(competitionType)).foreach {
 	    	  	 c=> {
 	    	  	   c.addResult(result)
 	    	  	   season.prePersist
