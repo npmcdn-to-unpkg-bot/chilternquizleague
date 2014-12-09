@@ -6,9 +6,8 @@ import com.googlecode.objectify.annotation
 
 
 
-object Annotations {
+object ObjectifyAnnotations {
   import com.googlecode.objectify.annotation
-  import scala.annotation.meta.field
   
   type Id = annotation.Id @field
   type Parent = annotation.Parent @field
@@ -19,4 +18,10 @@ object Annotations {
 
 // Etc. etc.
 
+}
+
+object JacksonAnnotations {
+  import com.fasterxml.jackson.annotation
+  
+  type JsonIgnore = annotation.JsonIgnore @field
 }

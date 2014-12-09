@@ -5,7 +5,8 @@ import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.Ref
 import com.googlecode.objectify.annotation.Parent
 import java.util.Date
-import scala.org.chilternquizleague.domain.util.Annotations._
+import scala.org.chilternquizleague.domain.util.ObjectifyAnnotations._
+import scala.org.chilternquizleague.domain.util.JacksonAnnotations._
 import java.util.ArrayList
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.annotation.Subclass
@@ -14,6 +15,10 @@ import java.util.Calendar
 import java.util.HashMap
 import scala.collection.JavaConversions._
 import scala.org.chilternquizleague.domain.util.CompetitionTypeStringifier
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
+
+
 
 trait BasePersistentEntity {
   @Id 
@@ -67,6 +72,7 @@ case class Venue(@Index var name: String, var email: String, var phone: String, 
 case class Team(@Index var name: String, @Index var shortName: String, var rubric: Text = Text(null), var venue: Ref[Venue], var users: java.util.List[Ref[User]] = new ArrayList) extends BasePersistentEntity {
   // Only for Objectify creation
   private def this() { this(name = null, shortName = null, venue = null) }
+  
 }
 
 abstract class CompetitionChild(@Parent var parent: Ref[BasePersistentEntity] = null) extends BasePersistentEntity
@@ -126,6 +132,7 @@ object CompetitionTypes {
 
 @Entity
 @Cache
+@JsonAutoDetect( fieldVisibility=Visibility.ANY)
 abstract class Competition extends BasePersistentEntity {
   var `type`: CompetitionType = null
   var description: String = null
@@ -141,7 +148,6 @@ case class BuzzerCompetition() extends Competition{ `type` = BUZZER}
 abstract class TeamCompetition extends Competition {
   def fixtures: java.util.List[Ref[Fixtures]]
   def results: java.util.List[Ref[Results]]
-
 }
 
 abstract class  BaseLeagueCompetition extends TeamCompetition {
@@ -153,14 +159,14 @@ abstract class  BaseLeagueCompetition extends TeamCompetition {
 
 @Subclass
 @Cache
-case class LeagueCompetition(var leagueTables: java.util.List[LeagueTable] = new ArrayList, var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, var results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition{`type` = LEAGUE;
+case class LeagueCompetition(@JsonIgnore var leagueTables: java.util.List[LeagueTable] = new ArrayList, @JsonIgnore var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList,@JsonIgnore var results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition{`type` = LEAGUE;
 // Only for Objectify creation
   private def this(){this(leagueTables = new ArrayList)} 
 }
 
 @Subclass
 @Cache
-case class BeerCompetition(leagueTables: java.util.List[LeagueTable] = new ArrayList, fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition{`type`=BEER;subsidiary = true
+case class BeerCompetition(@JsonIgnore var leagueTables: java.util.List[LeagueTable] = new ArrayList,@JsonIgnore var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, @JsonIgnore var results: java.util.List[Ref[Results]] = new ArrayList) extends BaseLeagueCompetition{`type`=BEER;subsidiary = true
 // Only for Objectify creation
   private def this(){this(leagueTables = new ArrayList)} }
 
@@ -168,14 +174,14 @@ abstract class KnockoutCompetition extends TeamCompetition
 
 @Subclass
 @Cache
-case class CupCompetition(fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, results: java.util.List[Ref[Results]] = new ArrayList) extends KnockoutCompetition{`type` = CUP
+case class CupCompetition(@JsonIgnore var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList,@JsonIgnore var results: java.util.List[Ref[Results]] = new ArrayList) extends KnockoutCompetition{`type` = CUP
   // Only for Objectify creation
   private def this(){this(results = new ArrayList)}
 }
 
 @Subclass
 @Cache
-case class PlateCompetition(fixtures: java.util.List[Ref[Fixtures]] = new ArrayList, results: java.util.List[Ref[Results]] = new ArrayList) extends KnockoutCompetition{`type` = PLATE
+case class PlateCompetitionvar (@JsonIgnore var fixtures: java.util.List[Ref[Fixtures]] = new ArrayList,@JsonIgnore var results: java.util.List[Ref[Results]] = new ArrayList) extends KnockoutCompetition{`type` = PLATE
   // Only for Objectify creation
   private def this(){this(results = new ArrayList)}
 }

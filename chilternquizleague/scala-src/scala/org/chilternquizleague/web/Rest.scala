@@ -23,7 +23,7 @@ import org.chilternquizleague.domain.TeamCompetition
 import org.chilternquizleague.domain.Text
 import org.chilternquizleague.domain.User
 import org.chilternquizleague.domain.individuals.IndividualQuiz
-import org.chilternquizleague.results.ResultHandler
+import scala.org.chilternquizleague.results.ResultHandler
 import scala.org.chilternquizleague.util.HttpUtils.RequestImprovements
 import scala.org.chilternquizleague.util.StringUtils.StringImprovements
 import org.chilternquizleague.views.CompetitionTypeView
@@ -35,7 +35,6 @@ import org.chilternquizleague.views.ResultsReportsView
 import org.chilternquizleague.views.ResultSubmission
 import org.chilternquizleague.views.SeasonView
 import org.chilternquizleague.views.TeamExtras
-import org.chilternquizleague.web.AppStartListener;
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
@@ -228,7 +227,7 @@ class ViewService extends BaseRest {
 
     val submissions = objectMapper.readValue(req.getReader(), classOf[Array[ResultSubmission]]);
 
-    submissions.foreach(sub => new ResultHandler(sub.getResult, sub.getEmail, sub.getSeasonId, sub.getCompetitionType).commit)
+    submissions.foreach(sub => ResultHandler(sub.getResult, sub.getEmail, sub.getSeasonId, sub.getCompetitionType))
 
     None
   }
@@ -257,7 +256,7 @@ class ViewService extends BaseRest {
     }
   }
 
-  def teamFixtures(teamId: Option[Long], season: Season): List[Fixtures] = {
+  def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000): List[Fixtures] = {
 
     val competitions = season.getTeamCompetitions.toList
 
@@ -269,11 +268,12 @@ class ViewService extends BaseRest {
       if (newFix.getFixtures.isEmpty) List() else List(newFix)
     }
 
-    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getFixtures flatMap flatMapFixtures }
+    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getFixtures flatMap flatMapFixtures } sortWith(_ .getStart before  _.getStart) slice(0, limit)
+
 
   }
 
-  def teamResults(teamId: Option[Long], season: Season): List[Results] = {
+  def teamResults(teamId: Option[Long], season: Season, limit:Int = 20000): List[Results] = {
     val competitions = season.getTeamCompetitions.toList
 
     def flatMapResults(f: Results): List[Results] = {
@@ -284,7 +284,7 @@ class ViewService extends BaseRest {
       if (newRes.getResults.isEmpty) List() else List(newRes)
     }
 
-    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getResults flatMap flatMapResults }
+    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getResults flatMap flatMapResults } sortWith(_.getDate before _.getDate) slice(0,limit)
 
   }
 
@@ -306,7 +306,7 @@ class ViewService extends BaseRest {
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
-    entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText().getText(n) } })
+    entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText.getText(n) } })
   }
 
   def allResults(req: HttpServletRequest) =
@@ -319,7 +319,7 @@ class ViewService extends BaseRest {
 
     val teams = ofy.load.`type`(classOf[Team]).list()
 
-    email flatMap { e => teams.filter(!_.getUsers.filter(!_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a, t) => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId()), s)))) }
+    email flatMap { e => teams.filter(!_.getUsers.filter(!_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a, t) => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s)))) }
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[List[CompetitionView]] =

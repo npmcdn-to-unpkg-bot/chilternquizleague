@@ -3,8 +3,7 @@ package scala.org.chilternquizleague.web
 import javax.servlet.ServletContextListener
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.ObjectifyService
-import scala.org.chilternquizleague.domain.GlobalApplicationData
-import scala.org.chilternquizleague.domain._
+import org.chilternquizleague.domain._
 
 class EntityRegistrationListener extends ServletContextListener {
 
@@ -39,15 +38,12 @@ class AppStartListener extends ServletContextListener {
 
   def contextDestroyed(x$1: javax.servlet.ServletContextEvent): Unit = {}
   def contextInitialized(x$1: javax.servlet.ServletContextEvent): Unit = {
-
-  		
-		
 		
 		val list = ObjectifyService.ofy().load().`type`(classOf[GlobalApplicationData]).list().toList;
 			
 		AppStartListener.globalApplicationDataId = list match {
-		  case Nil => Some(ObjectifyService.ofy.save.entity(GlobalApplicationData("CQL","",null,null)).now.getId)
-		  case _ => Some(list.head.id)
+		  case Nil => Some(ObjectifyService.ofy.save.entity(new GlobalApplicationData()).now.getId)
+		  case _ => Some(list.head.getId)
 		}
 
   }
