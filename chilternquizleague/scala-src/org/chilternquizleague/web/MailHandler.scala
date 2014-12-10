@@ -1,4 +1,4 @@
-package scala.org.chilternquizleague.web
+package org.chilternquizleague.web
 
 import scala.collection.JavaConversions._
 import javax.servlet.http.HttpServlet
@@ -18,7 +18,7 @@ import java.util.logging.Logger
 import java.util.logging.Level
 import javax.mail.Message.RecipientType
 import javax.mail.Transport
-import scala.org.chilternquizleague.util.Storage._
+import org.chilternquizleague.util.Storage._
 
 class MailHandler extends HttpServlet {
 

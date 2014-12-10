@@ -1,5 +1,5 @@
 mainApp.controller('LeagueTableController', [ '$scope', '$interval',
-		'viewService', function($scope, $interval, viewService) {
+		'viewService','$rootScope', function($scope, $interval, viewService,$rootScope) {
 
 			$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
 				if (currentSeasonId) {

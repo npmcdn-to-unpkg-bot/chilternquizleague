@@ -1,4 +1,4 @@
-package scala.org.chilternquizleague.results
+package org.chilternquizleague.results
 
 import org.chilternquizleague.domain.Result
 import org.chilternquizleague.domain.CompetitionType
@@ -7,7 +7,7 @@ import com.googlecode.objectify.VoidWork
 import org.chilternquizleague.domain._
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.Key
-import scala.org.chilternquizleague.util.Storage._
+import org.chilternquizleague.util.Storage._
 
 class ResultHandler(result:Result, email:String, seasonId:Long, competitionType:CompetitionType) {
 

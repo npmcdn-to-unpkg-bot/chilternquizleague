@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import scala.org.chilternquizleague.domain.util.CompetitionTypeStringifier;
+import org.chilternquizleague.domain.util.CompetitionTypeStringifier;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;

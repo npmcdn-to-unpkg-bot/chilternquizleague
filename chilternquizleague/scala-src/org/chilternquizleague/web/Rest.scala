@@ -1,16 +1,14 @@
-package scala.org.chilternquizleague.web
+package org.chilternquizleague.web
 
 import java.util.logging.Level
 import java.util.logging.Logger
-
+import java.util.{List => JList}
 import scala.collection.JavaConversions.asScalaBuffer
 import scala.collection.JavaConversions.bufferAsJavaList
 import scala.collection.JavaConversions.collectionAsScalaIterable
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.immutable.List
 import scala.util.control.Exception.catching
-
-import org.chilternquizleague.contact.EmailSender
 import org.chilternquizleague.domain.BaseEntity
 import org.chilternquizleague.domain.Competition
 import org.chilternquizleague.domain.CompetitionType
@@ -23,9 +21,9 @@ import org.chilternquizleague.domain.TeamCompetition
 import org.chilternquizleague.domain.Text
 import org.chilternquizleague.domain.User
 import org.chilternquizleague.domain.individuals.IndividualQuiz
-import scala.org.chilternquizleague.results.ResultHandler
-import scala.org.chilternquizleague.util.HttpUtils.RequestImprovements
-import scala.org.chilternquizleague.util.StringUtils.StringImprovements
+import org.chilternquizleague.results.ResultHandler
+import org.chilternquizleague.util.HttpUtils.RequestImprovements
+import org.chilternquizleague.util.StringUtils.StringImprovements
 import org.chilternquizleague.views.CompetitionTypeView
 import org.chilternquizleague.views.CompetitionView
 import org.chilternquizleague.views.ContactSubmission
@@ -35,7 +33,6 @@ import org.chilternquizleague.views.ResultsReportsView
 import org.chilternquizleague.views.ResultSubmission
 import org.chilternquizleague.views.SeasonView
 import org.chilternquizleague.views.TeamExtras
-
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -43,22 +40,37 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.ObjectifyService.ofy
-
 import javax.servlet.ServletConfig
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import scala.org.chilternquizleague.util.Storage.{entity => entityByKey}
-import scala.org.chilternquizleague.util.Storage.entityList
-import scala.org.chilternquizleague.util.Storage.save
+import org.chilternquizleague.util.Storage.{entity => entityByKey}
+import org.chilternquizleague.util.Storage.entityList
+import org.chilternquizleague.util.Storage.save
+import java.util.ArrayList
+import org.chilternquizleague.views.GlobalApplicationDataView
+import scala.collection.immutable.Iterable
+import java.util.Date
+
 
 trait BaseRest extends HttpServlet {
 
+  class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]]{
+    override def serialize(list:Iterable[Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
+      gen writeStartArray;
+      
+      list foreach {gen.writeObject(_)}
+      
+      gen writeEndArray()
+      
+    }
+  }
+  
   val LOG: Logger = Logger.getLogger(classOf[BaseRest].getName());
 
   def aliases: Map[String, String]
   val packages: List[Package] = List(classOf[BaseEntity].getPackage(), classOf[IndividualQuiz].getPackage());
-  def objectMapper: ObjectMapper = new ObjectMapper
+  val objectMapper: ObjectMapper = new ObjectMapper
   def parts(req: HttpServletRequest) = req.getPathInfo().split("\\/").tail;
   def entityFilter[T <: BaseEntity]: T => Boolean
 
@@ -83,7 +95,7 @@ trait BaseRest extends HttpServlet {
     val entName = entityName(head)
     head match {
 
-      case e if e.`contains`("-list") => makeEntityList(entName)
+      case e if e.`contains`("-list") => makeEntityList(entName).map(new ArrayList(_))
       case _ => entityByParam(parts.tail.head, entName)
     }
 
@@ -113,12 +125,13 @@ trait BaseRest extends HttpServlet {
 
   def logJson[T](things: T, message: String = "") = {
     if (LOG.isLoggable(Level.FINE)) {
-      LOG.fine(message + "\n" + objectMapper.writeValueAsString(things));
+      LOG.fine(message + "\n" + things.getClass.getName() + " : " +objectMapper.writeValueAsString(things));
     }
 
     things
   }
-
+  
+   
 }
 
 class EntityService extends BaseRest {
@@ -172,6 +185,7 @@ class ViewService extends BaseRest {
     val module = new SimpleModule
     module.addSerializer(classOf[User], new UserSerializer)
     module.addSerializer(classOf[Text], new TextSerializer)
+    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
     objectMapper registerModule module
   }
 
@@ -181,10 +195,10 @@ class ViewService extends BaseRest {
 
     val item: Option[_] = head match {
 
-      case a if a.contains("globaldata") => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData])
+      case a if a.contains("globaldata") => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).map(new GlobalApplicationDataView(_))
       case a if a.contains("leaguetable") => currentLeagueTable(req, CompetitionType.LEAGUE)
       case a if a.contains("beertable") => currentLeagueTable(req, CompetitionType.BEER)
-      case a if a.contains("season-views") => makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}
+      case a if a.contains("season-views") => seasons
       case a if a.contains("team-extras") => teamExtras(req)
       case a if a.contains("all-results") => allResults(req)
       case a if a.contains("competition-results") => competitionResults(req)
@@ -197,7 +211,7 @@ class ViewService extends BaseRest {
 
     }
 
-    item foreach { a => objectMapper.writeValue(resp.getWriter, logJson(item, "writing:")) }
+    item foreach { a => objectMapper.writeValue(resp.getWriter, logJson(a, "viewService writing:")) }
 
   }
 
@@ -214,6 +228,8 @@ class ViewService extends BaseRest {
     ret.foreach(r => objectMapper.writeValue(resp.getWriter, r))
 
   }
+  
+  def seasons():Option[List[SeasonView]] = {makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}}
 
   def submitResults(req: HttpServletRequest) = {
 
@@ -248,7 +264,7 @@ class ViewService extends BaseRest {
     }
   }
 
-  def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000): List[Fixtures] = {
+  def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Fixtures => Boolean = {_ => true}): List[Fixtures] = {
 
     val competitions = season.getTeamCompetitions.toList
 
@@ -260,12 +276,12 @@ class ViewService extends BaseRest {
       if (newFix.getFixtures.isEmpty) List() else List(newFix)
     }
 
-    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getFixtures flatMap flatMapFixtures } sortWith(_ .getStart before  _.getStart) slice(0, limit)
+    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getFixtures filter filter flatMap flatMapFixtures } sortWith(_ .getStart before  _.getStart) slice(0, limit)
 
 
   }
 
-  def teamResults(teamId: Option[Long], season: Season, limit:Int = 20000): List[Results] = {
+  def teamResults(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Results => Boolean = {_ => true}): List[Results] = {
     val competitions = season.getTeamCompetitions.toList
 
     def flatMapResults(f: Results): List[Results] = {
@@ -276,23 +292,29 @@ class ViewService extends BaseRest {
       if (newRes.getResults.isEmpty) List() else List(newRes)
     }
 
-    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getResults flatMap flatMapResults } sortWith(_.getDate before _.getDate) slice(0,limit)
+    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getResults filter filter flatMap flatMapResults } sortWith(_.getDate before _.getDate) slice(0,limit)
 
   }
 
-  def competitionResults(req: HttpServletRequest): Option[List[Results]] = {
+  /**
+   * Relies on http params id:Season and type:CompetitionType
+   */
+  private def teamCompetitionForSeason(req: HttpServletRequest):Option[TeamCompetition] = {
+      val compType = req.parameter("type") map { t => CompetitionType.valueOf(t) }
 
-    val compType = req.parameter("type") map { t => CompetitionType.valueOf(t) }
+    entityByKey(idParam(req), classOf[Season]) flatMap {
+      s => compType map {
+        t => s.getCompetition(t).asInstanceOf[TeamCompetition] }}
+  }
+  
+  def competitionResults(req: HttpServletRequest): Option[JList[Results]] = {
 
-    entityByKey(idParam(req), classOf[Season]) flatMap { s => compType map { t => s.getCompetition(t) } map { a: TeamCompetition => a.getResults().toList } }
-
+    teamCompetitionForSeason(req) map {a:TeamCompetition => a.getResults()}
   }
 
-  def competitionFixtures(req: HttpServletRequest): Option[List[Fixtures]] = {
+  def competitionFixtures(req: HttpServletRequest): Option[JList[Fixtures]] = {
 
-    val compType = req.parameter("type") map { t => CompetitionType.valueOf(t) }
-
-    entityByKey(idParam(req), classOf[Season]) flatMap { s => compType map { t => s.getCompetition(t) } map { a: TeamCompetition => a.getFixtures().toList } }
+   teamCompetitionForSeason(req) map {a: TeamCompetition => a.getFixtures()}
 
   }
 
@@ -301,7 +323,7 @@ class ViewService extends BaseRest {
     entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText.getText(n) } })
   }
 
-  def allResults(req: HttpServletRequest) =
+  def allResults(req: HttpServletRequest):Option[JList[_]] =
     Some(entityByKey(idParam(req), classOf[Season]).fold(List[TeamCompetition]())(_.getTeamCompetitions.toList) filter { !_.isSubsidiary() } flatMap { _.getResults })
 
   def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
@@ -309,12 +331,12 @@ class ViewService extends BaseRest {
     val season = entityByKey(idParam(req, "seasonId"), classOf[Season])
     val email = req.parameter("email").map(_.trim())
 
-    val teams = ofy.load.`type`(classOf[Team]).list()
+    val teams = entityList(classOf[Team])
 
-    email flatMap { e => teams.filter(!_.getUsers.filter(!_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a, t) => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s)))) }
+    email flatMap { e => teams.filter(!_.getUsers.filter(_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a, t) => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s)))) }
   }
 
-  def competitionsForSeason(req: HttpServletRequest): Option[List[CompetitionView]] =
+  def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
     entityByKey(idParam(req), classOf[Season]).map(_.getCompetitions.values.toList.map { a: Competition => new CompetitionView(a) })
 
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {

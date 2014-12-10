@@ -1,4 +1,4 @@
-package scala.org.chilternquizleague.util
+package org.chilternquizleague.util
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.ObjectifyService.ofy
 import org.chilternquizleague.domain.BaseEntity

@@ -1,4 +1,4 @@
-package scala.org.chilternquizleague.domain.util
+package org.chilternquizleague.domain.util
 
 import com.googlecode.objectify.stringifier.Stringifier
 import org.chilternquizleague.domain.CompetitionType

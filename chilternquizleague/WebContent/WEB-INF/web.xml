@@ -8,7 +8,7 @@
     <description>JAX-RS Tools Generated - Do not modify</description>
     <display-name>Entity REST Services</display-name>
     <servlet-name>EntityServices</servlet-name>
-    <servlet-class>scala.org.chilternquizleague.web.EntityService</servlet-class>
+    <servlet-class>org.chilternquizleague.web.EntityService</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
@@ -16,10 +16,10 @@
     <url-pattern>/entity/*</url-pattern>
   </servlet-mapping>
   <listener>
-    <listener-class>scala.org.chilternquizleague.web.EntityRegistrationListener</listener-class>
+    <listener-class>org.chilternquizleague.web.EntityRegistrationListener</listener-class>
   </listener>
   <listener>
-    <listener-class>scala.org.chilternquizleague.web.AppStartListener</listener-class>
+    <listener-class>org.chilternquizleague.web.ApplicationStartListener</listener-class>
   </listener>
   <filter>
     <filter-name>ObjectifyFilter</filter-name>
@@ -41,7 +41,7 @@
     <description></description>
     <display-name>View REST Services</display-name>
     <servlet-name>ViewServices</servlet-name>
-    <servlet-class>org.chilternquizleague.web.ViewServices</servlet-class>
+    <servlet-class>org.chilternquizleague.web.ViewService</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ViewServices</servlet-name>
@@ -49,7 +49,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>mailhandler</servlet-name>
-    <servlet-class>org.chilternquizleague.web.MailHandlerServlet</servlet-class>
+    <servlet-class>org.chilternquizleague.web.MailHandler</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>mailhandler</servlet-name>
