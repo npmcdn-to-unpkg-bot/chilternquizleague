@@ -15,7 +15,7 @@ class ResultHandler(result:Result, email:String, seasonId:Long, competitionType:
 	private def commit():Unit = {
 		
 	  
-	  Option(ofy.load.`type`(classOf[User]).filter("email",email).list.head).foreach {
+	  Option(entityList(classOf[User],("email",email)).head).foreach {
 
 	   result.setFirstSubmitter(_);
 	    
