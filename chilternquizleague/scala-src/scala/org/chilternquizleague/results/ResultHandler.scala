@@ -29,7 +29,7 @@ class ResultHandler(result:Result, email:String, seasonId:Long, competitionType:
 	    	  	 c=> {
 	    	  	   c.addResult(result)
 	    	  	   season.prePersist
-	    	  	   ofy.save.entities(season)
+	    	  	   save(season)
 	    	  	 } 
 	    	  	}
 	    	  	}

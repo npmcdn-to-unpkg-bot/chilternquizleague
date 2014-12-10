@@ -50,6 +50,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import scala.org.chilternquizleague.util.Storage.{entity => entityByKey}
 import scala.org.chilternquizleague.util.Storage.entityList
+import scala.org.chilternquizleague.util.Storage.save
 
 trait BaseRest extends HttpServlet {
 
@@ -70,8 +71,7 @@ trait BaseRest extends HttpServlet {
 
     val className = part.substring(0, 1).toUpperCase() + part.substring(1)
     def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
-
-import scala.util.control.Exception._
+    	import scala.util.control.Exception._
 
       if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
     }
@@ -101,7 +101,7 @@ import scala.util.control.Exception._
 
         val e = objectMapper.readValue(req.getReader(), clazz)
         e.prePersist
-        val key = ofy.save.entity(e).now
+        val key = save(e)
 
         ofy.load.key(key).now
 
@@ -131,7 +131,7 @@ class EntityService extends BaseRest {
     val head = bits.head
     val item = head match {
 
-      case "global" => entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData])
+      case "global" => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData])
       case "competitionType-list" => Some(CompetitionTypeView.getList)
       case _ => handleEntities(bits, head)
 
@@ -181,7 +181,7 @@ class ViewService extends BaseRest {
 
     val item: Option[_] = head match {
 
-      case a if a.contains("globaldata") => entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData])
+      case a if a.contains("globaldata") => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData])
       case a if a.contains("leaguetable") => currentLeagueTable(req, CompetitionType.LEAGUE)
       case a if a.contains("beertable") => currentLeagueTable(req, CompetitionType.BEER)
       case a if a.contains("season-views") => makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}
@@ -228,7 +228,7 @@ class ViewService extends BaseRest {
     val submission = objectMapper.readValue(
       req.getReader, classOf[ContactSubmission]);
 
-    new EmailSender().sendMail(submission.getSender, submission.getRecipient, submission.getText);
+    EmailSender(submission.getSender, submission.getRecipient, submission.getText);
     None
   }
 
@@ -298,7 +298,7 @@ class ViewService extends BaseRest {
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
-    entityByKey(AppStartListener.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText.getText(n) } })
+    entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText.getText(n) } })
   }
 
   def allResults(req: HttpServletRequest) =

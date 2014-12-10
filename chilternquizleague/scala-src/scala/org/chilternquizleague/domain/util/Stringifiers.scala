@@ -1,11 +1,11 @@
 package scala.org.chilternquizleague.domain.util
 
 import com.googlecode.objectify.stringifier.Stringifier
-import scala.org.chilternquizleague.domain.CompetitionTypes.CompetitionType
-import scala.org.chilternquizleague.domain.CompetitionTypes
+import org.chilternquizleague.domain.CompetitionType
 
-class CompetitionTypeStringifier extends Stringifier[CompetitionType]{
-  
-  override def fromString(name:String):CompetitionType = CompetitionTypes.byName(name).getOrElse(throw new IllegalArgumentException(name))
-  override def toString(compType:CompetitionType) = compType.name
+class CompetitionTypeStringifier extends EnumStringifier[CompetitionType](classOf[CompetitionType])
+
+abstract class EnumStringifier[T<:Enum[T]](clazz:Class[T]) extends Stringifier[T]{
+   override def fromString(name:String):T = Enum.valueOf(clazz,name)
+   override def toString(enum:T) = enum.name
 }

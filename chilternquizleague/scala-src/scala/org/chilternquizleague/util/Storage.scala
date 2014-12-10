@@ -18,5 +18,6 @@ object Storage {
   
   def entityList[T <: BaseEntity](c:Class[T]):List[T] = ofy.load.`type`(c).list.toList
 
+  def save[T <: BaseEntity](entity:T) = ofy.save.entity(entity).now
 
 }

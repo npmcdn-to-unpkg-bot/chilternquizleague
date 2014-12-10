@@ -18,81 +18,147 @@ import java.util.logging.Logger
 import java.util.logging.Level
 import javax.mail.Message.RecipientType
 import javax.mail.Transport
-
+import scala.org.chilternquizleague.util.Storage._
 
 class MailHandler extends HttpServlet {
-  
+
   val LOG: Logger = Logger.getLogger(classOf[MailHandler].getName());
-  
-  override def doPost(req:HttpServletRequest, resp:HttpServletResponse):Unit = {
-     
-    	val props:Properties = new Properties;
-		val session:Session = Session.getDefaultInstance(props, null);
-		
-				try {
-			val message = new MimeMessage(session,
-					req.getInputStream());
 
-			val globaldata = ofy().load().now(
-					Key.create(classOf[GlobalApplicationData],
-							AppStartListener.globalApplicationDataId.get));
-			val recipientParts = req.getPathInfo().replaceFirst("/", "")
-					.split("@");
+  override def doPost(req: HttpServletRequest, resp: HttpServletResponse): Unit = {
 
-			val recipientName = recipientParts(0);
+    val props: Properties = new Properties;
+    val session: Session = Session.getDefaultInstance(props, null);
 
-			globaldata.getEmailAliases.filter(_.getAlias == recipientName).foreach{alias => sendMail(message, globaldata, new InternetAddress(alias.getUser().getEmail()));return }
-			
-			ofy().load().`type`(classOf[Team]).list().filter(_.getEmailName == recipientName).foreach {team =>
-			  
-			  val addresses:Array[Address] = team.getUsers().map{a:User => new InternetAddress(a.getEmail)}.toArray
-			  
-			  sendMail(message, globaldata, addresses:_*)
-			  
-			  return
-			  
-			}
+    try {
+      val message = new MimeMessage(session,
+        req.getInputStream());
 
-			LOG.fine("No matching addressees for any recipients");
+      val globaldata = ofy().load().now(
+        Key.create(classOf[GlobalApplicationData],
+          Application.globalApplicationDataId.get));
+      val recipientParts = req.getPathInfo().replaceFirst("/", "")
+        .split("@");
 
-		} catch {
-		  case e:Exception => LOG.log(Level.SEVERE, "Failure recieving mail", e);
-		}
-    
-    
-    
+      val recipientName = recipientParts(0);
+
+      globaldata.getEmailAliases.filter(_.getAlias == recipientName).foreach { alias => sendMail(message, globaldata, new InternetAddress(alias.getUser().getEmail())); return }
+
+      entityList(classOf[Team]).filter(_.getEmailName == recipientName).foreach { team =>
+
+        val addresses: Array[Address] = team.getUsers().map { a: User => new InternetAddress(a.getEmail) }.toArray
+
+        sendMail(message, globaldata, addresses: _*)
+
+        return
+
+      }
+
+      LOG.fine("No matching addressees for any recipients");
+
+    } catch {
+      case e: Exception => LOG.log(Level.SEVERE, "Failure recieving mail", e);
+    }
+
   }
+
+  def sendMail(message: MimeMessage, globaldata: GlobalApplicationData,
+    addresses: Address*): Unit =
+    {
+
+      try {
+
+        message.setRecipients(RecipientType.TO, addresses.toArray);
+
+        message.setSubject("via " + globaldata.getLeagueName + " : " + message.getSubject);
+
+        LOG.fine(message.getFrom()(0) + " to "
+          + message.getAllRecipients()(0).toString());
+
+        Transport.send(message);
+      } catch {
+
+        case e: Exception => {
+          LOG.log(Level.SEVERE, "Failure sending mail", e);
+
+          val session = Session.getDefaultInstance(new Properties(), null);
+
+          val notification = new MimeMessage(session);
+          notification.addRecipient(RecipientType.TO, message.getFrom()(0));
+          notification.setSender(message.getAllRecipients()(0));
+          notification.setSubject(globaldata.getLeagueName() + " : Message delivery failed");
+          notification.setText("Message delivery failed, probably due to an attachment.\nThis mail service does not allow attachments.  Try resending as text only.");
+
+          Transport.send(notification);
+        }
+      }
+    }
+
+}
+
+object EmailSender{
   
-  	def sendMail(message:MimeMessage, globaldata:GlobalApplicationData,
-			 addresses:Address*):Unit =
-			{
-		
-		try {
-			
-			message.setRecipients(RecipientType.TO, addresses.toArray);
-			
-			message.setSubject("via " + globaldata.getLeagueName + " : " + message.getSubject);
+  def apply(sender: String, recipientName: String, text: String) = new EmailSender().sendMail(sender, recipientName, text)
+}
 
-			LOG.fine(message.getFrom()(0) + " to "
-					+ message.getAllRecipients()(0).toString());
+private class EmailSender {
 
-			Transport.send(message);
-		} catch {
-		  
-		  case e:Exception =>{
-			LOG.log(Level.SEVERE, "Failure sending mail", e);
-			
-			val session = Session.getDefaultInstance(new Properties(), null);
-			
-			val notification = new MimeMessage(session);
-			notification.addRecipient(RecipientType.TO, message.getFrom()(0));
-			notification.setSender(message.getAllRecipients()(0));
-			notification.setSubject(globaldata.getLeagueName() + " : Message delivery failed");
-			notification.setText("Message delivery failed, probably due to an attachment.\nThis mail service does not allow attachments.  Try resending as text only.");
-			
-			Transport.send(notification);
-		  }
-		}
-	}
+  val LOG: Logger = Logger.getLogger(classOf[EmailSender].getName);
 
+  def sendMail(sender: String, recipientName: String, text: String): Unit = {
+
+    try {
+
+      val globaldata = entity(Application.globalApplicationDataId, classOf[GlobalApplicationData])
+
+      globaldata.foreach { g =>
+        g.getEmailAliases.filter(_.getAlias() == recipientName).foreach {
+          alias =>
+            {
+              sendMail(sender, text, g,
+                new InternetAddress(alias.getUser().getEmail()));
+              return
+            }
+
+        }
+        val teams = entityList(classOf[Team])
+
+        teams.filter(recipientName == _.getEmailName()).foreach {
+          team =>
+            {
+
+              sendMail(sender, text, g, team.getUsers.map(user => new InternetAddress(user.getEmail())).toSeq: _*)
+              return
+            }
+        }
+      }
+
+      LOG.fine("No matching addressees for any recipients");
+
+    } catch {
+      case e: Exception => LOG.log(Level.SEVERE, "Failure recieving mail", e);
+    }
+  }
+
+  def sendMail(sender: String, text: String, globalApplicationData: GlobalApplicationData,
+    addresses: Address*): Unit = {
+
+    val props = new Properties();
+    val session = Session.getDefaultInstance(props, null);
+
+    try {
+      val outMessage = new MimeMessage(session);
+      outMessage.addRecipients(RecipientType.TO, addresses.toArray);
+      outMessage
+        .setSender(new InternetAddress(sender));
+      outMessage.setText(text);
+      outMessage.setSubject("Sent via " + globalApplicationData.getLeagueName());
+
+      LOG.fine(outMessage.getFrom()(0) + " to "
+        + outMessage.getAllRecipients()(0).toString());
+
+      Transport.send(outMessage);
+    } catch {
+      case e: Exception => LOG.log(Level.SEVERE, "Failure sending mail", e);
+    }
+  }
 }

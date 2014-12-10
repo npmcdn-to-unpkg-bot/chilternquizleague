@@ -2,13 +2,14 @@ package scala.org.chilternquizleague.web
 
 import javax.servlet.ServletContextListener
 import scala.collection.JavaConversions._
-import com.googlecode.objectify.ObjectifyService
 import org.chilternquizleague.domain._
+import scala.org.chilternquizleague.util.Storage._
 
 class EntityRegistrationListener extends ServletContextListener {
-
-  def contextDestroyed(x$1: javax.servlet.ServletContextEvent): Unit = {}
-  def contextInitialized(x$1: javax.servlet.ServletContextEvent): Unit = {
+  import com.googlecode.objectify.ObjectifyService
+  
+  def contextDestroyed(evt: javax.servlet.ServletContextEvent): Unit = {}
+  def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = {
 
     ObjectifyService.register(classOf[GlobalApplicationData]);
     ObjectifyService.register(classOf[User]);
@@ -28,21 +29,21 @@ class EntityRegistrationListener extends ServletContextListener {
   }
 }
 
-object AppStartListener{
+object Application{
   
   var globalApplicationDataId:Option[Long] = None
   
 }
 
-class AppStartListener extends ServletContextListener {
+class ApplicationStartListener extends ServletContextListener {
 
-  def contextDestroyed(x$1: javax.servlet.ServletContextEvent): Unit = {}
-  def contextInitialized(x$1: javax.servlet.ServletContextEvent): Unit = {
+  def contextDestroyed(evt: javax.servlet.ServletContextEvent): Unit = {}
+  def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = {
 		
-		val list = ObjectifyService.ofy().load().`type`(classOf[GlobalApplicationData]).list().toList;
+		val list = entityList(classOf[GlobalApplicationData])
 			
-		AppStartListener.globalApplicationDataId = list match {
-		  case Nil => Some(ObjectifyService.ofy.save.entity(new GlobalApplicationData()).now.getId)
+		Application.globalApplicationDataId = list match {
+		  case Nil => Some(save(new GlobalApplicationData()).getId())
 		  case _ => Some(list.head.getId)
 		}
 
