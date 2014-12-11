@@ -1,0 +1,18 @@
+<div ng-controller="AllResultsController">
+	<md-list>
+		<md-item ng-repeat="results in allResults  | orderBy: 'date' : true">
+			<md-card ng-controller="AllReportsController">
+				<md-subheader>{{results.date | date:'d MMM yyyy'}}</md-subheader>
+				<md-tabs>
+					<md-tab label="{{result.fixture.home.shortName}} {{result.homeScore}} : {{result.awayScore}} {{result.fixture.away.shortName}}"  ng-repeat="result in results.results" md-on-select="setReportsData({'result':result,'results':results})">
+						<md-card ng-repeat="report in reports.reports" ng-if="report.text">
+							<md-subheader>By: {{report.team.name}}</md-subheader>
+							<div ng-bind-html="report.text | lineBreaks | htmlify"></div>
+						</md-card-->
+					</md-tab>
+				</md-tabs>
+			</md-card>
+		</md-item>
+	
+	</md-list>
+</div>
