@@ -193,6 +193,7 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			  
 		  $scope.openLeft = function() {
 			    $mdSidenav('left').open();
+			    $mdSidenav('right').close();
 			  };
 			  
 			$scope.$on("progress", function(ev,value){$scope.progress = value;});
