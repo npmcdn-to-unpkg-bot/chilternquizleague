@@ -8,7 +8,11 @@ mainApp.filter("lineBreaks", [function(){return function(text){
 };}]);
 
 mainApp.filter('afterNow', function() {
-	return function(input) {
+	return function(input, disable) {
+		if(disable){
+			return input;
+		}
+		
 		var now = new Date().getTime();
 		var ret = [];
 		for (idx in input) {

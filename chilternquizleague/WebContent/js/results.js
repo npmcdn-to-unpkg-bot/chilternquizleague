@@ -15,6 +15,13 @@
 				}
 
 			})
+			.state('results.fixtures', {
+				url : "/fixtures/all",
+				views:{
+					menu:{templateUrl:"/results/fixtures-menu.html"},
+					content:{templateUrl:"/results/fixtures-table.html"}
+				}
+			})
 			.state('results.submit', {
 				url : "/results/submit",
 				views:{
@@ -137,12 +144,7 @@
 			'viewService',
 			'$location',
 			function($scope, viewService, $location) {
-				
-				$scope.setCurrentResults = function(results) {
-					$scope.currentResults = results;
-				};
-
-
+	
 				$scope.setSeason = function(season) {
 
 					$scope.allResults = season ? viewService.view("all-results",{id:season.id,isArray:true},function(results){
@@ -152,10 +154,6 @@
 					}): [];
 					
 					$scope.season = season;
-					
-					$scope.$watchCollection("allResults",function(allResults){
-						$scope.setCurrentResults(allResults && allResults.length > 0 ? allResults[0] : null);});
-
 				};
 				
 				$scope.$on("season", function(evt, season){
@@ -164,6 +162,30 @@
 
 
 			} ]);
+	
+	mainApp.controller("AllFixturesController", [
+		'$scope',
+		'viewService',
+		'$location',
+		function($scope, viewService, $location) {
+			
+			$scope.setSeason = function(season) {
+	
+				$scope.allFixtures = season ? viewService.view("all-fixtures",{id:season.id,isArray:true},function(fixtures){
+					if(fixtures){
+					fixtures.sort(function(fixtures1,fixtures2){return fixtures1.start -fixtures2.start;});
+					}
+				}): [];
+				
+				$scope.season = season;
+			};
+			
+			$scope.$on("season", function(evt, season){
+				$scope.setSeason(season);
+			});
+	
+	
+		} ]);
 	
 	mainApp.controller('ResultsTable', [ '$scope', function($scope) {
 		

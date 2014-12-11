@@ -146,7 +146,7 @@ class EntityService extends BaseRest {
   }
 
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
-    val item: BaseEntity = saveUpdate(req, entityName(parts(req).head))
+    val item = saveUpdate(req, entityName(parts(req).head))
 
     objectMapper.writeValue(resp.getWriter, logJson(item, "out:"))
   }
@@ -192,6 +192,7 @@ class ViewService extends BaseRest {
       case a if a.contains("season-views") => seasons
       case a if a.contains("team-extras") => teamExtras(req)
       case a if a.contains("all-results") => allResults(req)
+      case a if a.contains("all-fixtures") => allFixtures(req)
       case a if a.contains("competition-results") => competitionResults(req)
       case a if a.contains("competition-fixtures") => competitionFixtures(req)
       case a if a.contains("fixtures-for-email") => fixturesForEmail(req)
@@ -315,16 +316,20 @@ class ViewService extends BaseRest {
   }
 
   def allResults(req: HttpServletRequest):Option[JList[_]] =
-    Some(entityByKey(idParam(req), classOf[Season]).fold(List[TeamCompetition]())(_.getTeamCompetitions.toList) filter { !_.isSubsidiary() } flatMap { _.getResults })
+     entityByKey(idParam(req), classOf[Season]).map(_.getTeamCompetitions filter { !_.isSubsidiary() } flatMap { _.getResults })
 
+  def allFixtures(req: HttpServletRequest):Option[JList[_]] =
+    entityByKey(idParam(req), classOf[Season]).map(_.getTeamCompetitions filter { !_.isSubsidiary() } flatMap { _.getFixtures })
+
+    
   def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
 
     val season = entityByKey(idParam(req, "seasonId"), classOf[Season])
     val email = req.parameter("email").map(_.trim())
 
     val teams = entityList(classOf[Team])
-
-    email flatMap { e => teams.filter(!_.getUsers.filter(_.getEmail.equalsIgnoreCase(e)).isEmpty).foldLeft(Option[PreSubmissionView](null))((a, t) => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s)))) }
+    
+    email.flatMap( e => teams.find(_.getUsers().exists(_.getEmail.equalsIgnoreCase(e)))).flatMap(t => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s))))
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =

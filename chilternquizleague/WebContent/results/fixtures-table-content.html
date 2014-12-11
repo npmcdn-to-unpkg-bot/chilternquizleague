@@ -1,6 +1,6 @@
 <table class="results-table">
 	<thead
-		ng-repeat-start="fixtureSet in fixtures | afterNow | orderBy: 'start' | limitTo:rowCount">
+		ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount">
 		<tr class="full-header">
 			<th colspan="8">{{fixtureSet.start
 				| date:'dd MMMM yyyy'}} : {{fixtureSet.description}}</th>
