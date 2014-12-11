@@ -1,3 +1,5 @@
-<div ng-controller="FixturesTable" style="position: relative">
-	<div ng-include="'/results/fixtures-table-content.html'"/>
+<div ng-controller="AllFixturesController">
+	<md-card flex  ng-if="allFixtures.length">
+		<cql-fixtures class="full-header header-highlight" fixtures="allFixtures" show-all></cql-fixtures>
+	</md-card>
 </div>

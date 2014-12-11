@@ -56,11 +56,20 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
 
 mainApp.directive('cqlFixtures', function() {
     return {
-    	scope:{fixtures:"="},
+    	scope:{
+    		fixtures:"=",
+    		},
     	restrict:'E',
     	templateUrl:'/results/fixtures-table-content.html',
     	link : function(scope, element, attrs){
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
+     		scope.afterNow = function(){
+        		var now = new Date().getTime();
+        		var showAll = attrs.hasOwnProperty("showAll");
+    			return function(fixtures){
+    				return showAll || fixtures.start > now;
+    			};
+    		};
      	}
     };
   });
