@@ -109,17 +109,8 @@ trait BaseRest extends HttpServlet {
   def saveUpdate[T <: BaseEntity](req: HttpServletRequest, entityName: String): T = {
 
     val retval = classFromPart[T](entityName) map { clazz =>
-      {
-
-        val e = objectMapper.readValue(req.getReader(), clazz)
-        e.prePersist
-        val key = save(e)
-
-        ofy.load.key(key).now
-
-      }
+      ofy.load.key(save(objectMapper.readValue(req.getReader(), clazz))).now
     }
-
     retval.getOrElse(throw new ClassNotFoundException(entityName))
   }
 
