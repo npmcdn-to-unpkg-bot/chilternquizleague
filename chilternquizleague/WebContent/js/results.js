@@ -25,7 +25,7 @@
 			.state('results.reports', {
 				url : "/reports/all",
 				views:{
-					menu:{templateUrl:"/results/results-menu.html"},
+					menu:{templateUrl:"/results/all-reports-menu.html"},
 					content:{templateUrl:"/results/all-reports.html"}
 				}
 
@@ -216,11 +216,17 @@
 			});}
 
 	} ]);
+	mainApp.controller("AllReportsFatController", ['$scope', function($scope){
+		
+		$scope.selectedDate = {}
+		$scope.setDate = function(date){$scope.selectedDate = (date == $scope.selectedDate ? {} : date)}
+		
+	}]);
 	
 	mainApp.controller("AllReportsController", [ '$scope','viewService',
       	function($scope,viewService) {
-
-      		$scope.setReportsData = function(reportsData){	
+		
+			$scope.setReportsData = function(reportsData){	
       		
       		if (reportsData) {
       				$scope.reports = viewService.view("reports", {
