@@ -22,6 +22,14 @@
 					content:{templateUrl:"/results/fixtures-table.html"}
 				}
 			})
+			.state('results.reports', {
+				url : "/reports/all",
+				views:{
+					menu:{templateUrl:"/results/all-reports-menu.html"},
+					content:{templateUrl:"/results/all-reports.html"}
+				}
+
+			})
 			.state('results.submit', {
 				url : "/results/submit",
 				views:{
@@ -208,6 +216,27 @@
 			});}
 
 	} ]);
+	mainApp.controller("AllReportsFatController", ['$scope', function($scope){
+		
+		$scope.selectedDate = {}
+		$scope.setDate = function(date){$scope.selectedDate = (date == $scope.selectedDate ? {} : date)}
+		
+	}]);
+	
+	mainApp.controller("AllReportsController", [ '$scope','viewService',
+      	function($scope,viewService) {
+		
+			$scope.setReportsData = function(reportsData){	
+      		
+      		if (reportsData) {
+      				$scope.reports = viewService.view("reports", {
+      					resultsKey : reportsData.results.key,
+      					homeTeamId : reportsData.result.fixture.home.id
+
+      			});}
+      		};
+
+      	} ]);
 
 
 })();
