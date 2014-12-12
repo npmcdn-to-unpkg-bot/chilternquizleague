@@ -4,7 +4,7 @@
 		<md-item ng-repeat="results in allResults  | orderBy: 'date' : true">
 			<md-card ng-controller="AllReportsController">
 				<md-subheader ng-click="setDate(results.date)">{{results.date | date:'d MMMM yyyy'}} : {{results.description}}</md-subheader>
-				<md-tabs ng-if="selectedDate == results.date">
+				<md-tabs ng-if="selectedDate == results.date" md-theme="deep-orange">
 					<md-tab label="{{result.fixture.home.shortName}} v {{result.fixture.away.shortName}}"  ng-repeat="result in results.results | orderBy: 'fixture.home.shortName'" md-on-select="setReportsData({'result':result,'results':results})">
 						<md-subheader class="md-primary">{{result.fixture.home.name}} <span style="color:graytext;">{{result.homeScore}} : {{result.awayScore}}</span> {{result.fixture.away.name}}</md-subheader>
 						<md-card ng-repeat="report in reports.reports" ng-if="report.text">
