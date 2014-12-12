@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Index;
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
-public class User extends BaseEntity{
+public class UserJava extends BaseEntity{
 	
 	@Index
 	private String name;
