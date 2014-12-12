@@ -24,15 +24,6 @@ import org.chilternquizleague.domain.individuals.IndividualQuiz
 import org.chilternquizleague.results.ResultHandler
 import org.chilternquizleague.util.HttpUtils.RequestImprovements
 import org.chilternquizleague.util.StringUtils.StringImprovements
-import org.chilternquizleague.views.CompetitionTypeView
-import org.chilternquizleague.views.CompetitionView
-import org.chilternquizleague.views.ContactSubmission
-import org.chilternquizleague.views.LeagueTableView
-import org.chilternquizleague.views.PreSubmissionView
-import org.chilternquizleague.views.ResultsReportsView
-import org.chilternquizleague.views.ResultSubmission
-import org.chilternquizleague.views.SeasonView
-import org.chilternquizleague.views.TeamExtras
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -48,7 +39,6 @@ import org.chilternquizleague.util.Storage.{entity => entityByKey}
 import org.chilternquizleague.util.Storage.entityList
 import org.chilternquizleague.util.Storage.save
 import java.util.ArrayList
-import org.chilternquizleague.views.GlobalApplicationDataView
 import scala.collection.immutable.Iterable
 import java.util.Date
 
@@ -136,7 +126,7 @@ class EntityService extends BaseRest {
     val item = head match {
 
       case "global" => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData])
-      case "competitionType-list" => Some(CompetitionTypeView.getList)
+      case "competitionType-list" => Some(CompetitionTypeView.list)
       case _ => handleEntities(bits, head)
 
     }
@@ -227,7 +217,7 @@ class ViewService extends BaseRest {
 
     val submissions = objectMapper.readValue(req.getReader(), classOf[Array[ResultSubmission]]);
 
-    submissions.foreach(sub => ResultHandler(sub.getResult, sub.getEmail, sub.getSeasonId, sub.getCompetitionType))
+    submissions.foreach(sub => ResultHandler(sub.result, sub.email, sub.seasonId, sub.competitionType))
 
     None
   }
@@ -236,7 +226,7 @@ class ViewService extends BaseRest {
     val submission = objectMapper.readValue(
       req.getReader, classOf[ContactSubmission]);
 
-    EmailSender(submission.getSender, submission.getRecipient, submission.getText);
+    EmailSender(submission.sender, submission.recipient, submission.text);
     None
   }
 
