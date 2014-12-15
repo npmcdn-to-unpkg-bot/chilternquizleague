@@ -8,7 +8,7 @@ import com.googlecode.objectify.annotation.Entity;
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
-public class Venue extends BaseEntity{
+public class VenueJava extends BaseEntity{
 	
 	private String name;
 	private String address;

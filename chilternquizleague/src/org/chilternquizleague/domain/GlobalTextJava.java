@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 
 @Entity
 @Cache
-public class GlobalText extends BaseEntity {
+public class GlobalTextJava extends BaseEntity {
 	
 	
 	private String name;

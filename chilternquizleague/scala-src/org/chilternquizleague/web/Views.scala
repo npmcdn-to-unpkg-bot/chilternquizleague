@@ -14,6 +14,7 @@ import org.chilternquizleague.domain.GlobalApplicationData
 import org.chilternquizleague.domain.LeagueCompetition
 import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.Result
+import org.chilternquizleague.domain.util.RefUtils._
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionTypeView(compType:CompetitionType){
@@ -38,8 +39,8 @@ class CompetitionView(competition:Competition) {
 class GlobalApplicationDataView(data:GlobalApplicationData ) {
 		val frontPageText = data.getFrontPageText();
 		val leagueName = data.getLeagueName();
-		val currentSeasonId = if (data.getCurrentSeason() == null) null else data.getCurrentSeason().getId();
-		val textId = if (data.getGlobalText() == null) null else data.getGlobalText().getId();
+		val currentSeasonId = if (data.currentSeason == null) null else data.currentSeason.getId();
+		val textId = if (data.globalText == null) null else data.globalText.getId();
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -56,7 +57,7 @@ class LeagueTableView(season:Season , compType:CompetitionType ){
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class TeamExtras(team:Team,  val fixtures:List[Fixtures],  val results:List[Results]) {
 	val id = team.getId
-	val text = team.getRubric.getText
+	val text = team.rubric.text
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -67,7 +68,7 @@ class SeasonView(season:Season){
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class ResultsReportsView(result:Result){
-	val reports = result.getReports().map(report => new ReportView(report.getTeam, report.getText.getText)).toList	
+	val reports = result.getReports().map(report => new ReportView(report.getTeam, report.getText.text)).toList	
 }			
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

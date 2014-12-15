@@ -77,7 +77,7 @@ public class Results extends CompetitionChild{
 		
 		if(row == null){
 			return results.add(incoming);
-		}else if(!incoming.getReports().isEmpty() && !isEmpty(incoming.getReports().iterator().next().getText().getText())){
+		}else if(!incoming.getReports().isEmpty() && !isEmpty(incoming.getReports().iterator().next().getText().text())){
 			
 			row.getReports().addAll(incoming.getReports());
 

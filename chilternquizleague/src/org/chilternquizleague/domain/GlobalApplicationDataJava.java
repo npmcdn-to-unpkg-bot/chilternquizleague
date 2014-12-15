@@ -11,7 +11,7 @@ import com.googlecode.objectify.annotation.Entity;
 
 @Entity
 @Cache
-public class GlobalApplicationData extends BaseEntity{
+public class GlobalApplicationDataJava extends BaseEntity{
 	
 	private String frontPageText;
 	private String leagueName = "Chiltern Quiz League";

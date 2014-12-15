@@ -19,6 +19,7 @@ import java.util.logging.Level
 import javax.mail.Message.RecipientType
 import javax.mail.Transport
 import org.chilternquizleague.util.Storage._
+import org.chilternquizleague.domain.util.RefUtils._
 
 class MailHandler extends HttpServlet {
 
@@ -41,11 +42,11 @@ class MailHandler extends HttpServlet {
 
       val recipientName = recipientParts(0);
 
-      globaldata.getEmailAliases.filter(_.getAlias == recipientName).foreach { alias => sendMail(message, globaldata, new InternetAddress(alias.getUser().getEmail())); return }
+      globaldata.getEmailAliases.filter(_.getAlias == recipientName).foreach { alias => sendMail(message, globaldata, new InternetAddress(alias.user.email)); return }
 
-      entityList(classOf[Team]).filter(_.getEmailName == recipientName).foreach { team =>
+      entityList(classOf[Team]).filter(_.emailName == recipientName).foreach { team:Team =>
 
-        val addresses: Array[Address] = team.getUsers().map { a: User => new InternetAddress(a.getEmail) }.toArray
+        val addresses: Array[Address] = team.users.map { a: User => new InternetAddress(a.email) }.toArray
 
         sendMail(message, globaldata, addresses: _*)
 
@@ -115,18 +116,18 @@ private class EmailSender {
           alias =>
             {
               sendMail(sender, text, g,
-                new InternetAddress(alias.getUser().getEmail()));
+                new InternetAddress(alias.user.email));
               return
             }
 
         }
         val teams = entityList(classOf[Team])
 
-        teams.filter(recipientName == _.getEmailName()).foreach {
-          team =>
+        teams.filter(recipientName == _.emailName).foreach {
+          team:Team =>
             {
 
-              sendMail(sender, text, g, team.getUsers.map(user => new InternetAddress(user.getEmail())).toSeq: _*)
+              sendMail(sender, text, g, team.getUsers.map(user => new InternetAddress(user.email)).toSeq: _*)
               return
             }
         }

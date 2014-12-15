@@ -21,6 +21,7 @@ import org.chilternquizleague.domain.TeamCompetition
 import org.chilternquizleague.domain.Text
 import org.chilternquizleague.domain.User
 import org.chilternquizleague.domain.individuals.IndividualQuiz
+import org.chilternquizleague.domain.util.RefUtils._
 import org.chilternquizleague.results.ResultHandler
 import org.chilternquizleague.util.HttpUtils.RequestImprovements
 import org.chilternquizleague.util.StringUtils.StringImprovements
@@ -235,16 +236,14 @@ class ViewService extends BaseRest {
   def teamExtras(req: HttpServletRequest): Option[TeamExtras] = {
 
     val teamId = idParam(req, "teamId")
-
-    val team = entityByKey(teamId, classOf[Team])
-
-    team flatMap { t =>
-      {
-
-        entityByKey(idParam(req, "seasonId"), classOf[Season]) flatMap { s => Some(new TeamExtras(t, teamFixtures(teamId, s), teamResults(teamId, s))) }
-      }
+    for{
+      t <- entityByKey(teamId, classOf[Team])
+      s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
     }
-  }
+    yield{
+      new TeamExtras(t, teamFixtures(teamId, s), teamResults(teamId, s))
+    }
+ }
 
   def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Fixtures => Boolean = {_ => true}): List[Fixtures] = {
 
@@ -302,7 +301,7 @@ class ViewService extends BaseRest {
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
-    entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.getGlobalText.getText(n) } })
+    entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.globalText.text(n) } })
   }
 
   def allResults(req: HttpServletRequest):Option[JList[_]] =
@@ -314,23 +313,27 @@ class ViewService extends BaseRest {
     
   def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
 
-    val season = entityByKey(idParam(req, "seasonId"), classOf[Season])
-    val email = req.parameter("email").map(_.trim())
-
-    val teams = entityList(classOf[Team])
-    
-    email.flatMap( e => teams.find(_.getUsers().exists(_.getEmail.equalsIgnoreCase(e)))).flatMap(t => season.map(s => new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s))))
+    for{
+      e <- req.parameter("email").map(_.trim())
+      t <- entityList(classOf[Team]).find(_.users.exists(_.email equalsIgnoreCase e))
+      s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
+    }
+    yield{
+      new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s))
+    } 
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
     entityByKey(idParam(req), classOf[Season]).map(_.getCompetitions.values.toList.map { a: Competition => new CompetitionView(a) })
 
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
-
-    val team = entityByKey(idParam(req, "homeTeamId"), classOf[Team])
-    val results = req.parameter("resultsKey").map(a => (ofy.load.key(Key.create(a)).now.asInstanceOf[Results]))
-
-    team.flatMap(t => results.map(r => new ResultsReportsView(r.findRow(t))))
+    for{
+      t <- entityByKey(idParam(req, "homeTeamId"), classOf[Team])
+      r <- req.parameter("resultsKey").map(a => (ofy.load.key(Key.create(a)).now.asInstanceOf[Results]))
+    }
+    yield{
+      new ResultsReportsView(r.findRow(t)) 
+    }
   }
 
   protected def idParam(req: HttpServletRequest, name: String = "id") = req parameter (name) flatMap { _ toLongOpt }

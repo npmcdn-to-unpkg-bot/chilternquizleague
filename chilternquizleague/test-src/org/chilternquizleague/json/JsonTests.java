@@ -1,6 +1,6 @@
 package org.chilternquizleague.json;
 
-import org.chilternquizleague.domain.Team;
+import org.chilternquizleague.domain.TeamJava;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class JsonTests {
 
 	@Test
 	public void test() throws Exception{
-		Team team = new Team();
+		TeamJava team = new TeamJava();
 		team.setName("The Squirrel");
 		team.setShortName("Squirrel");
 		ObjectMapper objectMapper = new ObjectMapper();

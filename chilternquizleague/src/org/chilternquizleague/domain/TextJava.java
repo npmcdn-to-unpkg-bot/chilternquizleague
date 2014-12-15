@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
-public class Text {
+public class TextJava {
 
 	private String text;
 
-	public Text(){}
+	public TextJava(){}
 	
-	public Text(String text){
+	public TextJava(String text){
 		this.text = text;
 	}
 	

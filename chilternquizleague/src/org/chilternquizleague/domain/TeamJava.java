@@ -12,7 +12,7 @@ import com.googlecode.objectify.annotation.Entity;
 @JsonAutoDetect(fieldVisibility=Visibility.PROTECTED_AND_PUBLIC)
 @Cache
 @Entity
-public class Team extends BaseEntity{
+public class TeamJava extends BaseEntity{
 	
 	private String name;
 	
