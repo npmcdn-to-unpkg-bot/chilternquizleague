@@ -42,11 +42,11 @@ class MailHandler extends HttpServlet {
 
       val recipientName = recipientParts(0);
 
-      globaldata.getEmailAliases.filter(_.getAlias == recipientName).foreach { alias => sendMail(message, globaldata, new InternetAddress(alias.user.email)); return }
+      globaldata.emailAliases.filter(_.alias == recipientName).foreach { alias => sendMail(message, globaldata, new InternetAddress(alias.user.email)); return }
 
       entityList(classOf[Team]).filter(_.emailName == recipientName).foreach { team:Team =>
 
-        val addresses: Array[Address] = team.users.map { a: User => new InternetAddress(a.email) }.toArray
+        val addresses: Array[Address] = team.users.map { a => new InternetAddress(a.email) }.toArray
 
         sendMail(message, globaldata, addresses: _*)
 
@@ -70,7 +70,7 @@ class MailHandler extends HttpServlet {
 
         message.setRecipients(RecipientType.TO, addresses.toArray);
 
-        message.setSubject("via " + globaldata.getLeagueName + " : " + message.getSubject);
+        message.setSubject("via " + globaldata.leagueName + " : " + message.getSubject);
 
         LOG.fine(message.getFrom()(0) + " to "
           + message.getAllRecipients()(0).toString());
@@ -86,7 +86,7 @@ class MailHandler extends HttpServlet {
           val notification = new MimeMessage(session);
           notification.addRecipient(RecipientType.TO, message.getFrom()(0));
           notification.setSender(message.getAllRecipients()(0));
-          notification.setSubject(globaldata.getLeagueName() + " : Message delivery failed");
+          notification.setSubject(globaldata.leagueName + " : Message delivery failed");
           notification.setText("Message delivery failed, probably due to an attachment.\nThis mail service does not allow attachments.  Try resending as text only.");
 
           Transport.send(notification);
@@ -112,7 +112,7 @@ private class EmailSender {
       val globaldata = entity(Application.globalApplicationDataId, classOf[GlobalApplicationData])
 
       globaldata.foreach { g =>
-        g.getEmailAliases.filter(_.getAlias() == recipientName).foreach {
+        g.emailAliases.filter(_.alias == recipientName).foreach {
           alias =>
             {
               sendMail(sender, text, g,
@@ -127,7 +127,7 @@ private class EmailSender {
           team:Team =>
             {
 
-              sendMail(sender, text, g, team.getUsers.map(user => new InternetAddress(user.email)).toSeq: _*)
+              sendMail(sender, text, g, team.users.map(user => new InternetAddress(user.email)).toSeq: _*)
               return
             }
         }
@@ -152,7 +152,7 @@ private class EmailSender {
       outMessage
         .setSender(new InternetAddress(sender));
       outMessage.setText(text);
-      outMessage.setSubject("Sent via " + globalApplicationData.getLeagueName());
+      outMessage.setSubject("Sent via " + globalApplicationData.leagueName);
 
       LOG.fine(outMessage.getFrom()(0) + " to "
         + outMessage.getAllRecipients()(0).toString());

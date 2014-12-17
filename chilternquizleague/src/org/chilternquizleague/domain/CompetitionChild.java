@@ -1,5 +1,6 @@
 package org.chilternquizleague.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Parent;
 
@@ -10,7 +11,8 @@ public abstract class CompetitionChild extends BaseEntity {
 	
 	
 	@Override
-	void setParent(BaseEntity parent) {
+	@JsonIgnore
+	public void setParent(BaseEntity parent) {
 		this.parent = Utils.entityToRef(parent);
 	}
 

@@ -42,6 +42,18 @@ import org.chilternquizleague.util.Storage.save
 import java.util.ArrayList
 import scala.collection.immutable.Iterable
 import java.util.Date
+import com.googlecode.objectify.Ref
+import com.googlecode.objectify.util.jackson.RefSerializer
+import com.googlecode.objectify.util.jackson.RefDeserializer
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.core.SerializableString
+import com.fasterxml.jackson.core.io.SerializedString
+import com.fasterxml.jackson.databind.JsonNode
+import java.io.StringWriter
+import com.google.api.client.util.StringUtils
+import org.apache.commons.io.IOUtils
 
 
 trait BaseRest extends HttpServlet {
@@ -121,6 +133,37 @@ class EntityService extends BaseRest {
   override val aliases = Map(("text", "globalText"), ("global", "GlobalApplicationData"))
   override def entityFilter[T] = { _ => true }
 
+  override def init(config: ServletConfig) = {
+    val module = new SimpleModule
+    module.addSerializer(classOf[Ref[_]], new RefSerializer)
+    module.addDeserializer(classOf[Ref[_]], new RefDeserializer())
+    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+    objectMapper registerModule module
+  }
+  
+  
+  class RefSerializer extends JsonSerializer[Ref[_]]{
+    override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
+  }      
+
+   class RefDeserializer extends JsonDeserializer[Ref[_]]{
+     override def deserialize(parser:JsonParser, context:DeserializationContext):Ref[_] = {
+       val node:JsonNode = parser.getCodec().readTree(parser);
+       
+         val className = node.get("refClass").asText
+         val opt = classFromPart[BaseEntity](className)
+         
+         val remote = for{
+           clazz <- opt
+         }
+         yield{
+           parser.getCodec().treeToValue(node, clazz)
+         }
+        
+         Ref.create(ofy.save.entity(remote.get).now())
+     }	
+  }
+  
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
@@ -137,7 +180,8 @@ class EntityService extends BaseRest {
   }
 
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
-    val item = saveUpdate(req, entityName(parts(req).head))
+    
+    val item:AnyRef = saveUpdate(req, entityName(parts(req).head))
 
     objectMapper.writeValue(resp.getWriter, logJson(item, "out:"))
   }
@@ -149,7 +193,7 @@ class EntityService extends BaseRest {
 class ViewService extends BaseRest {
 
   override val aliases = Map[String, String]()
-  override def entityFilter[T <: BaseEntity] = { !_.isRetired() }
+  override def entityFilter[T <: BaseEntity] = { !_.retired }
 
   class UserSerializer extends JsonSerializer[User] {
     override def serialize(user: User, gen: JsonGenerator, prov: SerializerProvider) = {}
@@ -168,6 +212,8 @@ class ViewService extends BaseRest {
     module.addSerializer(classOf[User], new UserSerializer)
     module.addSerializer(classOf[Text], new TextSerializer)
     module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+    module.addSerializer(classOf[Ref[_]], new RefSerializer)
+    module.addDeserializer(classOf[Ref[_]], new RefDeserializer)
     objectMapper registerModule module
   }
 
@@ -247,33 +293,33 @@ class ViewService extends BaseRest {
 
   def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Fixtures => Boolean = {_ => true}): List[Fixtures] = {
 
-    val competitions = season.getTeamCompetitions.toList
+    val competitions = season.teamCompetitions
 
     def flatMapFixtures(f: Fixtures): List[Fixtures] = {
 
-      val newFix = new Fixtures(f);
-      newFix.setFixtures(f.getFixtures.toList filter { f => (teamId contains f.getHome.getId) || (teamId contains f.getAway.getId()) })
+      val newFix = Fixtures(f);
+      newFix.fixtures = f.fixtures.toList filter { f => (teamId contains f.home.id) || (teamId contains f.away.id) }
 
-      if (newFix.getFixtures.isEmpty) List() else List(newFix)
+      if (newFix.fixtures.isEmpty) Nil else List(newFix)
     }
 
-    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getFixtures filter filter flatMap flatMapFixtures } sortWith(_ .getStart before  _.getStart) slice(0, limit)
+    competitions filter { _ != null } filter { _.`type` != CompetitionType.BEER } flatMap { _.fixtures.map(_.get) filter filter flatMap flatMapFixtures } sortWith(_ .start before  _.start) slice(0, limit)
 
 
   }
 
   def teamResults(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Results => Boolean = {_ => true}): List[Results] = {
-    val competitions = season.getTeamCompetitions.toList
+    val competitions = season.teamCompetitions
 
     def flatMapResults(f: Results): List[Results] = {
 
-      val newRes = new Results(f);
-      newRes.setResults(f.getResults filter { f => (teamId contains f.getFixture.getHome.getId) || (teamId contains f.getFixture.getAway.getId) })
+      val newRes = Results(f);
+      newRes.results = f.results filter { f => (teamId contains f.fixture.home.id) || (teamId contains f.fixture.away.id) }
 
-      if (newRes.getResults.isEmpty) List() else List(newRes)
+      if (newRes.results.isEmpty) Nil else List(newRes)
     }
 
-    competitions filter { _ != null } filter { _.getType != CompetitionType.BEER } flatMap { _.getResults filter filter flatMap flatMapResults } sortWith(_.getDate before _.getDate) slice(0,limit)
+    competitions filter { _ != null } filter { _.`type` != CompetitionType.BEER } flatMap { _.results.map(_.get) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
 
   }
 
@@ -285,17 +331,17 @@ class ViewService extends BaseRest {
 
     entityByKey(idParam(req), classOf[Season]) flatMap {
       s => compType map {
-        t => s.getCompetition(t).asInstanceOf[TeamCompetition] }}
+        t => s.competition(t).asInstanceOf[TeamCompetition] }}
   }
   
   def competitionResults(req: HttpServletRequest): Option[JList[Results]] = {
 
-    teamCompetitionForSeason(req) map {a:TeamCompetition => a.getResults()}
+    teamCompetitionForSeason(req) map {a:TeamCompetition => a.results}
   }
 
   def competitionFixtures(req: HttpServletRequest): Option[JList[Fixtures]] = {
 
-   teamCompetitionForSeason(req) map {a: TeamCompetition => a.getFixtures()}
+   teamCompetitionForSeason(req) map {a: TeamCompetition => a.fixtures}
 
   }
 
@@ -305,10 +351,10 @@ class ViewService extends BaseRest {
   }
 
   def allResults(req: HttpServletRequest):Option[JList[_]] =
-     entityByKey(idParam(req), classOf[Season]).map(_.getTeamCompetitions filter { !_.isSubsidiary() } flatMap { _.getResults })
+     entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results })
 
   def allFixtures(req: HttpServletRequest):Option[JList[_]] =
-    entityByKey(idParam(req), classOf[Season]).map(_.getTeamCompetitions filter { !_.isSubsidiary() } flatMap { _.getFixtures })
+    entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures })
 
     
   def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
@@ -319,20 +365,22 @@ class ViewService extends BaseRest {
       s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
     }
     yield{
-      new PreSubmissionView(t, teamFixtures(Some(t.getId), s), teamResults(Some(t.getId),s))
+      new PreSubmissionView(t, teamFixtures(Some(t.id), s), teamResults(Some(t.id),s))
     } 
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
-    entityByKey(idParam(req), classOf[Season]).map(_.getCompetitions.values.toList.map { a: Competition => new CompetitionView(a) })
+    entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
 
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
     for{
       t <- entityByKey(idParam(req, "homeTeamId"), classOf[Team])
-      r <- req.parameter("resultsKey").map(a => (ofy.load.key(Key.create(a)).now.asInstanceOf[Results]))
+      key <- req.parameter("resultsKey")
+      r <- Option(ofy.load.key(Key.create(key)).now.asInstanceOf[Results])
+      reps <- r.findRow(t)
     }
     yield{
-      new ResultsReportsView(r.findRow(t)) 
+      new ResultsReportsView(reps) 
     }
   }
 

@@ -54,7 +54,7 @@ class ApplicationStartListener extends ServletContextListener {
 			
 		Application.globalApplicationDataId = list match {
 		  case Nil => Some(save(new GlobalApplicationData()).getId())
-		  case _ => Some(list.head.getId)
+		  case _ => Some(list.head.id)
 		}
 
   }

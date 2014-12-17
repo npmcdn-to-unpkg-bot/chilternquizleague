@@ -29,18 +29,18 @@ object CompetitionTypeView{
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionView(competition:Competition) {
-	val description = competition.getDescription
-	val `type` = new CompetitionTypeView(competition.getType)
-	val subsidiary = competition.isSubsidiary
-	val startTime = competition.getStartTime
+	val description = competition.description
+	val `type` = new CompetitionTypeView(competition.`type`)
+	val subsidiary = competition.subsidiary
+	val startTime = competition.startTime
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class GlobalApplicationDataView(data:GlobalApplicationData ) {
-		val frontPageText = data.getFrontPageText();
-		val leagueName = data.getLeagueName();
-		val currentSeasonId = if (data.currentSeason == null) null else data.currentSeason.getId();
-		val textId = if (data.globalText == null) null else data.globalText.getId();
+		val frontPageText = data.frontPageText ;
+		val leagueName = data.leagueName ;
+		val currentSeasonId = if (data.currentSeason == null) null else data.currentSeason.id;
+		val textId = if (data.globalText == null) null else data.globalText.id;
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -48,27 +48,27 @@ class PreSubmissionView(val team:Team, val fixtures:List[Fixtures], val results:
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class LeagueTableView(season:Season , compType:CompetitionType ){
-		val competition:LeagueCompetition = season.getCompetition(compType);
-		val tables = if(competition != null)  competition.getLeagueTables.toList else List();
-		val description = season.getDescription;
+		val competition:LeagueCompetition = season.competition(compType);
+		val tables = if(competition != null)  competition.leagueTables.toList else List();
+		val description = season.description;
 }
 
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class TeamExtras(team:Team,  val fixtures:List[Fixtures],  val results:List[Results]) {
-	val id = team.getId
+	val id = team.id
 	val text = team.rubric.text
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class SeasonView(season:Season){
-  val id = season.getId
-  val description = season.getDescription
+  val id = season.id
+  val description = season.description
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class ResultsReportsView(result:Result){
-	val reports = result.getReports().map(report => new ReportView(report.getTeam, report.getText.text)).toList	
+	val reports = result.reports.map(report => new ReportView(report.team, report.text.text)).toList	
 }			
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

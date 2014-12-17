@@ -1,6 +1,6 @@
 package org.chilternquizleague.domain
 
-import com.googlecode.objectify.annotation.Entity
+import com.googlecode.objectify.annotation._
 import com.googlecode.objectify.annotation.Cache
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
@@ -8,15 +8,45 @@ import com.googlecode.objectify.annotation.Index
 import java.util.{List => JList}
 import java.util.{Map => JMap}
 import com.googlecode.objectify.Ref
+import com.googlecode.objectify.Key
 import java.util.ArrayList
-import com.fasterxml.jackson.annotation.JsonIgnore
 import scala.beans.BeanProperty
 import org.chilternquizleague.domain.Utils._
 import java.util.HashMap
 import com.googlecode.objectify.annotation.Ignore
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.annotation.Load
+import java.util.Calendar
+import com.googlecode.objectify.annotation.Stringify
+import org.chilternquizleague.domain.util.CompetitionTypeStringifier
+import org.chilternquizleague.domain.util.JacksonAnnotations._
+//import org.chilternquizleague.domain.util.ObjectifyAnnotations._
+import scala.collection.immutable.HashSet
+import java.util.Date
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.googlecode.objectify.annotation.Subclass
 
+
+class BaseEntity{
+  @Id
+  var id:java.lang.Long = null
+  
+  var retired:Boolean = false
+  
+  @Ignore
+  @JsonProperty
+  val refClass = getClass.getSimpleName
+  
+  @Ignore
+  @JsonIgnore
+  private var _key:String = null
+  
+  @JsonGetter("key")
+  def key:String = {_key = if(_key == null && id != null) (Key.create(this).getString) else _key;_key}  
+  @JsonSetter("key")
+  def key_dummy(key:String) = {}
+  protected def key_= (key:String){_key = key}
+}
 
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -43,46 +73,38 @@ class Venue extends BaseEntity{
   var email:String = null
   var imageURL:String = null
 }
-
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Entity
 class Team extends BaseEntity{
-	@BeanProperty
+
 	var name:String = null
-	@BeanProperty
   	var shortName:String = null
-  	@BeanProperty
   	var rubric:Text = new Text
 	
-  	@JsonIgnore
+  	@JsonProperty("venue")
   	@Load
 	private var venueRef:Ref[Venue] = null
 	
-	@JsonIgnore
+	@JsonProperty("users")
 	@Load
 	private var userRefs:JList[Ref[User]] = new ArrayList
-	
 
-	def setVenue(v:Venue):Unit = venueRef = Ref.create(v)
-	def getVenue:Venue = if (venueRef == null) null else venueRef.get
+	def users:JList[Ref[User]] = userRefs
+	def venue:Ref[Venue] = venueRef
 	
+	lazy val emailName = if(shortName == null) null else shortName.replace(' ', '.').toLowerCase;
 
-	def users:JList[User] = refsToEntities(userRefs )
-	def setUsers(users:JList[User]):Unit = userRefs = entitiesToRefs(users)
-	def getUsers:JList[User] = users
-	
-	def emailName = if(shortName == null) null else shortName.replace(' ', '.').toLowerCase;
-	def getEmailName = emailName
-	def setEmailName(dummy:String) = {}
 }
 
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Entity
 class GlobalText extends BaseEntity{
   
-  @BeanProperty
   var name:String = null
 
+  @JsonIgnore
   private var text:JMap[String,TextEntry] = new HashMap
   
   def text(key:String):String = text.getOrElse(key, new TextEntry(key, "No text found for '" + key +"'")).text 
@@ -92,36 +114,284 @@ class GlobalText extends BaseEntity{
   
 }
 
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
 @Entity
 class GlobalApplicationData extends BaseEntity{
-  @BeanProperty
+
   var frontPageText:String = null
-  @BeanProperty
   var leagueName:String = null
 
   @Load
   var currentSeason:Ref[Season] = null
   @Load
   var globalText:Ref[GlobalText] = null
-  @BeanProperty
-  var emailAliases:JList[EmailAlias] = new ArrayList
-  
-  def setCurrentSeason(s:Season) = currentSeason = Ref.create(s)
-  def getCurrentSeason:Season = if(currentSeason==null) null else currentSeason .get
 
-  def setGlobalText(s:GlobalText) = globalText = Ref.create(s)
-  def getGlobalText:GlobalText = if(globalText==null) null else globalText .get
+  var emailAliases:JList[EmailAlias] = new ArrayList
 
 }
 
+
+object Season{
+  val types = HashSet(CompetitionType.LEAGUE,CompetitionType.BEER, CompetitionType.CUP, CompetitionType.PLATE);
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Entity
+class Season extends BaseEntity{
+  import org.chilternquizleague.domain.util.RefUtils._
+  @Index
+  var startYear:Int = Calendar.getInstance().get(Calendar.YEAR)
+  @Index
+  var endYear:Int = startYear + 1
+  @Stringify(classOf[CompetitionTypeStringifier])
+  var competitions:JMap[CompetitionType, Ref[Competition]] = new HashMap
+  
+  @Ignore
+  lazy val description = "" + startYear + "/" + endYear
+  
+  def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.types.contains(c.`type`)).asInstanceOf[List[TeamCompetition]]
+  def competition[T <: Competition](compType:CompetitionType) = compType.castTo(competitions.get(compType)).asInstanceOf[T]
+
+}
+
+object Results{
+  def apply(template:Results) = {
+    val copy = new Results()
+	copy.key = template.key;
+	copy.date = template.date;
+	copy.description = template.description;
+	copy
+  }
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Entity
+class Results extends BaseEntity{
+  var date:Date = new Date
+  var description:String = null
+  var results:JList[Result] = new ArrayList
+  
+  @Parent
+  var parent:Ref[BaseEntity] = null
+  
+  def findRow(fixture:Fixture) = results.toList.find(_.fixture same fixture) 
+  def findRow(homeTeam:Team) = results.toList.find(_.fixture.home == homeTeam)
+  def addResult(incoming:Result) = {
+    val row = findRow(incoming.fixture)
+    row match {
+  		case None => results.add(incoming)
+  		case a => {
+  		  incoming.reports.foreach(r=>a.foreach(_.reports.add(r)))
+  		  false
+  		}
+    }
+  }
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class Result{
+	var homeScore:Int = 0
+	var awayScore:Int = 0
+	var fixture:Fixture = null
+	var reports:JList[Report] = new ArrayList
+
+	@JsonIgnore
+	var firstSubmitter:Ref[User]= null
+  
+}
+
+object Fixtures{
+  
+  def apply(template:Fixtures) = {
+    val copy = new Fixtures
+    copy.start = template.start 
+    copy.end  = template.end
+    copy.competitionType  = template.competitionType 
+    copy.description  = template.description 
+    copy
+  }
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Entity
+class Fixtures extends BaseEntity{
+  	var start:Date = null
+	var end:Date = null
+	var competitionType:CompetitionType = null
+	var description:String = null
+	var fixtures:JList[Fixture] = new ArrayList
+	
+	@Parent
+	var parent:Ref[BaseEntity] = null
+  
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class Fixture{
+  	var start:Date = null
+	var end:Date = null
+	var home:Ref[Team] = null
+	var away:Ref[Team] = null
+	
+	def same(other:Fixture) = Utils.isSameDay(start, other.start) && home.getKey().equivalent(other.home.getKey())
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@JsonTypeInfo(use=JsonTypeInfo.Id.MINIMAL_CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
+@Entity
+@Cache
+abstract class Competition(
+    var `type`:CompetitionType,
+    var description:String,
+    var startTime:String,
+    var endTime:String,
+    var subsidiary:Boolean = false
+
+    ) extends BaseEntity{
+	description = `type`.getDescription()
+	
+    @Parent
+	var parent:Ref[BaseEntity] = null
+}
+
+abstract class TeamCompetition(
+    `type`:CompetitionType, 
+    subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00",subsidiary){
+    import org.chilternquizleague.domain.util.RefUtils._
+  
+	var fixtures:JList[Ref[Fixtures]] = new ArrayList
+	var results:JList[Ref[Results]] = new ArrayList
+	
+	def addResult(result:Result):Results
+	def resultsForDate(date:Date):Option[Results] = {
+	  
+	  val resultSet = results.find(r=>Utils.isSameDay(date, r.date)) 
+	  
+	  resultSet match {
+	    
+	    case None => {
+	      val newResults = new Results
+	      newResults.description  = description
+	      newResults.date = date
+	      val fixtures = fixturesForDate(date)
+	      for{
+	        f <- fixtures
+	      }
+	      yield{
+	        newResults.description = f.description
+	        newResults
+	      }
+	      results.add(newResults)
+	      Some(newResults)
+	    }
+	    case _ => resultSet.map(_.get)
+	  }
+	  
+	}
+	
+	def fixturesForDate(date:Date):Option[Fixtures] = fixtures.find(r=>Utils.isSameDay(date, r.start )).map(_.get)
+}
+
+abstract class BaseLeagueCompetition(
+    `type`:CompetitionType, 
+    subsidiary:Boolean = false)  extends TeamCompetition(`type`,subsidiary){
+  
+  	var win:Int = 2
+	var loss:Int = 0;
+	var draw:Int = 1;
+	
+	var leagueTables:JList[LeagueTable] = new ArrayList
+	
+	override def addResult(result:Result):Results = {
+	  val results = resultsForDate(result.fixture.start)
+	  for{
+	    r <- results
+	  }
+	  yield{
+	    r.addResult(result) match {
+	      case true => {
+	        for{
+	          table <- leagueTables
+	          row <- table.rows.find(r=>r.team == result.fixture.away || r.team == result.fixture.home)
+	        }
+	        yield{
+	          if(row.team == result.fixture.home){
+	            updateRow(row, result.homeScore , result.awayScore )
+	          }
+	          else{
+	            updateRow(row, result.awayScore  , result.homeScore  )
+	          }
+	        }
+	      }
+	      case false => {}
+	    }
+	  }
+
+	  results.get
+	}
+	
+	private def updateRow(row:LeagueTableRow, score:Int, oppoScore:Int):Unit={
+	  	val points = if(score > oppoScore)  win else if(score == oppoScore) draw else loss;
+		
+		row.leaguePoints += points
+		row.matchPointsFor += score
+		row.matchPointsAgainst += oppoScore
+		row.drawn += (if(points == draw) 1 else 0)
+		row.won += (if(points == win)  1 else 0)
+		row.lost += (if(points == loss) 1 else 0)
+		row.played += 1
+		
+		resortTable;
+
+	}
+	
+	protected def resortTable:Unit = {}
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Subclass
+class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE, false)
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Subclass
+class BeerCompetition extends BaseLeagueCompetition(CompetitionType.BEER, true)
+
+abstract class KnockoutCompetition(`type`:CompetitionType) extends TeamCompetition(`type`){
+	override def addResult(result:Result):Results = {
+	  val results = resultsForDate(result.fixture.start) 
+	  results foreach {
+	    _.addResult(result)
+	  }
+	  results.get
+	}
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Subclass
+class BuzzerCompetition extends Competition(CompetitionType.BUZZER,"","","")
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Subclass
+class CupCompetition extends KnockoutCompetition(CompetitionType.CUP)
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Subclass
+class PlateCompetition extends KnockoutCompetition(CompetitionType.PLATE)
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class EmailAlias{
-  @BeanProperty
+
   var alias:String = null
   @Load
   var user:Ref[User]= null 
-  
-  def getUser:User = if(user== null) null else user.get()
-  def setUser(u:User):Unit = user = Ref.create(u)
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -133,6 +403,33 @@ class TextEntry(var name:String,var text:String){
 class Text(var text:String){
   def this() = {this(null)}
 }
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class Report{
+  var text:Text = new Text
+  var team:Ref[Team] = null
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class LeagueTable{
+  	
+	var description:String = null
+	var rows:JList[LeagueTableRow] = new ArrayList
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class LeagueTableRow{
+  	var team:Ref[Team] = null
+	var position:String = null
+	var played = 0
+	var won = 0
+	var lost = 0
+	var drawn = 0
+	var leaguePoints = 0
+	var matchPointsFor = 0
+	var matchPointsAgainst = 0
+}
+
 
 
 

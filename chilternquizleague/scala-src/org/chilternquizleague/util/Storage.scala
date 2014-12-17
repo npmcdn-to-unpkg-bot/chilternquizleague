@@ -26,7 +26,6 @@ object Storage {
   }    
   
   def save[T <: BaseEntity](entity:T) = {
-    entity.prePersist()
     ofy.save.entity(entity).now
   }
 

@@ -8,14 +8,15 @@ import org.chilternquizleague.domain._
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.Key
 import org.chilternquizleague.util.Storage._
+import org.chilternquizleague.domain.util.RefUtils._
 
 class ResultHandler(result: Result, email: String, seasonId: Long, competitionType: CompetitionType) {
 
   private def commit(): Unit = {
 
-    Option(entityList(classOf[User], ("email", email)).head).foreach {
+    Option(entityList(classOf[User], ("email", email)).head).foreach {user:User =>
 
-      result.setFirstSubmitter(_);
+      result.firstSubmitter = user;
 
       entity(Some(seasonId), classOf[Season]).foreach {
 
@@ -25,12 +26,10 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
 
               override def vrun: Unit = {
 
-                Option[TeamCompetition](season.getCompetition(competitionType)).foreach {
-                  c =>
-                    {
-                      c.addResult(result)
-                      save(season)
-                    }
+                Option[TeamCompetition](season.competition(competitionType)).foreach {
+                  c => 	c.addResult(result)
+                    	save(season)
+                    
                 }
               }
 
