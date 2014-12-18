@@ -1,0 +1,72 @@
+package org.chilternquizleague.util
+
+import com.fasterxml.jackson.databind.JsonSerializer
+import com.googlecode.objectify.Ref
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import org.chilternquizleague.domain.BaseEntity
+import com.googlecode.objectify.ObjectifyService.ofy
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import scala.util.control.Exception.catching
+
+
+class RefSerializer extends JsonSerializer[Ref[_]] {
+  override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
+}
+
+class RefDeserializer extends JsonDeserializer[Ref[_]] {
+  override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
+    val node: JsonNode = parser.getCodec().readTree(parser);
+
+    val className = node.get("refClass").asText
+    val opt = ClassUtils.classFromPart[BaseEntity](className)
+
+    val remote = for {
+      clazz <- opt
+    } yield {
+      parser.getCodec().treeToValue(node, clazz)
+    }
+
+    Ref.create(ofy.save.entity(remote.get).now())
+  }
+}
+
+class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
+  override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
+    val node: JsonNode = parser.getCodec().readTree(parser);
+
+    val className = node.get("refClass").asText
+    val opt = ClassUtils.classFromPart[BaseEntity](className)
+
+    val remote = for {
+      clazz <- opt
+    } yield {
+      parser.getCodec().treeToValue(node, clazz)
+    }
+
+    remote match{
+      case Some(a) => Ref.create(a)
+      case _ => null
+    }
+  }
+}
+   
+object ClassUtils{
+    val packages: List[Package] = List(classOf[BaseEntity].getPackage());
+
+  
+    def classFromPart[T](part: String) = {
+
+    val className = part.substring(0, 1).toUpperCase() + part.substring(1)
+    def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
+    	import scala.util.control.Exception._
+
+      if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
+    }
+    packages.foldLeft(Option[Class[T]](null))(fun)
+  }
+}

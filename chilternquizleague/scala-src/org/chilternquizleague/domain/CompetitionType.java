@@ -4,31 +4,31 @@ public enum CompetitionType {
 
 	LEAGUE("League") {
 		@Override
-		public LeagueCompetitionJava castTo(Competition competition) {
+		public LeagueCompetition castTo(Competition competition) {
 
-			return LeagueCompetitionJava.class.cast(competition);
+			return LeagueCompetition.class.cast(competition);
 		}
 	},
 	BEER("Beer Leg") {
 		@Override
-		public LeagueCompetitionJava castTo(Competition competition) {
+		public BeerCompetition castTo(Competition competition) {
 
-			return LeagueCompetitionJava.class.cast(competition);
+			return BeerCompetition.class.cast(competition);
 		}
 	},
 	INDIVIDUAL("Individual"), 
 	CUP("Knockout Cup") {
 		@Override
-		public KnockoutCompetitionJava castTo(Competition competition) {
+		public KnockoutCompetition castTo(Competition competition) {
 
-			return KnockoutCompetitionJava.class.cast(competition);
+			return KnockoutCompetition.class.cast(competition);
 		}
 	},
 	PLATE("Plate") {
 		@Override
-		public KnockoutCompetitionJava castTo(Competition competition) {
+		public KnockoutCompetition castTo(Competition competition) {
 
-			return KnockoutCompetitionJava.class.cast(competition);
+			return KnockoutCompetition.class.cast(competition);
 		}
 	},
 	BUZZER("Buzzer Quiz"){

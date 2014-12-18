@@ -28,5 +28,7 @@ object Storage {
   def save[T <: BaseEntity](entity:T) = {
     ofy.save.entity(entity).now
   }
+  
+
 
 }

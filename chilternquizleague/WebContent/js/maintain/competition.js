@@ -238,6 +238,7 @@ maintainApp
 							if (!fixtures) {
 								fixtures = {
 									fixtures : [],
+									refClass : "Fixtures",
 									description : $scope.season.competitions[compType].description,
 									start : makeDateWithTime(
 											date,

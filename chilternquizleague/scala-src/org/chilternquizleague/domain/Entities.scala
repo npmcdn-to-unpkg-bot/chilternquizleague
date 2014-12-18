@@ -11,7 +11,6 @@ import com.googlecode.objectify.Ref
 import com.googlecode.objectify.Key
 import java.util.ArrayList
 import scala.beans.BeanProperty
-import org.chilternquizleague.domain.Utils._
 import java.util.HashMap
 import com.googlecode.objectify.annotation.Ignore
 import scala.collection.JavaConversions._
@@ -20,13 +19,15 @@ import java.util.Calendar
 import com.googlecode.objectify.annotation.Stringify
 import org.chilternquizleague.domain.util.CompetitionTypeStringifier
 import org.chilternquizleague.domain.util.JacksonAnnotations._
-//import org.chilternquizleague.domain.util.ObjectifyAnnotations._
+import org.chilternquizleague.util.DateUtils._
 import scala.collection.immutable.HashSet
 import java.util.Date
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.googlecode.objectify.annotation.Subclass
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-
+@JsonIgnoreProperties(Array("parent"))
 class BaseEntity{
   @Id
   var id:java.lang.Long = null
@@ -46,6 +47,8 @@ class BaseEntity{
   @JsonSetter("key")
   def key_dummy(key:String) = {}
   protected def key_= (key:String){_key = key}
+  
+  //def same(other:BaseEntity):Boolean = this == other || this.key == other.key
 }
 
 
@@ -95,6 +98,7 @@ class Team extends BaseEntity{
 	
 	lazy val emailName = if(shortName == null) null else shortName.replace(' ', '.').toLowerCase;
 
+	def same(other:Team) = this == other || this.id == other.id
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -151,7 +155,7 @@ class Season extends BaseEntity{
   @Ignore
   lazy val description = "" + startYear + "/" + endYear
   
-  def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.types.contains(c.`type`)).asInstanceOf[List[TeamCompetition]]
+  def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.types.contains(c.`type`)).map(_.get).asInstanceOf[List[TeamCompetition]]
   def competition[T <: Competition](compType:CompetitionType) = compType.castTo(competitions.get(compType)).asInstanceOf[T]
 
 }
@@ -178,7 +182,7 @@ class Results extends BaseEntity{
   var parent:Ref[BaseEntity] = null
   
   def findRow(fixture:Fixture) = results.toList.find(_.fixture same fixture) 
-  def findRow(homeTeam:Team) = results.toList.find(_.fixture.home == homeTeam)
+  def findRow(homeTeam:Team) = results.toList.find( _.fixture.home.get == homeTeam)
   def addResult(incoming:Result) = {
     val row = findRow(incoming.fixture)
     row match {
@@ -199,6 +203,7 @@ class Result{
 	var reports:JList[Report] = new ArrayList
 
 	@JsonIgnore
+	@Ignore
 	var firstSubmitter:Ref[User]= null
   
 }
@@ -237,7 +242,7 @@ class Fixture{
 	var home:Ref[Team] = null
 	var away:Ref[Team] = null
 	
-	def same(other:Fixture) = Utils.isSameDay(start, other.start) && home.getKey().equivalent(other.home.getKey())
+	def same(other:Fixture) = sameDay(start, other.start) && home.getKey().equivalent(other.home.getKey())
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -269,7 +274,7 @@ abstract class TeamCompetition(
 	def addResult(result:Result):Results
 	def resultsForDate(date:Date):Option[Results] = {
 	  
-	  val resultSet = results.find(r=>Utils.isSameDay(date, r.date)) 
+	  val resultSet = results.find(r=>sameDay(date, r.date)) 
 	  
 	  resultSet match {
 	    
@@ -293,7 +298,7 @@ abstract class TeamCompetition(
 	  
 	}
 	
-	def fixturesForDate(date:Date):Option[Fixtures] = fixtures.find(r=>Utils.isSameDay(date, r.start )).map(_.get)
+	def fixturesForDate(date:Date):Option[Fixtures] = fixtures.find(r=>sameDay(date, r.start )).map(_.get)
 }
 
 abstract class BaseLeagueCompetition(

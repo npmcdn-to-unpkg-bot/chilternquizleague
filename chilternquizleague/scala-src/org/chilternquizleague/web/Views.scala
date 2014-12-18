@@ -15,6 +15,7 @@ import org.chilternquizleague.domain.LeagueCompetition
 import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.Result
 import org.chilternquizleague.domain.util.RefUtils._
+import org.chilternquizleague.domain.BaseLeagueCompetition
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionTypeView(compType:CompetitionType){
@@ -48,7 +49,7 @@ class PreSubmissionView(val team:Team, val fixtures:List[Fixtures], val results:
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class LeagueTableView(season:Season , compType:CompetitionType ){
-		val competition:LeagueCompetition = season.competition(compType);
+		val competition:BaseLeagueCompetition = season.competition(compType);
 		val tables = if(competition != null)  competition.leagueTables.toList else List();
 		val description = season.description;
 }

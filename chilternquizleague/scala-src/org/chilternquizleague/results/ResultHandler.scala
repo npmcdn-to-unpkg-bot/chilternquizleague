@@ -27,8 +27,9 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
               override def vrun: Unit = {
 
                 Option[TeamCompetition](season.competition(competitionType)).foreach {
-                  c => 	c.addResult(result)
-                    	save(season)
+                  c => 	val r = c.addResult(result)
+                		save(r)  
+                    	save(c)
                     
                 }
               }

@@ -39,12 +39,11 @@ import javax.servlet.http.HttpServletResponse
 import org.chilternquizleague.util.Storage.{entity => entityByKey}
 import org.chilternquizleague.util.Storage.entityList
 import org.chilternquizleague.util.Storage.save
+import org.chilternquizleague.util.ClassUtils._
 import java.util.ArrayList
 import scala.collection.immutable.Iterable
 import java.util.Date
 import com.googlecode.objectify.Ref
-import com.googlecode.objectify.util.jackson.RefSerializer
-import com.googlecode.objectify.util.jackson.RefDeserializer
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -54,6 +53,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.io.StringWriter
 import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
+import org.chilternquizleague.util.RefSerializer
+import org.chilternquizleague.util.RefDeserializer
+import org.chilternquizleague.util.SafeRefDeserializer
 
 
 trait BaseRest extends HttpServlet {
@@ -72,7 +74,6 @@ trait BaseRest extends HttpServlet {
   val LOG: Logger = Logger.getLogger(classOf[BaseRest].getName());
 
   def aliases: Map[String, String]
-  val packages: List[Package] = List(classOf[BaseEntity].getPackage(), classOf[IndividualQuiz].getPackage());
   val objectMapper: ObjectMapper = new ObjectMapper
   def parts(req: HttpServletRequest) = req.getPathInfo().split("\\/").tail;
   def entityFilter[T <: BaseEntity]: T => Boolean
@@ -80,17 +81,6 @@ trait BaseRest extends HttpServlet {
   def entityName(head: String) = {
     val stripped = head.replace("-list", "")
     aliases.getOrElse(stripped, stripped)
-  }
-
-  def classFromPart[T](part: String) = {
-
-    val className = part.substring(0, 1).toUpperCase() + part.substring(1)
-    def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
-    	import scala.util.control.Exception._
-
-      if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
-    }
-    packages.foldLeft(Option[Class[T]](null))(fun)
   }
 
   def handleEntities(parts: Seq[String], head: String): Option[_] = {
@@ -139,29 +129,6 @@ class EntityService extends BaseRest {
     module.addDeserializer(classOf[Ref[_]], new RefDeserializer())
     module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
     objectMapper registerModule module
-  }
-  
-  
-  class RefSerializer extends JsonSerializer[Ref[_]]{
-    override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
-  }      
-
-   class RefDeserializer extends JsonDeserializer[Ref[_]]{
-     override def deserialize(parser:JsonParser, context:DeserializationContext):Ref[_] = {
-       val node:JsonNode = parser.getCodec().readTree(parser);
-       
-         val className = node.get("refClass").asText
-         val opt = classFromPart[BaseEntity](className)
-         
-         val remote = for{
-           clazz <- opt
-         }
-         yield{
-           parser.getCodec().treeToValue(node, clazz)
-         }
-        
-         Ref.create(ofy.save.entity(remote.get).now())
-     }	
   }
   
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
@@ -213,7 +180,7 @@ class ViewService extends BaseRest {
     module.addSerializer(classOf[Text], new TextSerializer)
     module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
     module.addSerializer(classOf[Ref[_]], new RefSerializer)
-    module.addDeserializer(classOf[Ref[_]], new RefDeserializer)
+    module.addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)
     objectMapper registerModule module
   }
 
@@ -266,7 +233,7 @@ class ViewService extends BaseRest {
 
     submissions.foreach(sub => ResultHandler(sub.result, sub.email, sub.seasonId, sub.competitionType))
 
-    None
+    Some("")
   }
 
   def submitContact(req: HttpServletRequest) = {
@@ -358,7 +325,7 @@ class ViewService extends BaseRest {
 
     
   def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
-
+   
     for{
       e <- req.parameter("email").map(_.trim())
       t <- entityList(classOf[Team]).find(_.users.exists(_.email equalsIgnoreCase e))
@@ -373,6 +340,7 @@ class ViewService extends BaseRest {
     entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
 
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
+    
     for{
       t <- entityByKey(idParam(req, "homeTeamId"), classOf[Team])
       key <- req.parameter("resultsKey")
