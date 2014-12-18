@@ -33,7 +33,7 @@ class EntityRegistrationListener extends ServletContextListener {
     ObjectifyService.register(classOf[CupCompetition]);
     ObjectifyService.register(classOf[PlateCompetition]);
     ObjectifyService.register(classOf[BuzzerCompetition]);
-    ObjectifyService.register(classOf[GlobalText]);
+    ObjectifyService.register(classOf[CommonText]);
     ObjectifyService.register(classOf[Season]);
 
   }
@@ -44,6 +44,8 @@ object Application{
   var globalApplicationDataId:Option[Long] = None
   
 }
+
+
 
 class ApplicationStartListener extends ServletContextListener {
 

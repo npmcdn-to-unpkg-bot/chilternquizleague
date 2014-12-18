@@ -18,6 +18,9 @@
   <listener>
     <listener-class>org.chilternquizleague.web.EntityRegistrationListener</listener-class>
   </listener>
+    <listener>
+    <listener-class>org.chilternquizleague.web.TextMigrationListener</listener-class>
+  </listener>
   <listener>
     <listener-class>org.chilternquizleague.web.ApplicationStartListener</listener-class>
   </listener>

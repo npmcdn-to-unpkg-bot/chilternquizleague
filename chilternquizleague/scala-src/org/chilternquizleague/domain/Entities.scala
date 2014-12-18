@@ -102,15 +102,16 @@ class Team extends BaseEntity{
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-@Cache
 @Entity
-class GlobalText extends BaseEntity{
+@Cache
+class CommonText extends BaseEntity{
   
   var name:String = null
 
   @JsonIgnore
-  private var text:JMap[String,TextEntry] = new HashMap
+  var text:JMap[String,TextEntry] = new HashMap
   
+  @Ignore
   def text(key:String):String = text.getOrElse(key, new TextEntry(key, "No text found for '" + key +"'")).text 
   
   def getEntries:JList[TextEntry] = new ArrayList(text.values)
@@ -129,7 +130,7 @@ class GlobalApplicationData extends BaseEntity{
   @Load
   var currentSeason:Ref[Season] = null
   @Load
-  var globalText:Ref[GlobalText] = null
+  var globalText:Ref[CommonText] = null
 
   var emailAliases:JList[EmailAlias] = new ArrayList
 

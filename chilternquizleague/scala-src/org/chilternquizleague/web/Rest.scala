@@ -20,7 +20,6 @@ import org.chilternquizleague.domain.Team
 import org.chilternquizleague.domain.TeamCompetition
 import org.chilternquizleague.domain.Text
 import org.chilternquizleague.domain.User
-import org.chilternquizleague.domain.individuals.IndividualQuiz
 import org.chilternquizleague.domain.util.RefUtils._
 import org.chilternquizleague.results.ResultHandler
 import org.chilternquizleague.util.HttpUtils.RequestImprovements
@@ -120,7 +119,7 @@ trait BaseRest extends HttpServlet {
 
 class EntityService extends BaseRest {
 
-  override val aliases = Map(("text", "globalText"), ("global", "GlobalApplicationData"))
+  override val aliases = Map(("text", "CommonText"), ("global", "GlobalApplicationData"))
   override def entityFilter[T] = { _ => true }
 
   override def init(config: ServletConfig) = {
@@ -159,7 +158,7 @@ class EntityService extends BaseRest {
 
 class ViewService extends BaseRest {
 
-  override val aliases = Map[String, String]()
+  override val aliases = Map[String, String](("GlobalText","CommonText"))
   override def entityFilter[T <: BaseEntity] = { !_.retired }
 
   class UserSerializer extends JsonSerializer[User] {
