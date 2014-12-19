@@ -33,6 +33,7 @@ class EntityRegistrationListener extends ServletContextListener {
     ObjectifyService.register(classOf[CupCompetition]);
     ObjectifyService.register(classOf[PlateCompetition]);
     ObjectifyService.register(classOf[BuzzerCompetition]);
+    ObjectifyService.register(classOf[IndividualCompetition]);
     ObjectifyService.register(classOf[CommonText]);
     ObjectifyService.register(classOf[Season]);
 

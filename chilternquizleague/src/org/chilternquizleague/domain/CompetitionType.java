@@ -16,7 +16,13 @@ public enum CompetitionType {
 			return BeerCompetition.class.cast(competition);
 		}
 	},
-	INDIVIDUAL("Individual"), 
+	INDIVIDUAL("Individual") {
+		@Override
+		public IndividualCompetition castTo(Competition competition) {
+
+			return IndividualCompetition.class.cast(competition);
+		}
+	}, 
 	CUP("Knockout Cup") {
 		@Override
 		public KnockoutCompetition castTo(Competition competition) {

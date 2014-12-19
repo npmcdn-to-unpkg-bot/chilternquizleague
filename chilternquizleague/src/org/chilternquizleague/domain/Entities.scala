@@ -268,6 +268,11 @@ abstract class Competition(
 	var parent:Ref[BaseEntity] = null
 }
 
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@Cache
+@Subclass
+class IndividualCompetition extends Competition(CompetitionType.INDIVIDUAL, "","20:00", "22:00")
+
 abstract class TeamCompetition(
     `type`:CompetitionType, 
     subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00",subsidiary){

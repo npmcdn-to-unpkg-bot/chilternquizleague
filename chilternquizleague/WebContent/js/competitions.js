@@ -76,6 +76,20 @@
 			
 		})
 		
+		.state("competitions.individual", {
+			
+			url:"/INDIVIDUAL",
+			views:{
+				menu:{
+					templateUrl : '/competition/competitions-menu.html'
+				},
+				content:{
+					templateUrl : '/competition/individual.html'
+				}
+			}
+			
+		})
+		
 		.state("competitions.results", {
 			
 			url:"/:type/results",
@@ -267,6 +281,12 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 				$scope.setCompetitionByType("BUZZER");
 
 			} ]);
+		mainApp.controller('IndividualCompetitionController', [ '$scope', function($scope) {
+
+			$scope.setCompetitionByType("INDIVIDUAL");
+
+		} ]);
+		
 		mainApp.controller('CompetitionAllResults', [
    			'$scope',
    			'$stateParams',

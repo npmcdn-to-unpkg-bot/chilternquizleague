@@ -72,6 +72,13 @@ maintainApp
 		'BuzzerCompCtrl',
 		getCommonParams(teamCompetitionControllerFactory("BUZZER")));
 
+maintainApp
+.controller(
+		'IndividualCompCtrl',
+		getCommonParams(teamCompetitionControllerFactory("INDIVIDUAL")));
+
+
+
 function UsedTeamsControl(teams, $scope) {
 
 	this.teams = teams;
