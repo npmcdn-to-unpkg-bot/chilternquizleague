@@ -70,7 +70,7 @@
 					templateUrl : '/competition/competitions-menu.html'
 				},
 				content:{
-					templateUrl : '/competition/buzzer.html'
+					templateUrl : '/competition/team-buzzer.html'
 				}
 			}
 			
