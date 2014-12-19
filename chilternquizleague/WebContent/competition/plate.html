@@ -1,5 +1,5 @@
 <div ng-controller="PlateCompetitionController">
-<md-card><div class="fix-text" cql-text="'plate-comp'"></div></md-card>
+<md-card><div class="fix-text" cql-text="'plate-comp'"></div><div class="fix-text" ng-bind-html="competition.text | htmlify"></div></md-card>
 	<md-card><div ng-include="'/competition/latest-results.html'">
 	</div></md-card>
 	<md-card><div ng-include="'/competition/next-fixtures.html'">

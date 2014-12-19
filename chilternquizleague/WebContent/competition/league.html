@@ -1,5 +1,5 @@
 <div ng-controller="LeagueCompetitionController">
-	<md-card hide-sm><div class="fix-text" cql-text="'league-comp'"></div></md-card>
+	<md-card hide-sm><div class="fix-text" cql-text="'league-comp'"></div><div class="fix-text" ng-bind-html="competition.text | htmlify"></div></md-card>
 	<md-card><div flex class="league-table-container"
 		ng-include="'/competition/league-table.html'"></div></md-card>
 	<md-card><div flex ng-include="'/competition/latest-results.html'"></div></md-card>

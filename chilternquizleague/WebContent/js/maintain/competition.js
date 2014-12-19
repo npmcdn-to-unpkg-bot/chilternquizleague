@@ -8,7 +8,7 @@ function teamCompetitionControllerFactory(name){
 	
 	return function($scope, entityService, $routeParams,
 			$rootScope, $location) {
-
+		$scope.tinymceOptions = tinymceOptions;
 		var seasonId = $routeParams.seasonId;
 		$scope.seasonId = seasonId;
 		makeUpdateFnWithCallback(

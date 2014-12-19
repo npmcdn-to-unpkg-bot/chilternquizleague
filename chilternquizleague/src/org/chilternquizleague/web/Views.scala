@@ -34,6 +34,7 @@ class CompetitionView(competition:Competition) {
 	val `type` = new CompetitionTypeView(competition.`type`)
 	val subsidiary = competition.subsidiary
 	val startTime = competition.startTime
+	val text = competition.text
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)

@@ -262,6 +262,7 @@ abstract class Competition(
 
     ) extends BaseEntity{
 	description = `type`.getDescription()
+	var text:String = null
 	
     @Parent
 	var parent:Ref[BaseEntity] = null
