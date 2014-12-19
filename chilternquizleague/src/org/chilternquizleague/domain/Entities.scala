@@ -177,6 +177,7 @@ object Results{
 @Cache
 @Entity
 class Results extends BaseEntity{
+  import org.chilternquizleague.domain.util.RefUtils._
   var date:Date = new Date
   var description:String = null
   var results:JList[Result] = new ArrayList
@@ -185,7 +186,7 @@ class Results extends BaseEntity{
   var parent:Ref[BaseEntity] = null
   
   def findRow(fixture:Fixture) = results.toList.find(_.fixture same fixture) 
-  def findRow(homeTeam:Team) = results.toList.find( _.fixture.home.get == homeTeam)
+  def findRow(homeTeam:Team) = results.toList.find( _.fixture.home same homeTeam)
   def addResult(incoming:Result) = {
     val row = findRow(incoming.fixture)
     row match {
@@ -365,7 +366,7 @@ abstract class BaseLeagueCompetition(
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE, false)
+class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE)
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
