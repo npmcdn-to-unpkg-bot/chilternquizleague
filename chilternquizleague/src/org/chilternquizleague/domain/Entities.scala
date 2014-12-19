@@ -102,7 +102,7 @@ class Team extends BaseEntity{
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-@Entity
+@Entity(name="GlobalText")
 @Cache
 class CommonText extends BaseEntity{
   
