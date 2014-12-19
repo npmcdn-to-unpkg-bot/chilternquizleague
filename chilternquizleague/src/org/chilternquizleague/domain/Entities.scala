@@ -14,11 +14,11 @@ import scala.beans.BeanProperty
 import java.util.HashMap
 import com.googlecode.objectify.annotation.Ignore
 import scala.collection.JavaConversions._
-import com.googlecode.objectify.annotation.Load
 import java.util.Calendar
 import com.googlecode.objectify.annotation.Stringify
 import org.chilternquizleague.domain.util.CompetitionTypeStringifier
 import org.chilternquizleague.domain.util.JacksonAnnotations._
+import org.chilternquizleague.domain.util.ObjectifyAnnotations._
 import org.chilternquizleague.util.DateUtils._
 import scala.collection.immutable.HashSet
 import java.util.Date
@@ -132,6 +132,7 @@ class GlobalApplicationData extends BaseEntity{
   @Load
   var globalText:Ref[CommonText] = null
 
+  @Load
   var emailAliases:JList[EmailAlias] = new ArrayList
 
 }
@@ -150,6 +151,7 @@ class Season extends BaseEntity{
   var startYear:Int = Calendar.getInstance().get(Calendar.YEAR)
   @Index
   var endYear:Int = startYear + 1
+  @Load
   @Stringify(classOf[CompetitionTypeStringifier])
   var competitions:JMap[CompetitionType, Ref[Competition]] = new HashMap
   
@@ -269,8 +271,10 @@ abstract class TeamCompetition(
     subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00",subsidiary){
     import org.chilternquizleague.domain.util.RefUtils._
   
-	var fixtures:JList[Ref[Fixtures]] = new ArrayList
-	var results:JList[Ref[Results]] = new ArrayList
+	@Load
+    var fixtures:JList[Ref[Fixtures]] = new ArrayList
+	@Load
+    var results:JList[Ref[Results]] = new ArrayList
 	
 	def addResult(result:Result):Results
 	def resultsForDate(date:Date):Option[Results] = {
@@ -413,6 +417,7 @@ class Text(var text:String){
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class Report{
   var text:Text = new Text
+  @Load
   var team:Ref[Team] = null
 }
 
