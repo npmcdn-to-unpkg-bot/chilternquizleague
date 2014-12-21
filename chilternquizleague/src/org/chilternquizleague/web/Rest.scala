@@ -55,6 +55,7 @@ import org.apache.commons.io.IOUtils
 import org.chilternquizleague.util.RefSerializer
 import org.chilternquizleague.util.RefDeserializer
 import org.chilternquizleague.util.SafeRefDeserializer
+import org.chilternquizleague.domain.BaseLeagueCompetition
 
 
 trait BaseRest extends HttpServlet {
@@ -92,6 +93,8 @@ trait BaseRest extends HttpServlet {
     }
 
   }
+
+  protected def idParam(req: HttpServletRequest, name: String = "id") = req parameter (name) flatMap { _ toLongOpt }
 
   def makeEntityList[T <: BaseEntity](entityName: String):Option[List[T]] = classFromPart(entityName) flatMap { c:Class[T] => makeEntityList(c) }
   def makeEntityList[T <: BaseEntity](c:Class[T]):Option[List[T]] = Some(entityList(c).filter(entityFilter[T]))
@@ -144,6 +147,7 @@ class EntityService extends BaseRest {
     item.foreach(a => objectMapper.writeValue(resp.getWriter, logJson(a, "writing:")))
 
   }
+  
 
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
     
@@ -351,6 +355,5 @@ class ViewService extends BaseRest {
     }
   }
 
-  protected def idParam(req: HttpServletRequest, name: String = "id") = req parameter (name) flatMap { _ toLongOpt }
 
 }
