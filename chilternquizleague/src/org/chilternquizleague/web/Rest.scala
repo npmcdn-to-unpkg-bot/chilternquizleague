@@ -162,7 +162,7 @@ class EntityService extends BaseRest {
 
 class ViewService extends BaseRest {
 
-  override val aliases = Map[String, String](("GlobalText","CommonText"))
+  override val aliases = Map(("GlobalText","CommonText"))
   override def entityFilter[T <: BaseEntity] = { !_.retired }
 
   class UserSerializer extends JsonSerializer[User] {
@@ -190,22 +190,23 @@ class ViewService extends BaseRest {
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
+    val stripped = head.replace("-list", "")
 
-    val item: Option[_] = head match {
+    val item: Option[_] = stripped match {
 
-      case a if a.contains("globaldata") => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).map(new GlobalApplicationDataView(_))
-      case a if a.contains("leaguetable") => currentLeagueTable(req, CompetitionType.LEAGUE)
-      case a if a.contains("beertable") => currentLeagueTable(req, CompetitionType.BEER)
-      case a if a.contains("season-views") => seasons
-      case a if a.contains("team-extras") => teamExtras(req)
-      case a if a.contains("all-results") => allResults(req)
-      case a if a.contains("all-fixtures") => allFixtures(req)
-      case a if a.contains("competition-results") => competitionResults(req)
-      case a if a.contains("competition-fixtures") => competitionFixtures(req)
-      case a if a.contains("fixtures-for-email") => fixturesForEmail(req)
-      case a if a.contains("competitions-view") => competitionsForSeason(req)
-      case a if a.contains("text") => textForName(req)
-      case a if a.contains("reports") => resultReports(req)
+      case "globaldata" => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).map(new GlobalApplicationDataView(_))
+      case "leaguetable" => currentLeagueTable(req, CompetitionType.LEAGUE)
+      case "beertable" => currentLeagueTable(req, CompetitionType.BEER)
+      case "season-views" => seasons
+      case "team-extras" => teamExtras(req)
+      case "all-results" => allResults(req)
+      case "all-fixtures" => allFixtures(req)
+      case "competition-results" => competitionResults(req)
+      case "competition-fixtures" => competitionFixtures(req)
+      case "fixtures-for-email" => fixturesForEmail(req)
+      case "competitions-view" => competitionsForSeason(req)
+      case "text" => textForName(req)
+      case "reports" => resultReports(req)
       case _ => handleEntities(bits, head)
 
     }
@@ -228,7 +229,7 @@ class ViewService extends BaseRest {
 
   }
   
-  def seasons():Option[List[SeasonView]] = {makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}}
+  def seasons():Option[List[SeasonView]] = makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}
 
   def submitResults(req: HttpServletRequest) = {
 
@@ -340,8 +341,8 @@ class ViewService extends BaseRest {
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
-    entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
-
+		  entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
+  
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
     
     for{
