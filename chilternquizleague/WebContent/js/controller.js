@@ -167,6 +167,10 @@ mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
   	url:"/contact",
   	templateUrl : "/contact/contact.html"
   })
+  .state("links", {
+  	url:"/links",
+  	templateUrl : "/links/links.html"
+  })
   
   
   ;
