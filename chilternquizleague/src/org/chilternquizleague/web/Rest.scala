@@ -52,24 +52,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.io.StringWriter
 import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
-import org.chilternquizleague.util.RefSerializer
-import org.chilternquizleague.util.RefDeserializer
-import org.chilternquizleague.util.SafeRefDeserializer
 import org.chilternquizleague.domain.BaseLeagueCompetition
+import org.chilternquizleague.util.JacksonUtils
 
 
 trait BaseRest extends HttpServlet {
 
-  class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]]{
-    override def serialize(list:Iterable[Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
-      gen writeStartArray;
-      
-      list foreach {gen.writeObject(_)}
-      
-      gen writeEndArray()
-      
-    }
-  }
+
   
   val LOG: Logger = Logger.getLogger(classOf[BaseRest].getName());
 
@@ -94,7 +83,7 @@ trait BaseRest extends HttpServlet {
 
   }
 
-  protected def idParam(req: HttpServletRequest, name: String = "id") = req parameter (name) flatMap { _ toLongOpt }
+  protected def idParam(req: HttpServletRequest, name: String = "id") = req id name
 
   def makeEntityList[T <: BaseEntity](entityName: String):Option[List[T]] = classFromPart(entityName) flatMap { c:Class[T] => makeEntityList(c) }
   def makeEntityList[T <: BaseEntity](c:Class[T]):Option[List[T]] = Some(entityList(c).filter(entityFilter[T]))
@@ -111,7 +100,7 @@ trait BaseRest extends HttpServlet {
 
   def logJson[T](things: T, message: String = "") = {
     if (LOG.isLoggable(Level.FINE)) {
-      LOG.fine(message + "\n" + things.getClass.getName() + " : " +objectMapper.writeValueAsString(things));
+      LOG.fine(s"$message\n${things.getClass.getName} : ${objectMapper.writeValueAsString(things)}")
     }
 
     things
@@ -126,11 +115,7 @@ class EntityService extends BaseRest {
   override def entityFilter[T] = { _ => true }
 
   override def init(config: ServletConfig) = {
-    val module = new SimpleModule
-    module.addSerializer(classOf[Ref[_]], new RefSerializer)
-    module.addDeserializer(classOf[Ref[_]], new RefDeserializer())
-    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
-    objectMapper registerModule module
+    objectMapper registerModule JacksonUtils.unsafeModule
   }
   
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
@@ -165,26 +150,10 @@ class ViewService extends BaseRest {
   override val aliases = Map(("GlobalText","CommonText"))
   override def entityFilter[T <: BaseEntity] = { !_.retired }
 
-  class UserSerializer extends JsonSerializer[User] {
-    override def serialize(user: User, gen: JsonGenerator, prov: SerializerProvider) = {}
-  }
-  class TextSerializer extends JsonSerializer[Text] {
-    override def serialize(text: Text, gen: JsonGenerator, prov: SerializerProvider) = {
-      gen writeStartObject;
-      gen writeNullField "text"
-      gen writeEndObject
-    }
 
-  }
 
   override def init(config: ServletConfig) = {
-    val module = new SimpleModule
-    module.addSerializer(classOf[User], new UserSerializer)
-    module.addSerializer(classOf[Text], new TextSerializer)
-    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
-    module.addSerializer(classOf[Ref[_]], new RefSerializer)
-    module.addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)
-    objectMapper registerModule module
+    objectMapper registerModule JacksonUtils.safeModule
   }
 
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
@@ -290,7 +259,7 @@ class ViewService extends BaseRest {
       if (newRes.results.isEmpty) Nil else List(newRes)
     }
 
-    competitions filter { _ != null } filter { _.`type` != CompetitionType.BEER } flatMap { _.results.map(_.get) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
+    competitions filter { _ != null } filter { _.`type` != CompetitionType.BEER } flatMap { _.results.map(_.get) filter(_!=null) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
 
   }
 
@@ -305,25 +274,20 @@ class ViewService extends BaseRest {
         t => s.competition(t).asInstanceOf[TeamCompetition] }}
   }
   
-  def competitionResults(req: HttpServletRequest): Option[JList[Results]] = {
+  def competitionResults(req: HttpServletRequest): Option[JList[Results]] = teamCompetitionForSeason(req) map {_.results}
 
-    teamCompetitionForSeason(req) map {a:TeamCompetition => a.results}
-  }
+  def competitionFixtures(req: HttpServletRequest): Option[JList[Fixtures]] = teamCompetitionForSeason(req) map {_.fixtures}
 
-  def competitionFixtures(req: HttpServletRequest): Option[JList[Fixtures]] = {
 
-   teamCompetitionForSeason(req) map {a: TeamCompetition => a.fixtures}
-
-  }
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
     entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.globalText.text(n) } })
   }
 
-  def allResults(req: HttpServletRequest):Option[JList[_]] =
-     entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results })
-
+  def allResults(req: HttpServletRequest):Option[JList[_]] = 
+    entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results })
+  
   def allFixtures(req: HttpServletRequest):Option[JList[_]] =
     entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures })
 
@@ -333,7 +297,7 @@ class ViewService extends BaseRest {
     for{
       e <- req.parameter("email").map(_.trim())
       t <- entityList(classOf[Team]).find(_.users.exists(_.email equalsIgnoreCase e))
-      s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
+      s <- entityByKey(req.id("seasonId"), classOf[Season])
     }
     yield{
       new PreSubmissionView(t, teamFixtures(Some(t.id), s), teamResults(Some(t.id),s))

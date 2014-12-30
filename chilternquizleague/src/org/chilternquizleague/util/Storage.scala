@@ -3,6 +3,7 @@ import com.googlecode.objectify.Key
 import com.googlecode.objectify.ObjectifyService.ofy
 import org.chilternquizleague.domain.BaseEntity
 import scala.collection.JavaConversions._
+import com.googlecode.objectify.cmd.Query
 
 object Storage {
   
@@ -16,12 +17,15 @@ object Storage {
 
   }
   
-  def entityList[T <: BaseEntity](c:Class[T], filter:(String,Any) = null):List[T] = {
+  def entityList[T <: BaseEntity](c:Class[T], filter:(String,Any)*):List[T] = {
     
     (filter match {
       
-      case (a,b) => ofy.load.`type`(c).filter(a,b).list
-      case _ => ofy.load.`type`(c).list
+      case Nil => ofy.load.`type`(c).list
+      case _ => {var loader:Query[T] = ofy.load.`type`(c)
+        for((a,b) <- filter)loader = loader.filter(a,b)
+        loader.list
+      }
     }).toList
   }    
   

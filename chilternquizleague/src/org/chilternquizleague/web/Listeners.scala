@@ -36,6 +36,7 @@ class EntityRegistrationListener extends ServletContextListener {
     ObjectifyService.register(classOf[IndividualCompetition]);
     ObjectifyService.register(classOf[CommonText]);
     ObjectifyService.register(classOf[Season]);
+    ObjectifyService.register(classOf[Statistics]);
 
   }
 }
@@ -80,7 +81,7 @@ class URLRewriteFilter extends Filter{
 
 			pathInfo match {
 			  
-			  case a if ((a == null || (a.contains("/_ah")) && !a.contains("."))) => {arg2.doFilter(arg0, arg1)}
+			  case a if ((a == null ||(a.startsWith("/tasks")) || (a.contains("/_ah")) && !a.contains("."))) => {arg2.doFilter(arg0, arg1)}
 			  case a if a.startsWith("/maintain") => {request.getRequestDispatcher("/maintain.html").forward(
 							arg0, arg1)}
 			  case a if context.getRealPath(request.getPathInfo()) == null => {request.getRequestDispatcher("/index.html").forward(

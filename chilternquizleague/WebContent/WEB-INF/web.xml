@@ -55,6 +55,14 @@
     <servlet-name>mailhandler</servlet-name>
     <url-pattern>/_ah/mail/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>statshandler</servlet-name>
+    <servlet-class>org.chilternquizleague.web.StatsWorker</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>statshandler</servlet-name>
+    <url-pattern>/tasks/stats</url-pattern>
+  </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintainance</web-resource-name>

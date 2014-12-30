@@ -331,18 +331,12 @@ abstract class BaseLeagueCompetition(
 	  yield{
 	    r.addResult(result) match {
 	      case true => {
-	        for{
-	          table <- leagueTables
-	          row <- table.rows.find(r=>r.team == result.fixture.away || r.team == result.fixture.home)
+	        for(table <- leagueTables) {
+	          for(homeRow <- table.rows if(homeRow.team == result.fixture.home)) updateRow(homeRow, result.homeScore, result.awayScore)
+	          for(awayRow <- table.rows if(awayRow.team == result.fixture.away)) updateRow(awayRow, result.awayScore, result.homeScore)
+	          table.sort
 	        }
-	        yield{
-	          if(row.team == result.fixture.home){
-	            updateRow(row, result.homeScore , result.awayScore )
-	          }
-	          else{
-	            updateRow(row, result.awayScore  , result.homeScore  )
-	          }
-	        }
+	
 	      }
 	      case false => {}
 	    }
@@ -361,12 +355,9 @@ abstract class BaseLeagueCompetition(
 		row.won += (if(points == win)  1 else 0)
 		row.lost += (if(points == loss) 1 else 0)
 		row.played += 1
-		
-		resortTable;
 
 	}
-	
-	protected def resortTable:Unit = {}
+
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -433,6 +424,14 @@ class LeagueTable{
   	
 	var description:String = null
 	var rows:JList[LeagueTableRow] = new ArrayList
+	
+	def sort() = {
+	  import org.chilternquizleague.domain.util.RefUtils._
+	  rows = rows.sortBy(r => (r.leaguePoints, r.matchPointsFor , r.won , r.drawn , r.team.shortName)).reverse
+	  
+	  var idx = 0
+	  for(row <- rows){idx = idx + 1; row.position = idx.toString} 
+	}
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -447,8 +446,6 @@ class LeagueTableRow{
 	var matchPointsFor = 0
 	var matchPointsAgainst = 0
 }
-
-
 
 
 

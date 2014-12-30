@@ -9,6 +9,12 @@ import scala.collection.JavaConversions._
 import com.googlecode.objectify.Key
 import org.chilternquizleague.util.Storage._
 import org.chilternquizleague.domain.util.RefUtils._
+import com.google.appengine.api.taskqueue.Queue
+import com.google.appengine.api.taskqueue.QueueFactory
+import com.google.appengine.api.taskqueue.TaskOptions.Builder._
+import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.chilternquizleague.util.JacksonUtils
 
 class ResultHandler(result: Result, email: String, seasonId: Long, competitionType: CompetitionType) {
 
@@ -36,6 +42,10 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
 
             })
           }
+      if(competitionType == CompetitionType.LEAGUE){    
+       val queue:Queue = QueueFactory.getDefaultQueue();
+       queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", seasonId.toString));
+      }
       }
 
       return

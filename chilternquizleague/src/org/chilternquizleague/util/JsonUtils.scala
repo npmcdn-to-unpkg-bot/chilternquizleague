@@ -12,9 +12,33 @@ import org.chilternquizleague.domain.BaseEntity
 import com.googlecode.objectify.ObjectifyService.ofy
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import scala.util.control.Exception.catching
+import com.fasterxml.jackson.databind.module.SimpleModule
+import org.chilternquizleague.domain.Text
+import org.chilternquizleague.domain.User
+import com.fasterxml.jackson.databind.ObjectMapper
 
 
-class RefSerializer extends JsonSerializer[Ref[_]] {
+
+   
+object ClassUtils{
+    val packages: List[Package] = List(classOf[BaseEntity].getPackage());
+
+  
+    def classFromPart[T](part: String) = {
+
+    val className = part.substring(0, 1).toUpperCase() + part.substring(1)
+    def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
+    	import scala.util.control.Exception._
+
+      if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
+    }
+    packages.foldLeft(Option[Class[T]](null))(fun)
+  }
+}
+
+object JacksonUtils {
+  
+  class RefSerializer extends JsonSerializer[Ref[_]] {
   override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
 }
 
@@ -54,19 +78,44 @@ class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
     }
   }
 }
-   
-object ClassUtils{
-    val packages: List[Package] = List(classOf[BaseEntity].getPackage());
 
-  
-    def classFromPart[T](part: String) = {
-
-    val className = part.substring(0, 1).toUpperCase() + part.substring(1)
-    def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
-    	import scala.util.control.Exception._
-
-      if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
-    }
-    packages.foldLeft(Option[Class[T]](null))(fun)
+  class UserSerializer extends JsonSerializer[User] {
+    override def serialize(user: User, gen: JsonGenerator, prov: SerializerProvider) = {}
   }
-}
+  class TextSerializer extends JsonSerializer[Text] {
+    override def serialize(text: Text, gen: JsonGenerator, prov: SerializerProvider) = {
+      gen writeStartObject;
+      gen writeNullField "text"
+      gen writeEndObject
+    }
+
+  }
+      class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]]{
+    override def serialize(list:Iterable[Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
+      gen writeStartArray;
+      
+      list foreach {gen.writeObject(_)}
+      
+      gen writeEndArray()
+      
+    }}
+  
+  lazy val unsafeModule = { 
+    val module = new SimpleModule
+    module.addSerializer(classOf[Ref[_]], new RefSerializer)
+    module.addDeserializer(classOf[Ref[_]], new RefDeserializer())
+    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+    module
+  	}
+  
+  lazy val safeModule = {    
+    val module = new SimpleModule
+    module.addSerializer(classOf[User], new UserSerializer)
+    module.addSerializer(classOf[Text], new TextSerializer)
+    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+    module.addSerializer(classOf[Ref[_]], new RefSerializer)
+    module.addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)}
+  
+  def safeMapper = new ObjectMapper registerModule safeModule
+  
+  }
