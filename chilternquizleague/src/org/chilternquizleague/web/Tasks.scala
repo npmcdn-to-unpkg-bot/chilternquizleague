@@ -19,6 +19,9 @@ import org.chilternquizleague.domain.LeagueTable
 import scala.collection.mutable.Buffer
 import org.chilternquizleague.util.JacksonUtils
 import java.util.logging.Logger
+import com.google.appengine.api.taskqueue.QueueFactory
+import com.google.appengine.api.taskqueue.TaskOptions.Builder._
+import scala.collection.JavaConversions._
 
 class StatsWorker extends HttpServlet{
   
@@ -56,16 +59,7 @@ class StatsWorker extends HttpServlet{
   
   private def stats(team:Team,season:Season):Statistics = {
     
-    val statSet = entityList(classOf[Statistics], ("team", team ),("season", season))
-    
-    statSet match {
-      
-      case Nil => {val stats = Statistics(team,season)
-    		  save(stats)
-    		  stats
-      }
-      case _ => statSet.head
-    }
+    Statistics.get(team,season)
     
   }
   
@@ -84,4 +78,24 @@ class StatsWorker extends HttpServlet{
     
     res.head
   }
+}
+
+object HistoricalStatsAggregator{
+  
+  def perform() = {
+	  
+    for{
+      g <- Application.globalData
+      c:LeagueCompetition = g.currentSeason.competition(CompetitionType.LEAGUE)
+      r <- c.results.sortBy(_.date)
+      result <- r.results
+    }
+    {
+      val queue = QueueFactory.getQueue("stats");
+       queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", g.currentSeason.getKey.getId.toString));
+
+    }
+    Some("Finished")
+  }
+
 }

@@ -43,7 +43,7 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
             })
           }
       if(competitionType == CompetitionType.LEAGUE){    
-       val queue:Queue = QueueFactory.getDefaultQueue();
+       val queue:Queue = QueueFactory.getQueue("stats");
        queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", seasonId.toString));
       }
       }

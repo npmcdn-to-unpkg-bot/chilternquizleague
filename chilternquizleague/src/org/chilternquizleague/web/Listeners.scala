@@ -43,8 +43,19 @@ class EntityRegistrationListener extends ServletContextListener {
 
 object Application{
   
-  var globalApplicationDataId:Option[Long] = None
+  private var globalApplicationDataId:Option[Long] = None
   
+  def globalData = for(g <- entity(globalApplicationDataId, classOf[GlobalApplicationData])) yield g
+
+  def init():Option[Long] = {
+    
+    val list = entityList(classOf[GlobalApplicationData])
+    globalApplicationDataId = list match {
+		  case Nil => Some(save(new GlobalApplicationData()).getId)
+		  case _ => Some(list.head.id)
+		}
+    globalApplicationDataId
+  }
 }
 
 
@@ -52,16 +63,8 @@ object Application{
 class ApplicationStartListener extends ServletContextListener {
 
   override def contextDestroyed(evt: javax.servlet.ServletContextEvent): Unit = {}
-  override def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = {
-		
-		val list = entityList(classOf[GlobalApplicationData])
-			
-		Application.globalApplicationDataId = list match {
-		  case Nil => Some(save(new GlobalApplicationData()).getId())
-		  case _ => Some(list.head.id)
-		}
-
-  }
+  override def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = Application.init
+  
 }
 
 object URLRewriteFilter {

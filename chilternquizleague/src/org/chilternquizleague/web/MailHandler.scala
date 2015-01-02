@@ -34,11 +34,8 @@ class MailHandler extends HttpServlet {
       val message = new MimeMessage(session,
         req.getInputStream());
 
-      val globaldata = ofy().load().now(
-        Key.create(classOf[GlobalApplicationData],
-          Application.globalApplicationDataId.get));
-      val recipientParts = req.getPathInfo().replaceFirst("/", "")
-        .split("@");
+      val globaldata = Application.globalData.get
+      val recipientParts = req.getPathInfo().replaceFirst("/", "").split("@")
 
       val recipientName = recipientParts(0);
 
@@ -70,10 +67,9 @@ class MailHandler extends HttpServlet {
 
         message.setRecipients(RecipientType.TO, addresses.toArray);
 
-        message.setSubject("via " + globaldata.leagueName + " : " + message.getSubject);
+        message.setSubject(s"via  ${globaldata.leagueName} : ${message.getSubject}");
 
-        LOG.fine(message.getFrom()(0) + " to "
-          + message.getAllRecipients()(0).toString());
+        LOG.fine(s"${message.getFrom()(0)} to ${message.getAllRecipients()(0).toString}");
 
         Transport.send(message);
       } catch {
@@ -86,7 +82,7 @@ class MailHandler extends HttpServlet {
           val notification = new MimeMessage(session);
           notification.addRecipient(RecipientType.TO, message.getFrom()(0));
           notification.setSender(message.getAllRecipients()(0));
-          notification.setSubject(globaldata.leagueName + " : Message delivery failed");
+          notification.setSubject(s"${globaldata.leagueName} : Message delivery failed");
           notification.setText("Message delivery failed, probably due to an attachment.\nThis mail service does not allow attachments.  Try resending as text only.");
 
           Transport.send(notification);
@@ -109,7 +105,7 @@ private class EmailSender {
 
     try {
 
-      val globaldata = entity(Application.globalApplicationDataId, classOf[GlobalApplicationData])
+      val globaldata = Application.globalData
 
       globaldata.foreach { g =>
         g.emailAliases.filter(_.alias == recipientName).foreach {
@@ -152,10 +148,9 @@ private class EmailSender {
       outMessage
         .setSender(new InternetAddress(sender));
       outMessage.setText(text);
-      outMessage.setSubject("Sent via " + globalApplicationData.leagueName);
+      outMessage.setSubject(s"Sent via ${globalApplicationData.leagueName}");
 
-      LOG.fine(outMessage.getFrom()(0) + " to "
-        + outMessage.getAllRecipients()(0).toString());
+      LOG.fine(s"${outMessage.getFrom()(0)} to ${outMessage.getAllRecipients()(0).toString}");
 
       Transport.send(outMessage);
     } catch {

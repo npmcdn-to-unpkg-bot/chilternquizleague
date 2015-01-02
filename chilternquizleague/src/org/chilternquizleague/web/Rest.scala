@@ -3,10 +3,7 @@ package org.chilternquizleague.web
 import java.util.logging.Level
 import java.util.logging.Logger
 import java.util.{List => JList}
-import scala.collection.JavaConversions.asScalaBuffer
-import scala.collection.JavaConversions.bufferAsJavaList
-import scala.collection.JavaConversions.collectionAsScalaIterable
-import scala.collection.JavaConversions.seqAsJavaList
+import scala.collection.JavaConversions._
 import scala.collection.immutable.List
 import scala.util.control.Exception.catching
 import org.chilternquizleague.domain.BaseEntity
@@ -123,7 +120,7 @@ class EntityService extends BaseRest {
     val head = bits.head
     val item = head match {
 
-      case "global" => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData])
+      case "global" => Application.globalData
       case "competitionType-list" => Some(CompetitionTypeView.list)
       case _ => handleEntities(bits, head)
 
@@ -163,7 +160,7 @@ class ViewService extends BaseRest {
 
     val item: Option[_] = stripped match {
 
-      case "globaldata" => entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).map(new GlobalApplicationDataView(_))
+      case "globaldata" => Application.globalData.map(new GlobalApplicationDataView(_))
       case "leaguetable" => currentLeagueTable(req, CompetitionType.LEAGUE)
       case "beertable" => currentLeagueTable(req, CompetitionType.BEER)
       case "season-views" => seasons
@@ -176,6 +173,7 @@ class ViewService extends BaseRest {
       case "competitions-view" => competitionsForSeason(req)
       case "text" => textForName(req)
       case "reports" => resultReports(req)
+      case "stats" => HistoricalStatsAggregator.perform
       case _ => handleEntities(bits, head)
 
     }
@@ -282,7 +280,7 @@ class ViewService extends BaseRest {
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
-    entityByKey(Application.globalApplicationDataId, classOf[GlobalApplicationData]).flatMap(g => { req.parameter("name") map { n => g.globalText.text(n) } })
+    Application.globalData.flatMap(g => { req.parameter("name") map { n => g.globalText.text(n) } })
   }
 
   def allResults(req: HttpServletRequest):Option[JList[_]] = 

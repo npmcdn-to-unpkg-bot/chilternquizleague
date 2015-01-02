@@ -9,6 +9,7 @@ import java.util.{Map => JMap}
 import java.util.ArrayList
 import org.chilternquizleague.domain.util.ObjectifyAnnotations._
 import org.chilternquizleague.domain.util.RefUtils._
+import org.chilternquizleague.util.Storage._
 import java.util.Calendar
 import java.util.Date
 import java.util.HashMap
@@ -56,7 +57,7 @@ class Statistics extends BaseEntity{
   def statsForDate(date:Date, alwaysNew:Boolean = true) = {
     val cal = Calendar.getInstance
     cal.setTime(date)
-    val week = cal.getWeekYear + (cal.get(Calendar.YEAR) *100)
+    val week = (cal.get(Calendar.YEAR) *100) + cal.get(Calendar.WEEK_OF_YEAR)
     
     if(alwaysNew){
       weekStats put (week, WeekStats(week))
@@ -76,6 +77,20 @@ object Statistics{
     stats.team  = team
     stats.season = season
     stats
+  }
+  
+  def get(team:Team,season:Season):Statistics = {
+    
+    val statSet = entityList(classOf[Statistics], ("team", team ),("season", season))
+    
+    statSet match {
+      
+      case Nil => {val stats = Statistics(team,season)
+    		  save(stats)
+    		  stats
+      }
+      case _ => statSet.head
+    }
   }
 }
 
