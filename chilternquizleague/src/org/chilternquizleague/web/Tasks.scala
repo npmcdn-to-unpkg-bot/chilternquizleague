@@ -95,19 +95,19 @@ class StatsWorker(result:Result, season:Season, competition:LeagueCompetition){
 
 object HistoricalStatsAggregator{
   
-  def perform() = {
+  def perform(season:Season) = {
 	  
+    val c:LeagueCompetition = season.competition(CompetitionType.LEAGUE)
+    val dummyComp = c.copyAsInitial
+    
     for{
-      g <- Application.globalData
-      c:LeagueCompetition = g.currentSeason.competition(CompetitionType.LEAGUE)
-      dummyComp = c.copyAsInitial
       r <- c.results.sortBy(_.date)
       result <- r.results
     }
     {
     	dummyComp.addResult(result)
       
-    	new StatsWorker(result,g.currentSeason, dummyComp ).doIt
+    	new StatsWorker(result,season, dummyComp ).doIt
     }
     Some(entityList(classOf[Statistics]))
   }
