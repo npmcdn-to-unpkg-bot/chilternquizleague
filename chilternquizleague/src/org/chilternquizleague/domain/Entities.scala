@@ -363,7 +363,30 @@ abstract class BaseLeagueCompetition(
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE)
+class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE){
+  
+  def copyAsInitial:LeagueCompetition = {
+    
+    val copy = new LeagueCompetition
+    val table = new LeagueTable
+    
+    for{
+      t <- leagueTables
+    }{
+      val table = new LeagueTable
+      table.description  = t.description 
+      table.rows = for(r <- t.rows)yield {
+        val row = new LeagueTableRow
+        row.team  = r.team 
+        row}
+      
+      copy.leagueTables.add(table)
+    }
+    
+    copy
+  }
+}
+
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass

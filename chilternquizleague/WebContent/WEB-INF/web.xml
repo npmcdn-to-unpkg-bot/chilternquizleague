@@ -57,7 +57,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>statshandler</servlet-name>
-    <servlet-class>org.chilternquizleague.web.StatsWorker</servlet-class>
+    <servlet-class>org.chilternquizleague.web.StatsQueueHandler</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>statshandler</servlet-name>

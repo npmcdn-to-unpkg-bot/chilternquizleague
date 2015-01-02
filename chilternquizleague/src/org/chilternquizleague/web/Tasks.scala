@@ -23,54 +23,67 @@ import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import scala.collection.JavaConversions._
 
-class StatsWorker extends HttpServlet{
-  
+
+class StatsQueueHandler extends HttpServlet{
   val LOG:Logger = Logger.getLogger(this.getClass.getName)
+    override def doPost(req:HttpServletRequest, resp:HttpServletResponse){
   
-  override def doPost(req:HttpServletRequest, resp:HttpServletResponse){
-    
 	LOG.fine(s"task arrived : ${req.getParameter("result")}")
-    
-    for{
+	
+	for{
       resText <- req.parameter("result")
       r = JacksonUtils.safeMapper.readValue(resText, classOf[Result])
       season <- entity(req.id("seasonId"), classOf[Season])
-      homeStats = stats(r.fixture.home,season)
-      awayStats = stats(r.fixture.away,season)
-    } 
-    {
-	  homeStats.addWeekStats( r.fixture.start, r.homeScore , r.awayScore )
+	}
+	{
+		StatsWorker.perform(r, season)
+	}
+  }
+}
+
+
+object StatsWorker{
+  
+  def perform(result:Result, season:Season) = new StatsWorker(result,season, season.competition(CompetitionType.LEAGUE)).doIt
+}
+
+class StatsWorker(result:Result, season:Season, competition:LeagueCompetition){
+  
+  val LOG:Logger = Logger.getLogger(this.getClass.getName)
+  
+  def doIt = {
+
+	LOG.warning(s"Building stats for  ${result.fixture.home.shortName} vs ${result.fixture.away.shortName} on ${result.fixture.start}" )
+      val homeStats = stats(result.fixture.home,season)
+      val awayStats = stats(result.fixture.away,season)
+
+	  homeStats.addWeekStats(result.fixture.start, result.homeScore , result.awayScore )
 	  save(homeStats)
-	  awayStats.addWeekStats(r.fixture.start, r.awayScore , r.homeScore )
+	  awayStats.addWeekStats(result.fixture.start, result.awayScore , result.homeScore )
 	  save(awayStats)
 	  
-	  val c:LeagueCompetition = season.competition(CompetitionType.LEAGUE)
-	  
-	  for(t <- c.leagueTables;row <- t.rows ){
+	  for(t <- competition.leagueTables;row <- t.rows ){
 	    val s = stats(row.team, season )
-	    s.addLeaguePosition(r.fixture.start, leaguePosition(row.team,season))
+	    s.addLeaguePosition(result.fixture.start, leaguePosition(row.team,competition))
 	    save(s)
 	  }
 	  
     }
-  }
   
-  override def doGet(req:HttpServletRequest, resp:HttpServletResponse) = doPost(req,resp)
   
-  private def stats(team:Team,season:Season):Statistics = {
+ private def stats(team:Team,season:Season):Statistics = {
     
     Statistics.get(team,season)
     
   }
   
-  private def leaguePosition(team:Team, season:Season):Int = {
+  private def leaguePosition(team:Team, competition:LeagueCompetition):Int = {
     import org.chilternquizleague.util.StringUtils.StringImprovements
-    val c:LeagueCompetition = season.competition(CompetitionType.LEAGUE)
     
     val res = for{
-      l <- c.leagueTables
+      l <- competition.leagueTables
       row <- l.rows if row.team.getKey.getId == team.id
-      pos = row.position.replace("=", "").toIntOpt.getOrElse(l.rows.indexOf(row)+1)
+      pos = String.valueOf(row.position).replace("=", "").toIntOpt.getOrElse(l.rows.indexOf(row)+1)
     }
     yield{
       pos
@@ -87,15 +100,16 @@ object HistoricalStatsAggregator{
     for{
       g <- Application.globalData
       c:LeagueCompetition = g.currentSeason.competition(CompetitionType.LEAGUE)
+      dummyComp = c.copyAsInitial
       r <- c.results.sortBy(_.date)
       result <- r.results
     }
     {
-      val queue = QueueFactory.getQueue("stats");
-       queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", g.currentSeason.getKey.getId.toString));
-
+    	dummyComp.addResult(result)
+      
+    	new StatsWorker(result,g.currentSeason, dummyComp ).doIt
     }
-    Some("Finished")
+    Some(entityList(classOf[Statistics]))
   }
 
 }

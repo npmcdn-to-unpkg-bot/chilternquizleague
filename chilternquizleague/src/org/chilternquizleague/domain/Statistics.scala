@@ -16,13 +16,16 @@ import java.util.HashMap
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.annotation.Stringify
 import org.chilternquizleague.domain.util.IntStringifier
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Entity
 class Statistics extends BaseEntity{
   
+
   @Index
   var team:Ref[Team] = null
+
   @Index
   var season:Ref[Season] = null
   
@@ -38,9 +41,9 @@ class Statistics extends BaseEntity{
     stats.pointsFor  = pointsFor
     stats.pointsAgainst  = pointsAgainst
     stats.pointsDifference  = pointsFor - pointsAgainst
-    stats.cumuPointsFor += pointsFor
-    stats.cumuPointsAgainst  += pointsAgainst
-    stats.cumuPointsDifference += stats.pointsDifference
+    stats.cumuPointsFor = seasonStats.runningPointsFor + pointsFor
+    stats.cumuPointsAgainst = seasonStats.runningPointsAgainst + pointsAgainst
+    stats.cumuPointsDifference = seasonStats.runningPointsDifference + stats.pointsDifference
     seasonStats.runningPointsFor  = stats.cumuPointsFor
     seasonStats.runningPointsAgainst = stats.cumuPointsAgainst 
     seasonStats.runningPointsDifference = stats.cumuPointsDifference 
@@ -94,6 +97,7 @@ object Statistics{
   }
 }
 
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class SeasonStats{
   var currentLeaguePosition = 0
   var runningPointsFor = 0
@@ -101,6 +105,7 @@ class SeasonStats{
   var runningPointsDifference = 0
 }
 
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class WeekStats{
   var weekNo = 0
   var leaguePosition = 0

@@ -122,6 +122,7 @@ class EntityService extends BaseRest {
 
       case "global" => Application.globalData
       case "competitionType-list" => Some(CompetitionTypeView.list)
+      case "stats" => HistoricalStatsAggregator.perform
       case _ => handleEntities(bits, head)
 
     }
@@ -173,7 +174,6 @@ class ViewService extends BaseRest {
       case "competitions-view" => competitionsForSeason(req)
       case "text" => textForName(req)
       case "reports" => resultReports(req)
-      case "stats" => HistoricalStatsAggregator.perform
       case _ => handleEntities(bits, head)
 
     }

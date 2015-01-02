@@ -47,14 +47,13 @@ object Application{
   
   def globalData = for(g <- entity(globalApplicationDataId, classOf[GlobalApplicationData])) yield g
 
-  def init():Option[Long] = {
+  def init() = {
     
     val list = entityList(classOf[GlobalApplicationData])
     globalApplicationDataId = list match {
 		  case Nil => Some(save(new GlobalApplicationData()).getId)
 		  case _ => Some(list.head.id)
 		}
-    globalApplicationDataId
   }
 }
 
