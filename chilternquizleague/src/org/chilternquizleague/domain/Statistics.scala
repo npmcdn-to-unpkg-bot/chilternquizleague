@@ -63,10 +63,10 @@ class Statistics extends BaseEntity{
     val week = (cal.get(Calendar.YEAR) *100) + cal.get(Calendar.WEEK_OF_YEAR)
     
     if(alwaysNew){
-      weekStats put (week, WeekStats(week))
+      weekStats put (week, WeekStats(date))
       weekStats(week)
     }
-    else weekStats.getOrElseUpdate(week, WeekStats(week))
+    else weekStats.getOrElseUpdate(week, WeekStats(date))
 
   }
   
@@ -107,7 +107,7 @@ class SeasonStats{
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class WeekStats{
-  var weekNo = 0
+  var date:Date = null
   var leaguePosition = 0
   var pointsFor = 0
   var pointsAgainst = 0
@@ -119,9 +119,9 @@ class WeekStats{
 }
 
 object WeekStats{
-  def apply(weekNo:Int) = {
+  def apply(date:Date) = {
     val stats = new WeekStats
-    stats.weekNo = weekNo
+    stats.date = date
     stats
   }
 }
