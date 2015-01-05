@@ -123,7 +123,6 @@ class EntityService extends BaseRest {
 
       case "global" => Application.globalData
       case "competitionType-list" => Some(CompetitionTypeView.list)
-      case "stats" => rebuildStats(req)
       case _ => handleEntities(bits, head)
 
     }
@@ -135,10 +134,14 @@ class EntityService extends BaseRest {
   def rebuildStats(req:HttpServletRequest) = for( s <- entityByKey(req.id("seasonId"), classOf[Season])) yield HistoricalStatsAggregator.perform(s)
   
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
-    
-    val item:AnyRef = saveUpdate(req, entityName(parts(req).head))
+    val bits = parts(req)
+    val head = bits.head
+    val item:Option[Any] = head match {
+          case "rebuild-stats" => rebuildStats(req)
+          case _ => Option(saveUpdate(req, entityName(parts(req).head)))
+    }
 
-    objectMapper.writeValue(resp.getWriter, logJson(item, "out:"))
+    item.foreach(i=>objectMapper.writeValue(resp.getWriter, logJson(i, "out:")))
   }
 
   override def doPut(req: HttpServletRequest, resp: HttpServletResponse) = doPost(req, resp)

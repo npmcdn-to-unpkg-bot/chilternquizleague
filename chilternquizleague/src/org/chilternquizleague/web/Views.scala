@@ -99,5 +99,5 @@ class StatisticsView(statistics:Statistics) {
   val season:SeasonView = new SeasonView(statistics.season)
   val team:Team = statistics.team 
   val seasonStats = statistics.seasonStats 
-  val weekStats = statistics.weekStats 
+  val weekStats = statistics.weekStats.values 
 }

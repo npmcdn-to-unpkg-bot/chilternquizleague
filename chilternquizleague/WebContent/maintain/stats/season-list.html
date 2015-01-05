@@ -1,0 +1,7 @@
+<div>
+	<div class="box-title">Statistics</div>
+	<div ng-repeat="season in seasons | orderBy:'startYear':true">
+		<div><a href="/maintain/stats/{{season.id}}">{{season.startYear}}/{{season.endYear}}</a></div>
+	</div>
+
+</div>

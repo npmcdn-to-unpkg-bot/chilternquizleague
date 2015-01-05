@@ -137,37 +137,78 @@
 
 			} ]);
 	
-	mainApp.controller("TeamCharts",["$scope", function($scope){
+	mainApp.controller("TeamCharts",["$scope", 'viewService',"$filter", function($scope,viewService, $filter){
 		$scope.setCurrentItem();
-		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-		var lineChartData = {
-		labels : ["January","February","March","April","May","June","July"],
-		datasets : [
-		{
-		label: "My First dataset",
-		fillColor : "rgba(220,220,220,0.2)",
-		strokeColor : "rgba(220,220,220,1)",
-		pointColor : "rgba(220,220,220,1)",
-		pointStrokeColor : "#fff",
-		pointHighlightFill : "#fff",
-		pointHighlightStroke : "rgba(220,220,220,1)",
-		data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-		},
-		{
-		label: "My Second dataset",
-		fillColor : "rgba(151,187,205,0.2)",
-		strokeColor : "rgba(151,187,205,1)",
-		pointColor : "rgba(151,187,205,1)",
-		pointStrokeColor : "#fff",
-		pointHighlightFill : "#fff",
-		pointHighlightStroke : "rgba(151,187,205,1)",
-		data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+		
+		function mapToProperty(arr,propName){
+			var retval = [];
+			for(idx in arr){
+				retval.push(arr[idx][propName]);
+			}
+			
+			return retval;
 		}
-		]
-		};
-		$scope.data = lineChartData;
 		
+		function dateToLabel(dates){
+			var retval = [];
+			for(idx in dates){
+				var d = new Date(dates[idx]);
+				retval.push($filter("date")(d,"dd MMM"));
+			}
+			
+			return retval;
+		}
 		
+		$scope.positionOptions={
+				scaleStartValue:10,
+				scaleStepWidth:-1,
+				scaleOverride:true,
+				scaleSteps:9,
+				datasetFill : false,
+				bezierCurve : true
+				};
+		
+		$scope.options={
+				legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+				datasetFill : false,
+				bezierCurve : true
+				};
+		
+		function loadStats(){
+			if ($scope.team && $scope.season && $scope.season.id ){
+			viewService.view("team-statistics",{
+								seasonId : $scope.season.id,
+								teamId : $scope.team.id
+							}, function(stats){
+								
+								var weekStats = stats.weekStats.sort(function(s1,s2){return s1.date>s2.date;});
+								var dateLabels = dateToLabel(mapToProperty(weekStats, "date").sort());
+								
+								$scope.positionData = {
+										labels: dateLabels,
+										datasets: [{
+											label:$scope.team.shortName,
+											data: mapToProperty(weekStats, "leaguePosition") 
+										}]
+								};
+								
+								$scope.pointsData = {
+										labels: dateLabels,
+										datasets: [{
+											label:"For",
+											data: mapToProperty(weekStats, "pointsFor") 
+										},{
+											strokeColor: "rgba(205,50,50,1)",
+											label:"Against",
+											data: mapToProperty(weekStats, "pointsAgainst") 
+										}]	
+								};
+
+							});
+				}
+			}
+		
+		$scope.$watchGroup(["team","season"], loadStats);
 	}]);
 
 })();

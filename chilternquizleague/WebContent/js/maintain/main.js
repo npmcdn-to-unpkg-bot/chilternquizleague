@@ -64,6 +64,12 @@ maintainApp.config([ '$routeProvider','$locationProvider', function($routeProvid
 	}).when('/maintain/texts/:textId', {
 		templateUrl : '/maintain/text/text-detail.html',
 		controller : 'TextDetailCtrl'
+	}).when('/maintain/stats', {
+		templateUrl : '/maintain/stats/season-list.html',
+		controller : 'SeasonListCtrl'
+	}).when('/maintain/stats/:seasonId', {
+		templateUrl : '/maintain/stats/stats-detail.html',
+		controller : 'StatsDetailCtrl'
 	}).otherwise({
 		redirectTo : ''
 	});

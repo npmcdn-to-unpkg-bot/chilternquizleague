@@ -22,6 +22,7 @@ import java.util.logging.Logger
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import scala.collection.JavaConversions._
+import java.util.ArrayList
 
 
 class StatsQueueHandler extends HttpServlet{
@@ -97,6 +98,9 @@ object HistoricalStatsAggregator{
   
   def perform(season:Season) = {
 	  
+    ofy.delete.entities(new ArrayList(entityList(classOf[Statistics], ("season",season))))
+    
+    
     val c:LeagueCompetition = season.competition(CompetitionType.LEAGUE)
     val dummyComp = c.copyAsInitial
     
@@ -109,7 +113,7 @@ object HistoricalStatsAggregator{
       
     	new StatsWorker(result,season, dummyComp ).doIt
     }
-    Some(entityList(classOf[Statistics]))
+    entityList(classOf[Statistics])
   }
 
 }
