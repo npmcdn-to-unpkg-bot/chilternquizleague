@@ -203,6 +203,29 @@
 											data: mapToProperty(weekStats, "pointsAgainst") 
 										}]	
 								};
+								
+								$scope.cumPointsData = {
+										labels: dateLabels,
+										datasets: [{
+											label:"For",
+											data: mapToProperty(weekStats, "cumuPointsFor") 
+										},{
+											strokeColor: "rgba(205,50,50,1)",
+											label:"Against",
+											data: mapToProperty(weekStats, "cumuPointsAgainst") 
+										}]	
+										
+								};
+								
+								$scope.cumPointsDifferenceData = {
+										labels: dateLabels,
+										datasets: [{
+											label:"Difference",
+											data: mapToProperty(weekStats, "cumuPointsDifference") 
+										}]	
+										
+								};
+								
 
 							});
 				}

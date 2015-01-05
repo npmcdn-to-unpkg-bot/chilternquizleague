@@ -1,5 +1,5 @@
 <cql-title-bar page-menu md-theme="amber">
-	<span>{{team.name}}</span>
+	<span hide-sm>{{team.name}}</span><span hide-gt-sm>{{team.shortName}}</span>
 		<md-button aria-label="contact us"
 			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
 			icon="/images/icons/ic_email.svg"></md-icon> <md-tooltip>Contact
@@ -7,7 +7,6 @@
 		<md-button aria-label="go to venue"
 			ng-href="/venues/{{team.venue.id}}"> <md-icon
 			icon="/images/icons/ic_location_on.svg"></md-icon> <md-tooltip>Venue</md-tooltip></md-button>
-
 </cql-title-bar>
 
 

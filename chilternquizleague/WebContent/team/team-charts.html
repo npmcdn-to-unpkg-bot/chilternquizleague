@@ -1,6 +1,22 @@
 <div ng-controller="TeamCharts">
-<div layout="row" layout-sm="column">
-	<div><canvas linechart options="positionOptions" data="positionData" width="300" height="300"></canvas></div>
-	<div><canvas linechart options="options" data="pointsData" width="300" height="300"></canvas></div>
+<div layout="row" layout-sm="column" layout-align="space-around">
+	<div>
+		<div>League Position</div>
+		<div><canvas linechart options="positionOptions" data="positionData" width="300" height="300"></canvas></div>
+	</div>
+	<div>
+		<div>Match Points</div>
+		<div><canvas linechart options="options" data="pointsData" width="300" height="300"></canvas></div>
+	</div>
+</div>
+<div layout="row" layout-sm="column" layout-align="space-around">
+	<div>
+		<div>Cumulative Match Points</div>
+		<div><canvas linechart options="options" data="cumPointsData" width="300" height="300"></canvas></div>
+	</div>
+	<div>
+		<div>Cumulative Match Points Difference</div>
+		<div><canvas linechart options="options" data="cumPointsDifferenceData" width="300" height="300"></canvas></div>
+	</div>
 </div>
 </div>

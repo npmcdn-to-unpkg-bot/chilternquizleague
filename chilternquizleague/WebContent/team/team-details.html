@@ -1,4 +1,6 @@
 <div flex ng-controller="TeamController" itemscope itemtype="http://schema.org/SportsTeam">
+	<md-subheader hide-gt-sm class="md-primary">{{team.name}}</md-subheader>
+	<md-button class="md-primary" ng-href="/teams/{{team.id}}/charts">Graphs</md-button>
 	<div ng-controller="TeamExtrasController">
 		<md-card hide-sm ng-if="team.extras.text"><div class="fix-text"
 			ng-bind-html="team.extras.text | htmlify"></div></md-card>
