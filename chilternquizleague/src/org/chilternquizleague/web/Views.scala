@@ -16,6 +16,7 @@ import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.Result
 import org.chilternquizleague.domain.util.RefUtils._
 import org.chilternquizleague.domain.BaseLeagueCompetition
+import org.chilternquizleague.domain.Statistics
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionTypeView(compType:CompetitionType){
@@ -44,6 +45,8 @@ class GlobalApplicationDataView(data:GlobalApplicationData ) {
 		val currentSeasonId = if (data.currentSeason == null) null else data.currentSeason.id;
 		val textId = if (data.globalText == null) null else data.globalText.id;
 }
+
+
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class PreSubmissionView(val team:Team, val fixtures:List[Fixtures], val results:List[Results])
@@ -89,4 +92,12 @@ class ContactSubmission(){
   var recipient:String = null
   var sender:String = null
   var text:String = null
+}
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class StatisticsView(statistics:Statistics) {
+  val season:SeasonView = new SeasonView(statistics.season)
+  val team:Team = statistics.team 
+  val seasonStats = statistics.seasonStats 
+  val weekStats = statistics.weekStats 
 }

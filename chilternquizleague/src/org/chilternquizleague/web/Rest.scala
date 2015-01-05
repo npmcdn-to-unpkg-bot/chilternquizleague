@@ -51,6 +51,7 @@ import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
 import org.chilternquizleague.domain.BaseLeagueCompetition
 import org.chilternquizleague.util.JacksonUtils
+import org.chilternquizleague.domain.Statistics
 
 
 trait BaseRest extends HttpServlet {
@@ -175,6 +176,7 @@ class ViewService extends BaseRest {
       case "competitions-view" => competitionsForSeason(req)
       case "text" => textForName(req)
       case "reports" => resultReports(req)
+      case "team-statistics" => teamStatistics(req)
       case _ => handleEntities(bits, head)
 
     }
@@ -195,6 +197,20 @@ class ViewService extends BaseRest {
 
     ret.foreach(r => objectMapper.writeValue(resp.getWriter, r))
 
+  }
+  
+  def teamStatistics(req: HttpServletRequest) = {
+    
+    for{
+      t <- entityByKey(req.id("teamId"), classOf[Team])
+      s <- entityByKey(req.id("seasonId"), classOf[Season])
+      stats = entityList(classOf[Statistics], ("team",t), ("season",s))
+    } yield{
+      stats match {
+        case Nil => null
+        case _ => stats.map(new StatisticsView(_)).head
+      }
+   } 
   }
   
   def seasons():Option[List[SeasonView]] = makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}
