@@ -169,10 +169,19 @@
 				};
 		
 		$scope.options={
-				legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+				datasetFill : true,
+				bezierCurve : true,
+				scaleBeginAtZero : false,
+				legendTemplate : '<ul class="chart-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+			    datasetStroke : true,	
+			};
+		
+		$scope.differenceOptions={
 				datasetFill : false,
-				bezierCurve : true
-				};
+				bezierCurve : true,
+				scaleBeginAtZero : false,
+			    datasetStroke : true,	
+			};
 		
 		function loadStats(){
 			if ($scope.team && $scope.season && $scope.season.id ){
@@ -188,6 +197,12 @@
 										labels: dateLabels,
 										datasets: [{
 											label:$scope.team.shortName,
+											strokeColor: "rgba(220,220,220,1)",
+											pointColor : "rgba(220,220,220,1)",
+											fillColor: "rgba(220,220,220,0.2)",
+								            pointStrokeColor: "#fff",
+								            pointHighlightFill: "#fff",
+								            pointHighlightStroke: "rgba(220,220,220,1)",
 											data: mapToProperty(weekStats, "leaguePosition") 
 										}]
 								};
@@ -196,10 +211,21 @@
 										labels: dateLabels,
 										datasets: [{
 											label:"For",
+											strokeColor: "rgba(220,220,220,1)",
+											fillColor: "rgba(220,220,220,0.2)",
+											pointColor : "rgba(220,220,220,1)",
+								            pointStrokeColor: "#fff",
+								            pointHighlightFill: "#fff",
+								            pointHighlightStroke: "rgba(220,220,220,1)",
 											data: mapToProperty(weekStats, "pointsFor") 
 										},{
 											strokeColor: "rgba(205,50,50,1)",
+											fillColor: "rgba(151,187,205,0.2)",
+											pointColor : "rgba(151,187,205,1)",
 											label:"Against",
+								            pointStrokeColor: "#fff",
+								            pointHighlightFill: "#fff",
+								            pointHighlightStroke: "rgba(205,50,50,1)",
 											data: mapToProperty(weekStats, "pointsAgainst") 
 										}]	
 								};
@@ -208,10 +234,21 @@
 										labels: dateLabels,
 										datasets: [{
 											label:"For",
+											strokeColor: "rgba(220,220,220,1)",
+											pointColor : "rgba(220,220,220,1)",
+											fillColor: "rgba(220,220,220,0.2)",
+								            pointStrokeColor: "#fff",
+								            pointHighlightFill: "#fff",
+								            pointHighlightStroke: "rgba(220,220,220,1)",
 											data: mapToProperty(weekStats, "cumuPointsFor") 
 										},{
-											strokeColor: "rgba(205,50,50,1)",
 											label:"Against",
+											strokeColor: "rgba(205,50,50,1)",
+											fillColor: "rgba(151,187,205,0.2)",
+											pointColor : "rgba(151,187,205,1)",
+								            pointStrokeColor: "#fff",
+								            pointHighlightFill: "#fff",
+								            pointHighlightStroke: "rgba(205,50,50,1)",
 											data: mapToProperty(weekStats, "cumuPointsAgainst") 
 										}]	
 										
@@ -221,6 +258,13 @@
 										labels: dateLabels,
 										datasets: [{
 											label:"Difference",
+											strokeColor: "rgba(220,220,220,1)",
+											pointColor : "rgba(220,220,220,1)",
+											fillColor: "rgba(220,220,220,0.2)",
+								            pointStrokeColor: "#fff",
+								            pointHighlightFill: "#fff",
+								            pointHighlightStroke: "rgba(220,220,220,1)",
+
 											data: mapToProperty(weekStats, "cumuPointsDifference") 
 										}]	
 										

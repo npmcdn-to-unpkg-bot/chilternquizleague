@@ -1,22 +1,25 @@
 <div ng-controller="TeamCharts">
+<md-card>
+<md-subheader class="md-primary">Graphs and Statistics</md-subheader>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
-		<div>League Position</div>
-		<div><canvas linechart options="positionOptions" data="positionData" width="300" height="300"></canvas></div>
+		<md-subheader>League Position</md-subheader>
+		<div><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" width="300" height="300"></canvas></div>
 	</div>
 	<div>
-		<div>Match Points</div>
-		<div><canvas linechart options="options" data="pointsData" width="300" height="300"></canvas></div>
+		<md-subheader>Match Points</md-subheader>
+		<div layout="row" layout-sm="column"><canvas tc-chartjs-line chart-options="options" chart-data="pointsData" auto-legend width="300" height="300"></canvas></div>
 	</div>
 </div>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
-		<div>Cumulative Match Points</div>
-		<div><canvas linechart options="options" data="cumPointsData" width="300" height="300"></canvas></div>
+		<md-subheader>Cumulative Match Points</md-subheader>
+		<div layout="row" layout-sm="column"><canvas auto-legend tc-chartjs-line chart-options="options" chart-data="cumPointsData" width="300" height="300"></canvas></div>
 	</div>
 	<div>
-		<div>Cumulative Match Points Difference</div>
-		<div><canvas linechart options="options" data="cumPointsDifferenceData" width="300" height="300"></canvas></div>
+		<md-subheader>Cumulative Match Points Difference</md-subheader>
+		<div><canvas tc-chartjs-line chart-options="differenceOptions" chart-data="cumPointsDifferenceData" width="300" height="300"></canvas></div>
 	</div>
 </div>
+</md-card>
 </div>

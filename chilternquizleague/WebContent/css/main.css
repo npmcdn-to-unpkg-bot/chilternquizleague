@@ -163,6 +163,24 @@ body > div:first-child > div{
 	overflow:visible;
 }
 
-
+.chart-legend {
+  list-style-type: none;
+  padding-left: 0;
+}
+.chart-legend li {
+  display: block;
+  float: left;
+  clear:both;
+  padding:.125em;
+  font-size: small;
+}
+.chart-legend li span {
+  width:1em;
+  height:1em;
+  display:block;
+  float:left;
+  margin-right:.5em;
+  border-radius:.25em;
+}
 
 

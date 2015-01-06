@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"angles"]).factory(
+var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"tc.chartjs"]).factory(
 		'viewService',
 		[
 				"$http","$rootScope",
