@@ -1,1 +1,13 @@
-<a href="/entity/dump.txt" download type="text/plain">Dump</button>
+<div ng-controller="DatabaseCtrl">
+	<form>
+	<div>
+		<a href="/entity/dump.txt" download type="text/plain">Dump
+			</a>
+	</div>
+	<div>
+		<input type="file" id="db.dump.file" value="Select Dump File">
+		<button
+			ng-click="uploadDump(document.getElementById('db.dump.file'))">Upload</button>
+	</div>
+	</form>
+</div>

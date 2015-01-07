@@ -9,17 +9,16 @@ import org.chilternquizleague.util.JacksonUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.{List => JList}
 import java.util.{Map => JMap}
+import com.googlecode.objectify.ObjectifyService._
 
 
 object DBDumper{
   
-  val dumpTypes:List[Class[_ <: BaseEntity]] = List(classOf[Season], classOf[Team], classOf[Venue], classOf[User], classOf[CommonText], classOf[GlobalApplicationData])
+  val dumpTypes:List[Class[_ <: BaseEntity]] = List(classOf[Venue], classOf[User], classOf[Team],  classOf[CommonText], classOf[Fixtures], classOf[Results], classOf[Competition], classOf[Season],classOf[GlobalApplicationData])
   
   def dump() = new DBDumper().dump
   
-  def load(entities:JMap[String, JList[_ <: BaseEntity]]) = {
-    
-  }
+  def load(entities:JMap[String, JList[JMap[String,Any]]]) = new DBDumper().load(entities)
   
 }
 
@@ -36,6 +35,23 @@ private class DBDumper {
     }
     
    dump
+  }
+  
+  def load(entities:JMap[String, JList[JMap[String,Any]]]) = {
+    val mapper = new ObjectMapper().registerModule(JacksonUtils.unsafeModule )
+    
+    
+       for{
+      t <- DBDumper.dumpTypes 
+      e <- entities.get(t.getName())
+    }{
+      if(String.valueOf(e.get("refClass")).contains("Competition")){
+      e.put("@class" ,"." + e.get("refClass")) 
+      }      
+      val s = mapper.writeValueAsString(e)
+       ofy.save().entities(mapper.readValue(s, t)); 
+    }
+
   }
 
 }

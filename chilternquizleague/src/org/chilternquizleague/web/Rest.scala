@@ -3,6 +3,7 @@ package org.chilternquizleague.web
 import java.util.logging.Level
 import java.util.logging.Logger
 import java.util.{List => JList}
+import java.util.{Map => JMap}
 import scala.collection.JavaConversions._
 import scala.collection.immutable.List
 import scala.util.control.Exception.catching
@@ -139,6 +140,7 @@ class EntityService extends BaseRest {
     val head = bits.head
     val item:Option[Any] = head match {
           case "rebuild-stats" => rebuildStats(req)
+          case "upload-dump" => DBDumper.load(objectMapper.readValue(req.getReader, classOf[JMap[String, JList[JMap[String,Any]]]]));None
           case _ => Option(saveUpdate(req, entityName(parts(req).head)))
     }
 
