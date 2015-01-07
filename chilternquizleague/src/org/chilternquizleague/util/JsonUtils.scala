@@ -117,5 +117,5 @@ class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
     module.addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)}
   
   def safeMapper = new ObjectMapper registerModule safeModule
-  
+      
   }

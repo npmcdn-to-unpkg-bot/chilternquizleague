@@ -1,6 +1,5 @@
 <div flex ng-controller="TeamController" itemscope itemtype="http://schema.org/SportsTeam">
 	<md-subheader hide-gt-sm class="md-primary">{{team.name}}</md-subheader>
-	<md-button class="md-primary" ng-href="/teams/{{team.id}}/charts">Graphs</md-button>
 	<div ng-controller="TeamExtrasController">
 		<md-card hide-sm ng-if="team.extras.text"><div class="fix-text"
 			ng-bind-html="team.extras.text | htmlify"></div></md-card>
@@ -9,6 +8,7 @@
 			<cql-results class="inline-header" rows="5" results="team.extras.results"></cql-results>
 			<div class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/results">Show all</md-button>
+				<md-button class="md-primary" ng-href="/teams/{{team.id}}/charts">Graphs & Stats</md-button>
 			</div>
 		</md-card>
 		<md-card>

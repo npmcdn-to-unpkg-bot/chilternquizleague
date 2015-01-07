@@ -70,6 +70,8 @@ maintainApp.config([ '$routeProvider','$locationProvider', function($routeProvid
 	}).when('/maintain/stats/:seasonId', {
 		templateUrl : '/maintain/stats/stats-detail.html',
 		controller : 'StatsDetailCtrl'
+	}).when('/maintain/database', {
+		templateUrl : '/maintain/database/database.html',
 	}).otherwise({
 		redirectTo : ''
 	});

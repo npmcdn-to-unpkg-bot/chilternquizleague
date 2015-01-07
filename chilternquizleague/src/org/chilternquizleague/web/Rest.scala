@@ -123,10 +123,11 @@ class EntityService extends BaseRest {
 
       case "global" => Application.globalData
       case "competitionType-list" => Some(CompetitionTypeView.list)
+      case "dump.txt" => Option(DBDumper.dump)
       case _ => handleEntities(bits, head)
 
     }
-
+    resp.setContentType("application/json")
     item.foreach(a => objectMapper.writeValue(resp.getWriter, logJson(a, "writing:")))
 
   }
@@ -141,6 +142,7 @@ class EntityService extends BaseRest {
           case _ => Option(saveUpdate(req, entityName(parts(req).head)))
     }
 
+    resp.setContentType("application/json")
     item.foreach(i=>objectMapper.writeValue(resp.getWriter, logJson(i, "out:")))
   }
 
