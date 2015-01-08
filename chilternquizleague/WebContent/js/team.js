@@ -221,7 +221,7 @@
 										},{
 											strokeColor: "rgba(205,50,50,1)",
 											fillColor: "rgba(151,187,205,0.2)",
-											pointColor : "rgba(151,187,205,1)",
+											pointColor : "rgba(205,50,50,1)",
 											label:"Against",
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
@@ -245,7 +245,7 @@
 											label:"Against",
 											strokeColor: "rgba(205,50,50,1)",
 											fillColor: "rgba(151,187,205,0.2)",
-											pointColor : "rgba(151,187,205,1)",
+											pointColor : "rgba(205,50,50,1)",
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(205,50,50,1)",

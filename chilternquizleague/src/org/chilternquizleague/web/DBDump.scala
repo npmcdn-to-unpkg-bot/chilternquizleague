@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.{List => JList}
 import java.util.{Map => JMap}
 import com.googlecode.objectify.ObjectifyService._
+import java.util.ArrayList
 
 
 object DBDumper{
@@ -40,6 +41,7 @@ private class DBDumper {
   def load(entities:JMap[String, JList[JMap[String,Any]]]) = {
     val mapper = new ObjectMapper().registerModule(JacksonUtils.unsafeModule )
     
+    ofy.delete.entities(new ArrayList(entityList(classOf[GlobalApplicationData])))
     
        for{
       t <- DBDumper.dumpTypes 
