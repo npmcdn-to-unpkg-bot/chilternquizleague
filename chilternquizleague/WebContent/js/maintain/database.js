@@ -1,6 +1,6 @@
 maintainApp.controller('DatabaseCtrl',["$scope", "entityService", function($scope,entityService){
 	
-	$scope.uploadDump = function(file){
+	$scope.uploadDump = function(){
 		
 		var file = document.getElementById('db.dump.file').files[0];
 		
