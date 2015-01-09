@@ -45,7 +45,7 @@ object Application{
   
   private var globalApplicationDataId:Option[Long] = None
   
-  def globalData = for(g <- entity(globalApplicationDataId, classOf[GlobalApplicationData])) yield g
+  def globalData = entity(globalApplicationDataId, classOf[GlobalApplicationData])
 
   def init() = {
     
