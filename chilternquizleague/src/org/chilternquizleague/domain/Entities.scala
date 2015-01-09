@@ -148,7 +148,7 @@ object Season{
 class Season extends BaseEntity{
   import org.chilternquizleague.domain.util.RefUtils._
   @Index
-  var startYear:Int = Calendar.getInstance().get(Calendar.YEAR)
+  var startYear:Int = Calendar.getInstance.get(Calendar.YEAR)
   @Index
   var endYear:Int = startYear + 1
   @Load
@@ -156,7 +156,7 @@ class Season extends BaseEntity{
   var competitions:JMap[CompetitionType, Ref[Competition]] = new HashMap
   
   @Ignore
-  lazy val description = "" + startYear + "/" + endYear
+  lazy val description = s"$startYear / $endYear"
   
   def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.types.contains(c.`type`)).map(_.get).asInstanceOf[List[TeamCompetition]]
   def competition[T <: Competition](compType:CompetitionType) = compType.castTo(competitions.get(compType)).asInstanceOf[T]

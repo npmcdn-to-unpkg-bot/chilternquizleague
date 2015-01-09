@@ -175,7 +175,7 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 			}			
 		}
 		
-		return null;
+		return $scope.competitions[0];
 	}
 	
 	$scope.setCompetition = function(comp){$scope.competition = comp;};
@@ -206,14 +206,16 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 	    	
 		
 		if(competitions && competitions.length > 0){
-		    var first = competitions.sort(function(c1,c2){c1.type.name.localeCompare(c2.type.name);})[0];	
-	    	$scope.setCompetition(first);}
+		    var compType = $scope.competition ? $scope.competition.type.name : "LEAGUE"
+		    	//competitions.sort(function(c1,c2){c1.type.name.localeCompare(c2.type.name);})[0].type;	
+	    	$scope.setCompetitionByType(compType);}
 
 	    });
 	
 	
 		$scope.$watch("season", function(season) {
 			if(season){
+
 			$scope.competitions = viewService.view("competitions-view", {
 				id : season.id,
 				isArray : true

@@ -8,7 +8,7 @@ import scala.collection.JavaConversions._
 
 object RefUtils {
 
-	implicit def ref2Value[T<:BaseEntity](ref:Ref[T]):T = ref.get
+	implicit def ref2Value[T<:BaseEntity](ref:Ref[T]):T = if(ref!=null) ref.get else null.asInstanceOf
 	
 	implicit def value2Ref[T<:BaseEntity](value:T):Ref[T] = if(value.id == null) Ref.create(ofy.save.entity(value).now) else Ref.create(value)
 
