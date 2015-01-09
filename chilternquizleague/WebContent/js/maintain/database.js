@@ -7,9 +7,7 @@ maintainApp.controller('DatabaseCtrl',["$scope", "entityService", function($scop
 		var r  = new FileReader();
 		r.onload = function(e){
 			
-			entityService.save("upload-dump", r.result);
-			
-			alert("Upload complete.  The server instance must now be restarted.")
+			entityService.save("upload-dump", r.result, function(){alert("Upload complete.");});
 		};
 		
 		r.readAsText(file);

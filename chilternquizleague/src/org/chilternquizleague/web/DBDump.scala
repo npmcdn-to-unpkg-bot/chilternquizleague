@@ -7,53 +7,73 @@ import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.BaseEntity
 import org.chilternquizleague.util.JacksonUtils
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.util.{List => JList}
-import java.util.{Map => JMap}
+import java.util.{ List => JList }
+import java.util.{ Map => JMap }
 import com.googlecode.objectify.ObjectifyService._
 import java.util.ArrayList
+import com.googlecode.objectify.VoidWork
+import java.util.logging.Logger
 
+object DBDumper {
 
-object DBDumper{
-  
-  val dumpTypes:List[Class[_ <: BaseEntity]] = List(classOf[Venue], classOf[User], classOf[Team],  classOf[CommonText], classOf[Fixtures], classOf[Results], classOf[Competition], classOf[Season],classOf[GlobalApplicationData])
-  
+  val dumpTypes: List[Class[_ <: BaseEntity]] = List(classOf[Venue], classOf[User], classOf[Team], classOf[CommonText], classOf[Fixtures], classOf[Results], classOf[Competition], classOf[Season], classOf[GlobalApplicationData])
+
   def dump() = new DBDumper().dump
-  
-  def load(entities:JMap[String, JList[JMap[String,Any]]]) = new DBDumper().load(entities)
-  
+
+  def load(entities: JMap[String, JList[JMap[String, Any]]]) = new DBDumper().load(entities)
+
 }
 
 private class DBDumper {
-  
-  def dump() ={
-    
-    val dump = new HashMap[String,JList[_]]
-    
-    for{
+
+  val LOG: Logger = Logger.getLogger(this.getClass.getName)
+
+  def dump() = {
+
+    val dump = new HashMap[String, JList[_]]
+
+    for {
       t <- DBDumper.dumpTypes
-    }{
+    } {
       dump.put(t.getName, entityList(t))
     }
-    
-   dump
-  }
-  
-  def load(entities:JMap[String, JList[JMap[String,Any]]]) = {
-    val mapper = new ObjectMapper().registerModule(JacksonUtils.unsafeModule )
-    
-    ofy.delete.entities(new ArrayList(entityList(classOf[GlobalApplicationData])))
-    
-       for{
-      t <- DBDumper.dumpTypes 
-      e <- entities.get(t.getName())
-    }{
-      if(String.valueOf(e.get("refClass")).contains("Competition")){
-      e.put("@class" ,"." + e.get("refClass")) 
-      }      
-      val s = mapper.writeValueAsString(e)
-       ofy.save().entities(mapper.readValue(s, t)); 
-    }
 
+    dump
+  }
+
+  def load(entities: JMap[String, JList[JMap[String, Any]]]) = {
+    val mapper = new ObjectMapper().registerModule(JacksonUtils.unsafeModule)
+
+    val globals = new ArrayList(entityList(classOf[GlobalApplicationData]))
+
+    ofy.transact(new VoidWork() {
+      override def vrun: Unit = {
+        ofy.delete.entities(globals)
+      }
+    })
+
+    for {
+      t <- DBDumper.dumpTypes
+      e <- entities.get(t.getName())
+    } {
+      if (String.valueOf(e.get("refClass")).contains("Competition")) {
+        e.put("@class", "." + e.get("refClass"))
+      }
+      val s = mapper.writeValueAsString(e)
+
+      ofy.save().entities(mapper.readValue(s, t));
+      LOG.warning(s"Loaded ${t.getName}, id=${e.get("id")}")
+    }
+    
+    val global = entityList(classOf[GlobalApplicationData]).head
+    
+    ofy.transact(new VoidWork() {
+      override def vrun: Unit = {
+        save(global)
+      }
+    })
+    
+    Application.init()
   }
 
 }
