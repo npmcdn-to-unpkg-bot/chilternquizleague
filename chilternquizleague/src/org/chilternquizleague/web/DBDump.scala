@@ -65,13 +65,13 @@ private class DBDumper {
       LOG.warning(s"Loaded ${t.getName}, id=${e.get("id")}")
     }
     
-    val global = entityList(classOf[GlobalApplicationData]).head
-    
+    for {global <- entityList(classOf[GlobalApplicationData])}
+    {
     ofy.transact(new VoidWork() {
       override def vrun: Unit = {
         save(global)
       }
-    })
+    })}
     
     Application.init()
   }

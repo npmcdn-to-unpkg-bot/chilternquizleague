@@ -49,7 +49,7 @@ class GlobalApplicationDataView(data:GlobalApplicationData ) {
 
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-class PreSubmissionView(val team:Team, val fixtures:List[Fixtures], val results:List[Results])
+class PreSubmissionView(val team:Team, val fixtures:Fixtures, val results:List[ResultForSubmission])
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class LeagueTableView(season:Season , compType:CompetitionType ){
@@ -78,6 +78,9 @@ class ResultsReportsView(result:Result){
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 class ReportView(val team:Team, val text:String)
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class ResultForSubmission(val compType:CompetitionTypeView, val result:Result)
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 class ResultSubmission(){

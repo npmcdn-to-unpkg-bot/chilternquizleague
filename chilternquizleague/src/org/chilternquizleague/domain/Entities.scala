@@ -186,7 +186,11 @@ class Results extends BaseEntity{
   var parent:Ref[BaseEntity] = null
   
   def findRow(fixture:Fixture) = results.toList.find(_.fixture same fixture) 
-  def findRow(homeTeam:Team) = results.toList.find( _.fixture.home same homeTeam)
+  
+  /**
+   * find a row for which either home or away team matches {team}
+   */
+  def findRow(team:Team) = results.toList.find( t => (t.fixture.home same team) || (t.fixture.away same team))
   def addResult(incoming:Result) = {
     val row = findRow(incoming.fixture)
     row match {
@@ -228,7 +232,8 @@ object Fixtures{
 @Cache
 @Entity
 class Fixtures extends BaseEntity{
-  	var start:Date = null
+    import org.chilternquizleague.domain.util.RefUtils._
+  var start:Date = null
 	var end:Date = null
 	var competitionType:CompetitionType = null
 	var description:String = null
@@ -236,6 +241,11 @@ class Fixtures extends BaseEntity{
 	
 	@Parent
 	var parent:Ref[BaseEntity] = null
+  
+  /**
+   * find a row for which either home or away team matches {team}
+   */
+  def findRow(team:Team) = fixtures.toList.find( f => (f.home same team) || (f.away same team))
   
 }
 
@@ -259,7 +269,6 @@ abstract class Competition(
     var startTime:String,
     var endTime:String,
     var subsidiary:Boolean = false
-
     ) extends BaseEntity{
 	description = `type`.getDescription()
 	var text:String = null
@@ -276,14 +285,18 @@ class IndividualCompetition extends Competition(CompetitionType.INDIVIDUAL, "","
 abstract class TeamCompetition(
     `type`:CompetitionType, 
     subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00",subsidiary){
-    import org.chilternquizleague.domain.util.RefUtils._
+  import org.chilternquizleague.domain.util.RefUtils._
   
 	@Load
-    var fixtures:JList[Ref[Fixtures]] = new ArrayList
+  var fixtures:JList[Ref[Fixtures]] = new ArrayList
 	@Load
-    var results:JList[Ref[Results]] = new ArrayList
-	
-	def addResult(result:Result):Results
+  var results:JList[Ref[Results]] = new ArrayList
+    	
+	@Load
+  var subsidiaryCompetition:Ref[TeamCompetition] = null
+  
+  def subsidiaryResults(date:Date) = if(subsidiaryCompetition == null) None else subsidiaryCompetition.resultsForDate(date)
+  def addResult(result:Result):Results
 	def resultsForDate(date:Date):Option[Results] = {
 	  
 	  val resultSet = results.find(r=>sameDay(date, r.date)) 

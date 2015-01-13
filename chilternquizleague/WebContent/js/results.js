@@ -67,68 +67,42 @@
 
 					if(!email) return;
 					
-					$scope.fixture = null;
+					$scope.preSubmission = null
 					
-					viewService.view("fixtures-for-email", {
+					viewService.view("results-for-submission", {
 						email : email,
 						seasonId : $scope.global.currentSeasonId,
-						isArray : true
-					}, function(preSubmission) {
-
-						if(preSubmission.fixtures)
-						{
-							var fixtures = nowOrBefore(preSubmission.fixtures);
-													
-							$scope.fixture = null;
-	
-							//loop once only
-							for (idx in fixtures) {
-	
-								var fixture = fixtures[idx].fixtures.pop();
-								$scope.fixtures = fixtures[idx];
-								$scope.fixture = fixture;
-								$scope.mainResult = {
-									fixture : $scope.fixture,
-									reports : [ {
-										team:preSubmission.team,
-										text:{text : ""}
-									} ]
-								};
-								$scope.beerResult = {
-									fixture : $scope.fixture
-								};
-								break;
-							}
-						}
-
-
-					});
+						isArray : false}, function(presub){
+							
+							$scope.results = angular.copy(presub.results)
+							$scope.preSubmission = presub
+							
+						}						
+					);
 				};
 				
 				$scope.$watch("email",$scope.fixturesForEmail);
 
 				$scope.submitResults = function() {
 
-					var submissions =  [ {
-						email: $scope.email,
-						result : $scope.mainResult,
-						seasonId : $scope.global.currentSeasonId,
-						competitionType :  $scope.fixtures.competitionType
-
-					}, {
-						email: $scope.email,
-						result : $scope.beerResult,
-						seasonId : $scope.global.currentSeasonId,
-						competitionType : "BEER"
-
-					} ];
+					var results = $scope.results;
+					var submissions =  [];
 					
-
-				 function commit() {
+					for(idx in results){
+						
+						submissions.push({
+							email: $scope.email,
+							result : results[idx].result,
+							seasonId : $scope.global.currentSeasonId,
+							competitionType :  results[idx].compType.name
+						});
+					}
+					
+					function commit() {
 						viewService.post("submit-results", submissions);
 						$mdDialog.hide();
 
-						$scope.fixture = null;
+						$scope.preSubmission = null;
 					}
 					
 					$mdDialog.show({

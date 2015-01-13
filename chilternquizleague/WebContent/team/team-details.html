@@ -20,5 +20,16 @@
 			</div>
 		</md-card>
 	</div>
+	<div hide-gt-sm md-theme="amber">
+	<div><md-button class="md-fab md-fab-top-right md-primary" aria-label="contact us"
+			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
+			icon="/images/icons/ic_email.svg"></md-icon> <md-tooltip>Contact
+		Us!</md-tooltip></md-button></div>
+		<div>	
+		<md-button class="md-fab md-fab-bottom-right md-primary" aria-label="go to venue"
+			ng-href="/venues/{{team.venue.id}}"> <md-icon
+			icon="/images/icons/ic_location_on.svg"></md-icon> <md-tooltip>Venue</md-tooltip></md-button></div>
 </div>
+</div>
+
 

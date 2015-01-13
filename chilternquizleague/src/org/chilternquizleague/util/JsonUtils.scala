@@ -90,7 +90,7 @@ class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
     }
 
   }
-      class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]]{
+ class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]]{
     override def serialize(list:Iterable[Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
       gen writeStartArray;
       
@@ -99,22 +99,35 @@ class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
       gen writeEndArray()
       
     }}
+ 
+ class ScalaMapSerialiser extends JsonSerializer[Map[String,Any]]{
+   
+   override def serialize(map:Map[String,Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
+     gen writeStartObject()
+     
+     for((k,v) <- map){gen.writeFieldName(k);gen.writeObject(v)}
+     
+     gen.writeEndObject()
+     
+   }
+   
+ }
   
   lazy val unsafeModule = { 
-    val module = new SimpleModule
-    module.addSerializer(classOf[Ref[_]], new RefSerializer)
-    module.addDeserializer(classOf[Ref[_]], new RefDeserializer())
-    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
-    module
+    new SimpleModule()
+    .addSerializer(classOf[Ref[_]], new RefSerializer)
+    .addDeserializer(classOf[Ref[_]], new RefDeserializer())
+    .addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
   	}
   
   lazy val safeModule = {    
-    val module = new SimpleModule
-    module.addSerializer(classOf[User], new UserSerializer)
-    module.addSerializer(classOf[Text], new TextSerializer)
-    module.addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
-    module.addSerializer(classOf[Ref[_]], new RefSerializer)
-    module.addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)}
+    new SimpleModule()
+    .addSerializer(classOf[User], new UserSerializer)
+    .addSerializer(classOf[Text], new TextSerializer)
+    .addSerializer(classOf[Map[String,Any]], new ScalaMapSerialiser)
+    .addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+    .addSerializer(classOf[Ref[_]], new RefSerializer)
+    .addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)}
   
   def safeMapper = new ObjectMapper registerModule safeModule
       

@@ -13,6 +13,7 @@ import org.chilternquizleague.domain.CompetitionType
 import org.chilternquizleague.domain.Fixtures
 import org.chilternquizleague.domain.GlobalApplicationData
 import org.chilternquizleague.domain.Results
+import org.chilternquizleague.domain.Result
 import org.chilternquizleague.domain.Season
 import org.chilternquizleague.domain.Team
 import org.chilternquizleague.domain.TeamCompetition
@@ -53,6 +54,9 @@ import org.apache.commons.io.IOUtils
 import org.chilternquizleague.domain.BaseLeagueCompetition
 import org.chilternquizleague.util.JacksonUtils
 import org.chilternquizleague.domain.Statistics
+import org.chilternquizleague.domain.TeamCompetition
+import org.chilternquizleague.web.ViewUtils._
+import org.chilternquizleague.domain.Report
 
 
 trait BaseRest extends HttpServlet {
@@ -179,7 +183,7 @@ class ViewService extends BaseRest {
       case "all-fixtures" => allFixtures(req)
       case "competition-results" => competitionResults(req)
       case "competition-fixtures" => competitionFixtures(req)
-      case "fixtures-for-email" => fixturesForEmail(req)
+      case "results-for-submission" => resultsForSubmission(req)
       case "competitions-view" => competitionsForSeason(req)
       case "text" => textForName(req)
       case "reports" => resultReports(req)
@@ -206,7 +210,7 @@ class ViewService extends BaseRest {
 
   }
   
-  def teamStatistics(req: HttpServletRequest) = {
+  def teamStatistics(req: HttpServletRequest):Option[StatisticsView] = {
     
     for{
       t <- entityByKey(req.id("teamId"), classOf[Team])
@@ -215,7 +219,7 @@ class ViewService extends BaseRest {
     } yield{
       stats match {
         case Nil => null
-        case _ => stats.map(new StatisticsView(_)).head
+        case _ => stats.head
       }
    } 
   }
@@ -255,7 +259,7 @@ class ViewService extends BaseRest {
 
   def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Fixtures => Boolean = {_ => true}): List[Fixtures] = {
 
-    val competitions = season.teamCompetitions
+    val competitions = season.teamCompetitions.filter (!_.subsidiary)
 
     def flatMapFixtures(f: Fixtures): List[Fixtures] = {
 
@@ -265,13 +269,13 @@ class ViewService extends BaseRest {
       if (newFix.fixtures.isEmpty) Nil else List(newFix)
     }
 
-    competitions filter { _ != null } filter { _.`type` != CompetitionType.BEER } flatMap { _.fixtures.map(_.get) filter filter flatMap flatMapFixtures } sortWith(_ .start before  _.start) slice(0, limit)
+    competitions filter { _ != null } flatMap { _.fixtures.map(_.get) filter filter flatMap flatMapFixtures } sortWith(_ .start before  _.start) slice(0, limit)
 
 
   }
 
   def teamResults(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Results => Boolean = {_ => true}): List[Results] = {
-    val competitions = season.teamCompetitions
+    val competitions = season.teamCompetitions.filter (!_.subsidiary)
 
     def flatMapResults(f: Results): List[Results] = {
 
@@ -281,7 +285,7 @@ class ViewService extends BaseRest {
       if (newRes.results.isEmpty) Nil else List(newRes)
     }
 
-    competitions filter { _ != null } filter { _.`type` != CompetitionType.BEER } flatMap { _.results.map(_.get) filter(_!=null) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
+    competitions filter { _ != null } flatMap { _.results.map(_.get) filter(_!=null) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
 
   }
 
@@ -314,16 +318,44 @@ class ViewService extends BaseRest {
     entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures })
 
     
-  def fixturesForEmail(req: HttpServletRequest): Option[PreSubmissionView] = {
+  def resultsForSubmission(req: HttpServletRequest): Option[PreSubmissionView] = {
    
+    val now  = new Date
     for{
       e <- req.parameter("email").map(_.trim())
       t <- entityList(classOf[Team]).find(_.users.exists(_.email equalsIgnoreCase e))
       s <- entityByKey(req.id("seasonId"), classOf[Season])
+      f <- teamFixtures(Some(t.id), s).filter(_.start before now).reverse.headOption
+      fixture <- f.fixtures.headOption
+      comp = s.competition(f.competitionType).asInstanceOf[TeamCompetition]
+      r <- comp.resultsForDate(f.start)
+      p = r.findRow(fixture)
+      sub = comp.subsidiaryResults(f.start)
     }
-    yield{
-      new PreSubmissionView(t, teamFixtures(Some(t.id), s), teamResults(Some(t.id),s))
-    } 
+    yield
+    {
+      val primaryResult = p.getOrElse{
+        val res = new Result
+        res.fixture = fixture
+        res
+      }
+      
+      val report:Report = new Report
+      report.team = t
+      primaryResult.reports.clear
+      primaryResult.reports.add(report)
+ 
+      val subResult = for(r <- sub) yield r.findRow(t).getOrElse{
+        val res = new Result
+        res.fixture = fixture
+        res
+      }
+      
+      val results:List[ResultForSubmission] = List[ResultForSubmission](new ResultForSubmission(comp.`type`, primaryResult)) ++ subResult.fold(List[ResultForSubmission]())(r => List(new ResultForSubmission(comp.subsidiaryCompetition.`type`,r)))
+      
+      new PreSubmissionView(t, f, results)
+    }
+    
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =

@@ -40,6 +40,11 @@ function teamCompetitionControllerFactory(name){
 			$scope.masterSeason.competitions[ucName] = $scope[competitionName];
 			$location.url("/maintain/seasons/" + seasonId);
 		};
+		
+		$scope.subFilter = function(value,index){
+			return value.comp.subsidiary
+			
+		}
 
 	};
 	
