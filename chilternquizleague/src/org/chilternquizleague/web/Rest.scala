@@ -264,12 +264,12 @@ class ViewService extends BaseRest {
     def flatMapFixtures(f: Fixtures): List[Fixtures] = {
 
       val newFix = Fixtures(f);
-      newFix.fixtures = f.fixtures.toList filter { f => (teamId contains nullSafeId(f.home)) || (teamId contains nullSafeId(f.away)) }
+      newFix.fixtures = f.fixtures.toList filter { f => (teamId contains f.home.Id) || (teamId contains f.away.Id) }
 
       if (newFix.fixtures.isEmpty) Nil else List(newFix)
     }
 
-    competitions filter { _ != null } flatMap { _.fixtures.map(_.get) filter filter flatMap flatMapFixtures } sortWith(_ .start before  _.start) slice(0, limit)
+    competitions filter { _ != null } flatMap { _.fixtures.map(_()) filter filter flatMap flatMapFixtures } sortWith(_ .start before  _.start) slice(0, limit)
 
 
   }
@@ -280,12 +280,12 @@ class ViewService extends BaseRest {
     def flatMapResults(f: Results): List[Results] = {
 
       val newRes = Results(f);
-      newRes.results = f.results filter { f => (teamId contains f.fixture.home.id) || (teamId contains f.fixture.away.id) }
+      newRes.results = f.results filter { f => (teamId contains f.fixture.home.Id) || (teamId contains f.fixture.away.Id) }
 
       if (newRes.results.isEmpty) Nil else List(newRes)
     }
 
-    competitions filter { _ != null } flatMap { _.results.map(_.get) filter(_!=null) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
+    competitions filter { _ != null } flatMap { _.results.map(_()) filter(_!=null) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
 
   }
 
@@ -293,11 +293,11 @@ class ViewService extends BaseRest {
    * Relies on http params id:Season and type:CompetitionType
    */
   private def teamCompetitionForSeason(req: HttpServletRequest):Option[TeamCompetition] = {
-      val compType = req.parameter("type") map { t => CompetitionType.valueOf(t) }
-
-    entityByKey(idParam(req), classOf[Season]) flatMap {
-      s => compType map {
-        t => s.competition(t).asInstanceOf[TeamCompetition] }}
+    for{
+      c <- req.parameter("type")
+      t = CompetitionType.valueOf(c) 
+      s <- entityByKey(req.id(), classOf[Season])
+    } yield s.competition(t).asInstanceOf[TeamCompetition]
   }
   
   def competitionResults(req: HttpServletRequest): Option[JList[Results]] = teamCompetitionForSeason(req) map {_.results}
