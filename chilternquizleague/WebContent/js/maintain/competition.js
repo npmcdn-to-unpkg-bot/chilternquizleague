@@ -189,8 +189,14 @@ maintainApp
 							"season",
 							null,
 							function(season) {
-								$scope.fixturesList = season.competitions[compType].fixtures;
-
+								$scope.fixturesList = [];
+								
+								for(idx in season.competitions[compType].fixtures ){
+									if(season.competitions[compType].fixtures[idx] != null){
+										$scope.fixturesList.push(season.competitions[compType].fixtures[idx])
+									}
+								}
+								
 								$scope
 										.setCurrentDate($scope.fixturesList[0] ? makeDateWithTime(
 												$scope.fixturesList[0].start,

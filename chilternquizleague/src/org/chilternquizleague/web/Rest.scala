@@ -264,7 +264,7 @@ class ViewService extends BaseRest {
     def flatMapFixtures(f: Fixtures): List[Fixtures] = {
 
       val newFix = Fixtures(f);
-      newFix.fixtures = f.fixtures.toList filter { f => (teamId contains f.home.id) || (teamId contains f.away.id) }
+      newFix.fixtures = f.fixtures.toList filter { f => (teamId contains nullSafeId(f.home)) || (teamId contains nullSafeId(f.away)) }
 
       if (newFix.fixtures.isEmpty) Nil else List(newFix)
     }
