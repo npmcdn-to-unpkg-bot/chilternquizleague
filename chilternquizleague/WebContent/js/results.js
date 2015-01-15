@@ -148,8 +148,8 @@
 	mainApp.controller("AllFixturesController", [
 		'$scope',
 		'viewService',
-		'$location',"$timeout",
-		function($scope, viewService, $location,$timeout) {
+		'$location',
+		function($scope, viewService, $location) {
 			
 			$scope.setSeason = function(season) {
 	

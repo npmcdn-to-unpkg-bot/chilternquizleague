@@ -1,9 +1,10 @@
-<div>
-	<div class="box-title">Venues</div>
-	<button ng-click="addScreen()">Add New</button>
+<md-whiteframe class="md-whiteframe-z1" flex ng-controller="VenueListCtrl">
+	<md-subheader >Venues</md-subheader>
+	<md-button ng-click="addScreen()" >Add New</md-button>
 
-	<div ng-repeat="venue in venues | orderBy :'name'">
-		<div><a href="/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</a></div>
-	</div>
-
-</div>
+	<md-list>
+	<md-item ng-repeat="venue in venues | orderBy :'name'">
+		<div><md-button href="/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</md-button></div>
+	</md-item>
+	</md-list>
+</md-whiteframe>
