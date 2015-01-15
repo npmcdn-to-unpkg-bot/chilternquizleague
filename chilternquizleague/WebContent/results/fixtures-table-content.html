@@ -1,26 +1,26 @@
 <table class="results-table">
 	<thead
-		ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount">
+		ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount" id="f{{::fixtureSet.start}}">
 		<tr class="full-header">
-			<th colspan="8">{{fixtureSet.start
-				| date:'dd MMMM yyyy'}} : {{fixtureSet.description}}</th>
+			<th colspan="8">{{::fixtureSet.start
+				| date:'dd MMMM yyyy'}} : {{::fixtureSet.description}}</th>
 		</tr>
 
 		<tr class="comp-header">
-			<th colspan="8">{{fixtureSet.description}}</th>
+			<th colspan="8">{{::fixtureSet.description}}</th>
 		</tr>
 
 		<tr class="date-header">
-			<th colspan="8">{{fixtureSet.start | date:'dd MMMM yyyy'}}</th>
+			<th colspan="8">{{::fixtureSet.start | date:'dd MMMM yyyy'}}</th>
 		</tr>
 	</thead>
 	<tbody ng-repeat-end>
 		<tr
 			ng-repeat="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
-			<td class="inline-header-cell">{{fixtureSet.start | date:'d MMM yy'}} : {{fixtureSet.description}}</td>
-			<td class="home-team">{{fixture.home.shortName}}</td>
+			<td class="inline-header-cell">{{::fixtureSet.start | date:'d MMM yy'}} : {{::fixtureSet.description}}</td>
+			<td class="home-team">{{::fixture.home.shortName}}</td>
 			<td>:</td>
-			<td class="away-team">{{fixture.away.shortName}}</td>
+			<td class="away-team">{{::fixture.away.shortName}}</td>
 		</tr>
 	</tbody>
 </table>

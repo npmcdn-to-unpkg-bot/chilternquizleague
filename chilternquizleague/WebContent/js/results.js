@@ -148,14 +148,25 @@
 	mainApp.controller("AllFixturesController", [
 		'$scope',
 		'viewService',
-		'$location',
-		function($scope, viewService, $location) {
+		'$location',"$timeout",
+		function($scope, viewService, $location,$timeout) {
 			
 			$scope.setSeason = function(season) {
 	
 				$scope.allFixtures = season ? viewService.view("all-fixtures",{id:season.id,isArray:true},function(fixtures){
 					if(fixtures){
 					fixtures.sort(function(fixtures1,fixtures2){return fixtures1.start -fixtures2.start;});
+
+	
+						var now = new Date().getTime()
+						
+						for(idx in fixtures){
+							if(fixtures[idx].start > now){
+								$location.hash("f" +fixtures[idx].start)
+								break;
+							}
+						}
+					
 					}
 				}): [];
 				
