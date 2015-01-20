@@ -4,7 +4,7 @@
 		<table>
 			<tr>
 				<td>Description</td>
-				<td><input ng-model="beerCompetition.description"></td>
+				<td><input ng-model="competition.description"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -16,7 +16,7 @@
 			</tr>
 			<tr>
 				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="beerCompetition.text" cols="60"
+				<td><textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
 
 			</tr>			
@@ -25,8 +25,8 @@
 				<tr>
 					<td></td>
 					<td>
-						<button ng-click="resetBeerCompetition()">Reset</button>
-						<button ng-click="addBeerCompetition(beerCompetition)">Save</button>
+						<button ng-click="resetCompetition()">Reset</button>
+						<button ng-click="addCompetition(competition)">Save</button>
 					</td>
 				</tr>
 			</tfoot>

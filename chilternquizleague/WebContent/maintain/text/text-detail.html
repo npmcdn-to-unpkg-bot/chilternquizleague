@@ -1,67 +1,59 @@
 <style>
-
-.highlit-border > div{
-	height:22em;
+.highlit-border>div {
+	height: 22em;
 }
 
-
-.lowlit-border a:hover ~div{
-	height:22em;
+.lowlit-border a:hover ~div {
+	height: 22em;
 }
 
- 
-.highlit-border> div.ng-enter.ng-enter-active,
-.highlit-border> div.ng-move.ng-move-active {
-  height:22em;
- }
-
-@keyframes my_animation {
-  from { height:22em; }
-  to { height:0; }
+.highlit-border>div.ng-enter.ng-enter-active, .highlit-border>div.ng-move.ng-move-active
+	{
+	height: 22em;
 }
 
-@-webkit-keyframes my_animation {
-  from { height:22em; }
-  to { height:0; }
+@
+keyframes my_animation {from { height:22em;
+	
+}
+
+to {
+	height: 0;
+}
+
+}
+@
+-webkit-keyframes my_animation {from { height:22em;
+	
+}
+
+to {
+	height: 0;
+}
 }
 </style>
 
-<div>
-	<div class="box-title">Text Details</div>
+<div ng-controller="TextDetailCtrl">
+	<md-subheader class="md-primary">Text Details</md-subheader>
 	<form>
-		<table>
-			<tr>
-				<td>Name</td>
-				<td><input ng-model="text.name" required></td>
-			</tr>
-			<tr>
-				<td><button ng-click="addEntry()">Add New</button></td>
+		<md-input-container> <label>Name</label> <input
+			ng-model="text.name" required> </md-input-container>
+		<md-button ng-click="addEntry()">Add New</md-button>
+		<md-list> <md-item
+			ng-repeat="entry in text.entries | orderBy :'name'"> <md-item-content>
+		<div class="show-thin standard-margins"
+			ng-class="entry == currentEntry ? 'highlit-border' : 'lowlit-border'">
+			<md-button href="" style="text-transform:none;" class="md-accent" ng-click="setCurrentEntry(entry)">{{entry.name}}</md-button>
+			<md-input-container>
+			<input type="text" ng-model="entry.name" required></md-input-container>
+			<div>
+				<textarea ui-tinymce="tinymceOptions" ng-model="entry.text"
+					rows="15" cols="150"></textarea>
+			</div>
+		</div>
+		</md-item-content> </md-item> </md-list>
 
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div class="show-thin standard-margins"
-						ng-class="entry == currentEntry ? 'highlit-border' : 'lowlit-border'"
-						ng-repeat="entry in text.entries | orderBy :'name'">
-						<a href="" ng-click="setCurrentEntry(entry)">{{entry.name}}</a> - <input
-							type="text" ng-model="entry.name" required>
-						<div >
-							<textarea ui-tinymce="tinymceOptions" ng-model="entry.text" rows="15" cols="150"></textarea>
-						</div>
-					</div>
-				</td>
-
-			</tr>
-
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetText()">Reset</button>
-						<button ng-click="updateText(text)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+		<md-button ng-click="resetText()">Reset</md-button>
+		<md-button class="md-primary md-raised" ng-click="updateText(text)">Save</md-button>
 	</form>
 </div>

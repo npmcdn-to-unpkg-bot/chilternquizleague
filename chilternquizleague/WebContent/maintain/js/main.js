@@ -17,47 +17,45 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 		url : "/maintain/venues/:venueId",
 		templateUrl : '/maintain/venue/venue-detail.html'
 	})
-		
+	.state("teams", {
+		url : "/maintain/teams",
+		templateUrl : "/maintain/team/team-list.html"
+	})
+	.state("team", {
+		url : "/maintain/teams/:teamId",
+		templateUrl : '/maintain/team/team-detail.html'
+	})
 
-//	}).when('/maintain/teams', {
-//		templateUrl : '/maintain/team/team-list.html',
-//		controller : 'TeamListCtrl'
-//	}).when('/maintain/teams/:teamId', {
-//		templateUrl : '/maintain/team/team-detail.html',
-//		controller : 'TeamDetailCtrl'
-//	}).when('/maintain/users', {
-//		templateUrl : '/maintain/user/user-list.html',
-//		controller : 'UserListCtrl'
-//	}).when('/maintain/users/:userId', {
-//		templateUrl : '/maintain/user/user-detail.html',
-//		controller : 'UserDetailCtrl'
-//	}).when('/maintain/seasons', {
-//		templateUrl : '/maintain/season/season-list.html',
-//		controller : 'SeasonListCtrl'
-//	}).when('/maintain/seasons/:seasonId', {
-//		templateUrl : '/maintain/season/season-detail.html',
-//		controller : 'SeasonDetailCtrl'
-//	}).when('/maintain/seasons/:seasonId/LEAGUE', {
-//		templateUrl : '/maintain/competition/league-detail.html',
-//		controller : 'LeagueCompCtrl'
-//	}).when('/maintain/seasons/:seasonId/BEER', {
-//		templateUrl : '/maintain/competition/beer-detail.html',
-//		controller : 'BeerCompCtrl'
-//	}).when('/maintain/seasons/:seasonId/CUP', {
-//		templateUrl : '/maintain/competition/cup-detail.html',
-//		controller : 'CupCompCtrl'
-//	}).when('/maintain/seasons/:seasonId/PLATE', {
-//		templateUrl : '/maintain/competition/plate-detail.html',
-//		controller : 'PlateCompCtrl'
-//	}).when('/maintain/seasons/:seasonId/BUZZER', {
-//		templateUrl : '/maintain/competition/buzzer-detail.html',
-//		controller : 'BuzzerCompCtrl'
-//	}).when('/maintain/seasons/:seasonId/INDIVIDUAL', {
-//		templateUrl : '/maintain/competition/individual-detail.html',
-//		controller : 'IndividualCompCtrl'
-//	}).when('/maintain/seasons/:seasonId/:compType/fixtures', {
-//		templateUrl : '/maintain/competition/fixtures.html',
-//		controller : 'FixturesCtrl'
+	.state('users', {
+		templateUrl : '/maintain/user/user-list.html',
+		url : '/maintain/users'})
+	.state('user', {
+		templateUrl : '/maintain/user/user-detail.html',
+		url : '/maintain/users/:userId'})
+	.state('seasons', {
+		templateUrl : '/maintain/season/season-list.html',
+		url : '/maintain/seasons'})
+	.state("season", {
+		templateUrl : '/maintain/season/season-detail.html'})
+	.state("season.detail", {
+		templateUrl:"/maintain/season/season-detail-contents.html",
+		url : '/maintain/seasons/:seasonId'}
+	)
+	.state('season.competition', {
+		templateUrl : '/maintain/competition/competition-container.html',
+		url: "/maintain/seasons/:seasonId/competition"}
+	)
+	.state("season.competition.detail", {
+		templateUrl : function(params){return "/maintain/competition/" + params.compType.toLowerCase() + "-detail.html"},
+		url : "/:compType"}
+	)
+
+	.state("season.competition.fixtures", {
+		templateUrl : '/maintain/competition/fixtures.html',
+		url : '/:compType/fixtures'})
+	.state("season.competition.results", {
+		templateUrl : '/maintain/competition/results.html',
+		url : '/:compType/results'})
 //	}).when('/maintain/seasons/:seasonId/:compType/results', {
 //		templateUrl : '/maintain/competition/results.html',
 //		controller : 'ResultsCtrl'
@@ -67,26 +65,36 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 //	}).when('/maintain/global/current', {
 //		templateUrl : '/maintain/global/global-detail.html',
 //		controller : 'GlobalDetailCtrl'
-//	}).when('/maintain/texts', {
-//		templateUrl : '/maintain/text/text-list.html',
-//		controller : 'TextListCtrl'
-//	}).when('/maintain/texts/:textId', {
-//		templateUrl : '/maintain/text/text-detail.html',
-//		controller : 'TextDetailCtrl'
-//	}).when('/maintain/stats', {
-//		templateUrl : '/maintain/stats/season-list.html',
-//		controller : 'SeasonListCtrl'
-//	}).when('/maintain/stats/:seasonId', {
-//		templateUrl : '/maintain/stats/stats-detail.html',
-//		controller : 'StatsDetailCtrl'
-//	}).when('/maintain/database', {
-//		templateUrl : '/maintain/database/database.html',
+	.state('texts', {
+		templateUrl : '/maintain/text/text-list.html',
+		url : '/maintain/texts'})
+	.state('text', {
+		templateUrl : '/maintain/text/text-detail.html',
+		url : '/maintain/texts/:textId'})
+	.state('stats', {
+		templateUrl : '/maintain/stats/season-list.html',
+		url : '/maintain/stats'})
+	.state('stats-detail', {
+		templateUrl : '/maintain/stats/stats-detail.html',
+		url: "/maintain/stats/:seasonId"})
+
+	.state("database", {
+		templateUrl : '/maintain/database/database.html',
+		url:'/maintain/database'})
 //	}).otherwise({
 //		redirectTo : ''
 //	});
 //	
 	$locationProvider.html5Mode(true);
 } ]);
+
+maintainApp.directive("cqlAddButton",function(){
+	
+	return {
+		restrict:'E',
+		replace:true,
+		template : "<span><md-button class='md-raised' ng-click='addScreen()'>Add New</md-button></span>"};
+});
 
 function makeUpdateFn(typeName, noRedirect) {
 	return makeUpdateFnWithCallback(typeName, (noRedirect ? null : function(
@@ -136,21 +144,11 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 function makeListFn(typeName, config) {
 
 	return function($scope, entityService, $routeParams, $rootScope, $location) {
-		var collectionName = typeName + "s";
 		config = config ? config : {};
+		
+		var collectionName = (config.collName ? config.collName
+				: typeName + "s")
 
-		if (config.entityName && config.bindName) {
-			collectionName = (config.collName ? config.collName
-					: collectionName);
-			$scope.$watch(config.entityName, function(entity) {
-				syncToListItem($scope, entity, $scope[collectionName],
-						config.bindName);
-			});
-			$scope.$watch(collectionName, function(collection) {
-				syncToListItem($scope, $scope[config.entityName], collection,
-						config.bindName);
-			});
-		}
 		entityService.loadList(typeName, function(ret) {
 			$scope[collectionName] = config.sort ? ret.sort(config.sort) : ret;
 		});
@@ -186,6 +184,19 @@ function removeFromListById(collection, entity) {
 			break;
 		}
 	}
+}
+
+function filter(list, fn){
+	
+	var ret = []
+	
+	for(idx in list){
+		if(fn(list[idx])){
+			ret.push(list[idx])
+		}
+	}
+	
+	return ret;
 }
 
 function getCommonParams(constructorFn) {

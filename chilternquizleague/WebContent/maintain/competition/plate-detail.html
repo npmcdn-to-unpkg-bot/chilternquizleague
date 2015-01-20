@@ -1,18 +1,18 @@
-<div>
+<div ng-controller="PlateCompCtrl">
 	<div class="box-title">Plate Details</div>
 	<form>
 		<table>
 			<tr>
 				<td>Description</td>
-				<td><input ng-model="plateCompetition.description"></td>
+				<td><input ng-model="competition.description"></td>
 			</tr>
 			<tr>
 				<td>Start Time</td>
-				<td><input required  ng-model="plateCompetition.startTime" ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
+				<td><input required  ng-model="competition.startTime" ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
 			</tr>
 			<tr>
 				<td>End Time</td>
-				<td><input required ng-model="plateCompetition.endTime"  ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
+				<td><input required ng-model="competition.endTime"  ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="plateCompetition.text" cols="60"
+				<td><textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
 
 			</tr>
@@ -32,8 +32,8 @@
 				<tr>
 					<td></td>
 					<td>
-						<button ng-click="resetPlateCompetition()">Reset</button>
-						<button ng-click="addPlateCompetition(plateCompetition)">Save</button>
+						<button ng-click="resetCompetition()">Reset</button>
+						<button ng-click="addCompetition(competition)">Save</button>
 					</td>
 				</tr>
 			</tfoot>

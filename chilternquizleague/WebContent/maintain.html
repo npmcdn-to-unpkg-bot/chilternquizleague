@@ -36,7 +36,7 @@
 
 
 </head>
-<body ng-app="maintainApp" md-swipe-right="toggleLeft()">
+<body ng-app="maintainApp" md-swipe-right="toggleLeft()" layout="column">
 	<md-toolbar><div class="md-toolbar-tools" style="margin-left:.25em;">Maintenance</div></md-toolbar>
 	<div layout="row" layout-align="">
 	<md-sidenav class="md-sidenav-left md-whiteframe-z2"
@@ -67,7 +67,7 @@
 		</div>
 	</md-sidenav>
 
-	<div ui-view></div>
+	<md-content ui-view flex></md-content>
 	</div>
 </body>
 </html>

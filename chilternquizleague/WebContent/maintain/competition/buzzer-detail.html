@@ -1,14 +1,14 @@
-<div>
+<div ng-controller="BuzzerCompCtrl">
 	<div class="box-title">Team Buzzer Details</div>
 	<form>
 		<table>
 			<tr>
 				<td>Description</td>
-				<td><input ng-model="buzzerCompetition.description"></td>
+				<td><input ng-model="competition.description"></td>
 			</tr>
 			<tr>
 				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="buzzerCompetition.text" cols="60"
+				<td><textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
 
 			</tr>
@@ -16,8 +16,8 @@
 				<tr>
 					<td></td>
 					<td>
-						<button ng-click="resetBuzzerCompetition()">Reset</button>
-						<button ng-click="addBuzzerCompetition(buzzerCompetition)">Save</button>
+						<button ng-click="resetCompetition()">Reset</button>
+						<button ng-click="addCompetition(competition)">Save</button>
 					</td>
 				</tr>
 			</tfoot>

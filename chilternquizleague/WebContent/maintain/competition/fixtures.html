@@ -1,39 +1,40 @@
 <div ng-controller="FixturesCtrl">
-	<div class="box-title">Fixtures</div>
-	<form >
-		<table>
-			<tr>
-				<td>Current Date</td>
-				<td><input ng-model="currentDate" type="date"/><button ng-click="advanceDate()">advance</button></td>
-			</tr>
-			<tr>
-				<td>Home</td>
-				<td><select ng-model="fixture.home" ng-options="team as team.name for team in unusedTeams"></td>
-			</tr>
-			<tr>
-				<td>Away</td>
-				<td><select ng-model="fixture.away" ng-options="team as team.name for team in unusedTeams"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><button ng-click="addFixture(fixture)">Add</button></td>
-			</tr>
-			<tr>
-				<td>Fixtures</td><td>
-				<div class="show-thin standard-margins" ng-class="fixts.start == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'" ng-repeat="fixts in fixturesList | orderBy : 'start'" ><a href="" ng-click="setCurrentDate(fixts.start)">{{fixts.start | date:'dd MMMM yyyy'}}</a> - <input ng-model="fixts.description">
-					<div ng-repeat="fixt in fixts.fixtures | orderBy : 'home.shortName'">{{fixt.home.shortName}} - {{fixt.away.shortName}} <span class="entity-remove-button"><button ng-click="removeFixture(fixt)">Remove</button></span></div>
-				</div></td>
-			</tr>
-
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="reset()">Reset</button>
-						<button ng-click="updateFixtures(fixturesList)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+	<md-subheader class="md-primary">Fixtures</md-subheader>
+	<form>
+		<div>
+			<div layout="row" layout-align="start center">
+				<md-input-container> <label>Current
+					Date</label> <input ng-model="currentDate" type="date" /> </md-input-container>
+				<md-button ng-click="advanceDate()">advance</md-button>
+			</div>
+			<div layout="row" layout-align="start end">
+				<div layout="column" layout-align="start start">
+					<md-subheader>Home</md-subheader>
+					<select ng-model="fixture.home"
+						ng-options="team as team.name for team in unusedTeams"></select>
+				</div>
+				<div layout="column" layout-align="start start">
+					<md-subheader>Away</md-subheader>
+					<select ng-model="fixture.away"
+						ng-options="team as team.name for team in unusedTeams"></select>
+				</div>
+				<md-button ng-click="addFixture(fixture)">Add</md-button>
+			</div>
+			<md-subheader>Fixtures</md-subheader>
+			<div class="show-thin standard-margins"
+				ng-class="fixts.start == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'"
+				ng-repeat="fixts in fixturesList | orderBy : 'start'">
+				<span layout="row" layout-align="start start"><md-button href="" ng-click="setCurrentDate(fixts.start)">{{fixts.start
+				| date:'dd MMMM yyyy'}}</md-button><md-input-container><input ng-model="fixts.description"></md-input-container></span>
+				<div ng-repeat="fixt in fixts.fixtures | orderBy : 'home.shortName'"
+					layout="row">
+					<span flex="30">{{fixt.home.shortName}} -
+						{{fixt.away.shortName}}</span>
+					<md-button ng-click="removeFixture(fixt)">Remove</md-button>
+				</div>
+			</div>
+		</div>
+		<md-button ng-click="resetFixtures()">Reset</md-button>
+		<md-button class="md-primary" ng-click="updateFixtures(fixturesList)">Save</md-button>
 	</form>
 </div>

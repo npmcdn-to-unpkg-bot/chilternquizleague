@@ -1,9 +1,10 @@
-<div>
-	<div class="box-title">Text</div>
-	<button ng-click="addScreen()">Add New</button>
+<div ng-controller="TextListCtrl">
+	<md-subheader class="md-primary">Text</md-subheader>
+	<cql-add-button></cql-add-button>
 
-	<div ng-repeat="text in texts | orderBy : 'name'">
-		<div><a href="/maintain/texts/{{text.id}}" >{{text.name}}</a></div>
-	</div>
+	
+	<md-list ng-repeat="text in texts | orderBy : 'name'">
+		<md-item><md-item-content><md-button href="/maintain/texts/{{text.id}}" >{{text.name}}</md-button></md-item-content></md-item>
+	</md-list>
 
 </div>
