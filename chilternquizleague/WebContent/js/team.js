@@ -71,16 +71,28 @@
 
 		$scope.makeICal = function(team) {
 
-			var contents = generateICalContent(team.extras.fixtures);
+			viewService.list("Venue", function(venueList){
+				
+				var venues = {}
+				
+				for(idx in venueList){
+					venues[venueList[idx].id] = venueList[idx]
+				}
+				
+				var contents = generateICalContent(team.extras.fixtures, venues);
 
-			var filename = team.shortName.replace(/\s/g, "_") + "_fixtures"
-					+ ".ics";
+				var filename = team.shortName.replace(/\s/g, "_") + "_fixtures"
+						+ ".ics";
 
-			var blob = new Blob([ contents ], {
-				type : "text/calendar;charset=utf-8"
-			});
+				var blob = new Blob([ contents ], {
+					type : "text/calendar;charset=utf-8"
+				});
 
-			saveAs(blob, filename);
+				saveAs(blob, filename);
+				
+			})
+			
+
 
 		};
 		

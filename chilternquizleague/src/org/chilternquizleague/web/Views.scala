@@ -61,7 +61,7 @@ class LeagueTableView(table:LeagueTable){
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class LeagueTableRowView(row:LeagueTableRow){
-  var team = new TeamView(row.team)
+  var team = TeamView(row.team)
   var position = row.position
   var played = row.played
   var won = row.won
@@ -81,6 +81,11 @@ class TeamView(team:Team){
   val venueId = team.venue.Id()
 }
 
+object TeamView{
+  
+  def apply(team:Team):TeamView = if(team == null) null else new TeamView(team)
+}
+
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class TeamExtras(team:Team,  val fixtures:List[FixturesView],  val results:List[ResultsView]) {
 	val id = team.id
@@ -89,32 +94,36 @@ class TeamExtras(team:Team,  val fixtures:List[FixturesView],  val results:List[
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class ResultsView(resultsSet:Results){
+  val id = resultsSet.id
+  val key = resultsSet.key
   val date = resultsSet.date
   val description = resultsSet.description
   val results = resultsSet.results.map(new ResultView(_))
 }
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class ResultView(result:Result){
-    var homeScore = result.homeScore
-    var awayScore = result.awayScore
-    var fixture = new FixtureView(result.fixture)
+  val homeScore = result.homeScore
+  val awayScore = result.awayScore
+  val fixture = new FixtureView(result.fixture)
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class FixturesView(fixturesSet:Fixtures){
-  var start = fixturesSet.start
-  var end = fixturesSet.end
-  var competitionType = new CompetitionTypeView(fixturesSet.competitionType)
-  var description = fixturesSet.description
-  var fixtures = fixturesSet.fixtures.map(new FixtureView(_))
+  val id = fixturesSet.id
+  val key = fixturesSet.key
+  val start = fixturesSet.start
+  val end = fixturesSet.end
+  val competitionType = new CompetitionTypeView(fixturesSet.competitionType)
+  val description = fixturesSet.description
+  val fixtures = fixturesSet.fixtures.map(new FixtureView(_))
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class FixtureView(fixture:Fixture){
-  var start = fixture.start
-  var end = fixture.end
-  var home = new TeamView(fixture.home)
-  var away = new TeamView(fixture.away)
+  val start = fixture.start
+  val end = fixture.end
+  val home = TeamView(fixture.home)
+  val away = TeamView(fixture.away)
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)

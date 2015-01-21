@@ -3,7 +3,7 @@
  * @param fixtures -
  *          Array of fixtures
  */
-function generateICalContent(fixtures) {
+function generateICalContent(fixtures, venues) {
 
 	var file = "BEGIN:VCALENDAR\nVERSION:2.0\n";
 
@@ -14,6 +14,18 @@ function generateICalContent(fixtures) {
 				+ "\n";
 	}
 
+	/**
+	 * Null-safe get 
+	 */
+	function nsg(object, property){
+		return object && property ? object[property] : null
+	}
+	function nsgVenue(team){
+		
+		return nsg(venues, nsg(team,"venueId"))
+		
+	}
+	
 	var now = factorAsICSDate(new Date());
 
 	for (idx in fixtures) {
@@ -25,13 +37,13 @@ function generateICalContent(fixtures) {
 			var startDate = new Date(fixture.start);
 			var endDate = new Date(fixture.end);
 
-			var description = fixture.home.shortName + " - " + fixture.away.shortName
+			var description = nsg(fixture.home, "shortName") + " - " + nsg(fixture.away, "shortName")
 					+ " : " + fixtureSet.description + "\n";
 
 			file += "BEGIN:VEVENT\n";
 			file += "DTSTAMP:" + now;
 			file += "UID:" + startDate.getTime() + "."
-					+ encodeURIComponent(fixture.home.shortName.replace(/\s/g, ""))
+					+ encodeURIComponent((""+nsg(fixture.home,"shortName")).replace(/\s/g, ""))
 					+ ".chilternquizleague.uk\n";
 			file += "DESCRIPTION:" + description;
 			file += "SUMMARY:" + description;
@@ -39,7 +51,7 @@ function generateICalContent(fixtures) {
 			file += "DTSTART:" + factorAsICSDate(startDate);
 			file += "DTEND:" + factorAsICSDate(endDate);
 			file += "LOCATION:"
-					+ ("" + fixture.home.venue.name + "," + fixture.home.venue.address)
+					+ ("" + nsg(nsgVenue(fixture.home),"name") + "," + nsg(nsgVenue(fixture.home), "address"))
 							.replace(/\n\r/g, ",").replace(/\n/g, ",").replace(/\r/g, ",")
 					+ "\n";
 			file += "END:VEVENT\n";
