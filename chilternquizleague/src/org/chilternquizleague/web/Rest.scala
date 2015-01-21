@@ -242,7 +242,7 @@ class ViewService extends BaseRest {
       s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
     }
     yield{
-      new TeamExtras(t, teamFixtures(teamId, s), teamResults(teamId, s))
+      new TeamExtras(t, teamFixtures(teamId, s).map(new FixturesView(_)), teamResults(teamId, s).map(new ResultsView(_)))
     }
  }
 
@@ -289,9 +289,9 @@ class ViewService extends BaseRest {
     } yield s.competition(t).asInstanceOf[TeamCompetition]
   }
   
-  def competitionResults(req: HttpServletRequest): Option[JList[Results]] = teamCompetitionForSeason(req) map {_.results}
+  def competitionResults(req: HttpServletRequest): Option[JList[ResultsView]] = teamCompetitionForSeason(req) map {_.results.map(new ResultsView(_))}
 
-  def competitionFixtures(req: HttpServletRequest): Option[JList[Fixtures]] = teamCompetitionForSeason(req) map {_.fixtures}
+  def competitionFixtures(req: HttpServletRequest): Option[JList[FixturesView]] = teamCompetitionForSeason(req) map {_.fixtures.map(new FixturesView(_))}
 
 
 
@@ -300,11 +300,11 @@ class ViewService extends BaseRest {
     Application.globalData.flatMap(g => { req.parameter("name") map { n => g.globalText.text(n) } })
   }
 
-  def allResults(req: HttpServletRequest):Option[JList[_]] = 
-    entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results })
+  def allResults(req: HttpServletRequest) = 
+    entityByKey(req.id(), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results.map(new ResultsView(_)) })
   
   def allFixtures(req: HttpServletRequest):Option[JList[_]] =
-    entityByKey(idParam(req), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures })
+    entityByKey(req.id(), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures.map(new FixturesView(_)) })
 
     
   def resultsForSubmission(req: HttpServletRequest): Option[PreSubmissionView] = {

@@ -82,9 +82,39 @@ class TeamView(team:Team){
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-class TeamExtras(team:Team,  val fixtures:List[Fixtures],  val results:List[Results]) {
+class TeamExtras(team:Team,  val fixtures:List[FixturesView],  val results:List[ResultsView]) {
 	val id = team.id
 	val text = team.rubric.text
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class ResultsView(resultsSet:Results){
+  val date = resultsSet.date
+  val description = resultsSet.description
+  val results = resultsSet.results.map(new ResultView(_))
+}
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class ResultView(result:Result){
+    var homeScore = result.homeScore
+    var awayScore = result.awayScore
+    var fixture = new FixtureView(result.fixture)
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class FixturesView(fixturesSet:Fixtures){
+  var start = fixturesSet.start
+  var end = fixturesSet.end
+  var competitionType = new CompetitionTypeView(fixturesSet.competitionType)
+  var description = fixturesSet.description
+  var fixtures = fixturesSet.fixtures.map(new FixtureView(_))
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class FixtureView(fixture:Fixture){
+  var start = fixture.start
+  var end = fixture.end
+  var home = new TeamView(fixture.home)
+  var away = new TeamView(fixture.away)
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
