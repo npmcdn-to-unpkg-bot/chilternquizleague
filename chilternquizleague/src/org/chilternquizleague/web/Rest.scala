@@ -232,7 +232,7 @@ class ViewService extends BaseRest {
     None
   }
 
-  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType):Option[LeagueTableView] = entityByKey(idParam(req), classOf[Season]) map (a => new LeagueTableView(a, compType))
+  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType):Option[LeagueTableWrapperView] = entityByKey(idParam(req), classOf[Season]) map (a => new LeagueTableWrapperView(a, compType))
 
   def teamExtras(req: HttpServletRequest): Option[TeamExtras] = {
 
