@@ -56,15 +56,18 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 	.state("season.competition.results", {
 		templateUrl : '/maintain/competition/results.html',
 		url : '/:compType/results'})
+	.state("season.competition.tables", {
+		templateUrl : '/maintain/competition/tables.html',
+		url : '/:compType/tables'})
 //	}).when('/maintain/seasons/:seasonId/:compType/results', {
 //		templateUrl : '/maintain/competition/results.html',
 //		controller : 'ResultsCtrl'
 //	}).when('/maintain/seasons/:seasonId/:compType/tables', {
 //		templateUrl : '/maintain/competition/tables.html',
 //		controller : 'LeagueTablesCtrl'
-//	}).when('/maintain/global/current', {
-//		templateUrl : '/maintain/global/global-detail.html',
-//		controller : 'GlobalDetailCtrl'
+	.state("global", {
+		templateUrl : '/maintain/global/global-detail.html',
+		url : '/maintain/global/current'})
 	.state('texts', {
 		templateUrl : '/maintain/text/text-list.html',
 		url : '/maintain/texts'})

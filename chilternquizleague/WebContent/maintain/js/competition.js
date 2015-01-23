@@ -15,9 +15,18 @@ function teamCompetitionControllerFactory() {
 		$scope.$watch("season", function(season) {
 
 			if (season) {
-				$scope[masterName] = season.competitions[ucName];
-				$scope[competitionName] = angular
-						.copy(season.competitions[ucName]);
+				
+				var competition = season.competitions[ucName]
+				
+				if(!competition){
+					entityService.load(ucName,"new", function(competition){
+						$scope[masterName] = competition;
+						$scope[competitionName] = angular.copy(competition);
+					})
+				}
+				
+				$scope[masterName] = competition;
+				$scope[competitionName] = angular.copy(competition);
 
 				$scope[addName] = function(competition) {
 					season.competitions[ucName] = $scope[competitionName];
@@ -94,24 +103,10 @@ maintainApp
 						$rootScope, $location) {
 
 					$scope.fixturesList = []
-
-					$scope.$watch("currentDate", function(date) {
-						if (date && $scope.competition) {
-
-							date = new Date(date.getTime());
-							var newDate = makeDateWithTime(date,
-									$scope.competition.startTime);
-
-							if (date.toUTCString() != newDate.toUTCString()) {
-								$scope.currentDate = newDate;
-							}
-						}
-
-					});
-
-					$scope.setCurrentDate = function(date) {
-						$scope.currentDate = new Date(date);
-					};
+					$scope.setCurrentFixtures = function(fixtures){
+						$scope.fixtures = fixtures
+						$scope.usedTeamsControl.setDate(fixtures.start)
+					}
 
 					function resolveExistingUnusedTeams(fixturesList) {
 
@@ -131,14 +126,23 @@ maintainApp
 
 									utc.add(fixture.home, fixture.away);
 								}
-								;
+								
 							}
 
-							var date = $scope.currentDate ? $scope.currentDate
-									: new Date();
-							utc.setDate(date);
 						}
 
+					}
+					
+					function initialiseUI(){
+						if($scope.fixturesList.length > 0){
+							
+							resolveExistingUnusedTeams($scope.fixturesList)
+							
+							$scope.setCurrentFixtures($scope.fixturesList[0])
+						}
+						else{
+							$scope.addFixtures()
+						}
 					}
 
 					$scope
@@ -148,6 +152,12 @@ maintainApp
 
 										if (competition && competition.id) {
 
+											for(idx in competition.fixtures){
+												var f = competition.fixtures[idx]
+												f.start = new Date(f.start)
+												f.end = new Date(f.end)
+											}
+											
 											$scope.masterFixtures = competition.fixtures
 											$scope.fixturesList = filter(
 													angular
@@ -156,14 +166,7 @@ maintainApp
 														return val != null
 													})
 
-											$scope
-													.setCurrentDate($scope.fixturesList[0] ? makeDateWithTime(
-															$scope.fixturesList[0].start,
-															competition.startTime)
-															: makeDateWithTime(
-																	new Date(),
-																	competition.startTime));
-											resolveExistingUnusedTeams($scope.fixturesList);
+											initialiseUI()		
 										}
 
 									});
@@ -179,13 +182,6 @@ maintainApp
 
 					$scope.$watch("teams", function(teams) {
 						resolveExistingUnusedTeams($scope.fixturesList);
-						$scope.$watch("currentDate", function(date) {
-
-							if (date && $scope.usedTeamsControl) {
-								$scope.usedTeamsControl.setDate(date);
-							}
-						});
-						$scope.fixture = {};
 					});
 
 					function makeDateWithTime(baseDate, timeString) {
@@ -198,56 +194,8 @@ maintainApp
 
 					}
 
-					function resolveCurrentFixtures(date) {
-
-						var time = new Date(date).getTime();
-
-						if (!$scope.fixtures
-								|| ($scope.fixtures && $scope.fixtures.start != time)) {
-
-							var fixtures = null;
-
-							for (index in $scope.fixturesList) {
-								if ($scope.fixturesList[index].start == time) {
-									fixtures = $scope.fixturesList[index];
-									break;
-								}
-							}
-							if (!fixtures) {
-								fixtures = {
-									fixtures : [],
-									refClass : "Fixtures",
-									description : $scope.competition.description,
-									start : makeDateWithTime(date,
-											$scope.competition.startTime)
-											.getTime(),
-
-									end : makeDateWithTime(date,
-											$scope.competition.endTime)
-											.getTime(),
-									competitionType : compType
-								};
-								$scope.fixturesList.push(fixtures);
-							}
-
-							$scope.fixturesList = $scope.fixturesList
-									.sort(function(fxs1, fxs2) {
-										return fxs1.start - fxs2.start;
-									});
-							$scope.fixtures = fixtures;
-
-						}
-					}
-
-					$scope.advanceDate = function() {
-						$scope.setCurrentDate(new Date($scope.currentDate
-								.getTime()
-								+ (7 * 60 * 60 * 24 * 1000)));
-					};
 
 					$scope.addFixture = function(fixture) {
-
-						resolveCurrentFixtures($scope.currentDate);
 
 						fixture.start = $scope.fixtures.start;
 						fixture.end = $scope.fixtures.end;
@@ -257,23 +205,57 @@ maintainApp
 						$scope.usedTeamsControl.add(fixture.home, fixture.away);
 					};
 					$scope.removeFixture = function(fixture) {
-						var date = new Date(fixture.start).getTime();
-						for (idx in $scope.fixturesList) {
-							var fixtures = $scope.fixturesList[idx];
-							if (date == fixtures.start) {
-								for (idx2 in fixtures.fixtures) {
-									var listFixture = fixtures.fixtures[idx2];
-									if (fixture.home.id == listFixture.home.id
-											&& fixture.away.id == listFixture.away.id) {
-										fixtures.fixtures.splice(idx2, 1);
-										$scope.usedTeamsControl.remove(
-												fixtures.start, fixture.home,
-												fixture.away);
-									}
-								}
+						
+						function compareTeams(t1,t2){
+							var t1Id = t1 ? t1.id : ""
+							var t2Id = t2 ? t2.id : ""
+							
+							return t1Id == t2Id
+						}
+						
+						for(idx in $scope.fixtures.fixtures){
+							var fix = $scope.fixtures.fixtures[idx]
+							if(compareTeams(fix.home,fixture.home) && compareTeams(fix.away, fixture.away)){	
+								 $scope.fixtures.fixtures.splice(idx, 1)
+								 $scope.usedTeamsControl.remove(fixture.start,fixture.home,fixture.away)
+								 break
 							}
+							
 						}
 					};
+					
+					$scope.addFixtures= function(){
+						var date = new Date()
+
+						if($scope.fixturesList.length > 0){
+							
+							var fixturesList = angular.copy($scope.fixturesList)
+							fixturesList.sort(function(a,b){return a.start > b.start})
+							
+							date = new Date(new Date(fixturesList.pop().start)
+									.getTime()
+									+ (7 * 60 * 60 * 24 * 1000))
+						}
+						
+						var start = makeDateWithTime(date, $scope.competition.startTime)
+						var end = makeDateWithTime(date, $scope.competition.endTime)
+						
+						entityService.load("Fixtures","new" , function(f){
+							
+							var fixtures = angular.copy(f)
+							
+							fixtures.start = start
+							fixtures.end = end
+							fixtures.description = $scope.competition.description
+							
+							$scope.fixturesList.push(fixtures)
+							$scope.setCurrentFixtures(fixtures)
+							
+						})
+						
+
+						
+					}
 
 					$scope.updateFixtures = function(fixtures) {
 						$scope.competition.fixtures = fixtures;
@@ -284,25 +266,21 @@ maintainApp
 					$scope.resetFixtures = function() {
 						$scope.fixturesList = angular
 								.copy($scope.masterFixtures)
+						initialiseUI()
 					}
 
-					// $scope.setCurrentDate(new Date());
 				}));
 
 maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 		entityService, $routeParams, $rootScope, $location) {
 
-	var compType = $scope.compType = $routeParams.compType;
-	var seasonId = $scope.seasonId = $routeParams.seasonId;
 
-	makeUpdateFnWithCallback(
-			"season",
-			null,
-			function(ret) {
 
-				$scope.leagueTables = angular
-						.copy(ret.competitions[compType].leagueTables);
-			})($scope, entityService, $routeParams, $rootScope, $location);
+	$scope.$watch("competition", function(competition){
+		
+		$scope.masterLeagueTables = competition.leagueTables
+		$scope.leagueTables = angular.copy(competition.leagueTables);
+	})
 
 	makeListFn("team", {
 		bindName : "currentSeason",
@@ -323,10 +301,14 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 		});
 	};
 
-	$scope.update = function(leagueTables) {
-		$scope.masterSeason.competitions[compType].leagueTables = leagueTables;
-		$location.url("/maintain/seasons/" + seasonId + "/" + compType);
+	$scope.updateTables = function(leagueTables) {
+		$scope.competition.leagueTables = leagueTables;
+		$location.url("/maintain/seasons/" + $scope.season.id + "/competition/" + $scope.competition.type);
 	};
+	
+	$scope.resetTables = function(){
+		$scope.leagueTables = angular.copy($scope.masterLeagueTables)
+	}
 
 	function setTeams() {
 
@@ -352,35 +334,33 @@ maintainApp.controller('ResultsCtrl',
 
 			$scope.resultsList = []
 
-			$scope.$watch("currentDate", function(date) {
-				if (date && $scope.season) {
-
-					date = new Date(date.getTime());
-					var newDate = makeDateWithTime(date,
-							$scope.season.competitions[compType].startTime);
-
-					if (date.toUTCString() != newDate.toUTCString()) {
-						$scope.currentDate = newDate;
-					}
-				}
-
-			});
-
-			$scope.setCurrentDate = function(date) {
-				$scope.currentDate = new Date(date);
-			};
-
+			$scope.setCurrentResults = function(results){$scope.results = results}
+			
+			$scope.filterEmptyReports = function(report){
+				return report.text.text != null && report.text.text != ""
+			}
+			
+			$scope.editReports = function(result){
+				$scope.currentResult = result == $scope.currentResult ? null : result
+				
+			}
+			
 			$scope.$watch("competition", function(competition) {
 
+				for(idx in competition.results){
+					var f = competition.results[idx]
+					f.date = new Date(f.date)
+				}
+				
 				$scope.masterResults = competition.results
 				$scope.resultsList = filter(angular.copy(competition.results),
 						function(val) {
 							return val != null
 						});
-
-				$scope.setCurrentDate($scope.resultsList[0] ? makeDateWithTime(
-						$scope.resultsList[0].date, competition.startTime)
-						: makeDateWithTime(new Date(), competition.startTime));
+				
+				if($scope.resultsList.length > 0){
+					$scope.results = $scope.resultsList[0]
+				}
 
 			})
 
@@ -392,44 +372,6 @@ maintainApp.controller('ResultsCtrl',
 						.getDate(), timeString.substring(0, 2), timeString
 						.substring(3));
 
-			}
-
-			function resolveCurrentResults(date) {
-
-				var time = new Date(date).getTime();
-
-				if (!$scope.results
-						|| ($scope.results && $scope.results.date != time)) {
-
-					var fixtures = null;
-
-					for (index in $scope.resultsList) {
-						if ($scope.resultsList[index].start == time) {
-							fixtures = $scope.resultsList[index];
-							break;
-						}
-					}
-					if (!results) {
-						results = {
-							results : [],
-							description : $scope.competition.description,
-							start : makeDateWithTime(date,
-									$scope.competition.startTime).getTime(),
-
-							end : makeDateWithTime(date,
-									$scope.competition.endTime).getTime(),
-							competitionType : compType
-						};
-						$scope.resultsList.push(results);
-					}
-
-					$scope.resultsList = $scope.resultsList.sort(function(fxs1,
-							fxs2) {
-						return fxs1.date - fxs2.date;
-					});
-					$scope.results = results;
-
-				}
 			}
 
 			$scope.updateResults = function(results) {

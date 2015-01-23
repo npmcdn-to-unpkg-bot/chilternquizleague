@@ -103,7 +103,8 @@ trait BaseRest extends HttpServlet {
 
 class EntityService extends BaseRest {
 
-  override val aliases = Map(("text", "CommonText"), ("global", "GlobalApplicationData"))
+  override val aliases = Map(("text", "CommonText"), 
+      ("global", "GlobalApplicationData")) ++ CompetitionType.values.map(t => (t.name(), t.compClass().getSimpleName))
   override def entityFilter[T] = { _ => true }
 
   override def init(config: ServletConfig) = {

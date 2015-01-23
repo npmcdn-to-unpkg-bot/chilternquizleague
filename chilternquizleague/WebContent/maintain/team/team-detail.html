@@ -23,10 +23,10 @@
 				</div>
 				<md-subheader>Users</md-subheader>
 
-				<div class="show-thin team-username-box">
-					<div class="team-username" ng-repeat="user in team.users">
-						<span>{{user.name}}</span><span class="entity-remove-button"><button
-								ng-click="removeUser(user)">Remove</button></span>
+				<div layout="column">
+					<div ng-repeat="user in team.users" layout="row" layout-align="space-between center">
+						<span>{{user.name}}</span><md-button
+								ng-click="removeUser(user)">Remove</md-button>
 					</div>
 				</div>
 			</div>
@@ -40,6 +40,6 @@
 
 
 		<md-button ng-click="resetTeam()">Reset</md-button>
-		<md-button class="md-primary md-raised" ng-click="updateTeam(team)">Save</md-button>
+		<md-button class="md-primary" ng-click="updateTeam(team)">Save</md-button>
 	</form>
 </div>

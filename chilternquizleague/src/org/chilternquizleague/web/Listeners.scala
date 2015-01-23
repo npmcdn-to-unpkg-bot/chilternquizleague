@@ -17,7 +17,7 @@ import javax.servlet.Filter
 
 class EntityRegistrationListener extends ServletContextListener {
   import com.googlecode.objectify.ObjectifyService
-  
+
   override def contextDestroyed(evt: javax.servlet.ServletContextEvent): Unit = {}
   override def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = {
 
@@ -41,72 +41,71 @@ class EntityRegistrationListener extends ServletContextListener {
   }
 }
 
-object Application{
-  
-  private var globalApplicationDataId:Option[Long] = None
-  
+object Application {
+
+  private var globalApplicationDataId: Option[Long] = None
+
   def globalData = entity(globalApplicationDataId, classOf[GlobalApplicationData])
 
   def init() = {
-    
+
     val list = entityList(classOf[GlobalApplicationData])
     globalApplicationDataId = list match {
-		  case Nil => Some(save(new GlobalApplicationData()).getId)
-		  case _ => Some(list.head.id)
-		}
+      case Nil => Some(save(new GlobalApplicationData()).getId)
+      case _ => Some(list.head.id)
+    }
   }
 }
-
-
 
 class ApplicationStartListener extends ServletContextListener {
 
   override def contextDestroyed(evt: javax.servlet.ServletContextEvent): Unit = {}
   override def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = Application.init
-  
+
 }
 
 object URLRewriteFilter {
-  val LOG:Logger = Logger.getLogger(classOf[URLRewriteFilter].getName())
+  val LOG: Logger = Logger.getLogger(classOf[URLRewriteFilter].getName())
 }
 
-class URLRewriteFilter extends Filter{
-   import URLRewriteFilter.LOG 
-  var context:ServletContext = null	
-  
-  override def doFilter(arg0:ServletRequest, arg1:ServletResponse,
-			 arg2:FilterChain):Unit = {
-		 val request = arg0.asInstanceOf[HttpServletRequest]
+class URLRewriteFilter extends Filter {
+  import URLRewriteFilter.LOG
+  var context: ServletContext = null
 
-		try {
-			val pathInfo = new URI(request.getRequestURI()).getPath();
+  override def doFilter(arg0: ServletRequest, arg1: ServletResponse,
+    arg2: FilterChain): Unit = {
+    val request = arg0.asInstanceOf[HttpServletRequest]
 
-			pathInfo match {
-			  
-			  case a if ((a == null ||(a.startsWith("/tasks")) || (a.contains("/_ah")) && !a.contains("."))) => {arg2.doFilter(arg0, arg1)}
-			  case a if a.startsWith("/maintain") => {request.getRequestDispatcher("/maintain.html").forward(
-							arg0, arg1)}
-			  case a if context.getRealPath(request.getPathInfo()) == null => {request.getRequestDispatcher("/index.html").forward(
-								arg0, arg1)}
-			
-			  case _ => {arg2.doFilter(arg0, arg1)}
-			}
+    try {
+      val pathInfo = new URI(request.getRequestURI()).getPath();
 
-		} catch{
-			
-		case e: Exception => LOG.log(Level.WARNING, "Error in redirect filter",e)
-		}
+      pathInfo match {
 
-		
-	}
+        case a if ((a == null || (a.startsWith("/tasks")) || (a.contains("/_ah")) && !a.contains("."))) => { arg2.doFilter(arg0, arg1) }
+        case a if a.startsWith("/maintain") => {
+          request.getRequestDispatcher("/maintain/index.html").forward(
+            arg0, arg1)
+        }
+        case a if context.getRealPath(request.getPathInfo()) == null => {
+          request.getRequestDispatcher("/index.html").forward(
+            arg0, arg1)
+        }
 
-	
-	override def init(arg0:FilterConfig ):Unit= {
-		context = arg0.getServletContext();
-		return
-	}
-	
-	override def destroy() = {}
-  
-  
+        case _ => { arg2.doFilter(arg0, arg1) }
+      }
+
+    } catch {
+
+      case e: Exception => LOG.log(Level.WARNING, "Error in redirect filter", e)
+    }
+
+  }
+
+  override def init(arg0: FilterConfig): Unit = {
+    context = arg0.getServletContext();
+    return
+  }
+
+  override def destroy() = {}
+
 }

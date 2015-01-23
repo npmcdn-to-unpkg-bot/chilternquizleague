@@ -21,7 +21,7 @@ import org.chilternquizleague.domain.Statistics
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionTypeView(compType:CompetitionType){
   val name = compType.name
-  val description = compType.getDescription
+  val description = compType.description
 }
 
 object CompetitionTypeView{

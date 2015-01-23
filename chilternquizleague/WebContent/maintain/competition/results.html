@@ -1,72 +1,48 @@
 <div ng-controller="ResultsCtrl">
 	<md-subheader class="md-primary">Results</md-subheader>
-	<style>
-.highlit-border>div {
-	height: 20em;
-}
-
-.lowlit-border a:hover ~div {
-	height: 20em;
-}
-
-.highlit-border>div.ng-enter.ng-enter-active, .highlit-border>div.ng-move.ng-move-active
-	{
-	height: 20em;
-}
-
-@
-keyframes my_animation {from { height:20em;
-	
-}
-
-to {
-	height: 0;
-}
-
-}
-@
--webkit-keyframes my_animation {from { height:20em;
-	
-}
-
-to {
-	height: 0;
-}
-}
-</style>
-
 	<form>
+		<div layout="row" layout-align="space-between">
+			<div flex="40">
+				<md-subheader class="md-accent">Results List</md-subheader>
+				<md-content style="height:70vh;padding-right:1em;">
+					<md-list>
+						<md-item ng-repeat="results in resultsList | orderBy : 'start'">
+							<md-item-contents layout="row" layout-align="space-between center">
+								<md-button ng-click="setCurrentResults(results)">{{results.date	| date:'dd MMMM yyyy'}}</md-button>
+								<span>{{results.description}}</span>
+							</md-item-contents>
+						</md-item>
+					</md-list>
+				</md-content>
+			</div>
+			<md-card layout="column" flex style="padding:.5em;"> <md-subheader
+				class="md-accent">Results Detail</md-subheader> <md-input-container>
+			<label>Description</label> <input ng-model="results.description">
+			</md-input-container>
+			<md-input-container> <label>Date</label> <input
+					ng-model="results.date" type="date"> </md-input-container>
 
-		<div>
-			<div class="show-thin standard-margins"
-				ng-class="results.date == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'"
-				ng-repeat="results in resultsList | orderBy : 'date'">
-				<span layout="row" layout-align="start start"> <md-button
-						href="" ng-click="setCurrentDate(results.date)">{{results.date
-					| date:'dd MMMM yyyy'}}</md-button> <md-input-container> <input
-						ng-model="results.description"></md-input-container>
-				</span>
-				<div
-					ng-repeat="result in results.results | orderBy : 'result.fixture.home.shortName'">
-					<span layout="row" layout-align="start start"> <md-input-container>
-						<label>{{result.fixture.home.shortName}}</label> <input
-							type="number" style="width: 3em;" ng-model="result.homeScore"
-							max="126"></md-input-container><md-input-container>
-						<label>{{result.fixture.away.shortName}}</label> <input
-							type="number" style="width: 3em;" ng-model="result.awayScore"
-							max="126"></md-input-container></span>
-					<div ng-repeat="report in result.reports">
-						<div>{{report.team.name}}</div>
+
+			<div
+				ng-repeat="result in results.results | orderBy : 'fixture.home.shortName'"
+				layout="column">
+				<div layout="row" class="md-padding" layout-align="start center">
+				<md-input-container><label>{{result.fixture.home.shortName}}</label><input type="number" ng-model="result.homeScore"></md-input-container>
+				<md-input-container><label>{{result.fixture.away.shortName}}</label><input type="number" ng-model="result.awayScore"></md-input-container>
+				<md-button ng-click="editReports(result)">Reports</md-button>
+				</div>
+				<md-content style="height:16em;" ng-show="result == currentResult">
+					<div ng-repeat="report in result.reports | filter:filterEmptyReports">
+						<md-subheader>{{report.team.name}}</md-subheader>
 						<div>
-							<textarea ng-model="report.text.text" rows="15" cols="150"></textarea>
+							<textarea ng-model="report.text.text" rows="15" cols="60"></textarea>
 						</div>
 					</div>
-				</div>
+				</md-content>
 			</div>
+			</md-card>
 		</div>
-
 		<md-button ng-click="resetResults()">Reset</md-button>
 		<md-button class="md-primary" ng-click="updateResults(resultsList)">Save</md-button>
-
 	</form>
 </div>

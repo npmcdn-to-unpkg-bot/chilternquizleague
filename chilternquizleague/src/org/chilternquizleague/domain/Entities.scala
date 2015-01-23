@@ -270,7 +270,7 @@ abstract class Competition(
     var endTime:String,
     var subsidiary:Boolean = false
     ) extends BaseEntity{
-	description = `type`.getDescription()
+	description = `type`.description
 	var text:String = null
 	
     @Parent

@@ -66,8 +66,7 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintainance</web-resource-name>
-      <url-pattern>/maintain.html/</url-pattern>
-      <url-pattern>/maintain.html</url-pattern>
+      <url-pattern>/maintain/*</url-pattern>
       <url-pattern>/entity/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
