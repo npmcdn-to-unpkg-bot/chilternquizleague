@@ -9,17 +9,21 @@
 				<input ng-model="team.shortName" required> </md-input-container>
 				<md-input-container><label>Venue</label>
 					<input type="hidden" ng-model="team.venue" required>
-				</md-input-container> 
-				<select ng-model="team.venue"
-					ng-options="venue as venue.name for venue in venues"
-					ng-change="team.name=team.venue.name" required></select>
 
+				<select class="md-input" ng-model="team.venue"
+					ng-options="venue as venue.name for venue in venues track by venue.id"
+					ng-change="team.name=team.venue.name" required></select>
+				</md-input-container> 
 				<md-checkbox ng-model="team.retired">Retired</md-checkbox>
 
 				<div>
-					<md-button ng-click="addUser(userToAdd)">Add User</md-button>
-					<select ng-model="userToAdd"
+					<md-button class="md-accent" ng-click="addUser(userToAdd)">Add User</md-button>
+					<md-input-container>
+					<label>Select a user</label>
+					<input type="hidden" ng-model="userToAdd">
+					<select class="md-input" ng-model="userToAdd"
 						ng-options="user as user.name for user in users"></select>
+					<md-input-container>
 				</div>
 				<md-subheader>Users</md-subheader>
 

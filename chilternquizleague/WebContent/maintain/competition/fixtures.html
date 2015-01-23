@@ -1,44 +1,51 @@
 <div ng-controller="FixturesCtrl">
 	<md-subheader class="md-primary">Fixtures</md-subheader>
 	<form>
-		<div layout="row" layout-align="space-between" >
+		<div layout="row" layout-align="space-between">
 			<div flex="40">
-				<md-subheader class="md-accent">Fixture List</md-subheader>
-				<md-button ng-click="addFixtures()">Add New</md-button>
-				<md-content  style="height:70vh;padding-right:1em;"> <md-list> <md-item
+				<md-subheader class="md-primary md-hue-1">Fixture
+				List</md-subheader>
+				<md-button class="md-accent" ng-click="addFixtures()">Add
+				New</md-button>
+				<md-content style="height:70vh;padding-right:1em;"> <md-list>
+				<md-item
 					ng-class="fixts.start == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'"
 					ng-repeat="fixts in fixturesList | orderBy : 'start'"> <md-item-contents
 					layout="row" layout-align="space-between center">
 				<md-button ng-click="setCurrentFixtures(fixts)">{{fixts.start
-				| date:'dd MMMM yyyy'}}</md-button><span>{{fixts.description}}</span></md-item-contents> </md-item> </md-list> </md-content>
+				| date:'dd MMMM yyyy'}}</md-button>
+				<span>{{fixts.description}}</span></md-item-contents> </md-item> </md-list> </md-content>
 			</div>
-			<md-card layout="column" flex style="padding:.5em;">
-				<md-subheader class="md-accent">Fixtures Detail</md-subheader>
-				<md-input-container> <label>Description</label> <input ng-model="fixtures.description" > </md-input-container>
-				<div layout="row" layout-align="start center">
-					<md-input-container> <label>Start</label> <input ng-model="fixtures.start" type="datetime-local" > </md-input-container>
-					<md-input-container> <label>End</label> <input ng-model="fixtures.end" type="datetime-local" > </md-input-container>
-				</div>
-				<div layout="row" layout-align="start end">
-					<div layout="column" layout-align="start start">
-						<md-subheader>Home</md-subheader>
-						<select ng-model="fixture.home"
-							ng-options="team as team.name for team in unusedTeams"></select>
-					</div>
-					<div layout="column" layout-align="start start">
-						<md-subheader>Away</md-subheader>
-						<select ng-model="fixture.away"
-							ng-options="team as team.name for team in unusedTeams"></select>
-					</div>
-					<md-button ng-click="addFixture(fixture)">Add</md-button>
-				</div>
-				<div
-					ng-repeat="fixt in fixtures.fixtures | orderBy : 'home.shortName'"
-					layout="row" class="md-padding" layout-align="start center">
-					<span flex="50">{{fixt.home.shortName}} -
-						{{fixt.away.shortName}}</span>
-					<md-button ng-click="removeFixture(fixt)">Remove</md-button>
-				</div>
+			<md-card layout="column" flex style="padding:.5em;"> <md-subheader
+				class="md-primary md-hue-1">Fixtures Detail</md-subheader> <md-input-container>
+			<label>Description</label> <input ng-model="fixtures.description">
+			</md-input-container>
+			<div layout="row" layout-align="start center">
+				<md-input-container> <label>Start</label> <input
+					ng-model="fixtures.start" type="datetime-local"> </md-input-container>
+				<md-input-container> <label>End</label> <input
+					ng-model="fixtures.end" type="datetime-local"> </md-input-container>
+			</div>
+			<div layout="row" layout-align="start center">
+
+				<md-input-container> <label>Home</label> <input
+					type="hidden" ng-model="fixture.home"> <select
+					class="md-input" ng-model="fixture.home"
+					ng-options="team as team.name for team in unusedTeams"></select> </md-input-container>
+				<md-input-container> <label>Away</label> <input
+					type="hidden" ng-model="fixture.away"> <select
+					class="md-input" ng-model="fixture.away"
+					ng-options="team as team.name for team in unusedTeams"></select> </md-input-container>
+
+				<md-button class="md-accent" ng-click="addFixture(fixture)">Add</md-button>
+			</div>
+			<div
+				ng-repeat="fixt in fixtures.fixtures | orderBy : 'home.shortName'"
+				layout="row" class="md-padding" layout-align="start center">
+				<span flex="50">{{fixt.home.shortName}} -
+					{{fixt.away.shortName}}</span>
+				<md-button ng-click="removeFixture(fixt)">Remove</md-button>
+			</div>
 			</md-card>
 		</div>
 		<md-button ng-click="resetFixtures()">Reset</md-button>

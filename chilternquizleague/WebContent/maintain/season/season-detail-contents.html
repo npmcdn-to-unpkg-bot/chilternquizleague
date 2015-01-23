@@ -7,10 +7,12 @@
 	<md-input-container> <label>End Year</label> <input
 		ng-model="season.endYear" required> </md-input-container>
 	<md-subheader>Competitions</md-subheader>
-	<md-button ng-click="addCompetition(addCompType)">Add</md-button>
-	<select ng-model="addCompType"
+	<div layout="row" layout-align="start start">
+	<md-button class="md-accent" ng-click="addCompetition(addCompType)">Add</md-button>
+	<md-input-container><select class="md-input" ng-model="addCompType"
 		ng-options="value as value.description for value in competitionTypes | orderBy : 'description'"></select>
-
+		</md-input-container>
+	</div>
 	<div class="show team-username-box standard-margins">
 		<table>
 			<tr ng-repeat="(type,competition) in season.competitions"
