@@ -1,1 +1,11 @@
-<span><span ng-style="labelStyle">Season</span><select ng-style="selectStyle" ng-model="season" ng-options="season.description for season in seasons track by season.id" ></select></span>
+<md-input-container ng-style="containerstyle">
+<style>
+select.tool *{
+	color: black;
+}
+</style>
+	<label ng-if="!hidelabel">Season</label>	
+	<input type="hidden" ng-model="season">
+	<select ng-class="toolclass" ng-style="selectstyle" class="md-input" ng-model="season" ng-options="season.description for season in seasons track by season.id" ></select>
+</md-input-container>
+	

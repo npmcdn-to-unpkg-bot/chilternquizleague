@@ -109,10 +109,10 @@ mainApp.directive('cqlSeasons', ["viewService","$rootScope",function(viewService
 	    	}
     		
     		scope.seasons = $rootScope.seasons;
-    		scope.labelStyle = attrs.hasOwnProperty("hidelabel") ? {display:"none"}:{"margin-right":".25em"};
-    		scope.selectStyle = attrs.hasOwnProperty("toolstyle") ? {background:"transparent",border:"none"}:{};
-    		
-
+    		scope.hidelabel = attrs.hasOwnProperty("hidelabel");
+    		scope.selectstyle = attrs.hasOwnProperty("toolstyle") ? {background:"inherit",border:"none",color:"inherit"}:{};
+    		scope.containerstyle = attrs.hasOwnProperty("toolstyle") ? {padding:"0",paddingBottom:"2px",paddingLeft:".25em"}:{}
+    		scope.toolclass = attrs.hasOwnProperty("toolstyle") ?"tool" : ""
      	},
     	templateUrl:'/common/season-dropdown.html'
     	
