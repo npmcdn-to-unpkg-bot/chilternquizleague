@@ -74,30 +74,8 @@ class URLRewriteFilter extends Filter {
 
   override def doFilter(arg0: ServletRequest, arg1: ServletResponse,
     arg2: FilterChain): Unit = {
-    val request = arg0.asInstanceOf[HttpServletRequest]
-
-    try {
-      val pathInfo = new URI(request.getRequestURI()).getPath();
-
-      pathInfo match {
-
-        case a if ((a == null || (a.startsWith("/tasks")) || (a.contains("/_ah")) && !a.contains("."))) => { arg2.doFilter(arg0, arg1) }
-        case a if a.startsWith("/maintain") => {
-          request.getRequestDispatcher("/maintain/index.html").forward(
-            arg0, arg1)
-        }
-        case a if context.getRealPath(request.getPathInfo()) == null => {
-          request.getRequestDispatcher("/index.html").forward(
-            arg0, arg1)
-        }
-
-        case _ => { arg2.doFilter(arg0, arg1) }
-      }
-
-    } catch {
-
-      case e: Exception => LOG.log(Level.WARNING, "Error in redirect filter", e)
-    }
+    arg0.getRequestDispatcher("/index.html").forward(
+      arg0, arg1)
 
   }
 
@@ -108,4 +86,33 @@ class URLRewriteFilter extends Filter {
 
   override def destroy() = {}
 
+}
+
+class MaintainURLRewriteFilter extends Filter {
+  override def doFilter(arg0: ServletRequest, arg1: ServletResponse,
+    arg2: FilterChain): Unit = {
+
+    arg0.getRequestDispatcher("/maintain/index.html").forward(
+      arg0, arg1)
+
+  }
+
+  override def init(arg0: FilterConfig): Unit = {}
+
+  override def destroy() = {}
+
+}
+
+class PassThroughFilter extends Filter {
+  override def doFilter(arg0: ServletRequest, arg1: ServletResponse,
+    arg2: FilterChain): Unit = {
+    val req = arg0.asInstanceOf[HttpServletRequest]
+    
+    arg0.getRequestDispatcher(req.getRequestURI).forward(arg0, arg1)
+
+  }
+
+  override def init(arg0: FilterConfig): Unit = {}
+
+  override def destroy() = {}
 }
