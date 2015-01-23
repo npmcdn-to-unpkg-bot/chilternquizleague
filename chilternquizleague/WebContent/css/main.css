@@ -26,6 +26,10 @@ section{
 	margin-bottom:.25em;
 }
 
+md-card{
+	padding:.25em;
+}
+
 .highlit-border{
 	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
 		.031em #c1dff8, -.063em .063em .125em .031em #c1dff8, .063em -.063em

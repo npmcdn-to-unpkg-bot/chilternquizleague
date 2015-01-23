@@ -2,9 +2,12 @@
 	<section style="margin-left:.25em;">
 	<form>
 		<div>
-			<md-text-float autofocus autocomplete label="Enter your email address" type="email"
+			<md-input-container>
+			<label>Enter your email address</label>
+			<input autofocus autocomplete type="email"
 				ng-model="email" ng-change="fixturesForEmail(email)" size="50"
-				required />
+				required >
+			</md-input-container>
 		</div>
 		<div ng-if="preSubmission.fixtures">
 			<md-subheader class="md-primary">{{preSubmission.fixtures.start | date :'dd MMMM yyyy'}} : {{preSubmission.fixtures.description}} - {{preSubmission.fixtures.fixtures[0].home.name}} : {{preSubmission.fixtures.fixtures[0].away.name}}</md-subheader>
