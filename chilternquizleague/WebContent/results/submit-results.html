@@ -4,7 +4,7 @@
 		<div>
 			<md-input-container>
 			<label>Enter your email address</label>
-			<input autofocus autocomplete type="email"
+			<input autofocus autocomplete="on" type="email"
 				ng-model="email" ng-change="fixturesForEmail(email)" size="50"
 				required >
 			</md-input-container>
@@ -14,30 +14,27 @@
 
 			<div ng-repeat="result in results">
 				
-			<div layout="row" layout-sm="column" padding>
+				<span class="md-accent">{{result.compType.description}}</span>
+				<div layout="row" layout-sm="column" padding>
+					
+					<md-input-container>
+						<label>{{result.result.fixture.home.shortName}} - Home</label>
+						<input type="number" ng-model="result.result.homeScore" ng-disabled="preSubmission.results[0].result.homeScore" >
+					</md-input-container>
+					<md-input-container>
+						<label>{{result.result.fixture.away.shortName}} - Away</label>
+						<input type="number" ng-model="result.result.awayScore" ng-disabled="preSubmission.results[0].result.homeScore" >
+					</md-input-container>
 				
-				<md-subheader class="md-primary">{{result.type.description}}</md-subheader>
-				<div >
-					<md-text-float label="{{result.result.fixture.home.shortName}} - Home"
-						type="number" ng-model="result.result.homeScore" ng-disabled="preSubmission.results[0].result.homeScore" />
-				</div>
-	
-				<div>
-					<md-text-float label="{{result.result.fixture.away.shortName}} - Away"
-						type="number" ng-model="result.result.awayScore" ng-disabled="preSubmission.results[0].result.awayScore"/>
 				</div>
 			
 			</div>
-			
-			</div>
 
-
-			<div colspan="2">Report</div>
-
-			<div>
+			<md-input-container>
+					<label>Report</label>
 				<textarea ui-tinymce="tinymceOptions" cols="60" rows="10"
 					ng-model="results[0].result.reports[0].text.text"></textarea>
-			</div>
+			</md-input-container>
 
 			<div style="margin-top:.25em;">
 				<md-button ng-click="submitResults()" class="md-primary md-raised">Submit</md-button>

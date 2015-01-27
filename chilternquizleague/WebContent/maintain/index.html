@@ -14,11 +14,8 @@
 <script type="text/javascript" src="/js/angular-ui-router.min.js"></script>
 <script type="text/javascript" src="/js/angular-aria.min.js"></script>
 <script type="text/javascript"src="/js/angular-material.js"></script>
-<script type="text/javascript" src="/js/hammer.js"></script>
 <script type="text/javascript" src="/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/js/tinymce/angular-tinymce.js"></script>
-<script type="text/javascript" src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
-<script type="text/javascript" src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
 <script type="text/javascript" src="/maintain/js/entity.js"></script>
 <script type="text/javascript" src="/maintain/js/main.js"></script>
 <script type="text/javascript" src="/maintain/js/competition.js"></script>
@@ -30,13 +27,11 @@
 <script type="text/javascript" src="/maintain/js/venue.js"></script>
 <script type="text/javascript" src="/maintain/js/stats.js"></script>
 <script type="text/javascript" src="/maintain/js/database.js"></script>
-<script type="text/javascript" src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
-<script type="text/javascript" src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
 
 
 
 </head>
-<body ng-app="maintainApp" md-swipe-right="toggleLeft()" layout="column">
+<body ng-app="maintainApp" md-swipe-right="toggleLeft()" layout="column" ng-controller="MainCtrl">
 	<md-toolbar><div class="md-toolbar-tools" style="margin-left:.25em;">Maintenance</div></md-toolbar>
 	<div layout="row" layout-align="">
 	<md-sidenav class="md-sidenav-left md-whiteframe-z2"

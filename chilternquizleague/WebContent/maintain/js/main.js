@@ -89,7 +89,18 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 //	});
 //	
 	$locationProvider.html5Mode(true);
+	
+
+	
+	
 } ]);
+
+maintainApp.controller("MainCtrl",[ '$mdSidenav',"$scope", function($mdSidenav,$scope) {
+
+	  $scope.toggleLeft = function() {
+		    $mdSidenav('left').toggle();
+		  };
+}]);
 
 maintainApp.directive("cqlAddButton",function(){
 	

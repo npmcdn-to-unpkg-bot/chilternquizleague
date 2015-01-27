@@ -1,10 +1,10 @@
 <div flex ng-controller="TeamController" itemscope itemtype="http://schema.org/SportsTeam">
 	<md-subheader hide-gt-sm class="md-primary">{{team.name}}</md-subheader>
-	<div ng-controller="TeamExtrasController">
+	<div ng-controller="TeamExtrasController" >
 		<md-card hide-sm ng-if="team.extras.text"><div class="fix-text"
 			ng-bind-html="team.extras.text | htmlify"></div></md-card>
 		<md-card>
-			<md-subheader>Last few results:</md-subheader>
+			<md-subheader class="md-accent">Last few results:</md-subheader>
 			<cql-results class="inline-header" rows="5" results="team.extras.results"></cql-results>
 			<div class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/results">Show all</md-button>
@@ -12,7 +12,7 @@
 			</div>
 		</md-card>
 		<md-card>
-			<md-subheader>Next few fixtures:</md-subheader>
+			<md-subheader class="md-accent">Next few fixtures:</md-subheader>
 			<cql-fixtures class="inline-header" rows="5" fixtures="team.extras.fixtures"></cql-fixtures> 
 			<div  class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/fixtures">Show all</md-button>
@@ -20,15 +20,15 @@
 			</div>
 		</md-card>
 	</div>
-	<div hide show-sm md-theme="amber">
-	<div><md-button class="md-fab md-fab-top-right md-primary" aria-label="contact us"
+	<div hide show-sm  md-theme="amber">
+	<div><md-button class="md-fab md-fab-top-right md-primary md-hue-1" aria-label="contact us"
 			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
-			icon="/images/icons/ic_email.svg"></md-icon> <md-tooltip>Contact
+			icon="/images/icons/ic_email.svg" style="width: 24px; height: 24px;"></md-icon> <md-tooltip>Contact
 		Us!</md-tooltip></md-button></div>
 		<div>	
-		<md-button class="md-fab md-fab-bottom-right md-primary" aria-label="go to venue"
+		<md-button class="md-fab md-fab-bottom-right md-primary md-hue-1" aria-label="go to venue"
 			ng-href="/venues/{{team.venue.id}}"> <md-icon
-			icon="/images/icons/ic_location_on.svg"></md-icon> <md-tooltip>Venue</md-tooltip></md-button></div>
+			icon="/images/icons/ic_location_on.svg" style="width: 24px; height: 24px; margin-top:11px"></md-icon> <md-tooltip>Venue</md-tooltip></md-button></div>
 </div>
 </div>
 
