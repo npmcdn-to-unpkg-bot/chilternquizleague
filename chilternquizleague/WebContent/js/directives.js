@@ -143,5 +143,5 @@ mainApp.directive("cqlPageMenu",function(){
 	return {
 		restrict:'E',
 		replace:true,
-		template : "<span hide-tablet-landscape hide-pc><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
+		template : "<span><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
 });
