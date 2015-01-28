@@ -4,7 +4,7 @@
 		<md-card hide-sm ng-if="team.extras.text"><div class="fix-text"
 			ng-bind-html="team.extras.text | htmlify"></div></md-card>
 		<md-card>
-			<md-subheader class="md-accent">Last few results:</md-subheader>
+			<cql-subheader class="md-accent" >Last few results:</cql-subheader>
 			<cql-results class="inline-header" rows="5" results="team.extras.results"></cql-results>
 			<div class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/results">Show all</md-button>

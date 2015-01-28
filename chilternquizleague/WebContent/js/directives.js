@@ -145,3 +145,17 @@ mainApp.directive("cqlPageMenu",function(){
 		replace:true,
 		template : "<span><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
 });
+
+mainApp.directive("cqlSubheader", function(){
+
+	return {
+		scope:{"class":"="},
+		restrict:'E',
+		replace:true,
+		transclude:true,
+		link: function(scope){
+			scope.classes = "md-subheader md-default-theme"
+		},
+		template: "<h2 ng-class='classes' ng-transclude></h2>"
+	}
+})
