@@ -202,6 +202,14 @@ mainApp.config(function($mdThemingProvider) {
 	    .primaryPalette('purple');
 	  $mdThemingProvider.theme('deep-orange')
 	    .primaryPalette('deep-orange');
+	  $mdThemingProvider.theme('light-blue')
+	    .primaryPalette('light-blue');
+	  $mdThemingProvider.theme('blue-grey')
+	    .primaryPalette('blue-grey');
+	  
+	  
+	  
+	  
 	});
 
 

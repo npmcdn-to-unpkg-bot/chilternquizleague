@@ -1,11 +1,11 @@
 <div>
-	<md-subheader class="md-primary">Team Buzzer Details</md-subheader>
+	<cql-subheader class="md-primary">Team Buzzer Details</cql-subheader>
 	<form>
 		<md-input-container>
 			<label>Description</label>
 			<input ng-model="competition.description">
 		</md-input-container>
-		<md-subheader>Text</md-subheader>
+		<cql-subheader>Text</cql-subheader>
 		<textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
 		<md-button ng-click="resetCompetition()">Reset</md-button>

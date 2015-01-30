@@ -143,7 +143,7 @@ mainApp.directive("cqlPageMenu",function(){
 	return {
 		restrict:'E',
 		replace:true,
-		template : "<span><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
+		template : "<span><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg' style='margin-bottom:5px'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
 });
 
 mainApp.directive("cqlSubheader", function(){
@@ -157,5 +157,18 @@ mainApp.directive("cqlSubheader", function(){
 			scope.classes = "md-subheader md-default-theme"
 		},
 		template: "<h2 ng-class='classes' ng-transclude></h2>"
+	}
+})
+
+mainApp.directive("cqlPageNav", function(){
+
+	return {
+		scope:{"title":"@"},
+		restrict:'E',
+		transclude:true,
+		link: function(scope){
+			scope.classes = "md-subheader md-default-theme"
+		},
+		templateUrl: "/common/sidenav.html"
 	}
 })

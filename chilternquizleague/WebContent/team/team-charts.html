@@ -1,23 +1,23 @@
 <div ng-controller="TeamCharts">
 <md-card>
-<md-subheader class="md-primary">Graphs and Statistics</md-subheader>
+<cql-subheader class="md-primary">Graphs and Statistics</cql-subheader>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
-		<md-subheader>League Position</md-subheader>
+		<cql-subheader>League Position</cql-subheader>
 		<div><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" width="300" height="300"></canvas></div>
 	</div>
 	<div>
-		<md-subheader>Match Points</md-subheader>
+		<cql-subheader>Match Points</cql-subheader>
 		<div layout="row" layout-sm="column"><canvas tc-chartjs-line chart-options="options" chart-data="pointsData" auto-legend width="300" height="300"></canvas></div>
 	</div>
 </div>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
-		<md-subheader>Cumulative Match Points Difference</md-subheader>
+		<cql-subheader>Cumulative Match Points Difference</cql-subheader>
 		<div><canvas tc-chartjs-line chart-options="differenceOptions" chart-data="cumPointsDifferenceData" width="300" height="300"></canvas></div>
 	</div>
 	<div>
-		<md-subheader>Cumulative Match Points</md-subheader>
+		<cql-subheader>Cumulative Match Points</cql-subheader>
 		<div layout="row" layout-sm="column"><canvas auto-legend tc-chartjs-line chart-options="options" chart-data="cumPointsData" width="300" height="300"></canvas></div>
 	</div>
 </div>
