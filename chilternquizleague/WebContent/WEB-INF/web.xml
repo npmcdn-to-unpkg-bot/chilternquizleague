@@ -30,12 +30,34 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   <filter>
+    <filter-name>PassThroughFilter</filter-name>
+    <filter-class>org.chilternquizleague.web.PassThroughFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>MaintainURLRewriteFilter</filter-name>
+    <filter-class>org.chilternquizleague.web.MaintainURLRewriteFilter</filter-class>
+  </filter>
+  <filter>
     <filter-name>URLRewriteFilter</filter-name>
     <filter-class>org.chilternquizleague.web.URLRewriteFilter</filter-class>
   </filter>
   <filter-mapping>
+    <filter-name>PassThroughFilter</filter-name>
+    <url-pattern>/_ah/*</url-pattern>
+    <url-pattern>/tasks/*</url-pattern>
+    <url-pattern>/entity/*</url-pattern>
+    <url-pattern>/view/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>MaintainURLRewriteFilter</filter-name>
+    <url-pattern>/maintain/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+  </filter-mapping>
+  <filter-mapping>
     <filter-name>URLRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   <servlet>
     <description></description>
@@ -66,8 +88,7 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintainance</web-resource-name>
-      <url-pattern>/maintain.html/</url-pattern>
-      <url-pattern>/maintain.html</url-pattern>
+      <url-pattern>/maintain/*</url-pattern>
       <url-pattern>/entity/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>

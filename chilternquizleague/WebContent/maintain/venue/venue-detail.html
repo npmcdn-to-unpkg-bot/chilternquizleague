@@ -1,43 +1,35 @@
-<div>
-	<div class="box-title">Venue Details</div>
+<div ng-controller="VenueDetailCtrl">
+	<cql-subheader class="md-primary">Venue Details</cql-subheader>
 	<form>
-		<table>
-			<tr>
-				<td>Name</td>
-				<td><input ng-model="venue.name" required></td>
-			</tr>
-			<tr>
-				<td>Address</td>
-				<td><textarea rows="10" cols="30" ng-model="venue.address" required></textarea></td>
-			</tr>
-			<tr>
-				<td>Phone</td>
-				<td><input ng-model="venue.phone"></td>
-			</tr>
-			<tr>
-				<td>Email Address</td>
-				<td><input ng-model="venue.email" type="email"></td>
-			</tr>
-			<tr>
-				<td>Website</td>
-				<td><input ng-model="venue.website" type="url"></td>
-			</tr>
-			<tr>
-				<td>Image URL</td>
-				<td><input ng-model="venue.imageURL" ></td>
-			</tr>
-			<tr>
-				<td colspan="2"><img alt="" src="{{venue.imageURL}}"></td>
-			</tr>
-			<tr>
-				<td>Retired</td>
-				<td><input type="checkbox" ng-model="venue.retired" ></td>
-			</tr>
-			<tfoot><tr><td></td><td>    <button ng-click="resetVenue()">Reset</button>
-    <button ng-click="updateVenue(venue)">Save</button></td></tr></tfoot>
-		</table>
-		
-		
+		<div layout="row" layout-align="space-between">
+			<div layout="column">
+				<md-input-container> <label>Name</label> <input
+					ng-model="venue.name" required> </md-input-container>
+				<md-input-container> <label>Address</label> <textarea
+					rows="6" cols="30" ng-model="venue.address" required></textarea> </md-input-container>
+				<md-input-container> <label>Phone</label> <input
+					ng-model="venue.phone"> </md-input-container>
+				<md-input-container> <label>Email
+					Address</label> <input ng-model="venue.email" type="email"> </md-input-container>
+				<md-input-container> <label>Website</label> <input
+					ng-model="venue.website" type="url"> </md-input-container>
+				<md-input-container> <label>Image URL</label> <input
+					ng-model="venue.imageURL"> </md-input-container>
+				<md-checkbox ng-model="venue.retired">Retired</md-checkbox>
+			</div>
+			<div layout-margin hide-sm>
+				<div>
+					<img alt="" src="{{venue.imageURL}}">
+				</div>
+			</div>
+		</div>
+
+		<span> <md-button class="md-raised" ng-click="resetVenue()">Reset</md-button></span>
+		<span><md-button class="md-primary"
+				ng-click="updateVenue(venue)">Save</md-button></span>
+
+
+
 	</form>
 
 </div>

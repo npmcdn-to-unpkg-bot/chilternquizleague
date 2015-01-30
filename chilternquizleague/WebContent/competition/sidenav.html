@@ -1,6 +1,5 @@
-<md-sidenav class="md-sidenav-left md-whiteframe-z2"
-	md-component-id="left" md-is-locked-open="$media('gt-md')" md-padding>
+<cql-page-nav title="Competitions">
 	<div ng-repeat="item in competitions | orderBy : 'type.name'">
 		<md-button class="menu-item menu-title" ng-click="closeLeft()" href="/competitions/{{item.type.name}}">{{item.description}}</md-button>
 	</div>
-</md-sidenav>
+</cql-page-nav>

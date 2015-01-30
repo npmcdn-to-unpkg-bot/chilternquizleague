@@ -1,52 +1,37 @@
 <div>
-	<div class="box-title">League Details</div>
+	<cql-subheader class="md-primary">League Details</cql-subheader>
+
 	<form>
-		<table>
-			<tr>
-				<td>Description</td>
-				<td><input ng-model="leagueCompetition.description"></td>
-			</tr>
-			<tr>
-				<td>Start Time</td>
-				<td><input required  ng-model="leagueCompetition.startTime" ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
-			</tr>
-			<tr>
-				<td>End Time</td>
-				<td><input required ng-model="leagueCompetition.endTime"  ng-pattern="/\d\d:\d\d/" placeholder="hh:mm"></td>
-			</tr>
-			<tr>
-				<td>Subsidiary Competition</td>
-				<td><select ng-model="leagueCompetition.subsidiaryCompetition"
-					ng-options="comp as type for (type,comp) in masterSeason.competitions track by comp.id | filter : subFilter | orderBy : 'type'"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><a href="/maintain/seasons/{{seasonId}}/LEAGUE/fixtures">Fixtures</a></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><a href="/maintain/seasons/{{seasonId}}/LEAGUE/results">Results</a></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><a href="/maintain/seasons/{{seasonId}}/LEAGUE/tables">Tables</a></td>
-			</tr>
-			<tr>
-				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="leagueCompetition.text" cols="60"
-							rows="15" ></textarea>
+		<div layout="row" layout-sm="column" layout-align="space-between">
+			<div layout="column">
+				<md-input-container> <label>Description</label>
+					<input ng-model="competition.description"> </md-input-container>
+				<md-input-container> <label>Start Time
+					(hh:mm)</label> <input required ng-model="competition.startTime"
+					ng-pattern="/\d\d:\d\d/"> </md-input-container>
+				<md-input-container> <label>End Time
+					(hh:mm)</label> <input required ng-model="competition.endTime"
+					ng-pattern="/\d\d:\d\d/"> </md-input-container>
+				{{season.competitions.length}}
+				<md-input-container>
+					<label>Subsidiary Competition</label>
+					<input type="hidden" ng-model="competition.subsidiaryCompetition">
+					<select class="md-input" ng-model="competition.subsidiaryCompetition" ng-options="comp as type for (type,comp) in season.competitions track by comp.id | filter : subFilter | orderBy : 'type'"></select>
+				</md-input-container>
+				<md-button href="/maintain/seasons/{{season.id}}/competition/LEAGUE/fixtures">Fixtures</md-button>
+				<md-button href="/maintain/seasons/{{season.id}}/competition/LEAGUE/results">Results</md-button>
+				<md-button href="/maintain/seasons/{{season.id}}/competition/LEAGUE/tables">Tables</md-button>
+			</div>
+			<div>
+				<md-input-container> <label>Text</label> 
+					<input type="hidden" ng-model="competition.text"> 
+				</md-input-container>
+				<textarea ui-tinymce="tinymceOptions" ng-model="competition.text"
+					cols="60" rows="15"></textarea>
+			</div>
+		</div>
+		<md-button ng-click="resetCompetition()">Reset</md-button>
+		<md-button class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
 
-			</tr>
-
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetLeagueCompetition()">Reset</button>
-						<button ng-click="addLeagueCompetition(leagueCompetition)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
 	</form>
 </div>

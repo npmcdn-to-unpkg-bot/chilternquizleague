@@ -1,26 +1,16 @@
 <div>
-	<div class="box-title">Individual Competition Details</div>
+	<cql-subheader class="md-primary">Individual Competition Details</cql-subheader>
 	<form>
-		<table>
-			<tr>
-				<td>Description</td>
-				<td><input ng-model="individualCompetition.description"></td>
-			</tr>
-			<tr>
-				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="individualCompetition.text" cols="60"
+		<md-input-container>
+			<label>Description</label>
+			<input ng-model="competition.description">
+		</md-input-container>
+		<cql-subheader>Text</cql-subheader>
+		<textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
 
-			</tr>
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetIndividualCompetition()">Reset</button>
-						<button ng-click="addIndividualCompetition(individualCompetition)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+		<md-button ng-click="resetCompetition()">Reset</md-button>
+		<md-button class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
+
 	</form>
 </div>

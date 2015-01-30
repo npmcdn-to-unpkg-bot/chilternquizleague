@@ -1,0 +1,32 @@
+<cql-subheader class="md-primary">Season Details</cql-subheader>
+
+<form>
+	<md-input-container> <label>Start Year</label> <input
+		ng-model="season.startYear"
+		ng-change="updateEndYear(season.startYear)" required> </md-input-container>
+	<md-input-container> <label>End Year</label> <input
+		ng-model="season.endYear" required> </md-input-container>
+	<cql-subheader>Competitions</cql-subheader>
+	<div layout="row" layout-align="start start">
+	<md-button class="md-accent" ng-click="addCompetition(addCompType)">Add</md-button>
+	<md-input-container><select class="md-input" ng-model="addCompType"
+		ng-options="value as value.description for value in competitionTypes | orderBy : 'description'"></select>
+		</md-input-container>
+	</div>
+	<div class="show team-username-box standard-margins">
+		<table>
+			<tr ng-repeat="(type,competition) in season.competitions"
+				class="entity-row">
+				<td class="entity-link"><md-button
+						href="/maintain/seasons/{{seasonId}}/competition/{{type}}">{{competition.description}}</md-button></td>
+				<td class="entity-remove-button"><md-button
+						ng-click="removeCompetition(competition)">Remove</md-button></td>
+			</tr>
+		</table>
+	</div>
+
+	<md-button ng-click="resetSeason()">Reset</md-button>
+	<md-button class="md-primary" ng-click="updateSeason(season)">Save</md-button>
+
+
+</form>

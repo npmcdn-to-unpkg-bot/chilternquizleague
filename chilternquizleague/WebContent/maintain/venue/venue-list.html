@@ -1,9 +1,10 @@
-<div>
-	<div class="box-title">Venues</div>
-	<button ng-click="addScreen()">Add New</button>
+<div ng-controller="VenueListCtrl">
+	<cql-subheader class="md-primary">Venues</cql-subheader>
+	<cql-add-button></cql-add-button>
 
-	<div ng-repeat="venue in venues | orderBy :'name'">
-		<div><a href="/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</a></div>
-	</div>
-
+	<md-list>
+		<md-item ng-repeat="venue in venues | orderBy :'name'">
+			<md-item-content><md-button href="/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</md-button></md-item-content>
+		</md-item>
+	</md-list>
 </div>

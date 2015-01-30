@@ -1,9 +1,9 @@
-<div>
-	<div class="box-title">Teams</div>
-	<button ng-click="addScreen()">Add New</button>
+<div ng-controller="TeamListCtrl">
+	<cql-subheader class="md-primary">Teams</cql-subheader>
+	<cql-add-button></cql-add-button>
 
-	<div ng-repeat="team in teams | orderBy:'shortName'">
-		<div><a href="/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</a></div>
-	</div>
+	<md-list>
+		<md-item ng-repeat="team in teams | orderBy:'shortName'"><md-item-content><md-button href="/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</md-button></md-item-content></md-item>
+	</md-list>
 
 </div>

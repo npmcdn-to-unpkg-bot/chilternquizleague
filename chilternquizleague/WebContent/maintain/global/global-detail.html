@@ -1,45 +1,26 @@
-<div>
-	<div class="box-title">Global Details</div>
+<div ng-controller="GlobalDetailCtrl">
+	<cql-subheader class="md-primary">Global Details</cql-subheader>
 	<form>
-		<table>
+		<md-input-container>
+			<label>League Name</label>
+			<input ng-model="global.leagueName" required size="60"/>
+		</md-input-container>
+		<md-input-container>
+			<label>Current Season</label>
+			<input type="hidden" ng-model="global.currentSeason">
+			<select class="md-input" ng-model="global.currentSeason"
+						ng-options="season as season.startYear for season in seasons track by season.id" required></select>
+		</md-input-container>
+		<cql-subheader>Front Page Text</cql-subheader>
+		<md-input-container>
+		<textarea ui-tinymce="tinymceOptions" ng-model="global.frontPageText" cols="60"
+							rows="15" required></textarea>
+		</md-input-container>
+		<md-button class="md-accent" ng-click="addAlias(global)">Add Alias</md-button>
+		<div ng-repeat="emailAlias in global.emailAliases" layout="row" layout-align="start end"><md-input-container><input placeholder="alias" required ng-model="emailAlias.alias"></md-input-container><md-input-container><select class="md-input" required ng-model="emailAlias.user" ng-options="user as user.name for user in users track by user.id"></select></md-input-container></div>
+		
+		<md-button ng-click="resetGlobal()">Reset</md-button>
+		<md-button class="md-primary" ng-click="updateGlobal(global)">Save</md-button>
 
-			<tbody>
-				<tr>
-					<td>League Name</td>
-					<td><input ng-model="global.leagueName" required size="60"/></td>
-				</tr>
-				<tr>
-					<td>Current Season</td>
-					<td><select ng-model="global.currentSeason"
-						ng-options="season as season.startYear for season in seasons" required/></td>
-				</tr>
-				
-								<tr>
-				<td>Text Provider</td>
-					<td><select ng-model="global.globalText"
-						ng-options="text as text.name for text in texts" required/></td>
-				</tr>
-				<tr>
-					<td>Front Page Text</td>
-					<td><textarea ui-tinymce="tinymceOptions" ng-model="global.frontPageText" cols="60"
-							rows="15" required></textarea></td>
-				</tr>
-				
-			<tr><td><button ng-click="addAlias(global)">Add Alias</button></td></tr>
-			<tr ng-repeat="emailAlias in global.emailAliases"><td><input required ng-model="emailAlias.alias"></td><td><select required ng-model="emailAlias.user" ng-options="user as user.name for user in users track by user.id"/></td></tr>
-			
-			</tbody>
-
-
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetGlobal()">Reset</button>
-						<button ng-click="updateGlobal(global)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
 	</form>
 </div>

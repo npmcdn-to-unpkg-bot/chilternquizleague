@@ -85,6 +85,8 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 					return service;
 				} ]);
 
+
+
 mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService',
 		function($rootScope, $state, $stateParams, $mdDialog, viewService) {
 
@@ -177,6 +179,38 @@ mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
 	
 $locationProvider.html5Mode(true);
 }]);
+
+mainApp.config(function($mdThemingProvider) {
+
+	  $mdThemingProvider.theme('amber')
+	    .primaryPalette('amber');
+	  $mdThemingProvider.theme('lime')
+	    .primaryPalette('lime');
+	  $mdThemingProvider.theme('yellow')
+	    .primaryPalette('yellow');
+	  $mdThemingProvider.theme('green')
+	    .primaryPalette('green');
+	  $mdThemingProvider.theme('cyan')
+	    .primaryPalette('cyan');
+	  $mdThemingProvider.theme('indigo')
+	    .primaryPalette('indigo');
+	  $mdThemingProvider.theme('red')
+	    .primaryPalette('red');
+	  $mdThemingProvider.theme('grey')
+	    .primaryPalette('grey');
+	  $mdThemingProvider.theme('purple')
+	    .primaryPalette('purple');
+	  $mdThemingProvider.theme('deep-orange')
+	    .primaryPalette('deep-orange');
+	  $mdThemingProvider.theme('light-blue')
+	    .primaryPalette('light-blue');
+	  $mdThemingProvider.theme('blue-grey')
+	    .primaryPalette('blue-grey');
+	  
+	  
+	  
+	  
+	});
 
 
 mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',

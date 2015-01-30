@@ -1,25 +1,17 @@
-<div>
-	<div class="box-title">User Details</div>
+<div ng-controller="UserDetailCtrl">
+	<cql-subheader class="md-primary">User Details</cql-subheader>
 	<form>
-		<table>
-			<tr>
-				<td>Name</td>
-				<td><input ng-model="user.name" required></td>
-			</tr>
-			<tr>
-				<td>email</td>
-				<td><input type="email" ng-model="user.email" ng-change="user.name=user.email" required></td>
-			</tr>
+		<md-input-container>
+			<label>Name</label>
+			<input ng-model="user.name" required>
+		</md-input-container>
+		<md-input-container>
+			<label>email</label>
+			<input type="email" ng-model="user.email" ng-change="user.name=user.email" required>
+		</md-input-container>
+		
+		<md-button ng-click="resetUser()">Reset</md-button>
+		<md-button class="md-primary" ng-click="updateUser(user)">Save</md-button>
 
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetUser()">Reset</button>
-						<button ng-click="updateUser(user)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
 	</form>
 </div>

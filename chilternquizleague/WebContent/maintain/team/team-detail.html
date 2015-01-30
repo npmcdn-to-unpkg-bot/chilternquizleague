@@ -1,51 +1,49 @@
-<div>
-	<div class="box-title">Team Details</div>
+<div flex ng-controller="TeamDetailCtrl">
+	<cql-subheader class="md-primary">Team Details</cql-subheader>
 	<form>
-		<table>
-			<tr>
-				<td>Name</td>
-				<td><input ng-model="team.name" required></td>
-			</tr>
-			<tr>
-				<td>Short Name</td>
-				<td><input ng-model="team.shortName" required></td>
-			</tr>
-			<tr>
-				<td>Venue</td>
-				<td><select ng-model="team.venue"
-					ng-options="venue as venue.name for venue in venues"
-					ng-change="team.name=team.venue.name" required></td>
-			</tr>
-			<tr>
-				<td>Retired</td>
-				<td><input type="checkbox" ng-model="team.retired" ></td>
-			</tr>
-			<tr>
-					<td>Rubric</td>
-					<td><textarea ui-tinymce="tinymceOptions" ng-model="team.rubric.text" cols="60"
-							rows="15" ></textarea></td>
-				</tr>
-			<tr>
-				<td></td>
-				<td><div><button ng-click="addUser(userToAdd)">Add</button><select ng-model="userToAdd" ng-options="user as user.name for user in users"/></div></td>
-			</tr>
-			<tr>
-				<td>Users</td>
-				<td>
-					<div class="show-thin team-username-box">
-						<div class="team-username" ng-repeat="user in team.users"><span>{{user.name}}</span><span class="entity-remove-button"><button ng-click="removeUser(user)">Remove</button></span></div>
+		<div layout="row" layout-sm="column" layout-align="space-between">
+			<div layout="column">
+				<md-input-container> <label>Name</label> <input
+					ng-model="team.name" required> </md-input-container>
+				<md-input-container> <label>Short Name</label>
+				<input ng-model="team.shortName" required> </md-input-container>
+				<md-input-container><label>Venue</label>
+					<input type="hidden" ng-model="team.venue" required>
+
+				<select class="md-input" ng-model="team.venue"
+					ng-options="venue as venue.name for venue in venues track by venue.id"
+					ng-change="team.name=team.venue.name" required></select>
+				</md-input-container> 
+				<md-checkbox ng-model="team.retired">Retired</md-checkbox>
+
+				<div>
+					<md-button class="md-accent" ng-click="addUser(userToAdd)">Add User</md-button>
+					<md-input-container>
+					<label>Select a user</label>
+					<input type="hidden" ng-model="userToAdd">
+					<select class="md-input" ng-model="userToAdd"
+						ng-options="user as user.name for user in users"></select>
+					<md-input-container>
+				</div>
+				<cql-subheader>Users</cql-subheader>
+
+				<div layout="column">
+					<div ng-repeat="user in team.users" layout="row" layout-align="space-between center">
+						<span>{{user.name}}</span><md-button
+								ng-click="removeUser(user)">Remove</md-button>
 					</div>
-				</td>
-			</tr>
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetTeam()">Reset</button>
-						<button ng-click="updateTeam(team)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+				</div>
+			</div>
+			<div>
+				<md-input-container><label>Rubric</label><input type="hidden" ng-model="team.rubric.text"></md-input-container>
+				<textarea
+					ui-tinymce="tinymceOptions" cols="60" rows="15"
+					ng-model="team.rubric.text" ></textarea>
+			</div>
+		</div>
+
+
+		<md-button ng-click="resetTeam()">Reset</md-button>
+		<md-button class="md-primary" ng-click="updateTeam(team)">Save</md-button>
 	</form>
 </div>

@@ -1,15 +1,14 @@
-<cql-title-bar page-menu md-theme="amber">
+<cql-title-bar page-menu>
 	<span hide-sm>{{team.name}}</span><span hide-gt-sm>{{team.shortName}}</span>
-
-		<md-button hide-sm aria-label="contact us"
-			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
-			icon="/images/icons/ic_email.svg"></md-icon> <md-tooltip>Contact
+	<span hide-sm layout="row" style="margin-left:.5em;padding-bottom:5px;">
+		<md-button aria-label="contact us"
+			ng-click="showContactForm(team.name,team.emailName)" > <md-icon
+			icon="/images/icons/ic_email.svg" ></md-icon> <md-tooltip>Contact
 		Us!</md-tooltip></md-button>			
-		<md-button hide-sm aria-label="go to venue"
+		<md-button aria-label="go to venue"
 			ng-href="/venues/{{team.venue.id}}"> <md-icon
-			icon="/images/icons/ic_location_on.svg"></md-icon> <md-tooltip>Venue</md-tooltip></md-button>
-
-
+			icon="/images/icons/ic_location_on.svg" ></md-icon> <md-tooltip>Venue</md-tooltip></md-button>
+	</span>
 </cql-title-bar>
 
 

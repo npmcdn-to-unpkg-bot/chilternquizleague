@@ -13,7 +13,7 @@ import org.chilternquizleague.domain.util.RefUtils._
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionTypeView(compType:CompetitionType){
   val name = compType.name
-  val description = compType.getDescription
+  val description = compType.description
 }
 
 object CompetitionTypeView{

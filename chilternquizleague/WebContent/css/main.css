@@ -26,6 +26,10 @@ section{
 	margin-bottom:.25em;
 }
 
+md-card{
+	padding:19px;
+}
+
 .highlit-border{
 	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
 		.031em #c1dff8, -.063em .063em .125em .031em #c1dff8, .063em -.063em
@@ -99,21 +103,22 @@ section{
 .page-header{
 	font-family: 'Nunito', sans-serif !important;
 	font-size: 150% !important;
+		text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
+	20px rgb(63,81,181), 0 0 30px rgb(63,81,181), 0 0 40px rgb(63,81,181), 0 0 50px rgb(63,81,181) !important;
 	color: darkblue !important;
+
 	transition:all 1s ease-out;
 }
 
 .page-header-small{
 	font-family: 'Nunito', sans-serif !important;
 	font-size: 100% !important;
-	color: darkblue !important;
+	color: white !important;
 	transition:all 1s ease-out;
 }
 
 .page-header:hover {
 	
-	text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
-	20px darkblue, 0 0 30px darkblue, 0 0 40px darkblue, 0 0 50px darkblue !important;
 	color: white !important;
 	
 }

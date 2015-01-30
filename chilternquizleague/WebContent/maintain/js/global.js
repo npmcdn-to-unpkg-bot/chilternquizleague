@@ -1,7 +1,7 @@
 maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
 		entityService, $routeParams, $rootScope, $location) {
 	makeUpdateFnWithCallback("global", function(ret, $location) {
-		$location.url("/maintain.html");
+		$location.url("/maintain");
 	})($scope, entityService, $routeParams, $rootScope, $location);
 	makeListFn("season", {
 		bindName : "currentSeason",
@@ -18,7 +18,7 @@ maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
 	
 	$scope.addAlias=function(global){
 		
-		global.emailAliases.push({alias:"change me",user:null});
+		global.emailAliases.push({alias:null,user:null});
 	};
 	
 	$scope.tinymceOptions = tinymceOptions;

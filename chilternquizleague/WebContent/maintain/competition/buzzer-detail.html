@@ -1,26 +1,15 @@
 <div>
-	<div class="box-title">Team Buzzer Details</div>
+	<cql-subheader class="md-primary">Team Buzzer Details</cql-subheader>
 	<form>
-		<table>
-			<tr>
-				<td>Description</td>
-				<td><input ng-model="buzzerCompetition.description"></td>
-			</tr>
-			<tr>
-				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="buzzerCompetition.text" cols="60"
+		<md-input-container>
+			<label>Description</label>
+			<input ng-model="competition.description">
+		</md-input-container>
+		<cql-subheader>Text</cql-subheader>
+		<textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
+		<md-button ng-click="resetCompetition()">Reset</md-button>
+		<md-button class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
 
-			</tr>
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetBuzzerCompetition()">Reset</button>
-						<button ng-click="addBuzzerCompetition(buzzerCompetition)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
 	</form>
 </div>

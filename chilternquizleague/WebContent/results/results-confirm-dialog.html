@@ -5,7 +5,7 @@
 
 		<md-list>
 		<md-list-item ng-repeat="submission in submissions">
-			<md-subheader>{{submission.competitionType}}</md-subheader>
+			<cql-subheader>{{submission.competitionType}}</cql-subheader>
 			<div class="md-tile-content">
 			<div>Home Score ({{submission.result.fixture.home.shortName}}) - {{submission.result.homeScore}}</div>
 			<div>Away Score ({{submission.result.fixture.away.shortName}}) - {{submission.result.awayScore}}</div>

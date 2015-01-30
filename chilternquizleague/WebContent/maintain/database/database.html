@@ -1,15 +1,16 @@
 <div ng-controller="DatabaseCtrl">
-	<form>
-	<div>
-		Dump database to text file : <a href="/entity/dump.txt" download type="text/plain">Dump
-			</a>
-	</div>
-	<br>
-	<div>
-		<div>Reload database from text file</div>
-		<input type="file" id="db.dump.file" value="Select Dump File">
-		<button
-			ng-click="uploadDump()">Upload</button>
-	</div>
-	</form>
+	<cql-subheader class="md-primary">Database</cql-subheader>
+
+	<md-card layout-align="start start" layout-margin layout-padding>
+		<cql-subheader>Dump database to text file</cql-subheader>
+	 	<md-button class="md-primary" href="/entity/dump.txt" download type="text/plain" target="_self">Download
+		</md-button>
+	</md-card>
+
+	<md-card layout-align="start start" layout-margin layout-padding>
+		<cql-subheader>Reload database from text file</cql-subheader>
+		<input type="file" id="db.dump.file" >
+		<md-button class="md-primary" ng-click="uploadDump()">Upload</md-button>
+	</md-card>
+
 </div>

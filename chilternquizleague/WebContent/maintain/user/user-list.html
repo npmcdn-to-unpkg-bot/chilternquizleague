@@ -1,9 +1,17 @@
-<div>
-	<div class="box-title">Users</div>
-	<button ng-click="addScreen()">Add New</button>
+<div ng-controller="UserListCtrl">
+	<cql-subheader class="md-primary">Users</cql-subheader>
+	<cql-add-button></cql-add-button>
 
-	<div ng-repeat="user in users | orderBy : 'name'">
-		<div><a href="/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</a></div>
+	<md-list>
+		<md-item ng-repeat="user in users | orderBy : 'name'">
+			<md-item-content>
+				<md-button style="text-transform:none;" href="/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</md-button>
+			</md-item-content>
+		</md-item>
+	</md-list>
+	
+	<div>
+		<div></div>
 	</div>
 
 </div>

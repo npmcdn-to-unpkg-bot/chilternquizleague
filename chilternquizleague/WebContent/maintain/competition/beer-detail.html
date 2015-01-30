@@ -1,35 +1,28 @@
 <div>
-	<div class="box-title">Beer Leg Details</div>
+	<cql-subheader class="md-primary">Beer Leg Details</cql-subheader>
+
 	<form>
-		<table>
-			<tr>
-				<td>Description</td>
-				<td><input ng-model="beerCompetition.description"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><a href="/maintain/seasons/{{seasonId}}/BEER/results">Results</a></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><a href="/maintain/seasons/{{seasonId}}/BEER/tables">Tables</a></td>
-			</tr>
-			<tr>
-				<td>Text</td>
-				<td><textarea ui-tinymce="tinymceOptions" ng-model="beerCompetition.text" cols="60"
-							rows="15" ></textarea>
+		<div layout="row" layout-sm="column" layout-align="space-between">
+			<div layout="column">
+				<md-input-container> <label>Description</label>
+				<input ng-model="competition.description"> </md-input-container>
+				<md-button href="/maintain/seasons/{{season.id}}/competition/BEER/results">Results</md-button>
+				<md-button href="/maintain/seasons/{{season.id}}/competition/BEER/tables">Tables</md-button>
+			</div>
+			<div>
+				<md-input-container> <label>Text</label> 
+					<input type="hidden" ng-model="competition.text"> 
+				</md-input-container>
+				<textarea ui-tinymce="tinymceOptions" ng-model="competition.text"
+					cols="60" rows="15"></textarea>
+				
+				
+			</div>
+		</div>
+		<md-button ng-click="resetCompetition()">Reset</md-button>
+		<md-button class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
 
-			</tr>			
-
-			<tfoot>
-				<tr>
-					<td></td>
-					<td>
-						<button ng-click="resetBeerCompetition()">Reset</button>
-						<button ng-click="addBeerCompetition(beerCompetition)">Save</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
 	</form>
 </div>
+
+
