@@ -40,12 +40,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.io.StringWriter
 import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
-import org.chilternquizleague.domain.BaseLeagueCompetition
 import org.chilternquizleague.util.JacksonUtils
-import org.chilternquizleague.domain.Statistics
-import org.chilternquizleague.domain.TeamCompetition
+import org.chilternquizleague.util.UserUtils
 import org.chilternquizleague.web.ViewUtils._
-import org.chilternquizleague.domain.Report
+
 
 
 trait BaseRest extends HttpServlet {
@@ -312,8 +310,7 @@ class ViewService extends BaseRest {
    
     val now  = new Date
     for{
-      e <- req.parameter("email").map(_.trim())
-      t <- entityList(classOf[Team]).find(_.users.exists(_.email equalsIgnoreCase e))
+      (u,t) <- UserUtils.userTeamForEmail(req.parameter("email"))
       s <- entityByKey(req.id("seasonId"), classOf[Season])
       f <- teamFixtures(Some(t.id), s).filter(_.start before now).reverse.headOption
       fixture <- f.fixtures.headOption
