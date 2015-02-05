@@ -1,3 +1,4 @@
+<div>
 <cql-title-bar page-menu>
 	<span hide-sm>{{team.name}}</span><span hide-gt-sm>{{team.shortName}}</span>
 	<span hide-sm layout="row" style="margin-left:.5em;padding-bottom:5px;">
@@ -11,6 +12,21 @@
 	</span>
 </cql-title-bar>
 
+<div hide show-sm style="top: 0;
+  height: 160px;
+  position: absolute;
+  right: 0;
+  width: 94px; margin-top:50px;">
+	<div><md-button class="md-primary md-fab md-fab-top-right" aria-label="contact us"
+			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
+			icon="/images/icons/ic_email.svg" style="width: 24px; height: 24px;"></md-icon> <md-tooltip>Contact
+		Us!</md-tooltip></md-button></div>
+		<div>	
+		<md-button class="md-primary md-fab md-fab-bottom-right" aria-label="go to venue"
+			ng-href="/venues/{{team.venue.id}}"> <md-icon
+			icon="/images/icons/ic_location_on.svg" style="width: 24px; height: 24px; margin-top:11px"></md-icon> <md-tooltip>Venue</md-tooltip></md-button></div>
+</div>
+</div>
 
 
 
