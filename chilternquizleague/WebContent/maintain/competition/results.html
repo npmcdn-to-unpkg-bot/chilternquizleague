@@ -8,7 +8,7 @@
 					<md-list>
 						<md-item ng-repeat="results in resultsList | orderBy : 'start'">
 							<md-item-contents layout="row" layout-align="space-between center">
-								<md-button ng-click="setCurrentResults(results)">{{results.date	| date:'dd MMMM yyyy'}}</md-button>
+								<md-button class="md-accent md-hue-1" ng-click="setCurrentResults(results)" style="text-transform:none;"><span hide-sm>{{results.date	| date:'dd MMMM yyyy'}}</span><span hide-gt-sm>{{results.date	| date:'dd MMM yy'}}</span></md-button>
 								<span>{{results.description}}</span>
 							</md-item-contents>
 						</md-item>
@@ -26,7 +26,7 @@
 			<div
 				ng-repeat="result in results.results | orderBy : 'fixture.home.shortName'"
 				layout="column">
-				<div layout="row" class="md-padding" layout-align="start center">
+				<div layout-gt-sm="row" layout="column" class="md-padding" layout-align-gt-sm="start center" layout-align="start start">
 				<md-input-container><label>{{result.fixture.home.shortName}}</label><input type="number" ng-model="result.homeScore"></md-input-container>
 				<md-input-container><label>{{result.fixture.away.shortName}}</label><input type="number" ng-model="result.awayScore"></md-input-container>
 				<md-button ng-click="editReports(result)">Reports</md-button>

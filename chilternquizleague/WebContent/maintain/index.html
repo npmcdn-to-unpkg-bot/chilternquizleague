@@ -3,6 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta http-equiv="Cache-Control" content="no-store" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chiltern Quiz League - data maintenance</title>
 <link rel="icon" type="image/gif" href="/favicon.gif" />
 <link type="text/css" rel="stylesheet" href="/maintain/css/maintain.css">
@@ -32,10 +33,11 @@
 
 </head>
 <body ng-app="maintainApp" md-swipe-right="toggleLeft()" layout="column" ng-controller="MainCtrl">
-	<md-toolbar><div class="md-toolbar-tools" style="margin-left:.25em;"><md-button hide show-sm show-md aria-label="Main menu" ng-click="toggleLeft()"><md-icon icon="/images/icons/ic_menu.svg" style="margin-bottom:5px"></md-icon><md-tooltip>Main menu</md-tooltip></md-button><span>Maintenance</span></div></md-toolbar>
+	<md-toolbar><div class="md-toolbar-tools" ><md-button hide show-sm show-md aria-label="Main menu" ng-click="toggleLeft()"><md-icon icon="/images/icons/ic_menu.svg" style="margin-bottom:5px"></md-icon><md-tooltip>Main menu</md-tooltip></md-button><span style="margin-left:.25em;">Maintenance</span></div></md-toolbar>
 	<div layout="row">
 	<md-sidenav class="md-sidenav-left md-whiteframe-z2"
-	md-component-id="left"  md-padding md-is-locked-open="$media('gt-md')" ng-click="toggleLeft()">
+	md-component-id="left" md-is-locked-open="$media('gt-md')" ng-click="toggleLeft()">
+		<md-content>
 		<div>
 			<md-button class="menu-item menu-title" href="/maintain/global/current">Global</md-button>
 		</div>
@@ -60,6 +62,7 @@
 		<div>
 			<md-button class="menu-item menu-title" href="/maintain/database">Database</md-button>
 		</div>
+		</md-content>
 	</md-sidenav>
 
 	<md-content ui-view flex style="margin-top:.25em;margin-left:.25em;"></md-content>

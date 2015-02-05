@@ -1,16 +1,19 @@
 <div ng-controller="LeagueTablesCtrl">
 	<cql-subheader class="md-primary">Tables</cql-subheader>
 	<form>
-		<div><md-button ng-click="addTable(leagueTables)">Add Table</md-button></div>
+		<div><md-button class="md-accent" ng-click="addTable(leagueTables)">Add Table</md-button></div>
 		<div ng-repeat="table in leagueTables">
-			<md-input-container><input ng-model="table.description"></md-input-container>
-			<div><md-button ng-click="addRow(table)">Add Row</md-button></div>
+			<md-input-container>
+				<label>Description</label>
+				<input ng-model="table.description">
+			</md-input-container>
+			<div><md-button class="md-accent" ng-click="addRow(table)">Add Row</md-button></div>
 			<table class="league-table-tbl">
 				<thead><tr><td>Position</td><td>Team</td><td>Played</td><td>Won</td><td>Lost</td><td>Drawn</td><td>Scored</td><td>Against</td><td>Points</td></tr></thead>
 				<tbody >
 				<tr ng-repeat="item in table.rows">
-					<td><md-input-container><input ng-model="item.position" ng-init="setRowTeam(item)"></md-input-container></td>
-					<td><md-input-container><select ng-model="item.team"  ng-options="team as team.shortName for team in teams track by team.id"></select></md-input-container></td>
+					<td><md-input-container><input ng-model="item.position" ng-init="setRowTeam(item)" style="width:3em;"></md-input-container></td>
+					<td><md-input-container><select class="md-input" ng-model="item.team"  ng-options="team as team.shortName for team in teams track by team.id"></select></md-input-container></td>
 					<td><md-input-container><input type="number" min="0" ng-model="item.played"></md-input-container></td>
 					<td><md-input-container><input type="number" min="0" ng-model="item.won"></md-input-container></td>
 					<td><md-input-container><input type="number" min="0" ng-model="item.lost"></md-input-container></td>
