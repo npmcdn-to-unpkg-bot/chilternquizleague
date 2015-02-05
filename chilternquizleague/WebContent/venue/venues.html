@@ -5,7 +5,7 @@
 		<cql-page-nav title="Venues">
 
 			<div ng-repeat="item in venues | orderBy:'name'">
-				<md-button class="menu-item menu-title" ng-click="closeLeft()"
+				<md-button class="menu-item menu-title" 
 					href="/venues/{{item.id}}">{{item.name}}</md-button>
 			</div>
 
