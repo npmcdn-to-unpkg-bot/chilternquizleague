@@ -44,13 +44,9 @@ private class DBDumper {
   def load(entities: JMap[String, JList[JMap[String, Any]]]) = {
     val mapper = new ObjectMapper().registerModule(JacksonUtils.unsafeModule)
 
-    val globals = new ArrayList(entityList(classOf[GlobalApplicationData]))
+    val globals = entityList(classOf[GlobalApplicationData])
 
-    ofy.transact(new VoidWork() {
-      override def vrun: Unit = {
-        ofy.delete.entities(globals)
-      }
-    })
+    transaction(() => delete(globals))
 
     for {
       t <- DBDumper.dumpTypes
@@ -67,12 +63,8 @@ private class DBDumper {
     
     for {global <- entityList(classOf[GlobalApplicationData])}
     {
-    ofy.transact(new VoidWork() {
-      override def vrun: Unit = {
-        save(global)
-      }
-    })}
-    
+      transaction(()=>save(global))
+    }    
     Application.init()
   }
 

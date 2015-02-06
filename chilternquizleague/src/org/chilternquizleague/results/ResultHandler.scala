@@ -20,7 +20,7 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
 
   private def commit(): Unit = {
 
-    Option(entityList(classOf[User], ("email", email)).head).foreach {user:User =>
+    Option(entityList(classOf[User], ("email", email)).head).foreach { user: User =>
 
       result.firstSubmitter = user;
 
@@ -28,24 +28,19 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
 
         season =>
           {
-            ofy.transact(new VoidWork() {
-
-              override def vrun: Unit = {
-
-                Option[TeamCompetition](season.competition(competitionType)).foreach {
-                  c => 	val r = c.addResult(result)
-                		save(r)  
-                    	save(c)
-                    
-                }
-              }
+            transaction(() => Option[TeamCompetition](season.competition(competitionType)).foreach {
+              c =>
+                val r = c.addResult(result)
+                save(r)
+                save(c)
 
             })
+
           }
-      if(competitionType == CompetitionType.LEAGUE){    
-       val queue:Queue = QueueFactory.getQueue("stats");
-       queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", seasonId.toString));
-      }
+          if (competitionType == CompetitionType.LEAGUE) {
+            val queue: Queue = QueueFactory.getQueue("stats");
+            queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", seasonId.toString));
+          }
       }
 
       return

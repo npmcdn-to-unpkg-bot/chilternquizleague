@@ -25,103 +25,93 @@ import scala.collection.JavaConversions._
 import java.util.ArrayList
 import com.googlecode.objectify.VoidWork
 
+class StatsQueueHandler extends HttpServlet {
+  val LOG: Logger = Logger.getLogger(this.getClass.getName)
+  override def doPost(req: HttpServletRequest, resp: HttpServletResponse) {
 
-class StatsQueueHandler extends HttpServlet{
-  val LOG:Logger = Logger.getLogger(this.getClass.getName)
-    override def doPost(req:HttpServletRequest, resp:HttpServletResponse){
-  
-	LOG.fine(s"task arrived : ${req.getParameter("result")}")
-	
-	for{
+    LOG.fine(s"task arrived : ${req.getParameter("result")}")
+
+    for {
       resText <- req.parameter("result")
       r = JacksonUtils.safeMapper.readValue(resText, classOf[Result])
       season <- entity(req.id("seasonId"), classOf[Season])
-	}
-	{
-		StatsWorker.perform(r, season)
-	}
+    } {
+      StatsWorker.perform(r, season)
+    }
   }
 }
 
+object StatsWorker {
 
-object StatsWorker{
-  
-  def perform(result:Result, season:Season) = new StatsWorker(result,season, season.competition(CompetitionType.LEAGUE)).doIt
+  def perform(result: Result, season: Season) = new StatsWorker(result, season, season.competition(CompetitionType.LEAGUE)).doIt
 }
 
-class StatsWorker(result:Result, season:Season, competition:LeagueCompetition){
-  
-  val LOG:Logger = Logger.getLogger(this.getClass.getName)
-  
+class StatsWorker(result: Result, season: Season, competition: LeagueCompetition) {
+
+  val LOG: Logger = Logger.getLogger(this.getClass.getName)
+
   def doIt = {
 
-	LOG.warning(s"Building stats for  ${result.fixture.home.shortName} vs ${result.fixture.away.shortName} on ${result.fixture.start}" )
-      val homeStats = stats(result.fixture.home,season)
-      val awayStats = stats(result.fixture.away,season)
+    LOG.warning(s"Building stats for  ${result.fixture.home.shortName} vs ${result.fixture.away.shortName} on ${result.fixture.start}")
+    val homeStats = stats(result.fixture.home, season)
+    val awayStats = stats(result.fixture.away, season)
 
-	  homeStats.addWeekStats(result.fixture.start, result.homeScore , result.awayScore )
-	  save(homeStats)
-	  awayStats.addWeekStats(result.fixture.start, result.awayScore , result.homeScore )
-	  save(awayStats)
-	  
-	  for(t <- competition.leagueTables;row <- t.rows ){
-	    val s = stats(row.team, season )
-	    s.addLeaguePosition(result.fixture.start, leaguePosition(row.team,competition))
-	    save(s)
-	  }
-	  
+    homeStats.addWeekStats(result.fixture.start, result.homeScore, result.awayScore)
+    save(homeStats)
+    awayStats.addWeekStats(result.fixture.start, result.awayScore, result.homeScore)
+    save(awayStats)
+
+    for (t <- competition.leagueTables; row <- t.rows) {
+      val s = stats(row.team, season)
+      s.addLeaguePosition(result.fixture.start, leaguePosition(row.team, competition))
+      save(s)
     }
-  
-  
- private def stats(team:Team,season:Season):Statistics = {
-    
-    Statistics.get(team,season)
-    
+
   }
-  
-  private def leaguePosition(team:Team, competition:LeagueCompetition):Int = {
+
+  private def stats(team: Team, season: Season): Statistics = {
+
+    Statistics.get(team, season)
+
+  }
+
+  private def leaguePosition(team: Team, competition: LeagueCompetition): Int = {
     import org.chilternquizleague.util.StringUtils.StringImprovements
-    
-    val res = for{
+
+    val res = for {
       l <- competition.leagueTables
       row <- l.rows if row.team.getKey.getId == team.id
-      pos = String.valueOf(row.position).replace("=", "").toIntOpt.getOrElse(l.rows.indexOf(row)+1)
-    }
-    yield{
+      pos = String.valueOf(row.position).replace("=", "").toIntOpt.getOrElse(l.rows.indexOf(row) + 1)
+    } yield {
       pos
     }
-    
+
     res.head
   }
 }
 
-object HistoricalStatsAggregator{
-  
-  def perform(season:Season) = {
-	  
-   val seasonStats = new ArrayList(entityList(classOf[Statistics], ("season",season)))
-   
-   for(s <- seasonStats){
-   ofy.transact(new VoidWork(){
-     
-     override def vrun() =  ofy.delete.entities(s).now()
-     
-   })
-   }
-   
-  
-    
-    val c:LeagueCompetition = season.competition(CompetitionType.LEAGUE)
+object HistoricalStatsAggregator {
+
+  def perform(season: Season) = {
+
+    val seasonStats = new ArrayList(entityList(classOf[Statistics], ("season", season)))
+
+    for (s <- seasonStats) {
+
+      transaction(() => delete(s))
+
+    }
+
+    val c: LeagueCompetition = season.competition(CompetitionType.LEAGUE)
     val dummyComp = c.copyAsInitial
-    
-    for{
+
+    for {
       r <- c.results.sortBy(_.date)
       result <- r.results
-    }
-    {
-    	dummyComp.addResult(result)
-      
-    	new StatsWorker(result,season, dummyComp ).doIt
+    } {
+      dummyComp.addResult(result)
+
+      new StatsWorker(result, season, dummyComp).doIt
     }
     entityList(classOf[Statistics])
   }

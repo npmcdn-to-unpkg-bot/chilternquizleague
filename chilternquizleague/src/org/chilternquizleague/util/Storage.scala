@@ -4,6 +4,7 @@ import com.googlecode.objectify.ObjectifyService.ofy
 import org.chilternquizleague.domain.BaseEntity
 import scala.collection.JavaConversions._
 import com.googlecode.objectify.cmd.Query
+import com.googlecode.objectify.VoidWork
 
 object Storage {
   
@@ -33,6 +34,16 @@ object Storage {
     ofy.save.entity(entity).now
   }
   
-
+  def delete[T <: BaseEntity](entity:T) = ofy.delete.entity(entity).now
+  
+  def delete[T <: BaseEntity](entities:java.util.List[T]) = ofy.delete.entities(entities).now
+  
+  def transaction(fn: () => Unit) = {
+    
+    ofy.transact(new VoidWork(){
+      override def vrun = fn()
+      })
+    
+  }
 
 }
