@@ -23,6 +23,7 @@ import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import scala.collection.JavaConversions._
 import java.util.ArrayList
+import com.googlecode.objectify.VoidWork
 
 
 class StatsQueueHandler extends HttpServlet{
@@ -98,8 +99,17 @@ object HistoricalStatsAggregator{
   
   def perform(season:Season) = {
 	  
-    ofy.delete.entities(new ArrayList(entityList(classOf[Statistics], ("season",season))))
-    
+   val seasonStats = new ArrayList(entityList(classOf[Statistics], ("season",season)))
+   
+   for(s <- seasonStats){
+   ofy.transact(new VoidWork(){
+     
+     override def vrun() =  ofy.delete.entities(s).now()
+     
+   })
+   }
+   
+  
     
     val c:LeagueCompetition = season.competition(CompetitionType.LEAGUE)
     val dummyComp = c.copyAsInitial

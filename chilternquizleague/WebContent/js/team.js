@@ -202,7 +202,8 @@
 								teamId : $scope.team.id
 							}, function(stats){
 								
-								var weekStats = stats.weekStats.sort(function(s1,s2){return s1.date>s2.date;});
+								var weekStats = stats.weekStats
+								weekStats.sort(function(s1,s2){return s1.date - s2.date;});
 								var dateLabels = dateToLabel(mapToProperty(weekStats, "date").sort());
 								
 								$scope.positionData = {

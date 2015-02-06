@@ -17,6 +17,7 @@ import scala.collection.JavaConversions._
 import com.googlecode.objectify.annotation.Stringify
 import org.chilternquizleague.domain.util.IntStringifier
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.util.logging.Logger
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Entity
@@ -47,7 +48,7 @@ class Statistics extends BaseEntity{
     seasonStats.runningPointsFor  = stats.cumuPointsFor
     seasonStats.runningPointsAgainst = stats.cumuPointsAgainst 
     seasonStats.runningPointsDifference = stats.cumuPointsDifference 
-    
+     
   }
   
   def addLeaguePosition(date:Date, leaguePosition:Int) = {
@@ -60,7 +61,7 @@ class Statistics extends BaseEntity{
   def statsForDate(date:Date, alwaysNew:Boolean = true) = {
     val cal = Calendar.getInstance
     cal.setTime(date)
-    val week = (cal.get(Calendar.YEAR) *100) + cal.get(Calendar.WEEK_OF_YEAR)
+    val week = makeWeek(date)
     
     if(alwaysNew){
       weekStats put (week, WeekStats(date))
@@ -68,6 +69,12 @@ class Statistics extends BaseEntity{
     }
     else weekStats.getOrElseUpdate(week, WeekStats(date))
 
+  }
+  
+  def makeWeek(date:Date) = {
+     val cal = Calendar.getInstance
+    cal.setTime(date)
+    (cal.get(Calendar.YEAR) *100) + cal.get(Calendar.WEEK_OF_YEAR)
   }
   
 
