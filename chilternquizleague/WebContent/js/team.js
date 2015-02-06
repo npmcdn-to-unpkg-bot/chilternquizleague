@@ -208,6 +208,7 @@
 								
 								$scope.positionData = {
 										labels: dateLabels,
+										responsive:true,
 										datasets: [{
 											label:$scope.team.shortName,
 											strokeColor: "rgba(220,220,220,1)",
@@ -222,6 +223,7 @@
 								
 								$scope.pointsData = {
 										labels: dateLabels,
+										responsive:true,
 										datasets: [{
 											label:"For",
 											strokeColor: "rgba(220,220,220,1)",
@@ -245,6 +247,7 @@
 								
 								$scope.cumPointsData = {
 										labels: dateLabels,
+										responsive:true,
 										datasets: [{
 											label:"For",
 											strokeColor: "rgba(220,220,220,1)",
@@ -269,6 +272,7 @@
 								
 								$scope.cumPointsDifferenceData = {
 										labels: dateLabels,
+										responsive:true,
 										datasets: [{
 											label:"Difference",
 											strokeColor: "rgba(220,220,220,1)",
