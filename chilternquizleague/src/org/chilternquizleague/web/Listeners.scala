@@ -16,27 +16,30 @@ import javax.servlet.FilterConfig
 import javax.servlet.Filter
 
 class EntityRegistrationListener extends ServletContextListener {
-  import com.googlecode.objectify.ObjectifyService
+  import com.googlecode.objectify.ObjectifyService.register
 
   override def contextDestroyed(evt: javax.servlet.ServletContextEvent): Unit = {}
   override def contextInitialized(evt: javax.servlet.ServletContextEvent): Unit = {
 
-    ObjectifyService.register(classOf[GlobalApplicationData]);
-    ObjectifyService.register(classOf[User]);
-    ObjectifyService.register(classOf[Team]);
-    ObjectifyService.register(classOf[Results]);
-    ObjectifyService.register(classOf[Fixtures]);
-    ObjectifyService.register(classOf[Venue]);
-    ObjectifyService.register(classOf[Competition]);
-    ObjectifyService.register(classOf[LeagueCompetition]);
-    ObjectifyService.register(classOf[BeerCompetition]);
-    ObjectifyService.register(classOf[CupCompetition]);
-    ObjectifyService.register(classOf[PlateCompetition]);
-    ObjectifyService.register(classOf[BuzzerCompetition]);
-    ObjectifyService.register(classOf[IndividualCompetition]);
-    ObjectifyService.register(classOf[CommonText]);
-    ObjectifyService.register(classOf[Season]);
-    ObjectifyService.register(classOf[Statistics]);
+    register(classOf[GlobalApplicationData])
+    register(classOf[User])
+    register(classOf[Team])
+    register(classOf[Results])
+    register(classOf[Fixtures])
+    register(classOf[Venue])
+    register(classOf[Competition])
+    register(classOf[LeagueCompetition])
+    register(classOf[BeerCompetition])
+    register(classOf[CupCompetition])
+    register(classOf[PlateCompetition])
+    register(classOf[BuzzerCompetition])
+    register(classOf[IndividualCompetition])
+    register(classOf[CommonText])
+    register(classOf[Season])
+    register(classOf[Statistics])
+    register(classOf[LogonToken])
+    register(classOf[SessionToken])
+    
 
   }
 }

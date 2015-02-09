@@ -4,14 +4,17 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import java.util.{List => JList}
 import java.util.{Map => JMap}
+
 import scala.collection.JavaConversions._
 import scala.collection.immutable.List
 import scala.util.control.Exception.catching
+
 import org.chilternquizleague.domain._
 import org.chilternquizleague.domain.util.RefUtils._
 import org.chilternquizleague.results.ResultHandler
 import org.chilternquizleague.util.HttpUtils.RequestImprovements
 import org.chilternquizleague.util.StringUtils.StringImprovements
+
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,17 +22,24 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.ObjectifyService.ofy
+
 import javax.servlet.ServletConfig
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.chilternquizleague.util.Storage.{entity => entityByKey}
+
 import org.chilternquizleague.util.Storage.entityList
 import org.chilternquizleague.util.Storage.save
 import org.chilternquizleague.util.ClassUtils._
+
 import java.util.ArrayList
+
 import scala.collection.immutable.Iterable
+
 import java.util.Date
+
 import com.googlecode.objectify.Ref
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.core.JsonParser
@@ -37,8 +47,12 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.core.SerializableString
 import com.fasterxml.jackson.core.io.SerializedString
 import com.fasterxml.jackson.databind.JsonNode
+
+import java.io.IOException;
 import java.io.StringWriter
+
 import com.google.api.client.util.StringUtils
+
 import org.apache.commons.io.IOUtils
 import org.chilternquizleague.util.JacksonUtils
 import org.chilternquizleague.util.UserUtils
@@ -46,7 +60,7 @@ import org.chilternquizleague.web.ViewUtils._
 
 
 
-trait BaseRest extends HttpServlet {
+trait BaseRest {
 
 
   
@@ -99,11 +113,11 @@ trait BaseRest extends HttpServlet {
    
 }
 
-class EntityService extends BaseRest {
+class EntityService extends HttpServlet with BaseRest {
 
   override val aliases = Map(("text", "CommonText"), 
       ("global", "GlobalApplicationData")) ++ CompetitionType.values.map(t => (t.name(), t.compClass().getSimpleName))
-  override def entityFilter[T] = { _ => true }
+  override def entityFilter[T] =  _ => true 
 
   override def init(config: ServletConfig) = {
     objectMapper registerModule JacksonUtils.unsafeModule
@@ -144,10 +158,10 @@ class EntityService extends BaseRest {
 
 }
 
-class ViewService extends BaseRest {
+class ViewService extends HttpServlet with BaseRest {
 
   override val aliases = Map(("GlobalText","CommonText"))
-  override def entityFilter[T <: BaseEntity] = { !_.retired }
+  override def entityFilter[T <: BaseEntity] =  !_.retired 
 
 
 
@@ -176,12 +190,34 @@ class ViewService extends BaseRest {
       case "text" => textForName(req)
       case "reports" => resultReports(req)
       case "team-statistics" => teamStatistics(req)
+      case "request-logon" => requestLogon(req.parameter("email"))
       case _ => handleEntities(bits, head)
 
     }
 
     item foreach { a => objectMapper.writeValue(resp.getWriter, logJson(a, "viewService writing:")) }
 
+  }
+  
+  
+  def requestLogon(email:Option[String]):Option[Boolean] = {
+    
+    for{
+      (u,t) <- UserUtils.userTeamForEmail(email)
+    }
+    {
+      val token = LogonToken()
+      
+      for(g <- Application.globalData){
+        
+        EmailSender.apply("security", s"Token is ${token.uuid}", List(u.email))
+      }
+      
+      return Some(true)
+    }
+    
+    Some(false)
+    
   }
 
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
@@ -361,5 +397,30 @@ class ViewService extends BaseRest {
     }
   }
 
+
+}
+
+class SecureService extends EntityService{
+  
+  override def doGet(req:HttpServletRequest, resp:HttpServletResponse) = {
+        val bits = parts(req)
+    val head = bits.head
+    val stripped = head.replace("-list", "")
+
+    val item: Option[_] = stripped match {
+
+
+      case _ => handleEntities(bits, head)
+
+    }
+
+    item foreach { a => objectMapper.writeValue(resp.getWriter, logJson(a, "viewService writing:")) }
+
+  }
+  
+  override def doPost(req:HttpServletRequest, resp:HttpServletResponse) = {
+    
+  }
+  
 
 }
