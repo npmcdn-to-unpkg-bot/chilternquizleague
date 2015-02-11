@@ -30,6 +30,14 @@
 		
 			}
 
+		}).state("teams.logon",{
+			url:"/logon",
+			views : {
+				menu:{templateUrl:"/team/teams-menu.html"},
+				content: {templateUrl:"/team/team-logon.html"}
+		
+			}
+
 		}).state("teams.id", {
 
 			url : "/:itemId",
@@ -63,7 +71,8 @@
 				content: {templateUrl:"/team/team-charts.html"}
 		
 			}
-		});
+		})
+		;
 
 	} ]);
 
@@ -294,5 +303,15 @@
 		
 		$scope.$watchGroup(["team","season"], loadStats);
 	}]);
+	
+	mainApp.controller("TeamLogon", ["$scope","secureService", function($scope,secureService){
+		
+		$scope.logon = function(password,email){
+			
+			secureService.logon(password,email,function(){})
+			
+		}
+		
+	}])
 
 })();

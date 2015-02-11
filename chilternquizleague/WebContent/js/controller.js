@@ -4,20 +4,10 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 				"$http","$rootScope",
 				function($http,$rootScope) {
 					function loadFromServer(type, params, callback, isArray) {
-						
-						var paramString = "";
-						for (name in params) {
-
-							paramString = paramString + name + "=" + params[name] + "&";
-						}
-
-						paramString = paramString.length > 0 ? ("?" + paramString.slice(0,
-								-1)) : "";
-
-						return doLoad(type, paramString, callback, isArray);
+						return doLoad(type, params, callback, isArray);
 					}
 
-					function doLoad(type, paramString, callback, isArray) {
+					function doLoad(type, params, callback, isArray) {
 						
 						$rootScope.$broadcast("progress", true);
 						
@@ -32,8 +22,8 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 
 						}
 						
-						$http.get("/view/" + type + paramString, {
-							"responseType" : "json"
+						$http.get("/view/" + type, {
+							"responseType" : "json","params":params
 						}).success(callbackWrapper);
 						
 						return retval;
@@ -83,7 +73,90 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 						}
 					};
 					return service;
-				} ]);
+				} ])
+				
+				.factory("secureService",["$http","$rootScope", function($http,$rootScope){
+					
+					var sessionPassword
+					
+					function decrypt(password,payload){
+						return angular.fromJson(sjcl.decrypt(password, payload.ciphertext, payload.params))
+					}
+					
+					function encrypt(password, item){
+						var rp = {}
+						var encrypted = sjcl.encrypt(password,angular.toJson(item),{},rp)
+						return angular.fromJson(encrypted)
+					}
+					
+					function loadFromServer(type, params, callback, isArray) {
+						return doLoad(type, params, callback, isArray);
+					}
+
+					function doLoad(type, params, callback, isArray) {
+						
+						$rootScope.$broadcast("progress", true);
+						
+						var retval = isArray ? [] : {};
+						
+						function callbackWrapper(item){
+							
+							item = decrypt(sessionPassword,item)
+							
+							callback && item ? callback(item):null;
+							angular.copy(item,retval);
+							
+							$rootScope.$broadcast("progress", false);
+
+						}
+						
+						$http.get("/secure/" + type, {
+							"responseType" : "json","params":params
+						}).success(callbackWrapper);
+						
+						return retval;
+					}
+
+					
+					var service = {
+
+						load : function(type, id, callback) {
+
+							return doLoad(type, "/" + id, callback);
+						},
+
+						view : function(type, params, callback) {
+
+							var isArray = false;
+							
+							if(params){
+								isArray = params.isArray;
+								delete params.isArray;
+							}
+
+							return loadFromServer(type, params, callback,isArray);
+						},
+
+						list : function(type, callback) {
+
+							return doLoad(type + "-list", "", callback, true);
+						},
+
+						post : function(type, payload, callback) {
+							return $http.post("/secure/" + type, encrypt(sessionPassword,payload)).success(callback);
+						},
+						logon : function(password, email, callback){
+							$http.post("/secure/logon/" + password.slice(0,8), encrypt(password.slice(8),{"email":email,"password":password})).success(function(payload){
+								
+								//sessionPassword = decrypt(password,payload)
+								callback()
+								
+							});
+						}
+						
+					};
+					return service;
+				}]);
 
 
 

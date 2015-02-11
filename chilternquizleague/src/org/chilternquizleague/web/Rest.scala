@@ -4,17 +4,14 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import java.util.{List => JList}
 import java.util.{Map => JMap}
-
 import scala.collection.JavaConversions._
 import scala.collection.immutable.List
 import scala.util.control.Exception.catching
-
 import org.chilternquizleague.domain._
 import org.chilternquizleague.domain.util.RefUtils._
 import org.chilternquizleague.results.ResultHandler
 import org.chilternquizleague.util.HttpUtils.RequestImprovements
 import org.chilternquizleague.util.StringUtils.StringImprovements
-
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -22,24 +19,18 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.ObjectifyService.ofy
-
 import javax.servlet.ServletConfig
-import javax.servlet.ServletException;
+import javax.servlet.ServletException
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.chilternquizleague.util.Storage.{entity => entityByKey}
-
 import org.chilternquizleague.util.Storage.entityList
 import org.chilternquizleague.util.Storage.save
 import org.chilternquizleague.util.ClassUtils._
-
 import java.util.ArrayList
-
 import scala.collection.immutable.Iterable
-
 import java.util.Date
-
 import com.googlecode.objectify.Ref
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.core.JsonParser
@@ -47,16 +38,14 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.core.SerializableString
 import com.fasterxml.jackson.core.io.SerializedString
 import com.fasterxml.jackson.databind.JsonNode
-
-import java.io.IOException;
+import java.io.IOException
 import java.io.StringWriter
-
 import com.google.api.client.util.StringUtils
-
 import org.apache.commons.io.IOUtils
 import org.chilternquizleague.util.JacksonUtils
 import org.chilternquizleague.util.UserUtils
 import org.chilternquizleague.web.ViewUtils._
+import java.util.HashMap
 
 
 
@@ -401,9 +390,78 @@ class ViewService extends HttpServlet with BaseRest {
 }
 
 class SecureService extends EntityService{
+  import javax.crypto.spec._
+  import javax.crypto._
+  import java.security._
+  import com.google.api.client.util._
+  import javax.script._
+  
+  def encrypt(value:String, token:Token):String  = {
+    try {
+        val skeySpec = new SecretKeySpec(token.uuid.getBytes, "AES");
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        val iv = new Array[Byte](16);
+        val random = new SecureRandom();
+        random.nextBytes(iv);
+        val ivParameterSpec = new IvParameterSpec(iv);
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec,ivParameterSpec);
+        val encrypted = cipher.doFinal(value.getBytes())
+        return Base64.encodeBase64String(encrypted);
+    } catch {
+      case ex:Exception => Logger.getLogger(this.getClass.getName).log(Level.SEVERE, null, ex);
+    } 
+    return null;
+}
+  
+  def decrypt(password:String, params:java.util.Map[String,Object]) = {
+    
+    val is = this.getClass.getResourceAsStream("sjcl.js")
+    
+    
+    val script = """
+    importPackage(java.io);
+    importPackage(java.lang)
+    
+    proxy = {}
+    function loadJs(is) {
+      var br = new BufferedReader(new InputStreamReader(is));
+      var line = null;
+      var script = "";
+      while((line = br.readLine())!=null) {
+          script += line;
+      }
+
+      eval(script);
+
+      proxy = sjcl
+
+    }    
+
+    loadJs(is);
+    println(proxy.decrypt);
+    
+    function decrypt(password,ct,params){
+
+
+      return proxy.decrypt(password,ct,params)
+    }
+
+
+"""
+    
+    val se = new ScriptEngineManager().getEngineByExtension("js")
+//    se.put("params", params)
+//    se.put("password", password)
+//    se.put("ct", params.get("ct"))
+    se.put("is",is)
+    se.eval(script)
+
+    se.asInstanceOf[Invocable].invokeFunction("decrypt",password,params.get("ct"),params)
+  }
+
   
   override def doGet(req:HttpServletRequest, resp:HttpServletResponse) = {
-        val bits = parts(req)
+    val bits = parts(req)
     val head = bits.head
     val stripped = head.replace("-list", "")
 
@@ -419,7 +477,26 @@ class SecureService extends EntityService{
   }
   
   override def doPost(req:HttpServletRequest, resp:HttpServletResponse) = {
+    val bits = parts(req)
+    val head = bits.head
+    val item: Option[_] = head match {
+
+      case "logon" => logon(req)
+      case _ => handleEntities(bits, head)
+
+    }
+
+    item foreach { a => objectMapper.writeValue(resp.getWriter, logJson(a, "viewService writing:")) }
+
+  }
+  
+  def logon(req:HttpServletRequest) = {
     
+    val obj = objectMapper.readValue(req.getReader(), classOf[HashMap[String,Object]]);
+    
+    val dec = decrypt("wagglewobble", obj)
+    
+    Some(obj)
   }
   
 

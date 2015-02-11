@@ -81,16 +81,7 @@ var ENTITY_SERVICE_DEFN = [
 				},
 				
 				command: function(command, params, callback){
-					var paramString = "";
-					for (name in params) {
-
-						paramString = paramString + name + "=" + params[name] + "&";
-					}
-
-					paramString = paramString.length > 0 ? ("?" + paramString.slice(0,
-							-1)) : "";
-					
-					$http.post("/entity/" + command + paramString).success(callback);
+					$http.post("/entity/" + command,null,{"params":params}).success(callback);
 				}
 			};
 			return service;

@@ -20,7 +20,7 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
 
   private def commit(): Unit = {
 
-    Option(entityList(classOf[User], ("email", email)).head).foreach { user: User =>
+    Option(entityList(classOf[User]).filter(_.email.equalsIgnoreCase(email)).head).foreach { user: User =>
 
       result.firstSubmitter = user;
 
