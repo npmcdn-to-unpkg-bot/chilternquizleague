@@ -3,6 +3,7 @@ package org.chilternquizleague.web
 import javax.servlet.ServletContextListener
 import scala.collection.JavaConversions._
 import org.chilternquizleague.domain._
+import org.chilternquizleague.domain.security._
 import org.chilternquizleague.util.Storage._
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse

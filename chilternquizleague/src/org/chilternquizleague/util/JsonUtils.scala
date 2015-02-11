@@ -30,7 +30,7 @@ object ClassUtils{
     def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
     	import scala.util.control.Exception._
 
-      if (c.isDefined) c else catching(classOf[ClassNotFoundException]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
+      if (c.isDefined) c else catching(classOf[NoClassDefFoundError]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
     }
     packages.foldLeft(Option[Class[T]](null))(fun)
   }

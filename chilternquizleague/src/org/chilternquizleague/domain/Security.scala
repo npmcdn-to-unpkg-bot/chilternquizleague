@@ -1,4 +1,4 @@
-package org.chilternquizleague.domain
+package org.chilternquizleague.domain.security
 
 import com.googlecode.objectify.annotation.Entity
 import java.util.Date
@@ -11,6 +11,7 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.Map
 import com.googlecode.objectify.annotation.Cache
 import com.googlecode.objectify.Ref
+import org.chilternquizleague.domain._
 
 //unused at present
 trait TokenCache{
@@ -36,8 +37,14 @@ object LogonToken{
     save(token)
     token
   }
-  def find(uuid:String) = entityList(classOf[LogonToken], ("uuid",uuid )).headOption
- 
+  def find(id:Long) = {
+    val now = new Date
+    val token = entity(Some(id),classOf[SessionToken])
+    
+    for(t <- token if t.expires before now) yield t 
+    
+  }
+
 }
 
 @Entity
@@ -52,7 +59,13 @@ object SessionToken{
     save(token)
     token
   }
-  def find(uuid:String) = entityList(classOf[SessionToken], ("uuid",uuid )).headOption
+  def find(id:Long) = {
+    val now = new Date
+    val token = entity(Some(id),classOf[SessionToken])
+    
+    for(t <- token if t.expires before now) yield t 
+    
+  }
 
   
   

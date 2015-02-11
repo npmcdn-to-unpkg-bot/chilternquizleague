@@ -77,16 +77,14 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 				
 				.factory("secureService",["$http","$rootScope", function($http,$rootScope){
 					
-					var sessionPassword
+					var session = {}
 					
 					function decrypt(password,payload){
-						return angular.fromJson(sjcl.decrypt(password, payload.ciphertext, payload.params))
+						return angular.fromJson(sjcl.decrypt(password, payload))
 					}
 					
 					function encrypt(password, item){
-						var rp = {}
-						var encrypted = sjcl.encrypt(password,angular.toJson(item),{},rp)
-						return angular.fromJson(encrypted)
+						return sjcl.encrypt(password,angular.toJson(item))
 					}
 					
 					function loadFromServer(type, params, callback, isArray) {
@@ -99,9 +97,9 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 						
 						var retval = isArray ? [] : {};
 						
-						function callbackWrapper(item){
+						function callbackWrapper(payload){
 							
-							item = decrypt(sessionPassword,item)
+							var item = decrypt(session.password,payload.text)
 							
 							callback && item ? callback(item):null;
 							angular.copy(item,retval);
@@ -111,7 +109,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 						}
 						
 						$http.get("/secure/" + type, {
-							"responseType" : "json","params":params
+							"responseType" : "json","params":params , data:{"id":session.id}
 						}).success(callbackWrapper);
 						
 						return retval;
@@ -143,13 +141,26 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 						},
 
 						post : function(type, payload, callback) {
-							return $http.post("/secure/" + type, encrypt(sessionPassword,payload)).success(callback);
+
+							
+							return $http.post("/secure/" + type, {
+								"id":session.id,
+								"text":encrypt(session.password,payload)
+								}).success(
+									function(payload){
+										var res = decrypt(session.password,payload.text)
+										callback(res)
+									}
+									
+									);
 						},
 						logon : function(password, email, callback){
-							$http.post("/secure/logon/" + password.slice(0,8), encrypt(password.slice(8),{"email":email,"password":password})).success(function(payload){
-								
-								//sessionPassword = decrypt(password,payload)
-								callback()
+							var passParts = password.split("|")
+							$http.post("/secure/logon", {"id":passParts[0],"text":encrypt(passParts[1],{"email":email,"password":password})}).success(function(payload){
+
+								var res = decrypt(passParts[1],payload.text)
+								session = res
+								callback(res.teamId)
 								
 							});
 						}
