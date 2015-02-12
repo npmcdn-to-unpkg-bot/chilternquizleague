@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"tc.chartjs"]).factory(
+var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"tc.chartjs","ui.tinymce"]).factory(
 		'viewService',
 		[
 				"$http","$rootScope",
@@ -80,7 +80,12 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 					var session = {}
 					
 					function decrypt(password,payload){
-						return angular.fromJson(sjcl.decrypt(password, payload))
+						
+						var dt = sjcl.decrypt(password, payload)
+						
+						var obj = angular.fromJson(angular.fromJson(dt))
+						
+						return obj
 					}
 					
 					function encrypt(password, item){
@@ -108,9 +113,10 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 
 						}
 						
+						params.sessionId = session.id
+						
 						$http.get("/secure/" + type, {
-							"responseType" : "json","params":params , data:{"id":session.id}
-						}).success(callbackWrapper);
+							"responseType" : "json","params":params}).success(callbackWrapper);
 						
 						return retval;
 					}
@@ -120,7 +126,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ui.router',"t
 
 						load : function(type, id, callback) {
 
-							return doLoad(type, "/" + id, callback);
+							return doLoad(type + "/" + id,{}, callback);
 						},
 
 						view : function(type, params, callback) {

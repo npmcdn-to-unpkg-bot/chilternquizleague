@@ -449,15 +449,15 @@ class SecureService extends EntityService {
     val head = bits.head
     val stripped = head.replace("-list", "")
 
-    val session = objectMapper.readValue(req.getReader, classOf[Wrapper])
-    val token = SessionToken.find(session.id)
+    val sessionId = req.id("sessionId")
 
     val item: Option[_] = stripped match {
       case _ => handleEntities(bits, head)
     }
 
     for {
-      t <- token
+      sid <- sessionId
+      t <- SessionToken.find(sid)
       a <- item
     } {
       objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)),"secure service"))
