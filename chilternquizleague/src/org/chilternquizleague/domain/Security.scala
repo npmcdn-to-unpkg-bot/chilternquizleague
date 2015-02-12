@@ -39,9 +39,9 @@ object LogonToken{
   }
   def find(id:Long) = {
     val now = new Date
-    val token = entity(Some(id),classOf[SessionToken])
+    val token = entity(Some(id),classOf[LogonToken])
     
-    for(t <- token if t.expires before now) yield t 
+    for(t <- token if t.expires after now) yield t 
     
   }
 
@@ -63,7 +63,7 @@ object SessionToken{
     val now = new Date
     val token = entity(Some(id),classOf[SessionToken])
     
-    for(t <- token if t.expires before now) yield t 
+    for(t <- token if t.expires after now) yield t 
     
   }
 

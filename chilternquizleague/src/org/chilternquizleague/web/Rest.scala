@@ -391,10 +391,6 @@ class SecureService extends EntityService {
 
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   class Session(val password: String, val id: Long, val teamId: Long)
-  @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-  class Wrapper(var text: String, var id: Long = 0) {
-    def this() = this(null)
-  }
 
   val se = new ScriptEngineManager().getEngineByExtension("js")
 
@@ -495,8 +491,10 @@ class SecureService extends EntityService {
 
   def logon(session: Wrapper, req: HttpServletRequest, resp: HttpServletResponse) = {
 
+    val tok = LogonToken.find(session.id)
+    
     for {
-      token <- LogonToken.find(session.id)
+      token <- tok
       (u, t) <- {
 
         val dec = objectMapper.readValue(decrypt(token.uuid, session.text), classOf[HashMap[String, String]])
@@ -516,4 +514,9 @@ class SecureService extends EntityService {
     None
   }
 
+}
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class Wrapper(var text: String, var id: Long = 0) {
+  def this() = this(null)
 }
