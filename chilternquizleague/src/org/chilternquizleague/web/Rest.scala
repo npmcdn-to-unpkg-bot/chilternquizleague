@@ -434,14 +434,22 @@ class SecureService extends EntityService {
     se.eval(script)
 
   }
+  
+  def logTime[T](f:()=>T, message:String = "method"):T = {
+      val now = System.currentTimeMillis()
+      val res = f()
+      LOG.warning(s"$message took ${System.currentTimeMillis - now} millis")
+      res
+  }
 
   def encrypt(value: Any, token: Token): String = {
-    String.valueOf(se.asInstanceOf[Invocable].invokeFunction("encrypt", token.uuid, objectMapper.writeValueAsString(value)))
+
+      String.valueOf(se.asInstanceOf[Invocable].invokeFunction("encrypt", token.uuid, objectMapper.writeValueAsString(value)))
 
   }
 
-  def decrypt(password: String, payload: String) = {
-    String.valueOf(se.asInstanceOf[Invocable].invokeFunction("decrypt", password, payload))
+  def decrypt(token: Token, payload: String) = {
+    String.valueOf(se.asInstanceOf[Invocable].invokeFunction("decrypt", token.uuid, payload))
   }
 
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
@@ -471,10 +479,10 @@ class SecureService extends EntityService {
     val session = objectMapper.readValue(req.getReader, classOf[Wrapper])
     val token = SessionToken.find(session.id)
 
-    val item: Option[AnyRef] = head match {
+    val item: Option[_] = head match {
 
       case "logon" => logon(session, req, resp)
-      case _ => for (t <- decryptedText(session, token)) yield saveUpdate(new StringReader(t), entityName(head))
+      case _ => for (t <- decryptedText(session, token)) yield saveUpdate[BaseEntity](new StringReader(t), entityName(head))
 
     }
 
@@ -487,7 +495,7 @@ class SecureService extends EntityService {
 
   }
 
-  def decryptedText(session: Wrapper, token: Option[SessionToken]) = for (t <- token) yield decrypt(t.uuid, session.text)
+  def decryptedText(session: Wrapper, token: Option[SessionToken]) = for (t <- token) yield decrypt(t, session.text)
 
   def logon(session: Wrapper, req: HttpServletRequest, resp: HttpServletResponse) = {
 
@@ -497,7 +505,7 @@ class SecureService extends EntityService {
       token <- tok
       (u, t) <- {
 
-        val dec = objectMapper.readValue(decrypt(token.uuid, session.text), classOf[HashMap[String, String]])
+        val dec = objectMapper.readValue(decrypt(token, session.text), classOf[HashMap[String, String]])
 
         val email = Some(dec.get("email"))
         userTeamForEmail(email)
