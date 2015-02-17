@@ -73,7 +73,9 @@ trait BaseRest {
     head match {
 
       case e if e.`contains`("-list") => makeEntityList(entName).map(new ArrayList(_))
-      case _ => entityByParam(parts.tail.head, entName)
+      case _ => for{idPart <- parts.tail.headOption
+                     e <- entityByParam[BaseEntity](idPart,entName)
+        } yield e
     }
 
   }

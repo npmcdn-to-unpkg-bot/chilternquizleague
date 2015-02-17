@@ -21,7 +21,6 @@ trait TokenCache{
   def init():Map[String,tokenType]
 }
 
-
 abstract class Token(var uuid:String, var expires:Date) extends BaseEntity
 
 @Entity
