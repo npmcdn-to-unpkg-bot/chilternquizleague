@@ -244,6 +244,7 @@ maintainApp
 							
 							var fixtures = angular.copy(f)
 							
+							fixtures.competitionType = $scope.competition.type
 							fixtures.start = start
 							fixtures.end = end
 							fixtures.description = $scope.competition.description
