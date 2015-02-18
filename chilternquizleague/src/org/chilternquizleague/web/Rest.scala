@@ -52,6 +52,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import java.io.Reader
 import java.io.StringReader
+import org.mozilla.javascript.Context
+import org.mozilla.javascript.ScriptableObject
+import org.mozilla.javascript.{ Function => JSFunction }
 
 trait BaseRest {
 
@@ -395,7 +398,7 @@ class SecureService extends EntityService {
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   class Session(val password: String, val id: Long, val teamId: Long)
 
-  val se = new ScriptEngineManager().getEngineByExtension("js")
+  var scope: ScriptableObject = null
 
   override def init(config: ServletConfig) = {
 
@@ -403,12 +406,10 @@ class SecureService extends EntityService {
     val is = this.getClass.getResourceAsStream("sjcl.js")
 
     val script = """
-    importPackage(java.io);
-    importPackage(java.lang)
     
     proxy = {}
     function loadJs(is) {
-      var br = new BufferedReader(new InputStreamReader(is));
+      var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
       var line = null;
       var script = "";
       while((line = br.readLine())!=null) {
@@ -433,8 +434,13 @@ class SecureService extends EntityService {
 
 
 """
-    se.put("is", is)
-    se.eval(script)
+    val cx = Context.enter()
+
+    scope = cx.initStandardObjects()
+    scope.put("is", scope, is)
+    cx.evaluateString(scope, script, "import", 1, null)
+    
+    Context.exit()
 
   }
 
@@ -447,12 +453,29 @@ class SecureService extends EntityService {
 
   def encrypt(value: Any, token: Token): String = {
 
-    String.valueOf(se.asInstanceOf[Invocable].invokeFunction("encrypt", token.uuid, objectMapper.writeValueAsString(value)))
+   val cx = Context.enter()
+    
+    val fct = scope.get("encrypt", scope).asInstanceOf[JSFunction]
+    val result = fct.call(cx, scope, scope, Array[Object](token.uuid, objectMapper.writeValueAsString(value)))
+
+    Context.exit()
+    
+    String.valueOf(result)
+    
+  
 
   }
 
   def decrypt(token: Token, payload: String) = {
-    String.valueOf(se.asInstanceOf[Invocable].invokeFunction("decrypt", token.uuid, payload))
+     val cx = Context.enter()
+    
+    val fct = scope.get("decrypt", scope).asInstanceOf[JSFunction]
+    val result = fct.call(cx, scope, scope, Array[Object](token.uuid, payload))
+
+    Context.exit()
+    
+    String.valueOf(result)
+
   }
 
   def sessionId(req: HttpServletRequest) = {
