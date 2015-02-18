@@ -73,9 +73,10 @@ trait BaseRest {
     head match {
 
       case e if e.`contains`("-list") => makeEntityList(entName).map(new ArrayList(_))
-      case _ => for{idPart <- parts.tail.headOption
-                     e <- entityByParam[BaseEntity](idPart,entName)
-        } yield e
+      case _ => for {
+        idPart <- parts.tail.headOption
+        e <- entityByParam[BaseEntity](idPart, entName)
+      } yield e
     }
 
   }
@@ -436,17 +437,17 @@ class SecureService extends EntityService {
     se.eval(script)
 
   }
-  
-  def logTime[T](f:()=>T, message:String = "method"):T = {
-      val now = System.currentTimeMillis()
-      val res = f()
-      LOG.warning(s"$message took ${System.currentTimeMillis - now} millis")
-      res
+
+  def logTime[T](f: () => T, message: String = "method"): T = {
+    val now = System.currentTimeMillis()
+    val res = f()
+    LOG.warning(s"$message took ${System.currentTimeMillis - now} millis")
+    res
   }
 
   def encrypt(value: Any, token: Token): String = {
 
-      String.valueOf(se.asInstanceOf[Invocable].invokeFunction("encrypt", token.uuid, objectMapper.writeValueAsString(value)))
+    String.valueOf(se.asInstanceOf[Invocable].invokeFunction("encrypt", token.uuid, objectMapper.writeValueAsString(value)))
 
   }
 
@@ -454,23 +455,30 @@ class SecureService extends EntityService {
     String.valueOf(se.asInstanceOf[Invocable].invokeFunction("decrypt", token.uuid, payload))
   }
 
+  def sessionId(req: HttpServletRequest) = {
+
+    for {
+      cookie <- req.getCookies.find { _.getName == "session" }
+      sessionId <- cookie.getValue.toLongOpt
+    } yield sessionId
+
+  }
+
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
     val stripped = head.replace("-list", "")
-
-    val sessionId = req.id("sessionId")
 
     val item: Option[_] = stripped match {
       case _ => handleEntities(bits, head)
     }
 
     for {
-      sid <- sessionId
-      t <- SessionToken.find(sid)
+      sessionId <- sessionId(req)
+      t <- SessionToken.find(sessionId)
       a <- item
     } {
-      objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)),"secure service"))
+      objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)), "secure service"))
     }
   }
 
@@ -479,22 +487,25 @@ class SecureService extends EntityService {
     val head = bits.head
 
     val session = objectMapper.readValue(req.getReader, classOf[Wrapper])
-    val token = SessionToken.find(session.id)
-
-    val item: Option[_] = head match {
-
-      case "logon" => logon(session, req, resp)
-      case _ => for (t <- decryptedText(session, token)) yield saveUpdate[BaseEntity](new StringReader(t), entityName(head))
-
-    }
 
     for {
-      t <- token
-      a <- item
-    } {
-      objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)),"secure service"))
-    }
+      sessionId <- sessionId(req)
+      token = SessionToken.find(sessionId)
 
+    } {
+
+      val item: Option[_] = head match {
+        case "logon" => logon(session, req, resp)
+        case _ => for (t <- decryptedText(session, token)) yield saveUpdate[BaseEntity](new StringReader(t), entityName(head))
+      }
+
+      for {
+        t <- token
+        a <- item
+      } {
+        objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)), "secure service"))
+      }
+    }
   }
 
   def decryptedText(session: Wrapper, token: Option[SessionToken]) = for (t <- token) yield decrypt(t, session.text)
@@ -502,7 +513,7 @@ class SecureService extends EntityService {
   def logon(session: Wrapper, req: HttpServletRequest, resp: HttpServletResponse) = {
 
     val tok = LogonToken.find(session.id)
-    
+
     for {
       token <- tok
       (u, t) <- {
