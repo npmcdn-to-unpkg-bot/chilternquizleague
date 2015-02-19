@@ -165,3 +165,6 @@ class StatisticsView(statistics:Statistics) {
   val seasonStats = statistics.seasonStats 
   val weekStats = statistics.weekStats.values 
 }
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class RequestLogonView(val result:Boolean)

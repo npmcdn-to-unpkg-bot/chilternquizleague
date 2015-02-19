@@ -150,7 +150,6 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 
 							
 							return $http.post("/secure/" + type, {
-								"id":session.id,
 								"text":encrypt(session.password,payload)
 								}).success(
 									function(payload){
@@ -161,13 +160,10 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 									);
 						},
 						logon : function(password, email, callback){
-							var passParts = password.split("|")
-							$cookies.session = passParts[0]
-							$http.post("/secure/logon", {"id":passParts[0],"text":encrypt(passParts[1],{"email":email,"password":password})}).success(function(payload){
+							$http.post("/secure/logon", {"text":encrypt(password,{"email":email,"password":password})}).success(function(payload){
 
-								var res = decrypt(passParts[1],payload.text)
+								var res = decrypt(password,payload.text)
 								session = res
-								$cookies.session = session.id
 								callback(res.teamId)
 								
 							});

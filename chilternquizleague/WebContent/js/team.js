@@ -324,7 +324,7 @@
 		$scope.authenticate = function(email){
 			
 			viewService.view("request-logon", {"email":email}, function(res){
-				$scope.authenticated = res
+				$scope.authenticated = res.result
 			})
 		}
 		

@@ -13,10 +13,12 @@
 	<div ng-if="authenticated">
 	<md-card><md-card_content>A one-time password has been sent to your email address.  Please paste it into the field below.</md-card_content></md-card> 
 
+	<form ng-submit="logon(token,email)">
+	
 	<md-input-container > <label>Password</label> <input
 		type="text" ng-model="token"> </md-input-container>
 
-	<md-button ng-click="logon(token,email)">Logon</md-button>
-
+	<md-button type="submit">Logon</md-button>
+	</form>
 	</div>
 </div>

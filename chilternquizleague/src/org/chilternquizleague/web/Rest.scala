@@ -55,6 +55,8 @@ import java.io.StringReader
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.ScriptableObject
 import org.mozilla.javascript.{ Function => JSFunction }
+import javax.servlet.http.Cookie
+import java.net.URL
 
 trait BaseRest {
 
@@ -99,6 +101,14 @@ trait BaseRest {
     retval.getOrElse(throw new ClassNotFoundException(entityName))
   }
 
+  def sessionCookieId(id:Long, resp:HttpServletResponse) = {
+    
+    val cookie = new Cookie("session",String.valueOf(id))
+    cookie.setPath("/secure/")
+    
+    resp.addCookie(cookie)
+   
+  }
   def logJson[T](things: T, message: String = "") = {
     if (LOG.isLoggable(Level.FINE)) {
       LOG.fine(s"$message\n${things.getClass.getName} : ${objectMapper.writeValueAsString(things)}")
@@ -185,7 +195,7 @@ class ViewService extends HttpServlet with BaseRest {
       case "text" => textForName(req)
       case "reports" => resultReports(req)
       case "team-statistics" => teamStatistics(req)
-      case "request-logon" => requestLogon(req.parameter("email"))
+      case "request-logon" => requestLogon(req.parameter("email"), req,resp)
       case _ => handleEntities(bits, head)
 
     }
@@ -208,7 +218,7 @@ class ViewService extends HttpServlet with BaseRest {
 
   }
 
-  def requestLogon(email: Option[String]): Option[Boolean] = {
+  def requestLogon(email: Option[String], req:HttpServletRequest, resp:HttpServletResponse): Option[RequestLogonView] = {
 
     for {
       (u, t) <- UserUtils.userTeamForEmail(email)
@@ -217,16 +227,19 @@ class ViewService extends HttpServlet with BaseRest {
 
       for (g <- Application.globalData) {
 
-        val idPlusPwd = f"${token.id}|${token.uuid}"
-
-        EmailSender.apply("security", s"Your one-time password is $idPlusPwd", List(u.email))
-        LOG.warning(s"one-time password is $idPlusPwd")
+        val pwd = token.uuid
+        sessionCookieId(token.id, resp)
+      
+        val host = new URL(req.getRequestURL.toString()).getHost
+        
+        EmailSender.apply(s"security@$host", s"Your one-time password is $pwd./nPlease paste this into the 'Password' field in your browser./n/nThis password will expire in 15 minutes.", List(u.email))
+        LOG.warning(s"one-time password is $pwd")
       }
-
-      return Some(true)
+      
+      return Some(new RequestLogonView(true))
     }
 
-    Some(false)
+    Some(new RequestLogonView(false))
 
   }
 
@@ -439,7 +452,7 @@ class SecureService extends EntityService {
     scope = cx.initStandardObjects()
     scope.put("is", scope, is)
     cx.evaluateString(scope, script, "import", 1, null)
-    
+
     Context.exit()
 
   }
@@ -453,37 +466,36 @@ class SecureService extends EntityService {
 
   def encrypt(value: Any, token: Token): String = {
 
-   val cx = Context.enter()
-    
+    val cx = Context.enter()
+
     val fct = scope.get("encrypt", scope).asInstanceOf[JSFunction]
     val result = fct.call(cx, scope, scope, Array[Object](token.uuid, objectMapper.writeValueAsString(value)))
 
     Context.exit()
-    
+
     String.valueOf(result)
-    
-  
 
   }
 
   def decrypt(token: Token, payload: String) = {
-     val cx = Context.enter()
-    
+    val cx = Context.enter()
+
     val fct = scope.get("decrypt", scope).asInstanceOf[JSFunction]
     val result = fct.call(cx, scope, scope, Array[Object](token.uuid, payload))
 
     Context.exit()
-    
+
     String.valueOf(result)
 
   }
 
   def sessionId(req: HttpServletRequest) = {
 
-    for {
-      cookie <- req.getCookies.find { _.getName == "session" }
-      sessionId <- cookie.getValue.toLongOpt
-    } yield sessionId
+    if (req.getCookies == null) Some(0L) else
+      for {
+        cookie <- req.getCookies.find { _.getName == "session" }
+        sessionId <- cookie.getValue.toLongOpt
+      } yield sessionId
 
   }
 
@@ -509,36 +521,34 @@ class SecureService extends EntityService {
     val bits = parts(req)
     val head = bits.head
 
-    val session = objectMapper.readValue(req.getReader, classOf[Wrapper])
+    val payload = objectMapper.readValue(req.getReader, classOf[Wrapper])
 
-    for {
-      sessionId <- sessionId(req)
-      token = SessionToken.find(sessionId)
-
-    } {
-
-      val item: Option[_] = head match {
-        case "logon" => logon(session, req, resp)
-        case _ => for (t <- decryptedText(session, token)) yield saveUpdate[BaseEntity](new StringReader(t), entityName(head))
-      }
-
+    def doSave() = {
       for {
-        t <- token
-        a <- item
-      } {
-        objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)), "secure service"))
+        sessionId <- sessionId(req)
+        t <- SessionToken.find(sessionId)
+        a = decrypt(t, payload.text)
+        i = saveUpdate[BaseEntity](new StringReader(a), entityName(head))
+      } yield new Wrapper(encrypt(i, t))
+    }
+
+    val item: Option[_] =
+
+      head match {
+        case "logon" => logon(payload, req, resp)
+        case _ => doSave()
       }
+
+    for (i <- item) {
+      objectMapper.writeValue(resp.getWriter, logJson(i, "secure service"))
     }
   }
 
-  def decryptedText(session: Wrapper, token: Option[SessionToken]) = for (t <- token) yield decrypt(t, session.text)
-
   def logon(session: Wrapper, req: HttpServletRequest, resp: HttpServletResponse) = {
 
-    val tok = LogonToken.find(session.id)
-
     for {
-      token <- tok
+      sessionId <- sessionId(req)
+      token <- LogonToken.find(sessionId)
       (u, t) <- {
 
         val dec = objectMapper.readValue(decrypt(token, session.text), classOf[HashMap[String, String]])
@@ -551,6 +561,7 @@ class SecureService extends EntityService {
 
       val sessionToken = SessionToken(u)
 
+      sessionCookieId(sessionToken.id, resp)
       objectMapper.writeValue(resp.getWriter, new Wrapper(encrypt(objectMapper.writeValueAsString(new Session(sessionToken.uuid, sessionToken.id, t.id)), token)))
 
       delete(token)
