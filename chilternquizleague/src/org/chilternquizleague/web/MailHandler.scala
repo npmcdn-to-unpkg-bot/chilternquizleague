@@ -65,9 +65,15 @@ class MailHandler extends HttpServlet {
 
       try {
 
+        val from = message.getFrom
+        
+        message.setSender(new InternetAddress(globaldata.senderEmail))
+        
+        message.setReplyTo(from)
+        
         message.setRecipients(RecipientType.TO, addresses.toArray);
 
-        message.setSubject(s"via  ${globaldata.leagueName} : ${message.getSubject}");
+        message.setSubject(s"Sent via ${globaldata.leagueName} : ${message.getSubject}");
 
         LOG.fine(s"${message.getFrom()(0)} to ${message.getAllRecipients()(0).toString}");
 
@@ -81,7 +87,7 @@ class MailHandler extends HttpServlet {
 
           val notification = new MimeMessage(session);
           notification.addRecipient(RecipientType.TO, message.getFrom()(0));
-          notification.setSender(message.getAllRecipients()(0));
+          notification.setSender(new InternetAddress(globaldata.senderEmail));
           notification.setSubject(s"${globaldata.leagueName} : Message delivery failed");
           notification.setText("Message delivery failed, probably due to an attachment.\nThis mail service does not allow attachments.  Try resending as text only.");
 
@@ -149,9 +155,11 @@ private class EmailSender {
       val outMessage = new MimeMessage(session);
       outMessage.addRecipients(RecipientType.TO, addresses.toArray);
       outMessage
-        .setSender(new InternetAddress(sender));
+        .setSender(new InternetAddress(g.senderEmail));
+      outMessage.setReplyTo(Array(new InternetAddress(sender)))
+
       outMessage.setText(text);
-      outMessage.setSubject(s"Sent via ${g.leagueName}");
+      outMessage.setSubject(s"Sent via ${g.leagueName} : From $sender");
 
       LOG.fine(s"${outMessage.getFrom()(0)} to ${outMessage.getAllRecipients()(0).toString}");
 

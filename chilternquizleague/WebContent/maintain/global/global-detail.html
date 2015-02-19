@@ -16,6 +16,10 @@
 		<textarea ui-tinymce="tinymceOptions" ng-model="global.frontPageText" cols="60"
 							rows="15" required></textarea>
 		</md-input-container>
+		<md-input-container>
+		<label>Sender email</label>
+		<input type="email" ng-model="global.senderEmail">
+		</md-input-container>
 		<md-button class="md-accent" ng-click="addAlias(global)">Add Alias</md-button>
 		<div ng-repeat="emailAlias in global.emailAliases" layout="row" layout-align="start end"><md-input-container><input placeholder="alias" required ng-model="emailAlias.alias"></md-input-container><md-input-container><select class="md-input" required ng-model="emailAlias.user" ng-options="user as user.name for user in users track by user.id"></select></md-input-container></div>
 		

@@ -126,6 +126,7 @@ class GlobalApplicationData extends BaseEntity{
 
   var frontPageText:String = null
   var leagueName:String = null
+  var senderEmail:String = null
 
   @Load
   var currentSeason:Ref[Season] = null
