@@ -1,0 +1,24 @@
+<div ng-controller="TeamLogon">
+	<cql-subheader>Log In</cql-subheader>
+	<div ng-hide="authenticated">
+	<form>
+	<md-input-container> <label>Email address</label> <input 
+		type="email" ng-model="email"> </md-input-container>
+	<md-button  ng-click="authenticate(email)">Submit</md-button>
+	</form>
+	</div>
+	<div ng-if="!authenticated && authenticated !== undefined">
+	<md-card><md-card_content>{{email}} is not registered with any team.</md-card_content></md-card>
+	</div>
+	<div ng-if="authenticated">
+	<md-card><md-card_content>A one-time password has been sent to your email address.  Please paste it into the field below.</md-card_content></md-card> 
+
+	<form ng-submit="logon(token,email)">
+	
+	<md-input-container > <label>Password</label> <input
+		type="text" ng-model="token"> </md-input-container>
+
+	<md-button type="submit">Logon</md-button>
+	</form>
+	</div>
+</div>

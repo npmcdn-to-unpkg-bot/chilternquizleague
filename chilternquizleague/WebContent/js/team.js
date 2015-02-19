@@ -30,6 +30,23 @@
 		
 			}
 
+		}).state("teams.logon",{
+			url:"/logon",
+			views : {
+				menu:{templateUrl:"/team/teams-menu.html"},
+				content: {templateUrl:"/team/team-logon.html"}
+		
+			}
+
+		})
+		.state("teams.edit",{
+			url:"/edit/:itemId",
+			views : {
+				menu:{templateUrl:"/team/teams-menu.html"},
+				content: {templateUrl:"/team/team-edit.html"}
+		
+			}
+
 		}).state("teams.id", {
 
 			url : "/:itemId",
@@ -63,7 +80,8 @@
 				content: {templateUrl:"/team/team-charts.html"}
 		
 			}
-		});
+		})
+		;
 
 	} ]);
 
@@ -294,5 +312,39 @@
 		
 		$scope.$watchGroup(["team","season"], loadStats);
 	}]);
+	
+	mainApp.controller("TeamLogon", ["$scope","viewService","secureService","$state", function($scope,viewService,secureService, $state){
+		
+		$scope.logon = function(password,email){
+			
+			secureService.logon(password,email,function(teamId){$state.go("teams.edit",{"itemId":teamId})})
+			
+		}
+		
+		$scope.authenticate = function(email){
+			
+			viewService.view("request-logon", {"email":email}, function(res){
+				$scope.authenticated = res.result
+			})
+		}
+		
+	}])
+	
+		mainApp.controller("TeamEdit", ["$scope","secureService","$stateParams", function($scope,secureService,$stateParams){
+		
+		$scope.team = secureService.load("team",$stateParams.itemId)
+		$scope.tinymceOptions={ 
+				plugins: "link, image, autolink, table, code, charmap, searchreplace, contextmenu",
+				menubar:true,
+			    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image"
+		}
+		$scope.save = function(team){
+			secureService.post("team",team, function(){alert("Details saved")})    	
+		}
+		
+			
+		
+		
+	}])
 
 })();

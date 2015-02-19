@@ -95,6 +95,8 @@ class MailHandler extends HttpServlet {
 object EmailSender{
   
   def apply(sender: String, recipientName: String, text: String) = new EmailSender().sendMail(sender, recipientName, text)
+  
+  def apply(sender: String, text: String, addressees:List[String]) = new EmailSender().sendMail(sender, text, Application.globalData, addressees.map(new InternetAddress(_)))
 }
 
 private class EmailSender {
@@ -111,8 +113,8 @@ private class EmailSender {
         g.emailAliases.filter(_.alias == recipientName).foreach {
           alias =>
             {
-              sendMail(sender, text, g,
-                new InternetAddress(alias.user.email));
+              sendMail(sender, text, globaldata,
+                List(new InternetAddress(alias.user.email)));
               return
             }
 
@@ -123,7 +125,7 @@ private class EmailSender {
           team:Team =>
             {
 
-              sendMail(sender, text, g, team.users.map(user => new InternetAddress(user.email)).toSeq: _*)
+              sendMail(sender, text, globaldata, team.users.map(user => new InternetAddress(user.email)).toList)
               return
             }
         }
@@ -136,19 +138,20 @@ private class EmailSender {
     }
   }
 
-  def sendMail(sender: String, text: String, globalApplicationData: GlobalApplicationData,
-    addresses: Address*): Unit = {
+  def sendMail(sender: String, text: String, globalApplicationData: Option[GlobalApplicationData] = Application.globalData,
+    addresses: List[Address]): Unit = {
 
     val props = new Properties();
     val session = Session.getDefaultInstance(props, null);
 
-    try {
+    for(g <- globalApplicationData){
+         try {
       val outMessage = new MimeMessage(session);
       outMessage.addRecipients(RecipientType.TO, addresses.toArray);
       outMessage
         .setSender(new InternetAddress(sender));
       outMessage.setText(text);
-      outMessage.setSubject(s"Sent via ${globalApplicationData.leagueName}");
+      outMessage.setSubject(s"Sent via ${g.leagueName}");
 
       LOG.fine(s"${outMessage.getFrom()(0)} to ${outMessage.getAllRecipients()(0).toString}");
 
@@ -156,5 +159,8 @@ private class EmailSender {
     } catch {
       case e: Exception => LOG.log(Level.SEVERE, "Failure sending mail", e);
     }
+    }
+    
+ 
   }
 }

@@ -9,7 +9,6 @@
     <display-name>Entity REST Services</display-name>
     <servlet-name>EntityServices</servlet-name>
     <servlet-class>org.chilternquizleague.web.EntityService</servlet-class>
-    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>EntityServices</servlet-name>
@@ -47,6 +46,7 @@
     <url-pattern>/tasks/*</url-pattern>
     <url-pattern>/entity/*</url-pattern>
     <url-pattern>/view/*</url-pattern>
+    <url-pattern>/secure/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   <filter-mapping>
@@ -70,6 +70,17 @@
     <url-pattern>/view/*</url-pattern>
   </servlet-mapping>
   <servlet>
+    <description></description>
+    <display-name>Secure REST Services</display-name>
+    <servlet-name>SecureServices</servlet-name>
+    <servlet-class>org.chilternquizleague.web.SecureService</servlet-class>
+        <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SecureServices</servlet-name>
+    <url-pattern>/secure/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>mailhandler</servlet-name>
     <servlet-class>org.chilternquizleague.web.MailHandler</servlet-class>
   </servlet>
@@ -87,7 +98,7 @@
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
-      <web-resource-name>maintainance</web-resource-name>
+      <web-resource-name>maintenance</web-resource-name>
       <url-pattern>/maintain/*</url-pattern>
       <url-pattern>/entity/*</url-pattern>
     </web-resource-collection>

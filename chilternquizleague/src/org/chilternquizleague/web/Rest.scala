@@ -2,12 +2,13 @@ package org.chilternquizleague.web
 
 import java.util.logging.Level
 import java.util.logging.Logger
-import java.util.{List => JList}
-import java.util.{Map => JMap}
+import java.util.{ List => JList }
+import java.util.{ Map => JMap }
 import scala.collection.JavaConversions._
 import scala.collection.immutable.List
 import scala.util.control.Exception.catching
 import org.chilternquizleague.domain._
+import org.chilternquizleague.domain.security._
 import org.chilternquizleague.domain.util.RefUtils._
 import org.chilternquizleague.results.ResultHandler
 import org.chilternquizleague.util.HttpUtils.RequestImprovements
@@ -20,12 +21,14 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.ObjectifyService.ofy
 import javax.servlet.ServletConfig
+import javax.servlet.ServletException
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import org.chilternquizleague.util.Storage.{entity => entityByKey}
+import org.chilternquizleague.util.Storage.{ entity => entityByKey }
 import org.chilternquizleague.util.Storage.entityList
 import org.chilternquizleague.util.Storage.save
+import org.chilternquizleague.util.Storage.delete
 import org.chilternquizleague.util.ClassUtils._
 import java.util.ArrayList
 import scala.collection.immutable.Iterable
@@ -37,19 +40,26 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.core.SerializableString
 import com.fasterxml.jackson.core.io.SerializedString
 import com.fasterxml.jackson.databind.JsonNode
+import java.io.IOException
 import java.io.StringWriter
 import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
 import org.chilternquizleague.util.JacksonUtils
 import org.chilternquizleague.util.UserUtils
 import org.chilternquizleague.web.ViewUtils._
+import java.util.HashMap
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
+import java.io.Reader
+import java.io.StringReader
+import org.mozilla.javascript.Context
+import org.mozilla.javascript.ScriptableObject
+import org.mozilla.javascript.{ Function => JSFunction }
+import javax.servlet.http.Cookie
+import java.net.URL
 
+trait BaseRest {
 
-
-trait BaseRest extends HttpServlet {
-
-
-  
   val LOG: Logger = Logger.getLogger(classOf[BaseRest].getName());
 
   def aliases: Map[String, String]
@@ -68,26 +78,37 @@ trait BaseRest extends HttpServlet {
     head match {
 
       case e if e.`contains`("-list") => makeEntityList(entName).map(new ArrayList(_))
-      case _ => entityByParam(parts.tail.head, entName)
+      case _ => for {
+        idPart <- parts.tail.headOption
+        e <- entityByParam[BaseEntity](idPart, entName)
+      } yield e
     }
 
   }
 
   protected def idParam(req: HttpServletRequest, name: String = "id") = req id name
 
-  def makeEntityList[T <: BaseEntity](entityName: String):Option[List[T]] = classFromPart(entityName) flatMap { c:Class[T] => makeEntityList(c) }
-  def makeEntityList[T <: BaseEntity](c:Class[T]):Option[List[T]] = Some(entityList(c).filter(entityFilter[T]))
+  def makeEntityList[T <: BaseEntity](entityName: String): Option[List[T]] = classFromPart(entityName) flatMap { c: Class[T] => makeEntityList(c) }
+  def makeEntityList[T <: BaseEntity](c: Class[T]): Option[List[T]] = Some(entityList(c).filter(entityFilter[T]))
 
   def entityByParam[T](idPart: String, entityName: String): Option[T] = classFromPart[T](entityName) flatMap { clazz: Class[T] => entityByKey(idPart.toLongOpt, clazz) }
 
-  def saveUpdate[T <: BaseEntity](req: HttpServletRequest, entityName: String): T = {
+  def saveUpdate[T <: BaseEntity](reader: Reader, entityName: String): T = {
 
     val retval = classFromPart[T](entityName) map { clazz =>
-      ofy.load.key(save(objectMapper.readValue(req.getReader(), clazz))).now
+      ofy.load.key(save(objectMapper.readValue(reader, clazz))).now
     }
     retval.getOrElse(throw new ClassNotFoundException(entityName))
   }
 
+  def sessionCookieId(id:Long, resp:HttpServletResponse) = {
+    
+    val cookie = new Cookie("session",String.valueOf(id))
+    cookie.setPath("/secure/")
+    
+    resp.addCookie(cookie)
+   
+  }
   def logJson[T](things: T, message: String = "") = {
     if (LOG.isLoggable(Level.FINE)) {
       LOG.fine(s"$message\n${things.getClass.getName} : ${objectMapper.writeValueAsString(things)}")
@@ -95,20 +116,19 @@ trait BaseRest extends HttpServlet {
 
     things
   }
-  
-   
+
 }
 
-class EntityService extends BaseRest {
+class EntityService extends HttpServlet with BaseRest {
 
-  override val aliases = Map(("text", "CommonText"), 
-      ("global", "GlobalApplicationData")) ++ CompetitionType.values.map(t => (t.name(), t.compClass().getSimpleName))
-  override def entityFilter[T] = { _ => true }
+  override val aliases = Map(("text", "CommonText"),
+    ("global", "GlobalApplicationData")) ++ CompetitionType.values.map(t => (t.name(), t.compClass().getSimpleName))
+  override def entityFilter[T] = _ => true
 
   override def init(config: ServletConfig) = {
     objectMapper registerModule JacksonUtils.unsafeModule
   }
-  
+
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
@@ -124,32 +144,31 @@ class EntityService extends BaseRest {
     item.foreach(a => objectMapper.writeValue(resp.getWriter, logJson(a, "writing:")))
 
   }
-  
-  def rebuildStats(req:HttpServletRequest) = for( s <- entityByKey(req.id("seasonId"), classOf[Season])) yield HistoricalStatsAggregator.perform(s)
-  
+
+  def rebuildStats(req: HttpServletRequest) = for (s <- entityByKey(req.id("seasonId"), classOf[Season])) yield HistoricalStatsAggregator.perform(s)
+
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
-    val item:Option[Any] = head match {
-          case "rebuild-stats" => rebuildStats(req)
-          case "upload-dump" => DBDumper.load(objectMapper.readValue(req.getReader, classOf[JMap[String, JList[JMap[String,Any]]]]));None
-          case _ => Option(saveUpdate(req, entityName(parts(req).head)))
+    val item: Option[Any] = head match {
+      case "rebuild-stats" => rebuildStats(req)
+      case "upload-dump" =>
+        DBDumper.load(objectMapper.readValue(req.getReader, classOf[JMap[String, JList[JMap[String, Any]]]])); None
+      case _ => Option(saveUpdate(req.getReader, entityName(parts(req).head)))
     }
 
     resp.setContentType("application/json")
-    item.foreach(i=>objectMapper.writeValue(resp.getWriter, logJson(i, "out:")))
+    item.foreach(i => objectMapper.writeValue(resp.getWriter, logJson(i, "out:")))
   }
 
   override def doPut(req: HttpServletRequest, resp: HttpServletResponse) = doPost(req, resp)
 
 }
 
-class ViewService extends BaseRest {
+class ViewService extends HttpServlet with BaseRest {
 
-  override val aliases = Map(("GlobalText","CommonText"))
-  override def entityFilter[T <: BaseEntity] = { !_.retired }
-
-
+  override val aliases = Map(("GlobalText", "CommonText"))
+  override def entityFilter[T <: BaseEntity] = !_.retired
 
   override def init(config: ServletConfig) = {
     objectMapper registerModule JacksonUtils.safeModule
@@ -176,6 +195,7 @@ class ViewService extends BaseRest {
       case "text" => textForName(req)
       case "reports" => resultReports(req)
       case "team-statistics" => teamStatistics(req)
+      case "request-logon" => requestLogon(req.parameter("email"), req,resp)
       case _ => handleEntities(bits, head)
 
     }
@@ -197,22 +217,47 @@ class ViewService extends BaseRest {
     ret.foreach(r => objectMapper.writeValue(resp.getWriter, r))
 
   }
-  
-  def teamStatistics(req: HttpServletRequest):Option[StatisticsView] = {
-    
-    for{
+
+  def requestLogon(email: Option[String], req:HttpServletRequest, resp:HttpServletResponse): Option[RequestLogonView] = {
+
+    for {
+      (u, t) <- UserUtils.userTeamForEmail(email)
+    } {
+      val token = LogonToken()
+
+      for (g <- Application.globalData) {
+
+        val pwd = token.uuid
+        sessionCookieId(token.id, resp)
+      
+        val host = new URL(req.getRequestURL.toString()).getHost
+        
+        EmailSender.apply(s"security@$host", s"Your one-time password is $pwd./nPlease paste this into the 'Password' field in your browser./n/nThis password will expire in 15 minutes.", List(u.email))
+        LOG.warning(s"one-time password is $pwd")
+      }
+      
+      return Some(new RequestLogonView(true))
+    }
+
+    Some(new RequestLogonView(false))
+
+  }
+
+  def teamStatistics(req: HttpServletRequest): Option[StatisticsView] = {
+
+    for {
       t <- entityByKey(req.id("teamId"), classOf[Team])
       s <- entityByKey(req.id("seasonId"), classOf[Season])
-      stats = entityList(classOf[Statistics], ("team",t), ("season",s))
-    } yield{
+      stats = entityList(classOf[Statistics], ("team", t), ("season", s))
+    } yield {
       stats match {
         case Nil => null
         case _ => stats.head
       }
-   } 
+    }
   }
-  
-  def seasons():Option[List[SeasonView]] = makeEntityList(classOf[Season]) map { _ map {new SeasonView(_)}}
+
+  def seasons(): Option[List[SeasonView]] = makeEntityList(classOf[Season]) map { _ map { new SeasonView(_) } }
 
   def submitResults(req: HttpServletRequest) = {
 
@@ -231,23 +276,22 @@ class ViewService extends BaseRest {
     None
   }
 
-  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType):Option[LeagueTableWrapperView] = entityByKey(idParam(req), classOf[Season]) map (a => new LeagueTableWrapperView(a, compType))
+  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType): Option[LeagueTableWrapperView] = entityByKey(idParam(req), classOf[Season]) map (a => new LeagueTableWrapperView(a, compType))
 
   def teamExtras(req: HttpServletRequest): Option[TeamExtras] = {
 
     val teamId = idParam(req, "teamId")
-    for{
+    for {
       t <- entityByKey(teamId, classOf[Team])
       s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
-    }
-    yield{
+    } yield {
       new TeamExtras(t, teamFixtures(teamId, s).map(new FixturesView(_)), teamResults(teamId, s).map(new ResultsView(_)))
     }
- }
+  }
 
-  def teamFixtures(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Fixtures => Boolean = {_ => true}): List[Fixtures] = {
+  def teamFixtures(teamId: Option[Long], season: Season, limit: Int = 20000, filter: Fixtures => Boolean = { _ => true }): List[Fixtures] = {
 
-    val competitions = season.teamCompetitions.filter (!_.subsidiary)
+    val competitions = season.teamCompetitions.filter(!_.subsidiary)
 
     def flatMapFixtures(f: Fixtures): List[Fixtures] = {
 
@@ -257,13 +301,12 @@ class ViewService extends BaseRest {
       if (newFix.fixtures.isEmpty) Nil else List(newFix)
     }
 
-    competitions filter { _ != null } flatMap { _.fixtures.map(_()) filter filter flatMap flatMapFixtures } sortWith(_ .start before  _.start) slice(0, limit)
-
+    competitions filter { _ != null } flatMap { _.fixtures.map(_()) filter filter flatMap flatMapFixtures } sortWith (_.start before _.start) slice (0, limit)
 
   }
 
-  def teamResults(teamId: Option[Long], season: Season, limit:Int = 20000, filter:Results => Boolean = {_ => true}): List[Results] = {
-    val competitions = season.teamCompetitions.filter (!_.subsidiary)
+  def teamResults(teamId: Option[Long], season: Season, limit: Int = 20000, filter: Results => Boolean = { _ => true }): List[Results] = {
+    val competitions = season.teamCompetitions.filter(!_.subsidiary)
 
     def flatMapResults(f: Results): List[Results] = {
 
@@ -273,44 +316,41 @@ class ViewService extends BaseRest {
       if (newRes.results.isEmpty) Nil else List(newRes)
     }
 
-    competitions filter { _ != null } flatMap { _.results.map(_()) filter(_!=null) filter filter flatMap flatMapResults } sortWith(_.date before _.date) slice(0,limit)
+    competitions filter { _ != null } flatMap { _.results.map(_()) filter (_ != null) filter filter flatMap flatMapResults } sortWith (_.date before _.date) slice (0, limit)
 
   }
 
   /**
    * Relies on http params id:Season and type:CompetitionType
    */
-  private def teamCompetitionForSeason(req: HttpServletRequest):Option[TeamCompetition] = {
-    for{
+  private def teamCompetitionForSeason(req: HttpServletRequest): Option[TeamCompetition] = {
+    for {
       c <- req.parameter("type")
-      t = CompetitionType.valueOf(c) 
+      t = CompetitionType.valueOf(c)
       s <- entityByKey(req.id(), classOf[Season])
     } yield s.competition(t).asInstanceOf[TeamCompetition]
   }
-  
-  def competitionResults(req: HttpServletRequest): Option[JList[ResultsView]] = teamCompetitionForSeason(req) map {_.results.map(new ResultsView(_))}
 
-  def competitionFixtures(req: HttpServletRequest): Option[JList[FixturesView]] = teamCompetitionForSeason(req) map {_.fixtures.map(new FixturesView(_))}
+  def competitionResults(req: HttpServletRequest): Option[JList[ResultsView]] = teamCompetitionForSeason(req) map { _.results.map(new ResultsView(_)) }
 
-
+  def competitionFixtures(req: HttpServletRequest): Option[JList[FixturesView]] = teamCompetitionForSeason(req) map { _.fixtures.map(new FixturesView(_)) }
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
     Application.globalData.flatMap(g => { req.parameter("name") map { n => g.globalText.text(n) } })
   }
 
-  def allResults(req: HttpServletRequest) = 
+  def allResults(req: HttpServletRequest) =
     entityByKey(req.id(), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results.map(new ResultsView(_)) })
-  
-  def allFixtures(req: HttpServletRequest):Option[JList[_]] =
+
+  def allFixtures(req: HttpServletRequest): Option[JList[_]] =
     entityByKey(req.id(), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures.map(new FixturesView(_)) })
 
-    
   def resultsForSubmission(req: HttpServletRequest): Option[PreSubmissionView] = {
-   
-    val now  = new Date
-    for{
-      (u,t) <- UserUtils.userTeamForEmail(req.parameter("email"))
+
+    val now = new Date
+    for {
+      (u, t) <- UserUtils.userTeamForEmail(req.parameter("email"))
       s <- entityByKey(req.id("seasonId"), classOf[Season])
       f <- teamFixtures(Some(t.id), s).filter(_.start before now).reverse.headOption
       fixture <- f.fixtures.headOption
@@ -318,48 +358,220 @@ class ViewService extends BaseRest {
       r <- comp.resultsForDate(f.start)
       p = r.findRow(fixture)
       sub = comp.subsidiaryResults(f.start)
-    }
-    yield
-    {
-      val primaryResult = p.getOrElse{
+    } yield {
+      val primaryResult = p.getOrElse {
         val res = new Result
         res.fixture = fixture
         res
       }
-      
-      val report:Report = new Report
+
+      val report: Report = new Report
       report.team = t
       primaryResult.reports.clear
       primaryResult.reports.add(report)
- 
-      val subResult = for(r <- sub) yield r.findRow(t).getOrElse{
+
+      val subResult = for (r <- sub) yield r.findRow(t).getOrElse {
         val res = new Result
         res.fixture = fixture
         res
       }
-      
-      val results:List[ResultForSubmission] = List[ResultForSubmission](new ResultForSubmission(comp.`type`, primaryResult)) ++ subResult.fold(List[ResultForSubmission]())(r => List(new ResultForSubmission(comp.subsidiaryCompetition.`type`,r)))
-      
+
+      val results: List[ResultForSubmission] = List[ResultForSubmission](new ResultForSubmission(comp.`type`, primaryResult)) ++ subResult.fold(List[ResultForSubmission]())(r => List(new ResultForSubmission(comp.subsidiaryCompetition.`type`, r)))
+
       new PreSubmissionView(t, f, results)
     }
-    
+
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
-		  entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
-  
+    entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
+
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
-    
-    for{
+
+    for {
       t <- entityByKey(idParam(req, "homeTeamId"), classOf[Team])
       key <- req.parameter("resultsKey")
       r <- Option(ofy.load.key(Key.create(key)).now.asInstanceOf[Results])
       reps <- r.findRow(t)
-    }
-    yield{
-      new ResultsReportsView(reps) 
+    } yield {
+      new ResultsReportsView(reps)
     }
   }
 
+}
 
+class SecureService extends EntityService {
+  import javax.crypto.spec._
+  import javax.crypto._
+  import java.security._
+  import com.google.api.client.util._
+  import javax.script._
+  import org.chilternquizleague.util.UserUtils._
+
+  @JsonAutoDetect(fieldVisibility = Visibility.ANY)
+  class Session(val password: String, val id: Long, val teamId: Long)
+
+  var scope: ScriptableObject = null
+
+  override def init(config: ServletConfig) = {
+
+    super.init(config: ServletConfig)
+    val is = this.getClass.getResourceAsStream("sjcl.js")
+
+    val script = """
+    
+    proxy = {}
+    function loadJs(is) {
+      var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+      var line = null;
+      var script = "";
+      while((line = br.readLine())!=null) {
+          script += line;
+      }
+
+      eval(script);
+
+      proxy = sjcl
+
+    }    
+
+    loadJs(is);
+    
+    function decrypt(password,ct){
+      return proxy.decrypt(password,"" + ct)
+    }
+
+    function encrypt(password, obj){
+      return proxy.encrypt(password, obj)
+    }
+
+
+"""
+    val cx = Context.enter()
+
+    scope = cx.initStandardObjects()
+    scope.put("is", scope, is)
+    cx.evaluateString(scope, script, "import", 1, null)
+
+    Context.exit()
+
+  }
+
+  def logTime[T](f: () => T, message: String = "method"): T = {
+    val now = System.currentTimeMillis()
+    val res = f()
+    LOG.warning(s"$message took ${System.currentTimeMillis - now} millis")
+    res
+  }
+
+  def encrypt(value: Any, token: Token): String = {
+
+    val cx = Context.enter()
+
+    val fct = scope.get("encrypt", scope).asInstanceOf[JSFunction]
+    val result = fct.call(cx, scope, scope, Array[Object](token.uuid, objectMapper.writeValueAsString(value)))
+
+    Context.exit()
+
+    String.valueOf(result)
+
+  }
+
+  def decrypt(token: Token, payload: String) = {
+    val cx = Context.enter()
+
+    val fct = scope.get("decrypt", scope).asInstanceOf[JSFunction]
+    val result = fct.call(cx, scope, scope, Array[Object](token.uuid, payload))
+
+    Context.exit()
+
+    String.valueOf(result)
+
+  }
+
+  def sessionId(req: HttpServletRequest) = {
+
+    if (req.getCookies == null) Some(0L) else
+      for {
+        cookie <- req.getCookies.find { _.getName == "session" }
+        sessionId <- cookie.getValue.toLongOpt
+      } yield sessionId
+
+  }
+
+  override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
+    val bits = parts(req)
+    val head = bits.head
+    val stripped = head.replace("-list", "")
+
+    val item: Option[_] = stripped match {
+      case _ => handleEntities(bits, head)
+    }
+
+    for {
+      sessionId <- sessionId(req)
+      t <- SessionToken.find(sessionId)
+      a <- item
+    } {
+      objectMapper.writeValue(resp.getWriter, logJson(new Wrapper(encrypt(a, t)), "secure service"))
+    }
+  }
+
+  override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
+    val bits = parts(req)
+    val head = bits.head
+
+    val payload = objectMapper.readValue(req.getReader, classOf[Wrapper])
+
+    def doSave() = {
+      for {
+        sessionId <- sessionId(req)
+        t <- SessionToken.find(sessionId)
+        a = decrypt(t, payload.text)
+        i = saveUpdate[BaseEntity](new StringReader(a), entityName(head))
+      } yield new Wrapper(encrypt(i, t))
+    }
+
+    val item: Option[_] =
+
+      head match {
+        case "logon" => logon(payload, req, resp)
+        case _ => doSave()
+      }
+
+    for (i <- item) {
+      objectMapper.writeValue(resp.getWriter, logJson(i, "secure service"))
+    }
+  }
+
+  def logon(session: Wrapper, req: HttpServletRequest, resp: HttpServletResponse) = {
+
+    for {
+      sessionId <- sessionId(req)
+      token <- LogonToken.find(sessionId)
+      (u, t) <- {
+
+        val dec = objectMapper.readValue(decrypt(token, session.text), classOf[HashMap[String, String]])
+
+        val email = Some(dec.get("email"))
+        userTeamForEmail(email)
+      }
+
+    } {
+
+      val sessionToken = SessionToken(u)
+
+      sessionCookieId(sessionToken.id, resp)
+      objectMapper.writeValue(resp.getWriter, new Wrapper(encrypt(objectMapper.writeValueAsString(new Session(sessionToken.uuid, sessionToken.id, t.id)), token)))
+
+      delete(token)
+    }
+    None
+  }
+
+}
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class Wrapper(var text: String, var id: Long = 0) {
+  def this() = this(null)
 }
