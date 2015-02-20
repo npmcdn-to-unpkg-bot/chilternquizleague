@@ -167,4 +167,11 @@ class StatisticsView(statistics:Statistics) {
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-class RequestLogonView(val result:Boolean)
+class RequestLogonResult(val result:Boolean)
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class MassMailRequest{
+  var subject:String = null
+  var text:String = null
+  var sender:String = null
+}

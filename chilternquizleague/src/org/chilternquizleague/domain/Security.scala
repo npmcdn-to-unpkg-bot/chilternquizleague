@@ -19,6 +19,7 @@ trait TokenCache{
   
   protected lazy val cache = init()
   def init():Map[String,tokenType]
+
 }
 
 abstract class Token(var uuid:String, var expires:Date) extends BaseEntity
@@ -31,8 +32,10 @@ class LogonToken(uuid:String,expires:Date) extends Token(uuid,expires){
 
 object LogonToken{
   
+  val duration = 15 * 60 * 1000
+  
   def apply() = {
-    val token = new LogonToken(UUID.randomUUID().toString(), new Date(System.currentTimeMillis() + (15 * 60 * 1000)))
+    val token = new LogonToken(UUID.randomUUID().toString(), new Date(System.currentTimeMillis() + duration))
     save(token)
     token
   }
@@ -41,6 +44,15 @@ object LogonToken{
     val token = entity(Some(id),classOf[LogonToken])
     
     for(t <- token if t.expires after now) yield t 
+    
+  }
+  
+  def cleanUp() = {
+    val now = new Date
+    val tokens = entityList(classOf[LogonToken])
+    for(t <- tokens if t.expires before now){
+      delete(t)
+    }
     
   }
 
@@ -53,11 +65,15 @@ class SessionToken(uuid:String,expires:Date, var user:Ref[User]) extends Token(u
 }
  
 object SessionToken{
+  
+  val duration = 60 * 60 * 1000
+  
   def apply(user:User) = {
-    val token = new SessionToken(UUID.randomUUID().toString(), new Date(System.currentTimeMillis() + (60 * 60 * 1000)), user)
+    val token = new SessionToken(UUID.randomUUID().toString(), new Date(System.currentTimeMillis() + duration), user)
     save(token)
     token
   }
+  
   def find(id:Long) = {
     val now = new Date
     val token = entity(Some(id),classOf[SessionToken])
@@ -66,6 +82,13 @@ object SessionToken{
     
   }
 
-  
+  def cleanUp() = {
+    val now = new Date
+    val tokens = entityList(classOf[SessionToken])
+    for(t <- tokens if t.expires before now){
+      delete(t)
+    }
+  }
+
   
 }

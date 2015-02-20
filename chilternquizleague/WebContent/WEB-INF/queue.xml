@@ -4,4 +4,8 @@
     <name>stats</name>
     <rate>1/s</rate>
   </queue>
+  <queue>
+    <name>tokens</name>
+    <rate>1/s</rate>
+  </queue>
 </queue-entries>

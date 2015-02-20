@@ -24,6 +24,8 @@ import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import scala.collection.JavaConversions._
 import java.util.ArrayList
 import com.googlecode.objectify.VoidWork
+import org.chilternquizleague.domain.security.LogonToken
+import org.chilternquizleague.domain.security.SessionToken
 
 class StatsQueueHandler extends HttpServlet {
   val LOG: Logger = Logger.getLogger(this.getClass.getName)
@@ -116,4 +118,16 @@ object HistoricalStatsAggregator {
     entityList(classOf[Statistics])
   }
 
+}
+
+class TokenQueueHandler extends HttpServlet {
+  val LOG: Logger = Logger.getLogger(this.getClass.getName)
+  override def doPost(req: HttpServletRequest, resp: HttpServletResponse) {
+
+    LOG.fine("Token task arrived")
+
+    LogonToken.cleanUp()
+    SessionToken.cleanUp()
+    
+  }
 }

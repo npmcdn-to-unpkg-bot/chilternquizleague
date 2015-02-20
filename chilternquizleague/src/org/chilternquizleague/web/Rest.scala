@@ -45,6 +45,7 @@ import java.io.StringWriter
 import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
 import org.chilternquizleague.util.JacksonUtils
+import org.chilternquizleague.util.JacksonUtils.ObjectMapperImprovements
 import org.chilternquizleague.util.UserUtils
 import org.chilternquizleague.web.ViewUtils._
 import java.util.HashMap
@@ -57,10 +58,16 @@ import org.mozilla.javascript.ScriptableObject
 import org.mozilla.javascript.{ Function => JSFunction }
 import javax.servlet.http.Cookie
 import java.net.URL
+import com.google.appengine.api.taskqueue.TaskOptions.Builder._
+import com.google.appengine.api.taskqueue.QueueFactory
+import javax.mail.Message.RecipientType
 
 trait BaseRest {
 
+  import scala.reflect._
+  
   val LOG: Logger = Logger.getLogger(classOf[BaseRest].getName());
+  val cookieName = "qlsessionid"
 
   def aliases: Map[String, String]
   val objectMapper: ObjectMapper = new ObjectMapper
@@ -101,14 +108,19 @@ trait BaseRest {
     retval.getOrElse(throw new ClassNotFoundException(entityName))
   }
 
-  def sessionCookieId(id:Long, resp:HttpServletResponse) = {
+  def sessionCookieId(id:Long, resp:HttpServletResponse, duration:Int) = {
     
-    val cookie = new Cookie("session",String.valueOf(id))
+    val cookie = new Cookie(cookieName,String.valueOf(id))
     cookie.setPath("/secure/")
+    cookie.setMaxAge(duration)
     
     resp.addCookie(cookie)
    
   }
+  
+  def readObject[T:ClassTag](req:HttpServletRequest):T = objectMapper.read[T](req.getReader).asInstanceOf[T] 
+
+  
   def logJson[T](things: T, message: String = "") = {
     if (LOG.isLoggable(Level.FINE)) {
       LOG.fine(s"$message\n${things.getClass.getName} : ${objectMapper.writeValueAsString(things)}")
@@ -144,16 +156,27 @@ class EntityService extends HttpServlet with BaseRest {
     item.foreach(a => objectMapper.writeValue(resp.getWriter, logJson(a, "writing:")))
 
   }
-
+  
   def rebuildStats(req: HttpServletRequest) = for (s <- entityByKey(req.id("seasonId"), classOf[Season])) yield HistoricalStatsAggregator.perform(s)
-
+  def massMail(request:MassMailRequest, host:String):Option[String]={
+    
+    val addresses = for{
+      t <- entityList(classOf[Team])
+      u <- t.users
+    }yield u.email
+    
+    EmailSender(s"${request.sender}@$host", request.text, addresses, recipientType = RecipientType.BCC,subject=request.subject)
+    
+    Some("")
+  }
+  
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
     val item: Option[Any] = head match {
       case "rebuild-stats" => rebuildStats(req)
-      case "upload-dump" =>
-        DBDumper.load(objectMapper.readValue(req.getReader, classOf[JMap[String, JList[JMap[String, Any]]]])); None
+      case "upload-dump" => DBDumper.load(readObject[JMap[String,JList[JMap[String,Any]]]](req)); None
+      case "mass-mail" => massMail(readObject[MassMailRequest](req),req.host)  
       case _ => Option(saveUpdate(req.getReader, entityName(parts(req).head)))
     }
 
@@ -218,7 +241,7 @@ class ViewService extends HttpServlet with BaseRest {
 
   }
 
-  def requestLogon(email: Option[String], req:HttpServletRequest, resp:HttpServletResponse): Option[RequestLogonView] = {
+  def requestLogon(email: Option[String], req:HttpServletRequest, resp:HttpServletResponse): Option[RequestLogonResult] = {
 
     for {
       (u, t) <- UserUtils.userTeamForEmail(email)
@@ -228,18 +251,18 @@ class ViewService extends HttpServlet with BaseRest {
       for (g <- Application.globalData) {
 
         val pwd = token.uuid
-        sessionCookieId(token.id, resp)
+        sessionCookieId(token.id, resp, LogonToken.duration/1000)
       
         val host = new URL(req.getRequestURL.toString()).getHost
         
-        EmailSender.apply(s"security@$host", s"Your one-time password is $pwd./nPlease paste this into the 'Password' field in your browser./n/nThis password will expire in 15 minutes.", List(u.email))
-        LOG.warning(s"one-time password is $pwd")
+        EmailSender.apply(s"security@$host", s"Your one-time password is $pwd.\nPlease paste this into the 'Password' field in your browser.\n\nThis password will expire in 15 minutes.", List(u.email))
+        Logger.getLogger(this.getClass.getName + ".requestLogon").fine(s"one-time password is $pwd")
       }
       
-      return Some(new RequestLogonView(true))
+      return Some(new RequestLogonResult(true))
     }
 
-    Some(new RequestLogonView(false))
+    Some(new RequestLogonResult(false))
 
   }
 
@@ -493,7 +516,7 @@ class SecureService extends EntityService {
 
     if (req.getCookies == null) Some(0L) else
       for {
-        cookie <- req.getCookies.find { _.getName == "session" }
+        cookie <- req.getCookies.find { _.getName == cookieName }
         sessionId <- cookie.getValue.toLongOpt
       } yield sessionId
 
@@ -561,8 +584,10 @@ class SecureService extends EntityService {
 
       val sessionToken = SessionToken(u)
 
-      sessionCookieId(sessionToken.id, resp)
+      sessionCookieId(sessionToken.id, resp, SessionToken.duration/1000)
       objectMapper.writeValue(resp.getWriter, new Wrapper(encrypt(objectMapper.writeValueAsString(new Session(sessionToken.uuid, sessionToken.id, t.id)), token)))
+      val queue = QueueFactory.getQueue("tokens");
+      queue.add(withUrl("/tasks/tokens").countdownMillis(SessionToken.duration * 2));
 
       delete(token)
     }

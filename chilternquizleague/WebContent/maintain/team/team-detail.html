@@ -22,7 +22,7 @@
 					<label>Select a user</label>
 					<input type="hidden" ng-model="userToAdd">
 					<select class="md-input" ng-model="userToAdd"
-						ng-options="user as user.name for user in users"></select>
+						ng-options="user as user.name for user in users track by user.id"></select>
 					<md-input-container>
 				</div>
 				<cql-subheader>Users</cql-subheader>

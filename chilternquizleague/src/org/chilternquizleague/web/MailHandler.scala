@@ -102,7 +102,9 @@ object EmailSender{
   
   def apply(sender: String, recipientName: String, text: String) = new EmailSender().sendMail(sender, recipientName, text)
   
-  def apply(sender: String, text: String, addressees:List[String]) = new EmailSender().sendMail(sender, text, Application.globalData, addressees.map(new InternetAddress(_)))
+  def apply(sender: String, text: String, addressees:List[String], recipientType:RecipientType = RecipientType.TO, subject:String = "") = new EmailSender().sendMail(sender, text, Application.globalData,recipientType ,addressees.map(new InternetAddress(_)),subject)
+  
+
 }
 
 private class EmailSender {
@@ -119,7 +121,7 @@ private class EmailSender {
         g.emailAliases.filter(_.alias == recipientName).foreach {
           alias =>
             {
-              sendMail(sender, text, globaldata,
+              sendMail(sender, text, globaldata, RecipientType.TO,
                 List(new InternetAddress(alias.user.email)));
               return
             }
@@ -131,7 +133,7 @@ private class EmailSender {
           team:Team =>
             {
 
-              sendMail(sender, text, globaldata, team.users.map(user => new InternetAddress(user.email)).toList)
+              sendMail(sender, text, globaldata, RecipientType.TO, team.users.map(user => new InternetAddress(user.email)).toList)
               return
             }
         }
@@ -144,8 +146,8 @@ private class EmailSender {
     }
   }
 
-  def sendMail(sender: String, text: String, globalApplicationData: Option[GlobalApplicationData] = Application.globalData,
-    addresses: List[Address]): Unit = {
+  def sendMail(sender: String, text: String, globalApplicationData: Option[GlobalApplicationData] = Application.globalData, recipientType:RecipientType,
+    addresses: List[Address], subject:String = ""): Unit = {
 
     val props = new Properties();
     val session = Session.getDefaultInstance(props, null);
@@ -153,13 +155,13 @@ private class EmailSender {
     for(g <- globalApplicationData){
          try {
       val outMessage = new MimeMessage(session);
-      outMessage.addRecipients(RecipientType.TO, addresses.toArray);
+      outMessage.addRecipients(recipientType, addresses.toArray);
       outMessage
         .setSender(new InternetAddress(g.senderEmail));
       outMessage.setReplyTo(Array(new InternetAddress(sender)))
 
       outMessage.setText(text);
-      outMessage.setSubject(s"Sent via ${g.leagueName} : From $sender");
+      outMessage.setSubject(if(subject.isEmpty()) s"Sent via ${g.leagueName} : From $sender " else s"${g.leagueName} : $subject");
 
       LOG.fine(s"${outMessage.getFrom()(0)} to ${outMessage.getAllRecipients()(0).toString}");
 

@@ -96,6 +96,14 @@
     <servlet-name>statshandler</servlet-name>
     <url-pattern>/tasks/stats</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>tokenhandler</servlet-name>
+    <servlet-class>org.chilternquizleague.web.TokenQueueHandler</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>tokenhandler</servlet-name>
+    <url-pattern>/tasks/tokens</url-pattern>
+  </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintenance</web-resource-name>

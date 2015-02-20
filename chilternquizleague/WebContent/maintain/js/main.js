@@ -59,12 +59,6 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 	.state("season.competition.tables", {
 		templateUrl : '/maintain/competition/tables.html',
 		url : '/:compType/tables'})
-//	}).when('/maintain/seasons/:seasonId/:compType/results', {
-//		templateUrl : '/maintain/competition/results.html',
-//		controller : 'ResultsCtrl'
-//	}).when('/maintain/seasons/:seasonId/:compType/tables', {
-//		templateUrl : '/maintain/competition/tables.html',
-//		controller : 'LeagueTablesCtrl'
 	.state("global", {
 		templateUrl : '/maintain/global/global-detail.html',
 		url : '/maintain/global/current'})
@@ -84,10 +78,13 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 	.state("database", {
 		templateUrl : '/maintain/database/database.html',
 		url:'/maintain/database'})
-//	}).otherwise({
-//		redirectTo : ''
-//	});
-//	
+	.state('mail', {
+		templateUrl : '/maintain/mail/mail-options.html',
+		url : '/maintain/mail'})
+	.state('mass-mail', {
+		templateUrl : '/maintain/mail/mass-mail.html',
+		url : '/maintain/mail/mass-mail'})
+
 	$locationProvider.html5Mode(true);
 	
 

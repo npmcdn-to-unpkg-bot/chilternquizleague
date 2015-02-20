@@ -16,19 +16,18 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import org.chilternquizleague.domain.Text
 import org.chilternquizleague.domain.User
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.Reader
+import scala.reflect.ClassTag
+import java.io.Writer
 
+object ClassUtils {
+  val packages: List[Package] = List(classOf[BaseEntity].getPackage());
 
-
-   
-object ClassUtils{
-    val packages: List[Package] = List(classOf[BaseEntity].getPackage());
-
-  
-    def classFromPart[T](part: String) = {
+  def classFromPart[T](part: String) = {
 
     val className = part.substring(0, 1).toUpperCase() + part.substring(1)
     def fun(c: Option[Class[T]], p: Package): Option[Class[T]] = {
-    	import scala.util.control.Exception._
+      import scala.util.control.Exception._
 
       if (c.isDefined) c else catching(classOf[NoClassDefFoundError]) opt Class.forName(p.getName() + "." + className).asInstanceOf[Class[T]]
     }
@@ -37,47 +36,55 @@ object ClassUtils{
 }
 
 object JacksonUtils {
-  
+
   class RefSerializer extends JsonSerializer[Ref[_]] {
-  override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
-}
+    override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
 
-class RefDeserializer extends JsonDeserializer[Ref[_]] {
-  override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
-    val node: JsonNode = parser.getCodec().readTree(parser);
-
-    val className = node.get("refClass").asText
-    val opt = ClassUtils.classFromPart[BaseEntity](className)
-
-    val remote = for {
-      clazz <- opt
-    } yield {
-      parser.getCodec().treeToValue(node, clazz)
-    }
-
-    Ref.create(ofy.save.entity(remote.get).now())
   }
-}
 
-class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
-  override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
-    val node: JsonNode = parser.getCodec().readTree(parser);
+  implicit class ObjectMapperImprovements(val o: ObjectMapper) {
 
-    val className = node.get("refClass").asText
-    val opt = ClassUtils.classFromPart[BaseEntity](className)
-
-    val remote = for {
-      clazz <- opt
-    } yield {
-      parser.getCodec().treeToValue(node, clazz)
-    }
-
-    remote match{
-      case Some(a) => Ref.create(a)
-      case _ => null
+    def read[T](reader: Reader)(implicit tag: ClassTag[T]): T = {
+      o.readValue(reader, tag.runtimeClass).asInstanceOf[T]
     }
   }
-}
+
+  class RefDeserializer extends JsonDeserializer[Ref[_]] {
+    override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
+      val node: JsonNode = parser.getCodec().readTree(parser);
+
+      val className = node.get("refClass").asText
+      val opt = ClassUtils.classFromPart[BaseEntity](className)
+
+      val remote = for {
+        clazz <- opt
+      } yield {
+        parser.getCodec().treeToValue(node, clazz)
+      }
+
+      Ref.create(ofy.save.entity(remote.get).now())
+    }
+  }
+
+  class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
+    override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
+      val node: JsonNode = parser.getCodec().readTree(parser);
+
+      val className = node.get("refClass").asText
+      val opt = ClassUtils.classFromPart[BaseEntity](className)
+
+      val remote = for {
+        clazz <- opt
+      } yield {
+        parser.getCodec().treeToValue(node, clazz)
+      }
+
+      remote match {
+        case Some(a) => Ref.create(a)
+        case _ => null
+      }
+    }
+  }
 
   class UserSerializer extends JsonSerializer[User] {
     override def serialize(user: User, gen: JsonGenerator, prov: SerializerProvider) = {}
@@ -90,45 +97,47 @@ class SafeRefDeserializer extends JsonDeserializer[Ref[_]] {
     }
 
   }
- class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]]{
-    override def serialize(list:Iterable[Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
+  class ScalaIterableSerialiser extends JsonSerializer[Iterable[Any]] {
+    override def serialize(list: Iterable[Any], gen: JsonGenerator, prov: SerializerProvider): Unit = {
       gen writeStartArray;
-      
-      list foreach {gen.writeObject(_)}
-      
-      gen writeEndArray()
-      
-    }}
- 
- class ScalaMapSerialiser extends JsonSerializer[Map[String,Any]]{
-   
-   override def serialize(map:Map[String,Any], gen: JsonGenerator, prov: SerializerProvider):Unit = {
-     gen writeStartObject()
-     
-     for((k,v) <- map){gen.writeFieldName(k);gen.writeObject(v)}
-     
-     gen.writeEndObject()
-     
-   }
-   
- }
-  
-  lazy val unsafeModule = { 
-    new SimpleModule()
-    .addSerializer(classOf[Ref[_]], new RefSerializer)
-    .addDeserializer(classOf[Ref[_]], new RefDeserializer())
-    .addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
-  	}
-  
-  lazy val safeModule = {    
-    new SimpleModule()
-    .addSerializer(classOf[User], new UserSerializer)
-    .addSerializer(classOf[Text], new TextSerializer)
-    .addSerializer(classOf[Map[String,Any]], new ScalaMapSerialiser)
-    .addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
-    .addSerializer(classOf[Ref[_]], new RefSerializer)
-    .addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)}
-  
-  def safeMapper = new ObjectMapper registerModule safeModule
-      
+
+      list foreach { gen.writeObject(_) }
+
+      gen writeEndArray ()
+
+    }
   }
+
+  class ScalaMapSerialiser extends JsonSerializer[Map[String, Any]] {
+
+    override def serialize(map: Map[String, Any], gen: JsonGenerator, prov: SerializerProvider): Unit = {
+      gen writeStartObject ()
+
+      for ((k, v) <- map) { gen.writeFieldName(k); gen.writeObject(v) }
+
+      gen.writeEndObject()
+
+    }
+
+  }
+
+  lazy val unsafeModule = {
+    new SimpleModule()
+      .addSerializer(classOf[Ref[_]], new RefSerializer)
+      .addDeserializer(classOf[Ref[_]], new RefDeserializer())
+      .addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+  }
+
+  lazy val safeModule = {
+    new SimpleModule()
+      .addSerializer(classOf[User], new UserSerializer)
+      .addSerializer(classOf[Text], new TextSerializer)
+      .addSerializer(classOf[Map[String, Any]], new ScalaMapSerialiser)
+      .addSerializer(classOf[Iterable[Any]], new ScalaIterableSerialiser)
+      .addSerializer(classOf[Ref[_]], new RefSerializer)
+      .addDeserializer(classOf[Ref[_]], new SafeRefDeserializer)
+  }
+
+  def safeMapper = new ObjectMapper registerModule safeModule
+
+}
