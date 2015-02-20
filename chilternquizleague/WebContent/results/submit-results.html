@@ -1,6 +1,6 @@
 <div ng-controller="ResultsSubmitController">
 	<section style="margin-left:.25em;">
-	<form>
+	<form ng-submit="submitResults()">
 		<div>
 			<md-input-container>
 			<label>Enter your email address</label>
@@ -37,7 +37,7 @@
 			</md-input-container>
 
 			<div style="margin-top:.25em;">
-				<md-button ng-click="submitResults()" class="md-primary md-raised">Submit</md-button>
+				<md-button type="submit" class="md-primary md-raised">Submit</md-button>
 			</div>
 
 		</div>

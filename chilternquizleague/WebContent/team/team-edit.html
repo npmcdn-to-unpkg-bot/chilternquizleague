@@ -1,7 +1,8 @@
 <div ng-controller="TeamEdit">
+	<form ng-submit="save(team)">
 	<md-input-container>
 		<label>Name</label>
-		<input type="text" ng-model="team.name">
+		<input type="text" ng-model="team.name" maxlength="30">
 	</md-input-container>
 	<md-input-container>
 		<label>Short Name</label>
@@ -13,5 +14,6 @@
 	</md-input-container>
 	<textarea class="md-input" ui-tinymce="tinymceOptions" cols="60" rows="15" ng-model="team.rubric.text"></textarea>
 	
-	<md-button ng-click="save(team)">Submit</md-button>
+	<md-button type="submit" class="md-primary md-raised" style="margin-top:.25em;">Submit</md-button>
+	</form>
 </div>

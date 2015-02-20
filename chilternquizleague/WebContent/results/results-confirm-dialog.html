@@ -12,7 +12,8 @@
 			</div>
 		</md-list-item>
 		</md-list>
-
-		<div class="md-toolbar-tools" layout-align="space-between"><md-button ng-click="commit()" class="md-primary md-raised">Confirm</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></div>
+		<form ng-submit="commit()">
+		<div class="md-toolbar-tools" layout-align="space-between"><md-button type="submit" class="md-primary md-raised">Confirm</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></div>
+		</form>
 		</md-content>
 </md-dialog>

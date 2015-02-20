@@ -42,7 +42,7 @@
 		.state("teams.edit",{
 			url:"/edit/:itemId",
 			views : {
-				menu:{templateUrl:"/team/teams-menu.html"},
+				menu:{templateUrl:"/team/team-edit-menu.html"},
 				content: {templateUrl:"/team/team-edit.html"}
 		
 			}

@@ -255,7 +255,7 @@ class ViewService extends HttpServlet with BaseRest {
       
         val host = new URL(req.getRequestURL.toString()).getHost
         
-        EmailSender.apply(s"security@$host", s"Your one-time password is $pwd.\nPlease paste this into the 'Password' field in your browser.\n\nThis password will expire in 15 minutes.", List(u.email))
+        EmailSender.apply(s"security@$host", s"Your one-time password is $pwd\nPlease paste this into the 'Password' field in your browser.\n\nThis password will expire in 15 minutes.", List(u.email))
         Logger.getLogger(this.getClass.getName + ".requestLogon").fine(s"one-time password is $pwd")
       }
       
