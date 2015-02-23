@@ -321,6 +321,8 @@
 			
 		}
 		
+		$scope.cookieEnabled = navigator.cookieEnabled
+		
 		$scope.authenticate = function(email){
 			
 			viewService.view("request-logon", {"email":email}, function(res){

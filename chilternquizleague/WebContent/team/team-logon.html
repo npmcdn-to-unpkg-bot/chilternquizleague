@@ -1,6 +1,8 @@
 <div ng-controller="TeamLogon">
 	<cql-subheader>Log In</cql-subheader>
-	<div ng-hide="authenticated">
+	<md-card ng-if="!cookieEnabled">
+		<md-card-content>Cookies are disabled in your browser.  Log in requires cookies to be enabled.</md-card-content></md-card>
+	<div ng-hide="authenticated || !cookieEnabled">
 		<form ng-submit="authenticate(email)">
 			<md-input-container> <label>Email
 				address</label> <input type="email" ng-model="email" autofocus autocomplete="on"> </md-input-container>
