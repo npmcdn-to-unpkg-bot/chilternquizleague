@@ -9,7 +9,7 @@ object HttpUtils {
     implicit class RequestImprovements(val s: HttpServletRequest) {
          def parameter(a:String) = Option(s.getParameter(a))
          def id(a:String = "id") = Option(s.getParameter(a)) flatMap { _ toLongOpt }
-         def host = new URL(s.getRequestURL.toString()).getHost
+         def host = new URL(s.getRequestURL.toString()).getHost.replaceFirst("www.", "")
     }
 
 }
