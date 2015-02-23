@@ -2,7 +2,7 @@
 	<div class="league-table" ng-repeat="table in leagueTable.tables">
 		<div class="standard-table" >
 			<div class="league-table-description" ng-if="table.description">
-			{{table.description}}</div>
+			{{::table.description}}</div>
 			<div class="table-header">
 				<div>
 					<span>Pos.</span>
@@ -24,22 +24,22 @@
 			</div>
 			<div class="table-body">
 				<div ng-repeat="item in table.rows | orderBy : ['leaguePoints','matchPointsFor', 'won', 'drawn','team.shortName'] : true">
-					<span class="numeric">{{item.position ? item.position : ($index +
-						1)}}</span>
+					<span class="numeric">{{::(item.position ? item.position : ($index +
+						1))}}</span>
 					
-					<span  class="team-name"><md-button class="md-primary" href="/teams/{{item.team.id}}" title="{{item.team.name}}">{{item.team.shortName}}</md-button></span>
+					<span  class="team-name"><md-button class="md-primary" href="/teams/{{::item.team.id}}" title="{{::item.team.name}}">{{::item.team.shortName}}</md-button></span>
 					
-					<span class="numeric">{{item.played}}</span>
+					<span class="numeric">{{::item.played}}</span>
 					
-					<span class="optional numeric">{{item.won}}</span>
+					<span class="optional numeric">{{::item.won}}</span>
 					
-					<span class="optional numeric">{{item.lost}}</span>
+					<span class="optional numeric">{{::item.lost}}</span>
 					
-					<span class="optional numeric">{{item.drawn}}</span>
+					<span class="optional numeric">{{::item.drawn}}</span>
 					
-					<span class="optional numeric">{{item.matchPointsFor}}</span>
+					<span class="optional numeric">{{::item.matchPointsFor}}</span>
 					
-					<span class="numeric">{{item.leaguePoints}}</span>
+					<span class="numeric">{{::item.leaguePoints}}</span>
 				</div>
 			</div>
 		</div>
