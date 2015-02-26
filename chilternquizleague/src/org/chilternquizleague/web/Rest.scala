@@ -30,6 +30,7 @@ import org.chilternquizleague.util.Storage.entityList
 import org.chilternquizleague.util.Storage.save
 import org.chilternquizleague.util.Storage.delete
 import org.chilternquizleague.util.ClassUtils._
+import org.chilternquizleague.util.LogUtils._
 import java.util.ArrayList
 import scala.collection.immutable.Iterable
 import java.util.Date
@@ -53,9 +54,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import java.io.Reader
 import java.io.StringReader
-import org.mozilla.javascript.Context
-import org.mozilla.javascript.ScriptableObject
-import org.mozilla.javascript.{ Function => JSFunction }
 import javax.servlet.http.Cookie
 import java.net.URL
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
@@ -256,7 +254,7 @@ class ViewService extends HttpServlet with BaseRest {
         val host = new URL(req.getRequestURL.toString()).getHost
         
         EmailSender.apply(s"security@$host", s"Your one-time password is $pwd\nPlease paste this into the 'Password' field in your browser.\n\nThis password will expire in 15 minutes.", List(u.email))
-        Logger.getLogger(this.getClass.getName + ".requestLogon").warning(s"one-time password is $pwd")
+        Logger.getLogger(this.getClass.getName + ".requestLogon").fine(s"one-time password is $pwd")
       }
       
       return Some(new RequestLogonResult(true))
@@ -435,12 +433,7 @@ class SecureService extends EntityService {
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   class Session(val password: String, val id: Long, val teamId: Long)
 
-  def logTime[T](f: () => T, message: String = "method"): T = {
-    val now = System.currentTimeMillis()
-    val res = f()
-    LOG.warning(s"$message took ${System.currentTimeMillis - now} millis")
-    res
-  }
+
 
   def encrypt(value: Any, token: Token): String = {
 

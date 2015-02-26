@@ -78,7 +78,7 @@ trait AES {
       // each Nk'th word has extra transformation
       if (i % Nk == 0) {
         temp = subWord(rotWord(temp));
-        for (t <- 0 to 3) temp(t) = (temp(t) ^ rCon(i / Nk)(t)).toLong
+        for (t <- 0 until 4) temp(t) = (temp(t) ^ rCon(i / Nk)(t)).toLong
       } // 256-bit key has subWord applied every 4th word
       else if (Nk > 6 && i % Nk == 4) {
         temp = subWord(temp);
@@ -351,13 +351,28 @@ object Crypto extends AES {
 
 object CtrTest extends App {
 
-  val res = Crypto.encrypt("""{"email":"davidcgood@gmail.com","password":"277db9d5-42c6-49bd-ba23-ac7ce76c2b81"}""", "password")
+  import org.chilternquizleague.util.LogUtils._
+  
+  val res:String = logTime(()=>Crypto.encrypt("""{"email":"davidcgood@gmail.com","password":"277db9d5-42c6-49bd-ba23-ac7ce76c2b81"}""", "password"), "short encrypt")
 
   println(res)
 
-  val dec = Crypto.decrypt(res, "password")
+  val dec = logTime(()=>Crypto.decrypt(res, "password"), "short decrypt")
 
   println(dec)
+  
+  val longString = """{"id":5715999101812736,"retired":false,"refClass":"Team","name":"The Squirrel","shortName":"Squirrel","rubric":{"text":"<p>Based in Penn Street, the team has been going in one form or another for about 25 years.&nbsp; Our strengths are literature, birds and Scottish Football: our weaknesses are beyond counting.</p>\n<p>On our day we're capable of losing to anyone, or indeed beating anyone (except <a href=\"http://chilternquizleague.uk/teams/team/5186378094608384\">Farnham Common</a>).</p>\n<p><strong><em>Usual result:</em></strong> narrow win</p>\n<p><strong><em>Usual league position:</em></strong> 3rd</p>\n<p><strong><em>Usual mood:</em></strong> resignation with a hint of hope (dashed)</p>"},"emailName":null,"bitmap$0":false,"key":"ahNzZWlzbWljLWJvbmZpcmUtNjAychELEgRUZWFtGICAgIC81ZMKDA","venue":{"id":5649391675244544,"retired":false,"refClass":"Venue","name":"The Squirrel","address":"Penn Street\nAmersham\nBuckinghamshire\nHP7 0PX","postcode":null,"website":"http://www.thesquirrelpub.co.uk","phone":"01494 711291","email":"thesquirrelpub@live.co.uk","imageURL":"http://www.thesquirrelpub.co.uk/images/p002_1_02.jpg","key":"ahNzZWlzbWljLWJvbmZpcmUtNjAychILEgVWZW51ZRiAgICA-MKECgw"},"users":[{"id":5644406560391168,"retired":false,"refClass":"User","name":"davidcgood@gmail.com","email":"davidcgood@gmail.com","key":"ahNzZWlzbWljLWJvbmZpcmUtNjAychELEgRVc2VyGICAgIDtsYMKDA"},{"id":5162157834502144,"retired":false,"refClass":"User","name":"rob.sutherland@axa-im.com","email":"rob.sutherland@axa-im.com","key":"ahNzZWlzbWljLWJvbmZpcmUtNjAychELEgRVc2VyGICAgMDI3pUJDA"},{"id":5697423099822080,"retired":false,"refClass":"User","name":"chris@clonmere.co.uk","email":"chris@clonmere.co.uk","key":"ahNzZWlzbWljLWJvbmZpcmUtNjAychELEgRVc2VyGICAgIDruI8KDA"}]}
+"""
+  
+  val longPwd = "84301009-45cd-4180-8b91-af2aee57f86e"
+  
+  val longEnc = logTime(()=>Crypto.encrypt(longString, longPwd),"long encrypt")
+  
+  println(longEnc)
+  
+  val longDec = logTime(()=>Crypto.decrypt(longEnc,longPwd),"long decrypt")
+  
+  println(longDec)
 
  
 }
