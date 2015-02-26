@@ -300,7 +300,7 @@ abstract class TeamCompetition(
   def addResult(result:Result):Results
 	def resultsForDate(date:Date):Option[Results] = {
 	  
-	  val resultSet = results.find(r=>sameDay(date, r.date)) 
+	  val resultSet = results.find(r=>r.get != null && sameDay(date, r.date)) 
 	  
 	  resultSet match {
 	    

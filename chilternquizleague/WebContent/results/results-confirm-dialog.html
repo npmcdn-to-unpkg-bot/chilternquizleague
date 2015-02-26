@@ -1,4 +1,4 @@
-<md-dialog>
+<md-dialog layout="column">
 	<md-toolbar md-theme="red"><div class="md-toolbar-tools">Check Your Results!</div></md-toolbar>
 		<md-content>
 		<div>Please check that all values are correct.  You will not be able to change them once submitted. If a mistake <em>is</em> made, please contact the webmaster.</div>
@@ -12,8 +12,8 @@
 			</div>
 		</md-list-item>
 		</md-list>
-		<form ng-submit="commit()">
-		<div class="md-toolbar-tools" layout-align="space-between"><md-button type="submit" class="md-primary md-raised">Confirm</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></div>
-		</form>
+
 		</md-content>
+		
+		<div class="md-actions"><form ng-submit="commit()"><md-button type="submit" class="md-primary md-raised">Confirm</md-button><md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button></form></div>
 </md-dialog>

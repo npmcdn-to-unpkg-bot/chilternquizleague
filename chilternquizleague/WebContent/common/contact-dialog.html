@@ -1,20 +1,20 @@
-<md-dialog> <md-content>
-<div flex layout="column">
-	<cql-subheader class="md-primary">
-	<div>Contact {{title}}</div>
-	</cql-subheader>
-	<form>
-		<md-input-container> <label>Your email
-			address</label> <input type="email" ng-model="sender" required
-			autocomplete="on" autofocus> </md-input-container>
-		<md-input-container hide-sm> <label>Your
-			Message</label> <textarea rows="10" cols="50" ng-model="text"></textarea> </md-input-container>
-		<md-input-container hide-gt-sm> <label>Your
-			Message</label> <textarea rows="8" cols="20" ng-model="text"></textarea> </md-input-container>
-		<div class="md-toolbar-tools" layout-align="space-between">
-			<md-button ng-click="send()" class="md-primary md-raised">Send</md-button>
-			<md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button>
-		</div>
-	</form>
-</div>
-</md-content> </md-dialog>
+<md-dialog layout="column">	<md-toolbar>
+
+<div class="md-toolbar-tools">Contact {{title}}</div>
+</md-toolbar>
+
+	<md-content> <md-input-container> <label>Your
+		email address</label> <input type="email" ng-model="sender" required
+		autocomplete="on" autofocus> </md-input-container> <md-input-container hide-sm>
+	<label>Your Message</label> <textarea rows="10" cols="50"
+		ng-model="text"></textarea> </md-input-container> <md-input-container hide-gt-sm>
+	<label>Your Message</label> <textarea rows="8" cols="20"
+		ng-model="text"></textarea> </md-input-container> </md-content>
+	<div class="md-actions">
+
+		<md-button type="submit" ng-click="send()" class="md-primary md-raised">Send</md-button>
+		<md-button ng-click="closeDialog()" class="md-raised">Cancel</md-button>
+
+	</div>
+
+</md-dialog>
