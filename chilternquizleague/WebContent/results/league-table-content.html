@@ -1,7 +1,7 @@
 <div ng-class="clazz" >
 	<div class="league-table" ng-repeat="table in leagueTable.tables">
 		<div class="standard-table" >
-			<div class="league-table-description" ng-if="table.description">
+			<div class="league-table-description" ng-if="::table.description">
 			{{::table.description}}</div>
 			<div class="table-header">
 				<div>

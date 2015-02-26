@@ -256,7 +256,7 @@ class ViewService extends HttpServlet with BaseRest {
         val host = new URL(req.getRequestURL.toString()).getHost
         
         EmailSender.apply(s"security@$host", s"Your one-time password is $pwd\nPlease paste this into the 'Password' field in your browser.\n\nThis password will expire in 15 minutes.", List(u.email))
-        Logger.getLogger(this.getClass.getName + ".requestLogon").fine(s"one-time password is $pwd")
+        Logger.getLogger(this.getClass.getName + ".requestLogon").warning(s"one-time password is $pwd")
       }
       
       return Some(new RequestLogonResult(true))
@@ -430,55 +430,10 @@ class SecureService extends EntityService {
   import com.google.api.client.util._
   import javax.script._
   import org.chilternquizleague.util.UserUtils._
+  import org.chilternquizleague.util.Crypto
 
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   class Session(val password: String, val id: Long, val teamId: Long)
-
-  var scope: ScriptableObject = null
-
-  override def init(config: ServletConfig) = {
-
-    super.init(config: ServletConfig)
-    val is = this.getClass.getResourceAsStream("sjcl.js")
-
-    val script = """
-    
-    proxy = {}
-    function loadJs(is) {
-      var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
-      var line = null;
-      var script = "";
-      while((line = br.readLine())!=null) {
-          script += line;
-      }
-
-      eval(script);
-
-      proxy = sjcl
-
-    }    
-
-    loadJs(is);
-    
-    function decrypt(password,ct){
-      return proxy.decrypt(password,"" + ct)
-    }
-
-    function encrypt(password, obj){
-      return proxy.encrypt(password, obj)
-    }
-
-
-"""
-    val cx = Context.enter()
-
-    scope = cx.initStandardObjects()
-    scope.put("is", scope, is)
-    cx.evaluateString(scope, script, "import", 1, null)
-
-    Context.exit()
-
-  }
 
   def logTime[T](f: () => T, message: String = "method"): T = {
     val now = System.currentTimeMillis()
@@ -489,26 +444,15 @@ class SecureService extends EntityService {
 
   def encrypt(value: Any, token: Token): String = {
 
-    val cx = Context.enter()
-
-    val fct = scope.get("encrypt", scope).asInstanceOf[JSFunction]
-    val result = fct.call(cx, scope, scope, Array[Object](token.uuid, objectMapper.writeValueAsString(value)))
-
-    Context.exit()
-
-    String.valueOf(result)
-
+   val json = objectMapper.writeValueAsString(value)
+    
+    logTime(()=>Crypto.encrypt(json, token.uuid), "encrypt")
+  
   }
 
-  def decrypt(token: Token, payload: String) = {
-    val cx = Context.enter()
-
-    val fct = scope.get("decrypt", scope).asInstanceOf[JSFunction]
-    val result = fct.call(cx, scope, scope, Array[Object](token.uuid, payload))
-
-    Context.exit()
-
-    String.valueOf(result)
+  def decrypt(token: Token, payload: String):String = {
+    
+    logTime(()=>Crypto.decrypt(payload, token.uuid), "decrypt")
 
   }
 

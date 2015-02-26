@@ -81,7 +81,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 					
 					function decrypt(password,payload){
 						
-						var dt = sjcl.decrypt(password, payload)
+						var dt = Aes.Ctr.decrypt(payload,password,256)
 						
 						var obj = angular.fromJson(angular.fromJson(dt))
 						
@@ -89,7 +89,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 					}
 					
 					function encrypt(password, item){
-						return sjcl.encrypt(password,angular.toJson(item))
+						return Aes.Ctr.encrypt(angular.toJson(item),password,256)
 					}
 					
 					function loadFromServer(type, params, callback, isArray) {
