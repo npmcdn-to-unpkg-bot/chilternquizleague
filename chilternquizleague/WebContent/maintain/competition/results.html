@@ -6,7 +6,7 @@
 				<cql-subheader class="md-primary md-hue-1">Results List</cql-subheader>
 				<md-content style="height:70vh;padding-right:1em;">
 					<md-list>
-						<md-item ng-repeat="results in resultsList | orderBy : 'start'">
+						<md-item ng-repeat="results in resultsList | orderBy : 'date'">
 							<md-item-contents layout="row" layout-align="space-between center">
 								<md-button class="md-accent md-hue-1" ng-click="setCurrentResults(results)" style="text-transform:none;"><span hide-sm>{{results.date	| date:'dd MMMM yyyy'}}</span><span hide-gt-sm>{{results.date	| date:'dd MMM yy'}}</span></md-button>
 								<span>{{results.description}}</span>
