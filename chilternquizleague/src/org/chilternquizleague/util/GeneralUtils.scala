@@ -13,7 +13,7 @@ object UserUtils{
     
       for{
         e <- email.map(_.trim())
-        t <- entityList(classOf[Team]).find(_.users.exists(_.email equalsIgnoreCase e))
+        t <- entities[Team]().find(_.users.exists(_.email equalsIgnoreCase e))
         u <- t.users.find (_.email equalsIgnoreCase e )
       }yield (u,t)    
   }

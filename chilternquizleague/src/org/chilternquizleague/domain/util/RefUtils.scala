@@ -5,6 +5,8 @@ import com.googlecode.objectify.ObjectifyService.ofy
 import org.chilternquizleague.domain.BaseEntity
 import java.util.{List => JList}
 import scala.collection.JavaConversions._
+import com.googlecode.objectify.ObjectifyService
+import scala.reflect.ClassTag
 
 object RefUtils {
 
@@ -22,5 +24,6 @@ object RefUtils {
     def apply():T = if(ref != null) ref.get else null.asInstanceOf[T]
     def ?():Option[T] = Option(ref())
   }
-
+  
+ 
 }

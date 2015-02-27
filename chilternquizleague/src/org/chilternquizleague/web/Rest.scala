@@ -26,9 +26,7 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.chilternquizleague.util.Storage.{ entity => entityByKey }
-import org.chilternquizleague.util.Storage.entityList
-import org.chilternquizleague.util.Storage.save
-import org.chilternquizleague.util.Storage.delete
+import org.chilternquizleague.util.Storage._
 import org.chilternquizleague.util.ClassUtils._
 import org.chilternquizleague.util.LogUtils._
 import java.util.ArrayList
@@ -155,11 +153,11 @@ class EntityService extends HttpServlet with BaseRest {
 
   }
   
-  def rebuildStats(req: HttpServletRequest) = for (s <- entityByKey(req.id("seasonId"), classOf[Season])) yield HistoricalStatsAggregator.perform(s)
+  def rebuildStats(req: HttpServletRequest) = for (s <- entityByKey[Season](req.id("seasonId"))) yield HistoricalStatsAggregator.perform(s)
   def massMail(request:MassMailRequest, host:String):Option[String]={
     
     val addresses = for{
-      t <- entityList(classOf[Team])
+      t <- entities[Team]()
       u <- t.users
     }yield u.email
     
@@ -267,9 +265,9 @@ class ViewService extends HttpServlet with BaseRest {
   def teamStatistics(req: HttpServletRequest): Option[StatisticsView] = {
 
     for {
-      t <- entityByKey(req.id("teamId"), classOf[Team])
-      s <- entityByKey(req.id("seasonId"), classOf[Season])
-      stats = entityList(classOf[Statistics], ("team", t), ("season", s))
+      t <- entityByKey[Team](req.id("teamId"))
+      s <- entityByKey[Season](req.id("seasonId"))
+      stats = entities[Statistics](("team", t), ("season", s))
     } yield {
       stats match {
         case Nil => null
@@ -297,14 +295,14 @@ class ViewService extends HttpServlet with BaseRest {
     None
   }
 
-  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType): Option[LeagueTableWrapperView] = entityByKey(idParam(req), classOf[Season]) map (a => new LeagueTableWrapperView(a, compType))
+  def currentLeagueTable(req: HttpServletRequest, compType: CompetitionType): Option[LeagueTableWrapperView] = entityByKey[Season](idParam(req)) map (a => new LeagueTableWrapperView(a, compType))
 
   def teamExtras(req: HttpServletRequest): Option[TeamExtras] = {
 
     val teamId = idParam(req, "teamId")
     for {
-      t <- entityByKey(teamId, classOf[Team])
-      s <- entityByKey(idParam(req, "seasonId"), classOf[Season])
+      t <- entityByKey[Team](teamId)
+      s <- entityByKey[Season](idParam(req, "seasonId"))
     } yield {
       new TeamExtras(t, teamFixtures(teamId, s).map(new FixturesView(_)), teamResults(teamId, s).map(new ResultsView(_)))
     }
@@ -348,7 +346,7 @@ class ViewService extends HttpServlet with BaseRest {
     for {
       c <- req.parameter("type")
       t = CompetitionType.valueOf(c)
-      s <- entityByKey(req.id(), classOf[Season])
+      s <- entityByKey[Season](req.id())
     } yield s.competition(t).asInstanceOf[TeamCompetition]
   }
 
@@ -362,17 +360,17 @@ class ViewService extends HttpServlet with BaseRest {
   }
 
   def allResults(req: HttpServletRequest) =
-    entityByKey(req.id(), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results.map(new ResultsView(_)) })
+    entityByKey[Season](req.id()).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.results.map(new ResultsView(_)) })
 
   def allFixtures(req: HttpServletRequest): Option[JList[_]] =
-    entityByKey(req.id(), classOf[Season]).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures.map(new FixturesView(_)) })
+    entityByKey[Season](req.id()).map(_.teamCompetitions filter { !_.subsidiary } flatMap { _.fixtures.map(new FixturesView(_)) })
 
   def resultsForSubmission(req: HttpServletRequest): Option[PreSubmissionView] = {
 
     val now = new Date
     for {
       (u, t) <- UserUtils.userTeamForEmail(req.parameter("email"))
-      s <- entityByKey(req.id("seasonId"), classOf[Season])
+      s <- entityByKey[Season](req.id("seasonId"))
       f <- teamFixtures(Some(t.id), s).filter(_.start before now).reverse.headOption
       fixture <- f.fixtures.headOption
       comp = s.competition(f.competitionType).asInstanceOf[TeamCompetition]
@@ -405,12 +403,12 @@ class ViewService extends HttpServlet with BaseRest {
   }
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
-    entityByKey(idParam(req), classOf[Season]).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
+    entityByKey[Season](idParam(req)).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
 
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
 
     for {
-      t <- entityByKey(idParam(req, "homeTeamId"), classOf[Team])
+      t <- entityByKey[Team](idParam(req, "homeTeamId"))
       key <- req.parameter("resultsKey")
       r <- Option(ofy.load.key(Key.create(key)).now.asInstanceOf[Results])
       reps <- r.findRow(t)

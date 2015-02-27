@@ -41,7 +41,7 @@ class MailHandler extends HttpServlet {
 
       globaldata.emailAliases.filter(_.alias == recipientName).foreach { alias => sendMail(message, globaldata, new InternetAddress(alias.user.email)); return }
 
-      entityList(classOf[Team]).filter(_.emailName == recipientName).foreach { team:Team =>
+      entities[Team]().filter(_.emailName == recipientName).foreach { team:Team =>
 
         val addresses: Array[Address] = team.users.map { a => new InternetAddress(a.email) }.toArray
 
@@ -127,7 +127,7 @@ private class EmailSender {
             }
 
         }
-        val teams = entityList(classOf[Team])
+        val teams = entities[Team]()
 
         teams.filter(recipientName == _.emailName).foreach {
           team:Team =>

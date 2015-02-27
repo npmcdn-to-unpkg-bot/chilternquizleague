@@ -36,7 +36,7 @@ class StatsQueueHandler extends HttpServlet {
     for {
       resText <- req.parameter("result")
       r = JacksonUtils.safeMapper.readValue(resText, classOf[Result])
-      season <- entity(req.id("seasonId"), classOf[Season])
+      season <- entity[Season](req.id("seasonId"))
     } {
       StatsWorker.perform(r, season)
     }

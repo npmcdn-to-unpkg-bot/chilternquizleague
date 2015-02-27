@@ -41,16 +41,16 @@ private class DBDumper {
     dump
   }
 
-  def load(entities: JMap[String, JList[JMap[String, Any]]]) = {
+  def load(entitySet: JMap[String, JList[JMap[String, Any]]]) = {
     val mapper = new ObjectMapper().registerModule(JacksonUtils.unsafeModule)
 
-    val globals = entityList(classOf[GlobalApplicationData])
+    val globals = entities[GlobalApplicationData]()
 
     transaction(() => delete(globals))
 
     for {
       t <- DBDumper.dumpTypes
-      e <- entities.get(t.getName())
+      e <- entitySet.get(t.getName())
     } {
       if (String.valueOf(e.get("refClass")).contains("Competition")) {
         e.put("@class", "." + e.get("refClass"))
@@ -61,7 +61,7 @@ private class DBDumper {
       LOG.warning(s"Loaded ${t.getName}, id=${e.get("id")}")
     }
     
-    for {global <- entityList(classOf[GlobalApplicationData])}
+    for {global <- entities[GlobalApplicationData]()}
     {
       transaction(()=>save(global))
     }    

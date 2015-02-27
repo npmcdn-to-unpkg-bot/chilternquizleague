@@ -53,7 +53,7 @@ object Application {
 
   def init() = {
 
-    val list = entityList(classOf[GlobalApplicationData])
+    val list = entities[GlobalApplicationData]()
     globalApplicationDataId = list match {
       case Nil => Some(save(new GlobalApplicationData()).getId)
       case _ => Some(list.head.id)
