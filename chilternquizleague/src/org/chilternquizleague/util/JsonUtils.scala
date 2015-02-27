@@ -37,17 +37,20 @@ object ClassUtils {
 
 object JacksonUtils {
 
-  class RefSerializer extends JsonSerializer[Ref[_]] {
-    override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
-
-  }
-
   implicit class ObjectMapperImprovements(val o: ObjectMapper) {
 
     def read[T](reader: Reader)(implicit tag: ClassTag[T]): T = {
       o.readValue(reader, tag.runtimeClass).asInstanceOf[T]
     }
   }
+  
+  
+  class RefSerializer extends JsonSerializer[Ref[_]] {
+    override def serialize(ref: Ref[_], gen: JsonGenerator, prov: SerializerProvider) = gen.writeObject(ref.get)
+
+  }
+
+
 
   class RefDeserializer extends JsonDeserializer[Ref[_]] {
     override def deserialize(parser: JsonParser, context: DeserializationContext): Ref[_] = {
