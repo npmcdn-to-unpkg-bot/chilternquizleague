@@ -85,6 +85,7 @@
 
 				$scope.submitResults = function() {
 
+					$scope.committed = false
 					var results = $scope.results;
 					var submissions =  [];
 					
@@ -94,15 +95,21 @@
 							email: $scope.email,
 							result : results[idx].result,
 							seasonId : $scope.global.currentSeasonId,
-							competitionType :  results[idx].compType.name
+							competitionType :  results[idx].compType.name,
+							description: results[idx].compType.description
 						});
 					}
 					
 					function commit() {
-						viewService.post("submit-results", submissions);
+						
+						if(!$scope.committed){
+							viewService.post("submit-results", submissions);
+							$scope.committed = true;
+						}
 						$mdDialog.hide();
 
 						$scope.preSubmission = null;
+
 					}
 					
 					$mdDialog.show({

@@ -149,6 +149,7 @@ class ResultSubmission(){
   var result:Result = null
   var seasonId:Long = 0
   var competitionType:CompetitionType = null
+  var description:String = null
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
