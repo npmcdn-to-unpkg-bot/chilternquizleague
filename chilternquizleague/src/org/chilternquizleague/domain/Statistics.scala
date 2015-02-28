@@ -91,7 +91,7 @@ object Statistics{
   
   def get(team:Team,season:Season):Statistics = {
     
-    val statSet = entityList(classOf[Statistics], ("team", team ),("season", season))
+    val statSet = entities[Statistics]().filter(s=>s.team.id == team.id && s.season.id == season.id )
     
     statSet match {
       

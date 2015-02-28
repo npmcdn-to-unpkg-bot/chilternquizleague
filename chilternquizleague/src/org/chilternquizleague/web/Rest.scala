@@ -267,7 +267,7 @@ class ViewService extends HttpServlet with BaseRest {
     for {
       t <- entityByKey[Team](req.id("teamId"))
       s <- entityByKey[Season](req.id("seasonId"))
-      stats = entities[Statistics](("team", t), ("season", s))
+      stats = entities[Statistics]().filter(st =>st.team.id == t.id && st.season.id == s.id)
     } yield {
       stats match {
         case Nil => null

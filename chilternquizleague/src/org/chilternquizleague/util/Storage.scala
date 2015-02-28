@@ -26,11 +26,11 @@ object Storage {
     entity(id, clazz)
   }
 
-  def entityList[T <: BaseEntity](c: Class[T], filter: (String, Any)*): List[T] = loadEntities(c, filter.toList)
+  def entityList[T <: BaseEntity](c: Class[T]): List[T] = loadEntities(c, Nil)
 
-  def entities[T <: BaseEntity](filter: (String, Any)*)(implicit tag: ClassTag[T]): List[T] = {
+  def entities[T <: BaseEntity]()(implicit tag: ClassTag[T]): List[T] = {
     val clazz: Class[T] = tag.runtimeClass.asInstanceOf[Class[T]]
-    loadEntities(clazz, filter.toList)
+    loadEntities(clazz, Nil)
 
   }
 

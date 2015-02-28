@@ -96,7 +96,7 @@ object HistoricalStatsAggregator {
 
   def perform(season: Season) = {
 
-    val seasonStats = new ArrayList(entityList(classOf[Statistics], ("season", season)))
+    val seasonStats = new ArrayList(entityList(classOf[Statistics]).filter(_.season.id == season.id))
 
     for (s <- seasonStats) {
 
