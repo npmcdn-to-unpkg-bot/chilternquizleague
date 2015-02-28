@@ -7,6 +7,7 @@ function teamCompetitionControllerFactory() {
 		var competitionName = "competition";
 		var masterName = "masterCompetition";
 		var addName = "addCompetition";
+		var saveName = "saveCompetition";
 		$scope[competitionName] = {}
 		$scope[masterName] = {}
 
@@ -32,6 +33,12 @@ function teamCompetitionControllerFactory() {
 					season.competitions[ucName] = $scope[competitionName];
 					$location.url("/maintain/seasons/" + season.id);
 				};
+				
+				$scope[saveName] = function(competition){
+					entityService.save("competition", competition, function(){
+						$location.path("/maintain/seasons")
+					})
+				}
 
 				$scope.resetCompetition = function() {
 					$scope[competitionName] = angular.copy($scope[masterName])
