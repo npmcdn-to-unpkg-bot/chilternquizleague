@@ -31,7 +31,8 @@
 			</div>
 		</div>
 		<md-button ng-click="resetCompetition()">Reset</md-button>
-		<md-button class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
+		<md-button  ng-if="!competition.id" class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
+		<md-button ng-if="competition.id" class="md-primary" ng-click="saveCompetition(competition)">Save and Close</md-button>
 
 	</form>
 </div>

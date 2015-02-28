@@ -9,7 +9,8 @@
 		<textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
 							rows="15" ></textarea>
 		<md-button ng-click="resetCompetition()">Reset</md-button>
-		<md-button class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
+		<md-button  ng-if="!competition.id" class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
+		<md-button ng-if="competition.id" class="md-primary" ng-click="saveCompetition(competition)">Save and Close</md-button>
 
 	</form>
 </div>
