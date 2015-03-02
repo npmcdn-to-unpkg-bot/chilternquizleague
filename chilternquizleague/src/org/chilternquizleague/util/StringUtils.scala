@@ -17,4 +17,9 @@ object DateUtils{
 
   def sameDay(date1:Date, date2:Date) = format.format(date1).compareTo(format.format(date2)) == 0	
   
+  implicit class DateImprovements(val d:Date){
+    
+    def sameDay(other:Date) = DateUtils.sameDay(d,other)
+    
+  }
 }

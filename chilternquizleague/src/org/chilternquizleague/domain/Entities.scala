@@ -257,7 +257,7 @@ class Fixture{
 	var home:Ref[Team] = null
 	var away:Ref[Team] = null
 	
-	def same(other:Fixture) = sameDay(start, other.start) && home.getKey().equivalent(other.home.getKey())
+	def same(other:Fixture) = (start sameDay other.start) && home.getKey().equivalent(other.home.getKey())
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -324,7 +324,7 @@ abstract class TeamCompetition(
 	  
 	}
 	
-	def fixturesForDate(date:Date):Option[Fixtures] = fixtures.find(r=>sameDay(date, r.start )).map(_.get)
+	def fixturesForDate(date:Date):Option[Fixtures] = fixtures.find(r=> date sameDay r.start).map(_.get)
 }
 
 abstract class BaseLeagueCompetition(
