@@ -34,7 +34,7 @@ object Storage {
 
   }
 
-  private def loadEntities[T](c: Class[T], filter: List[(String, Any)]): List[T] = {
+  private def loadEntities[T](c: Class[T], filter: List[(String, AnyRef)]): List[T] = {
 
     (filter match {
 
