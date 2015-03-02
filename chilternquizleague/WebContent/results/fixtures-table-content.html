@@ -1,8 +1,8 @@
 <table class="results-table">
 	<thead
-		ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount" id="f{{::fixtureSet.start}}">
+		ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount" >
 		<tr class="full-header">
-			<th colspan="8">{{::fixtureSet.start
+			<th colspan="8"><a id="f{{::fixtureSet.start}}"></a>{{::fixtureSet.start
 				| date:'dd MMMM yyyy'}} : {{::fixtureSet.description}}</th>
 		</tr>
 

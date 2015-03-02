@@ -74,7 +74,11 @@
 						seasonId : $scope.global.currentSeasonId,
 						isArray : false}, function(presub){
 							
-							$scope.results = angular.copy(presub.results)
+							$scope.results = angular.copy(presub.results).map(function(result){
+								result.result.homeScore = result.result.homeScore > 0 ? result.result.homeScore : null
+								result.result.awayScore = result.result.awayScore > 0 ? result.result.awayScore : null
+								return result		
+							})
 							$scope.preSubmission = presub
 							
 						}						
@@ -82,23 +86,29 @@
 				};
 				
 				$scope.$watch("email",$scope.fixturesForEmail);
+				$scope.isInvalid = function(){
+					
+					var retval =($scope.results.reduce(function(acc, result){
+						return acc * result.result.homeScore * result.result.awayScore
+					},1))
+					return retval <= 0 
+
+					
+				}
 
 				$scope.submitResults = function() {
 
 					$scope.committed = false
 					var results = $scope.results;
-					var submissions =  [];
-					
-					for(idx in results){
-						
-						submissions.push({
+					var submissions =  results.map(function(result){
+						return {
 							email: $scope.email,
-							result : results[idx].result,
+							result : result.result,
 							seasonId : $scope.global.currentSeasonId,
-							competitionType :  results[idx].compType.name,
-							description: results[idx].compType.description
-						});
-					}
+							competitionType :  result.compType.name,
+							description: result.compType.description
+						}
+					})
 					
 					function commit() {
 						
@@ -162,17 +172,19 @@
 	
 				$scope.allFixtures = season ? viewService.view("all-fixtures",{id:season.id,isArray:true},function(fixtures){
 					if(fixtures){
-					fixtures.sort(function(fixtures1,fixtures2){return fixtures1.start -fixtures2.start;});
+						fixtures.sort(function(fixtures1,fixtures2){return fixtures1.start -fixtures2.start;});
 
-	
-						var now = new Date().getTime()
+						$scope.$evalAsync(function(){						
+							var now = new Date().getTime()
+							
+							for(idx in fixtures){
+								if(fixtures[idx].start > now){
+									$location.hash("f" +fixtures[idx].start)
+									break;
+								}
+							}})
 						
-						for(idx in fixtures){
-							if(fixtures[idx].start > now){
-								$location.hash("f" +fixtures[idx].start)
-								break;
-							}
-						}
+
 					
 					}
 				}): [];
