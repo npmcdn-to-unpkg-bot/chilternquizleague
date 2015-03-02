@@ -170,24 +170,7 @@
 			
 			$scope.setSeason = function(season) {
 	
-				$scope.allFixtures = season ? viewService.view("all-fixtures",{id:season.id,isArray:true},function(fixtures){
-					if(fixtures){
-						fixtures.sort(function(fixtures1,fixtures2){return fixtures1.start -fixtures2.start;});
-
-						$scope.$evalAsync(function(){						
-							var now = new Date().getTime()
-							
-							for(idx in fixtures){
-								if(fixtures[idx].start > now){
-									$location.hash("f" +fixtures[idx].start)
-									break;
-								}
-							}})
-						
-
-					
-					}
-				}): [];
+				$scope.allFixtures = season ? viewService.view("all-fixtures",{id:season.id,isArray:true}): [];
 				
 				$scope.season = season;
 			};

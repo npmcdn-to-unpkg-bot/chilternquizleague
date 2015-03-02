@@ -54,10 +54,11 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     };
   }]);
 
-mainApp.directive('cqlFixtures', function() {
+mainApp.directive('cqlFixtures', ["$location",function($location) {
     return {
     	scope:{
     		fixtures:"=",
+    		scrollTo:"="
     		},
     	restrict:'E',
     	templateUrl:'/results/fixtures-table-content.html',
@@ -70,9 +71,20 @@ mainApp.directive('cqlFixtures', function() {
     				return showAll || fixtures.start > now;
     			};
     		};
+    		scope.$evalAsync(function(){
+    			if(scope.scrollTo){
+					var now = new Date().getTime()
+					var fixtures = scope.fixtures
+					fixtures = fixtures ? fixtures.sort(function(fixtures1,fixtures2){return fixtures1.start -fixtures2.start;}) : fixtures
+					for(idx in fixtures){
+						if(fixtures[idx].start > now){
+							$location.hash("f" +fixtures[idx].start)
+							break;
+						}
+					}}}) 
      	}
     };
-  });
+  }]);
 
 mainApp.directive('cqlLeagueTable', function() {
     return {
