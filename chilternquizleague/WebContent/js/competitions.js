@@ -168,14 +168,9 @@ mainApp.controller('CompetitionsController', [ '$scope', '$location',
 
 	function getForTypeName(name){
 		
-		for(idx in $scope.competitions){
-			if($scope.competitions[idx].type.name == name){
-				return $scope.competitions[idx];
-				
-			}			
-		}
+		var comps = $scope.competitions.filter(function(comp){return comp.type.name == name})
 		
-		return $scope.competitions[0];
+		return comps.length > 0 ? comps.pop():$scope.competitions[0]
 	}
 	
 	$scope.setCompetition = function(comp){$scope.competition = comp;};

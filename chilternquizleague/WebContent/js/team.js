@@ -91,11 +91,7 @@
 
 			viewService.list("Venue", function(venueList){
 				
-				var venues = {}
-				
-				for(idx in venueList){
-					venues[venueList[idx].id] = venueList[idx]
-				}
+				var venues = venueList.reduce(function(acc,venue){acc[venue.id] = venue;return acc},{})
 				
 				var contents = generateICalContent(team.extras.fixtures, venues);
 

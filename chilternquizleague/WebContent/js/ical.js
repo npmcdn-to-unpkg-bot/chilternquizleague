@@ -28,37 +28,40 @@ function generateICalContent(fixtures, venues) {
 	
 	var now = factorAsICSDate(new Date());
 
-	for (idx in fixtures) {
-
-		var fixtureSet = fixtures[idx];
-
-		for (idx2 in fixtureSet.fixtures) {
-			var fixture = fixtureSet.fixtures[idx2];
+	
+	file = fixtures.reduce(function(contents,fixtureSet){
+		
+		return contents + fixtureSet.fixtures.map(function(fixture){
+			
+			var contents = ""
 			var startDate = new Date(fixture.start);
 			var endDate = new Date(fixture.end);
 
 			var description = nsg(fixture.home, "shortName") + " - " + nsg(fixture.away, "shortName")
 					+ " : " + fixtureSet.description + "\n";
 
-			file += "BEGIN:VEVENT\n";
-			file += "DTSTAMP:" + now;
-			file += "UID:" + startDate.getTime() + "."
+			contents += "BEGIN:VEVENT\n";
+			contents += "DTSTAMP:" + now;
+			contents += "UID:" + startDate.getTime() + "."
 					+ encodeURIComponent((""+nsg(fixture.home,"shortName")).replace(/\s/g, ""))
 					+ ".chilternquizleague.uk\n";
-			file += "DESCRIPTION:" + description;
-			file += "SUMMARY:" + description;
+			contents += "DESCRIPTION:" + description;
+			contents += "SUMMARY:" + description;
 
-			file += "DTSTART:" + factorAsICSDate(startDate);
-			file += "DTEND:" + factorAsICSDate(endDate);
-			file += "LOCATION:"
+			contents += "DTSTART:" + factorAsICSDate(startDate);
+			contents += "DTEND:" + factorAsICSDate(endDate);
+			contents += "LOCATION:"
 					+ ("" + nsg(nsgVenue(fixture.home),"name") + "," + nsg(nsgVenue(fixture.home), "address"))
 							.replace(/\n\r/g, ",").replace(/\n/g, ",").replace(/\r/g, ",")
 					+ "\n";
-			file += "END:VEVENT\n";
-
-		}
-
-	}
+			contents += "END:VEVENT\n";
+			
+			return contents
+			
+			
+		}).join()
+		
+	},file)
 
 	file = file + "END:VCALENDAR\n";
 
