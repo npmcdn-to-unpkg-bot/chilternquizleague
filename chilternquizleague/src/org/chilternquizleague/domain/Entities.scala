@@ -197,7 +197,7 @@ class Results extends BaseEntity{
     row match {
   		case None => results.add(incoming)
   		case a => {
-  		  incoming.reports.foreach(r=>a.foreach(_.reports.add(r)))
+        for(r <- a;rep <- incoming.reports){r.reports.add(rep)}
   		  false
   		}
     }
