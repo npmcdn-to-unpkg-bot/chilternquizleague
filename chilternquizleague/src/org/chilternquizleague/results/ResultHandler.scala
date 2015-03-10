@@ -20,27 +20,31 @@ class ResultHandler(result: Result, email: String, seasonId: Long, competitionTy
 
   private def commit(): Unit = {
 
-  entityList(classOf[User]).filter(_.email.equalsIgnoreCase(email)).headOption.foreach { user: User =>
+    entityList(classOf[User]).filter(_.email.equalsIgnoreCase(email)).headOption.foreach { user: User =>
 
       result.firstSubmitter = user;
 
-      entity(Some(seasonId), classOf[Season]).foreach {
+      for (season <- entity(Some(seasonId), classOf[Season])) {
 
-        season =>
-          {
-            transaction(() => Option[TeamCompetition](season.competition(competitionType)).foreach {
-              c =>
-                val r = c.addResult(result)
-                save(r)
+        transaction(() => Option[TeamCompetition](season.competition(competitionType)).foreach {
+          c =>
+            val r = c.addResult(result)
+
+            r match {
+              case (res, added) => {
+                save(res)
                 save(c)
 
-            })
+                if (added && c.hasStats) {
+                  val queue: Queue = QueueFactory.getQueue("stats");
+                  queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", seasonId.toString));
+                }
 
-          }
-          if (competitionType == CompetitionType.LEAGUE) {
-            val queue: Queue = QueueFactory.getQueue("stats");
-            queue.add(withUrl("/tasks/stats").param("result", JacksonUtils.safeMapper.writeValueAsString(result)).param("seasonId", seasonId.toString));
-          }
+              }
+            }
+
+        })
+
       }
 
       return

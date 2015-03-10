@@ -288,7 +288,9 @@ abstract class TeamCompetition(
     subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00",subsidiary){
   import org.chilternquizleague.domain.util.RefUtils._
   
-	@Load
+	var hasStats = false
+  
+  @Load
   var fixtures:JList[Ref[Fixtures]] = new ArrayList
 	@Load
   var results:JList[Ref[Results]] = new ArrayList
@@ -297,7 +299,13 @@ abstract class TeamCompetition(
   var subsidiaryCompetition:Ref[TeamCompetition] = null
   
   def subsidiaryResults(date:Date) = if(subsidiaryCompetition == null) None else subsidiaryCompetition.resultsForDate(date)
-  def addResult(result:Result):Results
+  
+
+ /**
+ * @param result The result to add
+ * @return Tuple of the {@link Results} to which result has been added, and a boolean indicating whether it was added (true), or already present (false)
+ */
+def addResult(result:Result):(Results,Boolean)
 	def resultsForDate(date:Date):Option[Results] = {
 	  
 	  val resultSet = results.find(r=>r.get != null && sameDay(date, r.date)) 
@@ -337,9 +345,10 @@ abstract class BaseLeagueCompetition(
 	
 	var leagueTables:JList[LeagueTable] = new ArrayList
 	
-	override def addResult(result:Result):Results = {
+	override def addResult(result:Result):(Results,Boolean) = {
 	  val results = resultsForDate(result.fixture.start)
-	  for{
+	      
+    val res:Option[(Results,Boolean)] = for{
 	    r <- results
 	  }
 	  yield{
@@ -349,14 +358,14 @@ abstract class BaseLeagueCompetition(
 	          for(homeRow <- table.rows if(homeRow.team == result.fixture.home)) updateRow(homeRow, result.homeScore, result.awayScore)
 	          for(awayRow <- table.rows if(awayRow.team == result.fixture.away)) updateRow(awayRow, result.awayScore, result.homeScore)
 	          table.sort
-	        }
-	
+          }
+	        (r,true)
 	      }
-	      case false => {}
+	      case false => (r,false)
 	    }
 	  }
 
-	  results.get
+	 res.get
 	}
 	
 	private def updateRow(row:LeagueTableRow, score:Int, oppoScore:Int):Unit={
@@ -378,6 +387,8 @@ abstract class BaseLeagueCompetition(
 @Cache
 @Subclass
 class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE){
+  
+  hasStats = true
   
   def copyAsInitial:LeagueCompetition = {
     
@@ -407,12 +418,11 @@ class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE){
 class BeerCompetition extends BaseLeagueCompetition(CompetitionType.BEER, true)
 
 abstract class KnockoutCompetition(`type`:CompetitionType) extends TeamCompetition(`type`){
-	override def addResult(result:Result):Results = {
+	override def addResult(result:Result) = {
 	  val results = resultsForDate(result.fixture.start) 
-	  results foreach {
-	    _.addResult(result)
-	  }
-	  results.get
+	  
+   (for(r <- results) yield (r, r.addResult(result))).get
+
 	}
 }
 
