@@ -155,7 +155,7 @@ mainApp.directive("cqlPageMenu",function(){
 	return {
 		restrict:'E',
 		replace:true,
-		template : "<span><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon icon='/images/icons/ic_more_horiz.svg' style='margin-bottom:5px'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
+		template : "<span><md-button ng-click='toggleLeft()' aria-label='Page menu'><md-icon md-svg-src='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
 });
 
 mainApp.directive("cqlSubheader", function(){
