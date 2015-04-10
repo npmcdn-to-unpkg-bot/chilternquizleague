@@ -80,8 +80,26 @@ var ENTITY_SERVICE_DEFN = [
 					}).success(callback).error(cache.flush);
 				},
 				
-				command: function(command, params, callback){
-					$http.post("/entity/" + command,null,{"params":params}).success(callback);
+				command: function(command,content, params, callback){
+					$http.post("/entity/" + command,content,{"params":params}).success(callback);
+				},
+				
+				upload : function(file, fileName, callback){
+					
+					var r  = new FileReader();
+					
+					r.onload = function() {
+					    $http({
+					        method: 'POST', 
+					        url:"/entity/upload",
+					        headers: {'Content-Type': file.type}, 
+					        data: new Uint8Array(r.result), 
+					        params : {name:fileName},
+					        transformRequest: []
+					    }).success(callback)
+					};
+					r.readAsArrayBuffer(file);
+					
 				}
 			};
 			return service;

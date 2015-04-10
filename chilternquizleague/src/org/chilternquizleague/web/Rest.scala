@@ -57,6 +57,9 @@ import java.net.URL
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import com.google.appengine.api.taskqueue.QueueFactory
 import javax.mail.Message.RecipientType
+import org.chilternquizleague.util.LocalExample
+import org.chilternquizleague.util.CloudStorage
+import java.io.InputStream
 
 trait BaseRest {
 
@@ -145,6 +148,7 @@ class EntityService extends HttpServlet with BaseRest {
       case "global" => Application.globalData
       case "competitionType-list" => Some(CompetitionTypeView.list)
       case "dump.txt" => Option(DBDumper.dump)
+      case "file-acl" => for(fileName <- bits.tail.headOption) yield CloudStorage.getACL(fileName)
       case _ => handleEntities(bits, head)
 
     }
@@ -166,14 +170,21 @@ class EntityService extends HttpServlet with BaseRest {
     Some("")
   }
   
+  def upload(fileName:Option[String], mimeType:String, reader:InputStream) = {
+    for(n <- fileName) yield CloudStorage.saveFile(n, mimeType, reader)
+     
+  }
+  
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {
     val bits = parts(req)
     val head = bits.head
+    val mime = req.getContentType
     val item: Option[Any] = head match {
       case "rebuild-stats" => rebuildStats(req)
       case "upload-dump" => DBDumper.load(readObject[JMap[String,JList[JMap[String,Any]]]](req)); None
       case "mass-mail" => massMail(readObject[MassMailRequest](req),req.host)  
-      case _ => Option(saveUpdate(req.getReader, entityName(parts(req).head)))
+      case "upload" => upload(req.parameter("name") , req.getContentType, req.getInputStream)
+      case _ => Option(saveUpdate(req.getReader, entityName(bits.head)))
     }
 
     resp.setContentType("application/json")

@@ -13,7 +13,12 @@
 					Address</label> <input ng-model="venue.email" type="email"> </md-input-container>
 				<md-input-container> <label>Website</label> <input
 					ng-model="venue.website" type="url"> </md-input-container>
-				<md-input-container> <label>Image URL</label> <input
+				
+						<input placeholder="Upload Photo" type="file" id="venue.image.file" >
+		<md-button class="md-primary" ng-click="uploadImage()">Upload</md-button>
+				
+				
+				<md-input-container > <label>Image URL</label> <input
 					ng-model="venue.imageURL"> </md-input-container>
 				<md-checkbox ng-model="venue.retired">Retired</md-checkbox>
 			</div>
