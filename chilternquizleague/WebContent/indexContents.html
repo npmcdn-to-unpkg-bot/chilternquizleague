@@ -7,10 +7,14 @@
 			<div class="league-table-container" ng-class="$media('md') ? 'collapse' : ''"
 				ng-include="'/results/league-table.html'"></div>
 		</section>
-		<md-card flex style="padding:.25em;">
+		<div layout="column" flex style="padding:.25em;">
+		<md-card>
 			<div ng-bind-html="global.frontPageText | htmlify" class="fix-text"></div>
 		</md-card>
-
+		<md-card>
+			<div class="fix-text" cql-text="'front-page-suppl'"></div>
+		</md-card>
+		</div>
 	<section hide-sm hide-md>
 		<iframe
 			src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FChilternQuizLeague&amp;width&amp;height=427&amp;colorscheme=light&amp;show_faces=false&amp;header=true&amp;stream=true&amp;show_border=true"
