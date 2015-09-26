@@ -6,6 +6,6 @@ select.tool *{
 </style>
 	<label ng-if="!hidelabel">Season</label>	
 	<input type="hidden" ng-model="season">
-	<select ng-class="toolclass" ng-style="selectstyle" class="md-input" ng-model="season" ng-options="season.description for season in seasons track by season.id" ></select>
+	<select ng-class="toolclass" ng-style="selectstyle" class="md-input" ng-model="season" ng-options="season.description for season in seasons | orderBy season.description track by season.id" ></select>
 </md-input-container>
 	
