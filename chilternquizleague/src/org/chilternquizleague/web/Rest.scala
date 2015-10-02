@@ -145,6 +145,8 @@ class EntityService extends HttpServlet with BaseRest {
     val head = bits.head
     val item = head match {
 
+      case "leagueTable" => Some(new LeagueTable)
+      case "leagueTableRow" => Some(new LeagueTableRow)
       case "global" => Application.globalData
       case "competitionType-list" => Some(CompetitionTypeView.list)
       case "dump.txt" => Option(DBDumper.dump)
