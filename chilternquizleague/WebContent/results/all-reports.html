@@ -4,9 +4,9 @@
 		<md-item ng-repeat="results in allResults  | orderBy: 'date' : true">
 			<md-card ng-controller="AllReportsController">
 				<cql-subheader ng-click="setDate(results.date)">{{results.date | date:'d MMMM yyyy'}} : {{results.description}}</cql-subheader>
-				<md-tabs ng-if="selectedDate == results.date" class="md-hue-1">
+				<md-tabs md-dynamic-height ng-if="selectedDate == results.date" class="md-hue-1">
 					<md-tab label="{{result.fixture.home.shortName}} v {{result.fixture.away.shortName}}"  ng-repeat="result in results.results | orderBy: 'fixture.home.shortName'" md-on-select="setReportsData({'result':result,'results':results})">
-						<cql-subheader class="md-primary">{{result.fixture.home.name}} <span style="color:graytext;">{{result.homeScore}} : {{result.awayScore}}</span> {{result.fixture.away.name}}</cql-subheader>
+						<cql-subheader class="md-primary" style="margin-top:1em;">{{result.fixture.home.name}} <span style="color:graytext;">{{result.homeScore}} : {{result.awayScore}}</span> {{result.fixture.away.name}}</cql-subheader>
 						<md-card ng-repeat="report in reports.reports" ng-if="report.text">
 							<cql-subheader>By: {{report.team.name}}</cql-subheader>
 							<div ng-bind-html="report.text | lineBreaks | htmlify"></div>

@@ -39,6 +39,12 @@
 	min-width: 2em;
 }
 
+.league-table .team-btn{
+	line-height:normal;
+	margin-top:0;
+	margin-bottom:0;
+}
+
 .collapse .league-table .standard-table div>span.optional{
    display:none;
 }
