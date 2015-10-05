@@ -39,6 +39,7 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
   					templateUrl : '/results/reports.html',
   					controller : "ReportsController",
   					targetEvent : ev,
+  					clickOutsideToClose:true,
   					locals : {
   						reportsData : {
   							results : results,
