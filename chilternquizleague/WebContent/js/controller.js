@@ -301,8 +301,8 @@ mainApp.config(function($mdThemingProvider) {
 	});
 
 
-mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav',
-		function($scope, $interval, viewService, $mdSidenav) {
+mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia',
+		function($scope, $interval, viewService, $mdSidenav, $mdMedia) {
 			
 		  $scope.toggleRight = function() {
 		    $mdSidenav('right').toggle();
@@ -323,6 +323,8 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			  };
 			  
 			$scope.$on("progress", function(ev,value){$scope.progress = value;});
+			
+			$scope.$mdMedia = $mdMedia
 
 		} ]);
 
