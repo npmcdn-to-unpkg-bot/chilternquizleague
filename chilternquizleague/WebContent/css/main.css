@@ -11,6 +11,7 @@ html,body {
 body {
 	padding-left: .25em;
 	padding-top: .25em;
+	overflow-x:hidden;
 }
 
 .fix-text > p {
@@ -26,9 +27,6 @@ section{
 	margin-bottom:.25em;
 }
 
-md-card{
-	padding:19px;
-}
 
 .highlit-border{
 	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
@@ -155,6 +153,7 @@ md-card{
 
 .full-content{
 	 max-height:calc(100vh - 112px);
+	 overflow-x:hidden;
 }
 
 @media screen and (max-width: 960px) {

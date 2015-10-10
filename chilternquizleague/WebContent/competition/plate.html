@@ -1,7 +1,7 @@
 <div ng-controller="PlateCompetitionController">
-<md-card><div class="fix-text" cql-text="'plate-comp'"></div><div class="fix-text" ng-bind-html="competition.text | htmlify"></div></md-card>
-	<md-card><div ng-include="'/competition/latest-results.html'">
-	</div></md-card>
-	<md-card><div ng-include="'/competition/next-fixtures.html'">
-	</div></md-card>
+	<md-card><md-card-content><div class="fix-text" cql-text="'plate-comp'"></div><div class="fix-text" ng-bind-html="competition.text | htmlify"></div></md-card-content></md-card>
+	<md-card><md-card-content ng-include="'/competition/latest-results.html'">
+	</md-card-content></md-card>
+	<md-card><md-card-content ng-include="'/competition/next-fixtures.html'">
+	</md-card-content></md-card>
 </div>

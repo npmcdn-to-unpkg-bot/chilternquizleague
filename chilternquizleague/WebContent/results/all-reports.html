@@ -3,6 +3,7 @@
 		<cql-subheader>Click on a date to see match reports</cql-subheader>
 		<md-item ng-repeat="results in allResults  | orderBy: 'date' : true">
 			<md-card ng-controller="AllReportsController">
+			<md-card-content>
 				<cql-subheader ng-click="setDate(results.date)">{{results.date | date:'d MMMM yyyy'}} : {{results.description}}</cql-subheader>
 				<md-tabs md-dynamic-height ng-if="selectedDate == results.date" class="md-hue-1">
 					<md-tab label="{{result.fixture.home.shortName}} v {{result.fixture.away.shortName}}"  ng-repeat="result in results.results | orderBy: 'fixture.home.shortName'" md-on-select="setReportsData({'result':result,'results':results})">
@@ -13,6 +14,7 @@
 						</md-card>
 					</md-tab>
 				</md-tabs>
+			</md-card-content>
 			</md-card>
 		</md-item>
 	</md-list>

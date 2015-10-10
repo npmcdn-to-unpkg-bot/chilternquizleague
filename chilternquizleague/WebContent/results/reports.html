@@ -5,8 +5,10 @@
 	</cql-subheader>
 	<md-content>
 		<md-card ng-repeat="report in reports.reports" ng-if="report.text">
+			<md-card-content>
 			<cql-subheader>By: {{report.team.name}}</cql-subheader>
 			<div ng-bind-html="report.text | lineBreaks | htmlify"></div>
+			</md-card-content>
 		</md-card>
 	</md-content>
 
