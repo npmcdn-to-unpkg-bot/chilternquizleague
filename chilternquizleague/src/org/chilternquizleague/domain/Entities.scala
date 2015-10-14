@@ -162,6 +162,12 @@ class Season extends BaseEntity{
   def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.types.contains(c.`type`)).map(_.get).asInstanceOf[List[TeamCompetition]]
   def competition[T <: Competition](compType:CompetitionType) = compType.castTo(competitions.get(compType)).asInstanceOf[T]
 
+  def positions(team:Team):List[String] = {
+    for{ c <- teamCompetitions
+         p <- c.currentPosition(team)    
+    }
+    yield p
+  }
 }
 
 object Results{
@@ -333,6 +339,8 @@ def addResult(result:Result):(Results,Boolean)
 	}
 	
 	def fixturesForDate(date:Date):Option[Fixtures] = fixtures.find(r=> date sameDay r.start).map(_.get)
+
+  def currentPosition(team:Team):Option[String] = None 
 }
 
 abstract class BaseLeagueCompetition(
@@ -380,6 +388,16 @@ abstract class BaseLeagueCompetition(
 		row.played += 1
 
 	}
+  
+  override def currentPosition(team:Team):Option[String] = {
+    val res = for{
+      lt <- leagueTables
+      ltr <- lt.rows if (ltr.team.get.id == team.id)
+    }
+    yield {s"$description ${if (lt.description == null) "" else lt.description} : ${ltr.position}"}
+    
+    res.headOption
+  }
 
 }
 
@@ -410,6 +428,8 @@ class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE){
     
     copy
   }
+  
+
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -424,6 +444,21 @@ abstract class KnockoutCompetition(`type`:CompetitionType) extends TeamCompetiti
    (for(r <- results) yield (r, r.addResult(result))).get
 
 	}
+  
+  override def currentPosition(team:Team):Option[String] = {
+      import org.chilternquizleague.domain.util.RefUtils._
+       
+      val now = new Date()
+      val res = for{
+        f <- fixtures if(now.before(f.start))
+        fix <- f.fixtures if(fix.home.same(team) || fix.away.same(team))
+      }
+      yield f.description
+    
+      res.headOption
+    }
+
+  
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)

@@ -1,5 +1,5 @@
 <div flex ng-controller="TeamDetailCtrl">
-	<cql-subheader class="md-primary">Team Details</cql-subheader>
+	<md-subheader class="md-primary">Team Details</md-subheader>
 	<form>
 		<div layout="row" layout-sm="column" layout-align="space-between">
 			<div layout="column">
@@ -25,7 +25,7 @@
 						ng-options="user as user.name for user in users track by user.id"></select>
 					<md-input-container>
 				</div>
-				<cql-subheader>Users</cql-subheader>
+				<md-subheader>Users</md-subheader>
 
 				<div layout="column">
 					<div ng-repeat="user in team.users" layout="row" layout-align="space-between center">

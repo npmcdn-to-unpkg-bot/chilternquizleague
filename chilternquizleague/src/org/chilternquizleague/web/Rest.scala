@@ -317,7 +317,7 @@ class ViewService extends HttpServlet with BaseRest {
       t <- entityByKey[Team](teamId)
       s <- entityByKey[Season](idParam(req, "seasonId"))
     } yield {
-      new TeamExtras(t, teamFixtures(teamId, s).map(new FixturesView(_)), teamResults(teamId, s).map(new ResultsView(_)))
+      new TeamExtras(t, teamFixtures(teamId, s).map(new FixturesView(_)), teamResults(teamId, s).map(new ResultsView(_)), s.positions(t))
     }
   }
 

@@ -12,7 +12,7 @@
 		</div>
 		<div ng-if="preSubmission.fixtures"  layout="column">
 			<md-content>
-			<cql-subheader class="md-primary">{{preSubmission.fixtures.start | date :'dd MMMM yyyy'}} : {{preSubmission.fixtures.description}} - {{preSubmission.fixtures.fixtures[0].home.name}} : {{preSubmission.fixtures.fixtures[0].away.name}}</cql-subheader>
+			<md-subheader class="md-primary">{{preSubmission.fixtures.start | date :'dd MMMM yyyy'}} : {{preSubmission.fixtures.description}} - {{preSubmission.fixtures.fixtures[0].home.name}} : {{preSubmission.fixtures.fixtures[0].away.name}}</md-subheader>
 
 			<div ng-repeat="result in results">
 				

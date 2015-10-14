@@ -1,5 +1,5 @@
 <div ng-controller="GlobalDetailCtrl">
-	<cql-subheader class="md-primary">Global Details</cql-subheader>
+	<md-subheader class="md-primary">Global Details</md-subheader>
 	<form>
 		<md-input-container>
 			<label>League Name</label>
@@ -11,7 +11,7 @@
 			<select class="md-input" ng-model="global.currentSeason"
 						ng-options="season as season.startYear for season in seasons track by season.id" required></select>
 		</md-input-container>
-		<cql-subheader>Front Page Text</cql-subheader>
+		<md-subheader>Front Page Text</md-subheader>
 		<md-input-container>
 		<textarea ui-tinymce="tinymceOptions" ng-model="global.frontPageText" cols="60"
 							rows="15" required></textarea>

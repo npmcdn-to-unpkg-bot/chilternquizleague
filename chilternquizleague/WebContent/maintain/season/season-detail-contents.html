@@ -1,4 +1,4 @@
-<cql-subheader class="md-primary">Season Details</cql-subheader>
+<md-subheader class="md-primary">Season Details</md-subheader>
 
 <form>
 	<md-input-container> <label>Start Year</label> <input
@@ -6,7 +6,7 @@
 		ng-change="updateEndYear(season.startYear)" required> </md-input-container>
 	<md-input-container> <label>End Year</label> <input
 		ng-model="season.endYear" required> </md-input-container>
-	<cql-subheader>Competitions</cql-subheader>
+	<md-subheader>Competitions</md-subheader>
 	<div layout="row" layout-align="start start">
 	<md-button class="md-accent" ng-click="addCompetition(addCompType)">Add</md-button>
 	<md-input-container><select class="md-input" ng-model="addCompType"

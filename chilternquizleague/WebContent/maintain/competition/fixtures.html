@@ -1,10 +1,10 @@
 <div ng-controller="FixturesCtrl">
-	<cql-subheader class="md-primary">Fixtures</cql-subheader>
+	<md-subheader class="md-primary">Fixtures</md-subheader>
 	<form>
 		<div layout="row" layout-align="space-between">
 			<div flex="40">
-				<cql-subheader class="md-primary md-hue-1">Fixture
-				List</cql-subheader>
+				<md-subheader class="md-primary md-hue-1">Fixture
+				List</md-subheader>
 				<md-button class="md-accent" ng-click="addFixtures()">Add
 				New</md-button>
 				<md-content style="height:70vh;padding-right:1em;"> <md-list>
@@ -17,8 +17,8 @@
 				| date:'dd MMMM yyyy'}}</span></md-button>
 				<span>{{fixts.description}}</span></md-item-contents> </md-item> </md-list> </md-content>
 			</div>
-			<md-card layout="column" flex style="padding:.5em;"> <cql-subheader
-				class="md-primary md-hue-1">Fixtures Detail</cql-subheader> <md-input-container>
+			<md-card layout="column" flex style="padding:.5em;"> <md-subheader
+				class="md-primary md-hue-1">Fixtures Detail</md-subheader> <md-input-container>
 			<label>Description</label> <input ng-model="fixtures.description">
 			</md-input-container>
 			<div layout-gt-md="row" layout="column" layout-align-gt-md="start center" layout-align="start start">

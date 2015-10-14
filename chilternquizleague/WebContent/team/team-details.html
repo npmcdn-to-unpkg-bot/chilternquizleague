@@ -1,11 +1,19 @@
 <div flex ng-controller="TeamController" itemscope itemtype="http://schema.org/SportsTeam">
-	<cql-subheader hide-gt-sm class="md-primary">{{team.name}}</cql-subheader>
+	<md-subheader hide-gt-sm class="md-primary">{{team.name}}</md-subheader>
 	<div ng-controller="TeamExtrasController" >
 		<md-card hide-sm ng-if="team.extras.text"><md-card-content class="fix-text"
 			ng-bind-html="team.extras.text | htmlify"></md-card-content></md-card>
 		<md-card>
-			<cql-subheader class="md-accent" >Last few results:</cql-subheader>
 			<md-card-content>
+			<md-list ang-if="team.extras.positions">
+			<md-subheader class="md-accent" >Standings:</md-subheader>
+			<md-list-content class="md-1-line" ng-repeat="position in team.extras.positions">
+			<div class="md-list-item-text" >
+			<p>{{position }}</p>
+			</div>
+			</md-list-content>
+			</md-list>
+			<md-subheader class="md-accent" >Last few results:</md-subheader>
 			<cql-results class="inline-header" rows="5" results="team.extras.results"></cql-results>
 			<div class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/results">Show all</md-button>
@@ -14,8 +22,8 @@
 			</md-card-content>
 		</md-card>
 		<md-card>
-			<cql-subheader class="md-accent">Next few fixtures:</cql-subheader>
 			<md-card-content>
+			<md-subheader class="md-accent">Next few fixtures:</md-subheader>
 			<cql-fixtures class="inline-header" rows="5" fixtures="team.extras.fixtures"></cql-fixtures> 
 			<div  class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/fixtures">Show all</md-button>

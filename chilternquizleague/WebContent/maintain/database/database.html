@@ -1,14 +1,14 @@
 <div ng-controller="DatabaseCtrl">
-	<cql-subheader class="md-primary">Database</cql-subheader>
+	<md-subheader class="md-primary">Database</md-subheader>
 
 	<md-card layout-align="start start" layout-margin layout-padding>
-		<cql-subheader>Dump database to text file</cql-subheader>
+		<md-subheader>Dump database to text file</md-subheader>
 	 	<md-button class="md-primary" href="/entity/dump.txt" download type="text/plain" target="_self">Download
 		</md-button>
 	</md-card>
 
 	<md-card layout-align="start start" layout-margin layout-padding>
-		<cql-subheader>Reload database from text file</cql-subheader>
+		<md-subheader>Reload database from text file</md-subheader>
 		<input type="file" id="db.dump.file" >
 		<md-button class="md-primary" ng-click="uploadDump()">Upload</md-button>
 	</md-card>

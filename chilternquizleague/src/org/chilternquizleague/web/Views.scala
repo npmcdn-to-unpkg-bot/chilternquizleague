@@ -87,7 +87,7 @@ object TeamView{
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-class TeamExtras(team:Team,  val fixtures:List[FixturesView],  val results:List[ResultsView]) {
+class TeamExtras(team:Team,  val fixtures:List[FixturesView],  val results:List[ResultsView], val positions:List[String]) {
 	val id = team.id
 	val text = team.rubric.text
 }

@@ -1,9 +1,9 @@
 <div ng-controller="ResultsCtrl">
-	<cql-subheader class="md-primary">Results</cql-subheader>
+	<md-subheader class="md-primary">Results</md-subheader>
 	<form>
 		<div layout="row" layout-align="space-between">
 			<div flex="40">
-				<cql-subheader class="md-primary md-hue-1">Results List</cql-subheader>
+				<md-subheader class="md-primary md-hue-1">Results List</md-subheader>
 				<md-content style="height:70vh;padding-right:1em;">
 					<md-list>
 						<md-item ng-repeat="results in resultsList | orderBy : 'date'">
@@ -15,8 +15,8 @@
 					</md-list>
 				</md-content>
 			</div>
-			<md-card layout="column" flex > <cql-subheader
-				class="md-primary md-hue-1">Results Detail</cql-subheader> <md-input-container>
+			<md-card layout="column" flex > <md-subheader
+				class="md-primary md-hue-1">Results Detail</md-subheader> <md-input-container>
 			<label>Description</label> <input ng-model="results.description">
 			</md-input-container>
 			<md-input-container> <label>Date</label> <input
@@ -33,7 +33,7 @@
 				</div>
 				<md-content style="height:16em;" ng-show="result == currentResult">
 					<div ng-repeat="report in result.reports | filter:filterEmptyReports">
-						<cql-subheader>{{report.team.name}}</cql-subheader>
+						<md-subheader>{{report.team.name}}</md-subheader>
 						<div>
 							<textarea ng-model="report.text.text" rows="15" cols="60"></textarea>
 						</div>
