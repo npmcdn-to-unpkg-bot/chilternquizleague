@@ -1,7 +1,7 @@
 <div ng-controller="AllResultsController">
 	<md-list ng-controller="AllReportsFatController">
 		<md-subheader>Click on a date to see match reports</md-subheader>
-		<md-item ng-repeat="results in allResults  | orderBy: 'date' : true">
+		<md-list-item ng-repeat="results in allResults  | orderBy: 'date' : true">
 			<md-card ng-controller="AllReportsController">
 			<md-card-content>
 				<md-subheader ng-click="setDate(results.date)">{{results.date | date:'d MMMM yyyy'}} : {{results.description}}</md-subheader>
@@ -18,6 +18,6 @@
 				</md-tabs>
 			</md-card-content>
 			</md-card>
-		</md-item>
+		</md-list-item>
 	</md-list>
 </div>
