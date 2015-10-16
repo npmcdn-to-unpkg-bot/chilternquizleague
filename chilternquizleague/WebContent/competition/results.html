@@ -2,8 +2,7 @@
 	<md-card-content>
 	<md-subheader>All Results - {{competition.description}}</md-subheader>
 	<section>
-		<div class="full-header header-highlight"
-			ng-include="'/competition/results-table.html'"></div>
+		<cql-results type="'full-header'"  results="results" ng-controller="CompetitionResultsTable"></cql-results>
 	</section>
 	</md-card-content>
 </md-card>

@@ -27,7 +27,8 @@ mainApp.directive('cqlText', ['htmlifyFilter','viewService',function(htmlify,vie
 
 mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     return {
-    	scope:{results:"="},
+    	scope:{results:"=",
+    		type:"="},
     	restrict:'E',
     	templateUrl:'/results/results-table-content.html',
     	link : function(scope, element, attrs){
@@ -59,7 +60,8 @@ mainApp.directive('cqlFixtures', ["$location",function($location) {
     return {
     	scope:{
     		fixtures:"=",
-    		scrollTo:"="
+    		scrollTo:"=",
+    		type:"="	
     		},
     	restrict:'E',
     	templateUrl:'/results/fixtures-table-content.html',
