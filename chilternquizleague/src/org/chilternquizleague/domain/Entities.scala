@@ -392,7 +392,7 @@ abstract class BaseLeagueCompetition(
   override def currentPosition(team:Team):Option[String] = {
     val res = for{
       lt <- leagueTables
-      ltr <- lt.rows if (ltr.team.get.id == team.id)
+      ltr <- lt.rows if (ltr.team.get.id == team.id && ltr.position != null)
     }
     yield {s"$description ${if (lt.description == null) "" else lt.description} : ${ltr.position}"}
     
