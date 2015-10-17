@@ -3,21 +3,21 @@
 <md-subheader class="md-primary">Graphs and Statistics</md-subheader>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
-		<md-subheader>League Position</md-subheader>
+		<md-subheader class=" md-no-sticky">League Position</md-subheader>
 		<div><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" height="300" ></canvas></div>
-	</div>
+	</div> 
 	<div>
-		<md-subheader>Match Points</md-subheader>
+		<md-subheader  class=" md-no-sticky">Match Points</md-subheader>
 		<div layout="row" layout-sm="column"><canvas tc-chartjs-line chart-options="options" chart-data="pointsData" auto-legend height="300"></canvas></div>
 	</div>
 </div>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
-		<md-subheader>Cumulative Match Points Difference</md-subheader>
+		<md-subheader  class=" md-no-sticky">Cumulative Match Points Difference</md-subheader>
 		<div><canvas tc-chartjs-line chart-options="differenceOptions" chart-data="cumPointsDifferenceData" height="300"></canvas></div>
 	</div>
 	<div>
-		<md-subheader>Cumulative Match Points</md-subheader>
+		<md-subheader  class=" md-no-sticky">Cumulative Match Points</md-subheader>
 		<div layout="row" layout-sm="column"><canvas auto-legend tc-chartjs-line chart-options="options" chart-data="cumPointsData" height="300"></canvas></div>
 	</div>
 </div>

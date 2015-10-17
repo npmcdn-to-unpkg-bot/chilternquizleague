@@ -95,21 +95,21 @@
 	padding:.25em;
 }
 
-.no-header .results-table>section>h2{
+.no-header .results-table>section>.md-subheader{
  	display:none;
  }
 
-.date-header.results-table>section>h2:not(.date-header){
+.date-header.results-table>section>.md-subheader:not(.date-header){
 	
 	display:none;
 }
 
-.comp-header.results-table>section>h2:not(.comp-header){
+.comp-header.results-table>section>.md-subheader:not(.comp-header){
 	
 	display:none;
 }
 
-.full-header.results-table>section>h2:not(.full-header){
+.full-header.results-table>section>.md-subheader:not(.full-header){
 	
 	display:none;
 }

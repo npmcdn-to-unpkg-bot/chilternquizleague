@@ -5,7 +5,7 @@
 			ng-bind-html="team.extras.text | htmlify"></md-card-content></md-card>
 		<md-card>
 			<md-card-content>
-			<md-list ang-if="team.extras.positions">
+			<md-list ng-if="team.extras.positions.length > 0">
 			<md-subheader class="md-accent" >Standings:</md-subheader>
 			<md-list-content class="md-1-line" ng-repeat="position in team.extras.positions">
 			<div class="md-list-item-text" >
