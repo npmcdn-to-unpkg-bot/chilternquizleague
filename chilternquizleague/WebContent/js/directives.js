@@ -33,10 +33,13 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     	templateUrl:'/results/results-table-content.html',
     	link : function(scope, element, attrs){
     		
+    		scope.close = function(){$mdDialog.hide()}
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
     		scope.showReports = function(ev,results, result) {
 
   				$mdDialog.show({
+  					scope : scope,
+  					preserveScope: true,
   					templateUrl : '/results/reports.html',
   					controller : "ReportsController",
   					targetEvent : ev,

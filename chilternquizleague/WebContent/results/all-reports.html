@@ -1,12 +1,12 @@
 <div ng-controller="AllResultsController">
 	<md-list ng-controller="AllReportsFatController">
 		<md-subheader>Click on a date to see match reports</md-subheader>
-		<md-list-item ng-repeat="results in allResults  | orderBy: 'date' : true">
-			<md-card ng-controller="AllReportsController">
+		<md-list-item ng-repeat="results in allResults  | orderBy: 'date' : true" >
+			<md-card ng-controller="AllReportsController" flex>
 			<md-card-content>
 				<md-subheader ng-click="setDate(results.date)">{{results.date | date:'d MMMM yyyy'}} : {{results.description}}</md-subheader>
 				<md-tabs md-dynamic-height ng-if="selectedDate == results.date" class="md-hue-1">
-					<md-tab label="{{result.fixture.home.shortName}} v {{result.fixture.away.shortName}}"  ng-repeat="result in results.results | orderBy: 'fixture.home.shortName'" md-on-select="setReportsData({'result':result,'results':results})">
+					<md-tab label="{{result.fixture.home.shortName}} v {{result.fixture.away.shortName}}"  ng-repeat="result in results.results | orderBy: 'fixture.home.shortName'" md-on-select="setReportsData({'result':result,'results':results})" >
 						<md-subheader class="md-primary" style="margin-top:1em;">{{result.fixture.home.name}} <span style="color:graytext;">{{result.homeScore}} : {{result.awayScore}}</span> {{result.fixture.away.name}}</md-subheader>
 						<md-card ng-repeat="report in reports.reports" ng-if="report.text">
 							<md-card-content>

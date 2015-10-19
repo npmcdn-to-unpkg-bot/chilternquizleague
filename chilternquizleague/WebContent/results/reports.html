@@ -1,8 +1,14 @@
 <md-dialog class="md-padding">
-	<md-subheader class="md-primary">{{reportsData.results.date | date:'dd MMM yyyy'}} -
-	{{reportsData.result.fixture.home.shortName}} :
+    <div class="md-toolbar-tools">
+      <md-subheader class="md-primary">{{reportsData.results.date | date:'dd MMM yyyy'}} - {{reportsData.result.fixture.home.shortName}} :
 	{{reportsData.result.fixture.away.shortName}}
 	</md-subheader>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <md-icon md-svg-src="/images/icons/ic_close_24px.svg" aria-label="Close dialog" style="width: 24px; height: 24px;"></md-icon>
+      </md-button>
+    </div>
+
 	<md-content>
 		<md-card ng-repeat="report in reports.reports" ng-if="report.text">
 			<md-card-content>

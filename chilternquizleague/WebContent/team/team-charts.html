@@ -1,5 +1,8 @@
 <div ng-controller="TeamCharts">
+
 <md-card>
+<md-card-content>
+<cql-seasons season="season"></cql-seasons>
 <md-subheader class="md-primary">Graphs and Statistics</md-subheader>
 <div layout="row" layout-sm="column" layout-align="space-around">
 	<div>
@@ -21,5 +24,6 @@
 		<div layout="row" layout-sm="column"><canvas auto-legend tc-chartjs-line chart-options="options" chart-data="cumPointsData" height="300"></canvas></div>
 	</div>
 </div>
+</md-card-content>
 </md-card>
 </div>
