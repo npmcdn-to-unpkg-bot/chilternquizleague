@@ -1,7 +1,7 @@
 <div class="results-table" ng-switch="type" ng-class="type">
 	<table ng-switch-when="inline-header">
 		<tbody>
-			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'start' | limitTo:rowCount"></tr>
+			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' | limitTo:rowCount"></tr>
 			<tr ng-repeat-end>
 				<td class="inline-header-cell" ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" >{{::resultSet.date | date:'d MMM yy'}} : {{::resultSet.description}}</td>
 				<td class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{::result.fixture.home.shortName}}</td>
@@ -13,7 +13,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<section ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'start' | limitTo:rowCount">
+	<section ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' | limitTo:rowCount">
 
 		<md-subheader class="full-header">
 			<a id="f{{::resultSet.date}}"></a>{{::resultSet.date
