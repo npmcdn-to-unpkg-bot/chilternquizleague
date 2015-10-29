@@ -1,11 +1,7 @@
 <md-input-container ng-style="containerstyle">
-<style>
-select.tool *{
-	color: black;
-}
-</style>
 	<label ng-if="!hidelabel">Season</label>	
-	<input type="hidden" ng-model="season">
-	<select ng-class="toolclass" ng-style="selectstyle" class="md-input" ng-model="season" ng-options="season.description for season in seasons | orderBy:'description' track by season.id" ></select>
+	<md-select ng-model="season" ng-class="toolclass" >
+		<md-option ng-value="season" ng-repeat="season in seasons | orderBy:'description'">{{season.description}}</md-option>
+	</md-select>
 </md-input-container>
 	

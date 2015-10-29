@@ -13,16 +13,16 @@
 	</table>
 	<section ng-switch-default ng-repeat="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount">
 
-		<md-subheader class="full-header">
+		<md-subheader ng-if="type=='full-header'" class="full-header">
 			<a id="f{{::fixtureSet.start}}"></a>{{::fixtureSet.start
 				| date:'dd MMMM yyyy'}} : {{::fixtureSet.description}}
 		</md-subheader>
 
-		<md-subheader class="comp-header">
+		<md-subheader ng-if="type=='comp-header'" class="comp-header">
 			{{::fixtureSet.description}}
 		</md-subheader>
 
-		<md-subheader class="date-header" >
+		<md-subheader ng-if="type=='date-header'" class="date-header">
 			{{::fixtureSet.start | date:'dd MMMM yyyy'}}
 		</md-subheader>
 
