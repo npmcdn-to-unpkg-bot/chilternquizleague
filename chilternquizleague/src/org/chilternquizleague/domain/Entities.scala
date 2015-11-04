@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.googlecode.objectify.annotation.Subclass
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import org.chilternquizleague.util.StringUtils
 
 @JsonIgnoreProperties(Array("parent"))
 class BaseEntity{
@@ -394,7 +395,7 @@ abstract class BaseLeagueCompetition(
       lt <- leagueTables
       ltr <- lt.rows if (ltr.team.get.id == team.id && ltr.position != null)
     }
-    yield {s"$description ${if (lt.description == null) "" else lt.description} : ${ltr.position}"}
+    yield {s"$description ${if (lt.description == null) "" else lt.description} : ${StringUtils.toOrdinal(ltr.position.toInt)}"}
     
     res.headOption
   }
