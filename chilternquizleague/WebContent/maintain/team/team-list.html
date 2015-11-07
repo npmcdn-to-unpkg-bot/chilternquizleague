@@ -3,7 +3,7 @@
 	<cql-add-button></cql-add-button>
 
 	<md-list>
-		<md-item ng-repeat="team in teams | orderBy:'shortName'"><md-item-content><md-button href="/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</md-button></md-item-content></md-item>
+		<md-list-item ng-repeat="team in teams | orderBy:'shortName'"><md-list-item-content><md-button href="/maintain/teams/{{team.id}}" ng-class="team.retired ? 'retired' : ''">{{team.name}}</md-button></md-list-item-content></md-list-item>
 	</md-list>
 
 </div>

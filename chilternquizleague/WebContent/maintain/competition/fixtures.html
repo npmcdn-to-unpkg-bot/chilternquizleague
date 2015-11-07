@@ -8,14 +8,14 @@
 				<md-button class="md-accent" ng-click="addFixtures()">Add
 				New</md-button>
 				<md-content style="height:70vh;padding-right:1em;"> <md-list>
-				<md-item
+				<md-list-item
 					ng-class="fixts.start == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'"
-					ng-repeat="fixts in fixturesList | orderBy : 'start'"> <md-item-contents
+					ng-repeat="fixts in fixturesList | orderBy : 'start'"> <md-list-item-contents
 					layout="row" layout-align="space-between center">
 				<md-button class="md-accent md-hue-1" ng-click="setCurrentFixtures(fixts)" style="text-transform:none;"><span hide-gt-sm>{{fixts.start
 				| date:'dd MMM yy'}}</span><span hide-sm>{{fixts.start
 				| date:'dd MMMM yyyy'}}</span></md-button>
-				<span>{{fixts.description}}</span></md-item-contents> </md-item> </md-list> </md-content>
+				<span>{{fixts.description}}</span></md-list-item-contents> </md-list-item> </md-list> </md-content>
 			</div>
 			<md-card layout="column" flex style="padding:.5em;"> <md-subheader
 				class="md-primary md-hue-1">Fixtures Detail</md-subheader> <md-input-container>
@@ -29,14 +29,15 @@
 			</div>
 			<div layout-gt-md="row" layout="column" layout-align-gt-md="start center" layout-align="start start">
 
-				<md-input-container> <label>Home</label> <input
-					type="hidden" ng-model="fixture.home"> <select
-					class="md-input" ng-model="fixture.home"
-					ng-options="team as team.name for team in unusedTeams"></select> </md-input-container>
-				<md-input-container> <label>Away</label> <input
-					type="hidden" ng-model="fixture.away"> <select
-					class="md-input" ng-model="fixture.away"
-					ng-options="team as team.name for team in unusedTeams"></select> </md-input-container>
+				<md-input-container> <label>Home</label>
+					<md-select ng-model="fixture.home">
+						<md-option ng-value="team" ng-repeat="team in unusedTeams">{{team.name}}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container> <label>Away</label> 					<md-select ng-model="fixture.away">
+						<md-option ng-value="team" ng-repeat="team in unusedTeams">{{team.name}}</md-option>
+					</md-select> 
+				</md-input-container>
 
 				<md-button class="md-accent" ng-click="addFixture(fixture)">Add</md-button>
 			</div>

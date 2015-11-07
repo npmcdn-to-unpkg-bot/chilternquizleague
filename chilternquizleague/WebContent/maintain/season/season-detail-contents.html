@@ -9,8 +9,10 @@
 	<md-subheader>Competitions</md-subheader>
 	<div layout="row" layout-align="start start">
 	<md-button class="md-accent" ng-click="addCompetition(addCompType)">Add</md-button>
-	<md-input-container><select class="md-input" ng-model="addCompType"
-		ng-options="value as value.description for value in competitionTypes | orderBy : 'description'"></select>
+	<md-input-container>
+		<md-select ng-model="addCompType" placeholder="Select a competition">
+			<md-option ng-value="value" ng-repeat="value in competitionTypes">{{value.description}}</md-option>
+		</md-select>
 		</md-input-container>
 	</div>
 	<div class="show team-username-box standard-margins">

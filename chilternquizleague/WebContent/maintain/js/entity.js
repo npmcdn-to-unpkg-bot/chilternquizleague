@@ -54,7 +54,7 @@ var ENTITY_SERVICE_DEFN = [
 			var service = {
 
 				load : function(type, id, callback) {
-					var entity = cache.get(type, id);
+					var entity;// = cache.get(type, id);
 
 					entity ? (callback ? callback(entity) : null)
 							: loadFromServer(type, id, cacheCallbackFactory(

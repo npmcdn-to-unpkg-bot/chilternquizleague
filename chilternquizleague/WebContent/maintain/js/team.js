@@ -13,7 +13,13 @@ maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope,
 	})($scope, entityService);
 	makeListFn("user")($scope, entityService);
 
-	$scope.userToAdd = {};
+	$scope.matchUsers = function(users,text){
+		
+		return users.filter(function(user){return user.name.indexOf(text) > -1})
+		
+	}
+	
+	$scope.userToAdd = null;
 	$scope.addUser = function(user) {
 		$scope.team.users.push(user);
 	};

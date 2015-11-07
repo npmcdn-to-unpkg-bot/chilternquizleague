@@ -39,8 +39,8 @@ to {
 		<md-input-container> <label>Name</label> <input
 			ng-model="text.name" required> </md-input-container>
 		<md-button ng-click="addEntry()">Add New</md-button>
-		<md-list> <md-item
-			ng-repeat="entry in text.entries | orderBy :'name'"> <md-item-content>
+		<md-list> <md-list-item
+			ng-repeat="entry in text.entries | orderBy :'name'"> <md-list-item-content>
 		<div class="show-thin standard-margins"
 			ng-class="entry == currentEntry ? 'highlit-border' : 'lowlit-border'">
 			<md-button href="" style="text-transform:none;" class="md-accent" ng-click="setCurrentEntry(entry)">{{entry.name}}</md-button>
@@ -51,7 +51,7 @@ to {
 					rows="15" cols="150"></textarea>
 			</div>
 		</div>
-		</md-item-content> </md-item> </md-list>
+		</md-list-item-content> </md-list-item> </md-list>
 
 		<md-button ng-click="resetText()">Reset</md-button>
 		<md-button class="md-primary" ng-click="updateText(text)">Save</md-button>

@@ -6,21 +6,21 @@
 				<md-subheader class="md-primary md-hue-1">Results List</md-subheader>
 				<md-content style="height:70vh;padding-right:1em;">
 					<md-list>
-						<md-item ng-repeat="results in resultsList | orderBy : 'date'">
-							<md-item-contents layout="row" layout-align="space-between center">
+						<md-list-item ng-repeat="results in resultsList | orderBy : 'date'">
+							<md-list-item-contents layout="row" layout-align="space-between center">
 								<md-button class="md-accent md-hue-1" ng-click="setCurrentResults(results)" style="text-transform:none;"><span hide-sm>{{results.date	| date:'dd MMMM yyyy'}}</span><span hide-gt-sm>{{results.date	| date:'dd MMM yy'}}</span></md-button>
 								<span>{{results.description}}</span>
-							</md-item-contents>
-						</md-item>
+							</md-list-item-contents>
+						</md-list-item>
 					</md-list>
 				</md-content>
 			</div>
 			<md-card layout="column" flex > <md-subheader
-				class="md-primary md-hue-1">Results Detail</md-subheader> <md-input-container>
+				class="md-primary md-hue-1">Results Detail</md-subheader> 
+				<md-input-container>
 			<label>Description</label> <input ng-model="results.description">
 			</md-input-container>
-			<md-input-container> <label>Date</label> <input
-					ng-model="results.date" type="date"> </md-input-container>
+			<md-datepicker 	ng-model="results.date" md-placeholder="Date"></md-datepicker>
 
 
 			<div

@@ -3,9 +3,9 @@
 	<cql-add-button></cql-add-button>
 
 	<md-list>
-		<md-item ng-repeat="season in seasons | orderBy:'startYear':true">
-			<md-item-content><md-button href="/maintain/seasons/{{season.id}}">{{season.startYear}}/{{season.endYear}}</md-button></md-item-content>
-		</md-item>
+		<md-list-item ng-repeat="season in seasons | orderBy:'startYear':true">
+			<md-list-item-content><md-button href="/maintain/seasons/{{season.id}}">{{season.startYear}}/{{season.endYear}}</md-button></md-list-item-content>
+		</md-list-item>
 	</md-list>
 
 </div>

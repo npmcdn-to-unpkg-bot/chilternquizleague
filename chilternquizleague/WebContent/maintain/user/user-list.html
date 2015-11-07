@@ -3,11 +3,11 @@
 	<cql-add-button></cql-add-button>
 
 	<md-list>
-		<md-item ng-repeat="user in users | orderBy : 'name'">
-			<md-item-content>
+		<md-list-item ng-repeat="user in users | orderBy : 'name'">
+			<md-list-item-content>
 				<md-button style="text-transform:none;" href="/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</md-button>
-			</md-item-content>
-		</md-item>
+			</md-list-item-content>
+		</md-list-item>
 	</md-list>
 	
 	<div>

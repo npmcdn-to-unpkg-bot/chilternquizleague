@@ -7,9 +7,9 @@
 		</md-input-container>
 		<md-input-container>
 			<label>Current Season</label>
-			<input type="hidden" ng-model="global.currentSeason">
-			<select class="md-input" ng-model="global.currentSeason"
-						ng-options="season as season.startYear for season in seasons track by season.id" required></select>
+			<md-select ng-model="global.currentSeason" placeholder="Select a season" ng-model-options="{trackBy: '$value.id'}" required>
+				<md-option ng-value="season" ng-repeat="season in seasons">{{season.startYear}}</md-option>
+			</md-select>
 		</md-input-container>
 		<md-subheader>Front Page Text</md-subheader>
 		<md-input-container>
