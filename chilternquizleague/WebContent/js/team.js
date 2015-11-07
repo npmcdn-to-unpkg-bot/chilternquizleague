@@ -331,6 +331,7 @@
 		mainApp.controller("TeamEdit", ["$scope","secureService","$stateParams", function($scope,secureService,$stateParams){
 		
 		$scope.team = secureService.load("team",$stateParams.itemId)
+		$scope.users = secureService.list("user")
 		$scope.tinymceOptions={ 
 				plugins: "link, image, autolink, table, code, charmap, searchreplace, contextmenu",
 				menubar:true,
@@ -338,6 +339,12 @@
 		}
 		$scope.save = function(team){
 			secureService.post("team",team, function(){alert("Details saved")})    	
+		}
+		
+		$scope.matchUsers = function(users,text){
+			
+			return users.filter(function(user){return user.name.indexOf(text) > -1})
+			
 		}
 		
 			

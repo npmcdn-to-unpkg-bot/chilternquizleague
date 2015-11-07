@@ -8,7 +8,10 @@
 		<label>Short Name</label>
 		<input type="text" ng-model="team.shortName" maxlength="13">
 	</md-input-container>
-		<md-input-container>
+	<md-contact-chips ng-model="team.users" md-contacts="matchUsers(users,$query)" md-contact-name="name" md-contact-email="email" placeholder="Team Members">
+	</md-contact-chips>
+	
+	<md-input-container>
 		<label>Text</label>
 		<input type="hidden" ng-model="team.rubric.text">
 	</md-input-container>
