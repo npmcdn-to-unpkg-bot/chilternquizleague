@@ -328,7 +328,7 @@
 		
 	}])
 	
-		mainApp.controller("TeamEdit", ["$scope","secureService","$stateParams", function($scope,secureService,$stateParams){
+		mainApp.controller("TeamEdit", ["$scope","secureService","$stateParams","$mdDialog", function($scope,secureService,$stateParams, $mdDialog){
 		
 		$scope.team = secureService.load("team",$stateParams.itemId)
 		$scope.users = secureService.list("user")
@@ -337,16 +337,47 @@
 				menubar:true,
 			    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image"
 		}
-		$scope.save = function(team){
-			secureService.post("team",team, function(){alert("Details saved")})    	
+		$scope.saveTeam = function(team){
+			secureService.post("team",team, function(){ $mdDialog.show(
+		      $mdDialog.alert()
+	         .clickOutsideToClose(true)
+	        .content('Team Details Saved.')
+	        .ariaLabel('Team Saved')
+	        .ok('Ok')
+	    );})    	
 		}
 		
 		$scope.matchUsers = function(users,text){
 			
-			return users.filter(function(user){return user.name.indexOf(text) > -1})
+			return users.filter(function(user){return user.name.toLowerCase().indexOf(text.toLowerCase()) > -1})
 			
 		}
 		
+		$scope.newUserForm = function(ev){
+			
+			function DialogController($scope, $mdDialog){
+				$scope.cancel = function(){$mdDialog.cancel()};
+				$scope.add = function(user){$mdDialog.hide(user)}; 
+				$scope.user = {}
+				$scope.users = secureService.list("user")
+				$scope.inUsers = function(user){return $scope.users.find(function(user1){return user.email == user1.email})!== undefined}
+				
+			}
+						
+			$mdDialog.show({
+	      templateUrl: '/team/new-user-dialog.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      clickOutsideToClose:false,
+	      controller:DialogController
+	    })
+	        .then(function(user) {
+	        	secureService.post("user", user, function(user){$scope.team.users.push(user)})
+	        	
+	        	
+	        });
+	  
+		}
 			
 		
 		

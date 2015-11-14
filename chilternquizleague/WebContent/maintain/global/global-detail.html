@@ -21,7 +21,16 @@
 		<input type="email" ng-model="global.senderEmail">
 		</md-input-container>
 		<md-button class="md-accent" ng-click="addAlias(global)">Add Alias</md-button>
-		<div ng-repeat="emailAlias in global.emailAliases" layout="row" layout-align="start end"><md-input-container><input placeholder="alias" required ng-model="emailAlias.alias"></md-input-container><md-input-container><select class="md-input" required ng-model="emailAlias.user" ng-options="user as user.name for user in users track by user.id"></select></md-input-container></div>
+		<div ng-repeat="emailAlias in global.emailAliases" layout="row" layout-align="start end">
+			<md-input-container>
+				<input placeholder="alias" required ng-model="emailAlias.alias">
+			</md-input-container>
+			<md-input-container>
+				<md-select required ng-model="emailAlias.user" ng-model-options="{trackBy: '$value.id'}">
+					<md-option ng-value="user" ng-repeat="user in users">{{user.name}}</md-option>
+				</md-select>
+			</md-input-container>
+		</div>
 		
 		<md-button ng-click="resetGlobal()">Reset</md-button>
 		<md-button class="md-primary" ng-click="updateGlobal(global)">Save</md-button>

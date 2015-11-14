@@ -24,6 +24,11 @@ trait TokenCache{
 
 abstract class Token(var uuid:String, var expires:Date) extends BaseEntity
 
+object Token{
+  
+  def token():String = UUID.randomUUID().toString().replace("-", "")
+}
+
 @Entity
 @Cache
 class LogonToken(uuid:String,expires:Date) extends Token(uuid,expires){
@@ -35,7 +40,7 @@ object LogonToken{
   val duration = 15 * 60 * 1000
   
   def apply() = {
-    val token = new LogonToken(UUID.randomUUID().toString(), new Date(System.currentTimeMillis() + duration))
+    val token = new LogonToken(Token.token(), new Date(System.currentTimeMillis() + duration))
     save(token)
     token
   }
@@ -69,7 +74,7 @@ object SessionToken{
   val duration = 60 * 60 * 1000
   
   def apply(user:User) = {
-    val token = new SessionToken(UUID.randomUUID().toString(), new Date(System.currentTimeMillis() + duration), user)
+    val token = new SessionToken(Token.token(), new Date(System.currentTimeMillis() + duration), user)
     save(token)
     token
   }

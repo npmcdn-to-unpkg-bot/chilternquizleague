@@ -3,10 +3,10 @@
 	<md-card ng-if="!cookieEnabled">
 		<md-card-content>Cookies are disabled in your browser.  Log in requires cookies to be enabled.</md-card-content></md-card>
 	<div ng-hide="authenticated || !cookieEnabled">
-		<form ng-submit="authenticate(email)">
+		<form ng-submit="authenticate(email)" layout="column">
 			<md-input-container> <label>Email
 				address</label> <input type="email" ng-model="email" autofocus autocomplete="on"> </md-input-container>
-			<md-button class="md-primary md-raised" type="submit">Submit</md-button>
+			<span class="md-action"><md-button class="md-primary md-raised" type="submit">Submit</md-button></span>
 		</form>
 	</div>
 	<div ng-if="!authenticated && authenticated !== undefined">
@@ -16,16 +16,19 @@
 	</div>
 	<div ng-if="authenticated">
 		<md-card>
-		<md-card-content>A one-time password has been sent
+
+		<md-card-content layout="column">A one-time password has been sent
 		to your email address. Please paste it into the 'Password' field
 		below.</md-card-content></md-card>
 
-		<form ng-submit="logon(token,email)">
-
-			<md-input-container> <label>Password</label> <input
+		<form ng-submit="logon(token,email)" >
+		<md-content layout="column">
+		<md-input-container> <label>Password</label> <input
 				type="text" ng-model="token" autofocus> </md-input-container>
 
-			<md-button class="md-primary md-raised" type="submit">Login</md-button>
+			<span class="md-action"><md-button class="md-primary md-raised" type="submit">Login</md-button></span>
+		</md-content>
 		</form>
+
 	</div>
 </div>
