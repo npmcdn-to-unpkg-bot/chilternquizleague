@@ -1,0 +1,34 @@
+
+
+<md-dialog aria-label="New User">
+    <form name="newUserForm" ng-submit="add(user)">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>New User</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="/images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content class="md-dialog-content" style="max-width:800px;max-height:810px;" layout="column">
+    	<md-input-container>
+    		<label>Name</label>
+    		<input type="text" ng-model="user.name" required></input>
+    	</md-input-container>
+    	<md-input-container md-is-error="inUsers(user)">
+    		<label>Email</label>
+    		<input type="email" ng-model="user.email" required></input>
+    	</md-input-container>
+    </md-dialog-content>
+     <md-dialog-actions class="md-actions" layout="row">
+      <md-button ng-click="cancel()" >
+        Cancel
+      </md-button>
+      <md-button type="submit" ng-disabled="inUsers(user)" class="md-primary md-raised">
+        Add
+      </md-button>
+    </md-dialog-actions>
+    </form>
+</md-dialog>
+
