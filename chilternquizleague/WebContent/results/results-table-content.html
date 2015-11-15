@@ -1,15 +1,28 @@
 <div class="results-table" ng-switch="type" ng-class="type">
 	<table ng-switch-when="inline-header">
-		<tbody>
+		<tbody hide-sm>
 			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount"></tr>
 			<tr ng-repeat-end>
-				<td class="inline-header-cell" ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" >{{::resultSet.date | date:'d MMM yy'}} : {{::resultSet.description}}</td>
+				<td class="inline-header-cell" ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" >{{::resultSet.date | date:'d MMMM yyyy'}} : {{::resultSet.description}}</span></td>
 				<td class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{::result.fixture.home.shortName}}</td>
 				<td class="numeric">{{::result.homeScore}}</td>
 				<td>-</td>
 				<td class="left-align">{{::result.awayScore}}</td>
 				<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
-				<td ng-repeat-end class="row-annotation"><md-button class="" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
+				<td ng-repeat-end class="row-annotation"><md-button class="slim-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
+			</tr>
+		</tbody>
+		<tbody hide-gt-sm>
+			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
+				<td class="inline-header-cell" colspan="7">{{::resultSet.date | date:'d MMMM yyyy'}} : {{::resultSet.description}}</td>
+			</tr>
+			<tr  ng-repeat-end>
+				<td ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{::result.fixture.home.shortName}}</td>
+				<td class="numeric">{{::result.homeScore}}</td>
+				<td>-</td>
+				<td class="left-align">{{::result.awayScore}}</td>
+				<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
+				<td ng-repeat-end class="row-annotation"><md-button class="slim-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
 			</tr>
 		</tbody>
 	</table>
@@ -36,7 +49,7 @@
 					<td>-</td>
 					<td class="left-align">{{::result.awayScore}}</td>
 					<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
-					<td class="row-annotation"><md-button class="" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
+					<td class="row-annotation"><md-button class="slim-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip>Show match reports</md-tooltip></md-button></td>
 				</tr>
 			</tbody>
 		</table>

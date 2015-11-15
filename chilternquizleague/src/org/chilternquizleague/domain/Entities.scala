@@ -188,6 +188,7 @@ class Results extends BaseEntity{
   import org.chilternquizleague.domain.util.RefUtils._
   var date:Date = new Date
   var description:String = null
+  var iconPath:String = null
   var results:JList[Result] = new ArrayList
   
   @Parent
@@ -276,6 +277,7 @@ abstract class Competition(
     var description:String,
     var startTime:String,
     var endTime:String,
+    var iconPath:String,
     var subsidiary:Boolean = false
     ) extends BaseEntity{
 	description = `type`.description
@@ -288,11 +290,12 @@ abstract class Competition(
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class IndividualCompetition extends Competition(CompetitionType.INDIVIDUAL, "","20:00", "22:00")
+class IndividualCompetition extends Competition(CompetitionType.INDIVIDUAL, "","20:00", "22:00", "/images/icons/competition/individual.svg")
 
 abstract class TeamCompetition(
-    `type`:CompetitionType, 
-    subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00",subsidiary){
+    `type`:CompetitionType,
+    iconPath:String, 
+    subsidiary:Boolean = false)  extends Competition(`type`,"","20:30","22:00", iconPath, subsidiary){
   import org.chilternquizleague.domain.util.RefUtils._
   
 	var hasStats = false
@@ -345,8 +348,9 @@ def addResult(result:Result):(Results,Boolean)
 }
 
 abstract class BaseLeagueCompetition(
-    `type`:CompetitionType, 
-    subsidiary:Boolean = false)  extends TeamCompetition(`type`,subsidiary){
+    `type`:CompetitionType,
+    iconPath:String, 
+    subsidiary:Boolean = false)  extends TeamCompetition(`type`, iconPath,subsidiary){
   
   	var win:Int = 2
 	var loss:Int = 0;
@@ -405,7 +409,7 @@ abstract class BaseLeagueCompetition(
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE){
+class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE, "/images/icons/competition/league.svg"){
   
   hasStats = true
   
@@ -436,9 +440,9 @@ class LeagueCompetition extends BaseLeagueCompetition(CompetitionType.LEAGUE){
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class BeerCompetition extends BaseLeagueCompetition(CompetitionType.BEER, true)
+class BeerCompetition extends BaseLeagueCompetition(CompetitionType.BEER,"/images/icons/competition/beer.svg" ,true)
 
-abstract class KnockoutCompetition(`type`:CompetitionType) extends TeamCompetition(`type`){
+abstract class KnockoutCompetition(`type`:CompetitionType, iconPath:String) extends TeamCompetition(`type`, iconPath){
 	override def addResult(result:Result) = {
 	  val results = resultsForDate(result.fixture.start) 
 	  
@@ -465,17 +469,17 @@ abstract class KnockoutCompetition(`type`:CompetitionType) extends TeamCompetiti
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class BuzzerCompetition extends Competition(CompetitionType.BUZZER,"","","")
+class BuzzerCompetition extends Competition(CompetitionType.BUZZER,"","","","/images/icons/competition/buzzer.svg")
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class CupCompetition extends KnockoutCompetition(CompetitionType.CUP)
+class CupCompetition extends KnockoutCompetition(CompetitionType.CUP, "/images/icons/competition/cup.svg")
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class PlateCompetition extends KnockoutCompetition(CompetitionType.PLATE)
+class PlateCompetition extends KnockoutCompetition(CompetitionType.PLATE,"/images/icons/competition/plate.svg")
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class EmailAlias{
