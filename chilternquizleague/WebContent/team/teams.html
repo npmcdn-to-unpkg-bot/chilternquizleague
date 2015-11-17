@@ -1,9 +1,9 @@
 <div layout="column" ng-controller="TeamsController" md-theme="blue-grey">
-	<div ui-view="menu"></div>
-	<div layout="row">
-		<ng-include src="'/team/sidenav.html'"></ng-include>
-		<md-content flex ui-view="content" class="full-content" style="overflow-x:hidden"></md-content>
+	<div ui-view="menu" >
 	</div>
-
+	<div layout="row">
+	<div ng-include="'/team/sidenav.html'" ></div>
+	<md-content flex ui-view="content" class="full-content" ></md-content>
+	</div>
 </div>
 

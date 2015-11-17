@@ -1,24 +1,25 @@
 <cql-title-bar>
 	<span hide-sm class="page-header">{{::global.leagueName}}</span><span show-sm hide-gt-sm>{{global.leagueName}}</span>
 </cql-title-bar>
-<md-content layout="row" layout-sm="column" layout-margin >
+<md-content flex layout="row" layout-sm="column" layout-margin class="full-content">
 		<section>
 			<div class="league-table-container " ng-class="{collapse : $mdMedia('md')}"
 				ng-include="'/results/league-table.html'"></div>
 		</section>
 		<div layout="column" flex style="padding:.25em;">
-		<md-card>
-			<md-card-content ng-bind-html="global.frontPageText | htmlify" class="fix-text"></md-card-content>
-		</md-card>
-		<md-card>
-			<md-card-content class="fix-text" cql-text="'front-page-suppl'"></md-card-content>
-		</md-card>
+			<md-card>
+				<md-card-content ng-bind-html="global.frontPageText | htmlify" class="fix-text"></md-card-content>
+			</md-card>
+			<md-card>
+				<md-card-content class="fix-text" cql-text="'front-page-suppl'"></md-card-content>
+			</md-card>
 		</div>
-	<section hide-sm hide-md>
-		<iframe
-			src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FChilternQuizLeague&amp;width&amp;height=427&amp;colorscheme=light&amp;show_faces=false&amp;header=true&amp;stream=true&amp;show_border=true"
-			scrolling="no" frameborder="0"
-			style="border: none; overflow: hidden; height: 427px;"
-			allowTransparency="true"></iframe>
-	</section>
+		<section hide-sm hide-md>
+			<iframe
+				src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FChilternQuizLeague&amp;width&amp;height=427&amp;colorscheme=light&amp;show_faces=false&amp;header=true&amp;stream=true&amp;show_border=true"
+				scrolling="no" frameborder="0"
+				style="border: none; overflow: hidden; height: 427px;"
+				allowTransparency="true"></iframe>
+		</section>
+
 </md-content>
