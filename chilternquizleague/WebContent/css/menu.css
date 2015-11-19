@@ -1,6 +1,10 @@
 
-        
-.menu-item {
+ .menu-item{
+  	text-align:left !important;
+  	padding-left:1em;
+
+ }       
+.1menu-item {
   background: none;
   border-width: 0;
   cursor: pointer;
@@ -25,29 +29,29 @@
   transition: 0.2s ease-in-out;
   transition-property: max-height, background-color, opacity;
 }
-.menu-item.ng-hide {
+.1menu-item.ng-hide {
   max-height: 0;
   opacity: 0;
 }
-.menu-item:hover, .menu-item:focus {
+.1menu-item:hover, .menu-item:focus {
   color: #999;
 }
-.menu-item.menu-sub-item.active {
+.1menu-item.menu-sub-item.active {
   background-color: #eeeeee;
   font-weight: bold;
   color: #4285f4;
 }
-.menu-item.menu-title {
+.1menu-item.menu-title {
   color: #888;
   font-size: 16px;
   padding-left: 16px;
   text-align: left;
   text-transform: uppercase;
 }
-.menu-item.menu-title.active {
+.1menu-item.menu-title.active {
   font-weight: bold;
 }
-.menu-item.menu-title:hover,
-.menu-item.menu-title:focus {
+.1menu-item.menu-title:hover,
+.1menu-item.menu-title:focus {
   color: #AAA;
 }

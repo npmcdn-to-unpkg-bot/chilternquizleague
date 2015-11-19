@@ -1,15 +1,15 @@
 <cql-page-nav title="Teams">
-	<div>
+	<md-content layout="column"  layout-align="start">
 		<md-button class="menu-item menu-title" 
 			href="/teams/start-team">Start a team</md-button>
 		<md-button class="menu-item menu-title" 
 			href="/teams/logon">Log in</md-button>
-	</div>
+	</md-content>
 	<md-divider></md-divider>
-	<div ng-repeat="item in teams | orderBy:'shortName'">
-		<md-button class="menu-item menu-title" 
+	<md-content layout="column"  layout-align="start">
+		<md-button ng-repeat="item in teams | orderBy:'shortName'" class="menu-item menu-title" 
 			href="/teams/{{item.id}}">{{item.name}}</md-button>
-	</div>
+	</md-content>
 
 </cql-page-nav>
 
