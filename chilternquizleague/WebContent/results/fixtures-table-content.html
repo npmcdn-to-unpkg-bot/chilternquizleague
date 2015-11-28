@@ -4,7 +4,7 @@
 			<tr ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount"
 			></tr>
 			<tr ng-repeat-end>
-				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="inline-header-cell">{{::fixtureSet.start | date:'d MMM yy'}} : {{::fixtureSet.description}}</td>
+				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="inline-header-cell">{{::fixtureSet.start | date:'d MMMM yyyy'}} : {{::fixtureSet.description}}</td>
 				<td class="home-team">{{::fixture.home.shortName}}</td>
 				<td>:</td>
 				<td ng-repeat-end class="away-team">{{::fixture.away.shortName}}</td>

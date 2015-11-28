@@ -167,22 +167,11 @@
 		$scope.setCurrentItem();
 		
 		function mapToProperty(arr,propName){
-			var retval = [];
-			for(idx in arr){
-				retval.push(arr[idx][propName]);
-			}
-			
-			return retval;
+			return arr.map(function(i){return i[propName]});
 		}
 		
 		function dateToLabel(dates){
-			var retval = [];
-			for(idx in dates){
-				var d = new Date(dates[idx]);
-				retval.push($filter("date")(d,"dd MMM"));
-			}
-			
-			return retval;
+			return dates.map(function(d){return $filter("date")(new Date(d),"dd MMM")});
 		}
 		
 		$scope.positionOptions={
@@ -209,11 +198,20 @@
 			    datasetStroke : true,	
 			};
 		
-		function loadStats(){
-			if ($scope.team && $scope.season && $scope.season.id ){
+		function loadStats(newValues){
+			
+			if(newValues && newValues.length > 1 && newValues[0] && newValues[1]){
+				
+				doLoadStats(newValues[0], newValues[1])
+			}
+			
+		}
+		
+		function doLoadStats(team, season){
+			if (season.id ){
 			viewService.view("team-statistics",{
-								seasonId : $scope.season.id,
-								teamId : $scope.team.id
+								seasonId : season.id,
+								teamId : team.id
 							}, function(stats){
 								
 								var weekStats = stats.weekStats
@@ -224,7 +222,7 @@
 										labels: dateLabels,
 										responsive:true,
 										datasets: [{
-											label:$scope.team.shortName,
+											label:team.shortName,
 											strokeColor: "rgba(220,220,220,1)",
 											pointColor : "rgba(220,220,220,1)",
 											fillColor: "rgba(220,220,220,0.2)",
