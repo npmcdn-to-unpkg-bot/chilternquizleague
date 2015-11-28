@@ -41,7 +41,7 @@
 <body md-swipe-left="toggleRight()"  md-swipe-right="openLeft()" >
 	<div ui-view>
 	</div>
-	<md-progress-linear ng-show="progress" style="position:fixed;bottom:5px;left:0;width:100%;z-index:1000000;" md-mode="indeterminate" ></md-progress-linear>
+	<md-progress-linear ng-show="progress" style="position:fixed;bottom:0px;left:0;width:100%;z-index:1000000;" md-mode="indeterminate" ></md-progress-linear>
 	<div ng-include="'/common/menu-side.html'"></div>
 </body>
 </html>
