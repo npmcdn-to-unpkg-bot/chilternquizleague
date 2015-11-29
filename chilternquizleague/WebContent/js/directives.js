@@ -35,6 +35,14 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     		
     		scope.close = function(){$mdDialog.hide()}
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
+    		scope.showInfo = function($event,content){
+  				
+  				$mdDialog.show(
+  			      $mdDialog.alert()
+  			        .textContent(content)
+  			        .ok('Close')
+  			        .targetEvent($event))
+  			}
     		scope.showReports = function(ev,results, result) {
 
   				$mdDialog.show({

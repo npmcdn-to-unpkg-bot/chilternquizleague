@@ -205,6 +205,14 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 				}
 			});
 			
+			$rootScope.showInfo = function($event,content){
+				
+				$mdDialog.show(
+			      $mdDialog.alert()
+			        .parent($event)
+			        .textContent(content))
+			}
+			
 			$rootScope.showContactForm = function(title, recipient){
 				
 				$mdDialog.show({

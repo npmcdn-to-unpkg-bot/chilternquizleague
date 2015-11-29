@@ -29,15 +29,17 @@
 				<div layout-gt-sm="row" layout="column" class="md-padding" layout-align-gt-sm="start center" layout-align="start start">
 				<md-input-container><label>{{result.fixture.home.shortName}}</label><input type="number" ng-model="result.homeScore"></md-input-container>
 				<md-input-container><label>{{result.fixture.away.shortName}}</label><input type="number" ng-model="result.awayScore"></md-input-container>
-				<md-button ng-click="editReports(result)">Reports</md-button>
+				<md-button ng-click="editReports(result)">Reports &amp; Notes</md-button>
 				</div>
-				<md-content style="height:16em;" ng-show="result == currentResult">
-					<div ng-repeat="report in result.reports | filter:filterEmptyReports">
-						<md-subheader>{{report.team.name}}</md-subheader>
-						<div>
-							<textarea ng-model="report.text.text" rows="15" cols="60"></textarea>
-						</div>
-					</div>
+				<md-content style="height:16em;" ng-show="result == currentResult" layout="column">
+					<md-input-container ng-repeat="report in result.reports | filter:filterEmptyReports">
+						<label>{{report.team.name}}</label>
+						<textarea ng-model="report.text.text" rows="15" cols="60"></textarea>
+					</md-input-container>
+					<md-input-container>
+						<label>Notes</label>
+						<textarea ng-model="result.note" rows="15" cols="60" ></textarea>
+					</md-input-container>
 				</md-content>
 			</div>
 			</md-card-content>

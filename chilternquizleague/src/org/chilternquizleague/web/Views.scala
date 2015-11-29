@@ -104,7 +104,9 @@ class ResultsView(resultsSet:Results){
 class ResultView(result:Result){
   val homeScore = result.homeScore
   val awayScore = result.awayScore
+  val note = result.note
   val fixture = new FixtureView(result.fixture)
+  val hasReports = !result.reports.filter(!_.isEmpty()).isEmpty()
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)

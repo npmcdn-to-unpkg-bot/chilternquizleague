@@ -218,6 +218,7 @@ class Result{
 	var awayScore:Int = 0
 	var fixture:Fixture = null
 	var reports:JList[Report] = new ArrayList
+  var note:String = null
 
 	@JsonIgnore
 	@Ignore
@@ -497,6 +498,7 @@ class TextEntry(var name:String,var text:String){
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class Text(var text:String){
   def this() = {this(null)}
+  def isEmpty() = text == null || text.isEmpty()
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -504,6 +506,7 @@ class Report{
   var text:Text = new Text
   @Load
   var team:Ref[Team] = null
+  def isEmpty() = text == null || text.isEmpty()
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
