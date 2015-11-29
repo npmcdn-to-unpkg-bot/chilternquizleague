@@ -498,6 +498,7 @@ class TextEntry(var name:String,var text:String){
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class Text(var text:String){
   def this() = {this(null)}
+  @JsonIgnore
   def isEmpty() = text == null || text.isEmpty()
 }
 
@@ -506,6 +507,7 @@ class Report{
   var text:Text = new Text
   @Load
   var team:Ref[Team] = null
+  @JsonIgnore
   def isEmpty() = text == null || text.isEmpty()
 }
 
