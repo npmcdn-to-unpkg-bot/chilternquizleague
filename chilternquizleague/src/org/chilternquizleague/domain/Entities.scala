@@ -368,11 +368,7 @@ abstract class BaseLeagueCompetition(
 	  yield{
 	    r.addResult(result) match {
 	      case true => {
-	        for(table <- leagueTables) {
-	          for(homeRow <- table.rows if(homeRow.team == result.fixture.home)) updateRow(homeRow, result.homeScore, result.awayScore)
-	          for(awayRow <- table.rows if(awayRow.team == result.fixture.away)) updateRow(awayRow, result.awayScore, result.homeScore)
-	          table.sort
-          }
+          addResultToTable(result)
 	        (r,true)
 	      }
 	      case false => (r,false)
@@ -381,6 +377,25 @@ abstract class BaseLeagueCompetition(
 
 	 res.get
 	}
+  
+  private def addResultToTable(result:Result) = {
+          for(table <- leagueTables) {
+            for(homeRow <- table.rows if(homeRow.team == result.fixture.home)) updateRow(homeRow, result.homeScore, result.awayScore)
+            for(awayRow <- table.rows if(awayRow.team == result.fixture.away)) updateRow(awayRow, result.awayScore, result.homeScore)
+            table.sort
+          }
+ 
+  } 
+  
+  def recalculateTables = {
+    
+    for(table <- leagueTables) table.clear()
+    
+    for{resultSet <- results
+        result <- resultSet.get().results    
+    } addResultToTable(result)
+    
+  }
 	
 	private def updateRow(row:LeagueTableRow, score:Int, oppoScore:Int):Unit={
 	  	val points = if(score > oppoScore)  win else if(score == oppoScore) draw else loss;
@@ -404,6 +419,7 @@ abstract class BaseLeagueCompetition(
     
     res.headOption
   }
+
 
 }
 
@@ -524,6 +540,10 @@ class LeagueTable{
 	  var idx = 0
 	  for(row <- rows){idx = idx + 1; row.position = idx.toString} 
 	}
+  
+  def clear() = {
+    for(row <- rows) row.reset()
+  }
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -537,6 +557,17 @@ class LeagueTableRow{
 	var leaguePoints = 0
 	var matchPointsFor = 0
 	var matchPointsAgainst = 0
+  
+  def reset() = {
+    position = null
+    played = 0
+    won = 0
+    lost = 0
+    drawn = 0
+    leaguePoints = 0
+    matchPointsFor = 0
+    matchPointsAgainst = 0
+   }
 }
 
 

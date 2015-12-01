@@ -330,6 +330,17 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 			}
 		}
 	}
+	
+	$scope.recalculateTables = function(competition){
+		entityService.command("recalculateTables",null, {"competitionId": competition.id},
+		function(comp){
+
+				$scope.masterLeagueTables = comp.leagueTables
+				$scope.leagueTables = angular.copy(comp.leagueTables);
+			})
+
+
+	}
 
 	$scope.$watch("teams", setTeams);
 	$scope.$watch("leagueTables", setTeams);
@@ -391,6 +402,8 @@ maintainApp.controller('ResultsCtrl',
 			$scope.resetResults = function(){
 				$scope.resultsList = angular.copy($scope.masterResults)
 			}
+			
+
 
 			// $scope.setCurrentDate(new Date());
 		}));

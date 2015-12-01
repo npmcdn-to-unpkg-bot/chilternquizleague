@@ -2,6 +2,7 @@
 	<md-subheader class="md-primary">Tables</md-subheader>
 	<form>
 		<div><md-button class="md-accent" ng-click="addTable(leagueTables)">Add Table</md-button></div>
+		<div><md-button class="md-accent" ng-click="recalculateTables(competition)">Recalculate Tables</md-button></div>
 		<div ng-repeat="table in leagueTables">
 			<md-input-container>
 				<label>Description</label>
