@@ -394,7 +394,7 @@ abstract class BaseLeagueCompetition(
     for{resultSet <- results
         result <- resultSet.get().results    
     } addResultToTable(result)
-    
+    leagueTables
   }
 	
 	private def updateRow(row:LeagueTableRow, score:Int, oppoScore:Int):Unit={

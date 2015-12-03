@@ -27,6 +27,7 @@
 				ng-repeat="result in results.results | orderBy : 'fixture.home.shortName'"
 				layout="column">
 				<div layout-gt-sm="row" layout="column" class="md-padding" layout-align-gt-sm="start center" layout-align="start start">
+				<md-button class="md-fab md-mini md-warn"  ng-click="removeResult(result)">X</md-button>
 				<md-input-container><label>{{result.fixture.home.shortName}}</label><input type="number" ng-model="result.homeScore"></md-input-container>
 				<md-input-container><label>{{result.fixture.away.shortName}}</label><input type="number" ng-model="result.awayScore"></md-input-container>
 				<md-button ng-click="editReports(result)">Reports &amp; Notes</md-button>

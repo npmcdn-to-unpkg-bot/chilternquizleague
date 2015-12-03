@@ -160,7 +160,7 @@ class EntityService extends HttpServlet with BaseRest {
   }
   
   def rebuildStats(req: HttpServletRequest) = for (s <- entityByKey[Season](req.id("seasonId"))) yield HistoricalStatsAggregator.perform(s)
-  def recalculateTables(req: HttpServletRequest) = for(c <- entityByKey[BaseLeagueCompetition](req.id("competitionId"))) yield {c.recalculateTables;c}
+  def recalculateTables(req: HttpServletRequest) = for(c <- entityByKey[BaseLeagueCompetition](req.id("competitionId"))) yield {c.recalculateTables}
   
   def massMail(request:MassMailRequest, host:String):Option[String]={
     

@@ -308,6 +308,13 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 			table.rows.push(angular.copy(ret));
 		});
 	};
+	
+	$scope.removeRow = function(table,item){
+		
+		table.rows = table.rows.filter(function(row){return row.team.id != item.team.id})
+		
+	}
+	
 
 	$scope.updateTables = function(leagueTables) {
 		$scope.competition.leagueTables = leagueTables;
@@ -333,10 +340,10 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 	
 	$scope.recalculateTables = function(competition){
 		entityService.command("recalculateTables",null, {"competitionId": competition.id},
-		function(comp){
+		function(leagueTables){
 
-				$scope.masterLeagueTables = comp.leagueTables
-				$scope.leagueTables = angular.copy(comp.leagueTables);
+				$scope.masterLeagueTables = leagueTables
+				$scope.leagueTables = angular.copy(leagueTables);
 			})
 
 
@@ -403,7 +410,27 @@ maintainApp.controller('ResultsCtrl',
 				$scope.resultsList = angular.copy($scope.masterResults)
 			}
 			
-
+			$scope.removeResult = function(result) {
+				
+				var fixture = result.fixture;
+				
+				function compareTeams(t1,t2){
+					var t1Id = t1 ? t1.id : ""
+					var t2Id = t2 ? t2.id : ""
+					
+					return t1Id == t2Id
+				}
+				
+				for(idx in $scope.results.results){
+					var res = $scope.results.results[idx]
+					var fix = res.fixture
+					if(compareTeams(fix.home,fixture.home) && compareTeams(fix.away, fixture.away)){	
+						 $scope.results.results.splice(idx, 1)
+						 break
+					}
+					
+				}
+			};
 
 			// $scope.setCurrentDate(new Date());
 		}));
