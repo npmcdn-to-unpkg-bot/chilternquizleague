@@ -167,7 +167,7 @@
 		$scope.setCurrentItem();
 		
 		function mapToProperty(arr,propName){
-			return arr.map(function(i){return i[propName]});
+			return arr.map(function(i){return i==null ? null : i[propName]});
 		}
 		
 		function dateToLabel(dates){
@@ -244,7 +244,7 @@
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(220,220,220,1)",
-											data: mapToProperty(weekStats, "pointsFor") 
+											data: mapToProperty(weekStats.map(function(i){return i.ignorable ? null : i}), "pointsFor")
 										},{
 											strokeColor: "rgba(205,50,50,1)",
 											fillColor: "rgba(151,187,205,0.2)",
@@ -253,7 +253,7 @@
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(205,50,50,1)",
-											data: mapToProperty(weekStats, "pointsAgainst") 
+											data: mapToProperty(weekStats.map(function(i){return i.ignorable ? null : i}), "pointsAgainst") 
 										}]	
 								};
 								

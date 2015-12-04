@@ -42,13 +42,19 @@ class Statistics extends BaseEntity{
     stats.pointsFor  = pointsFor
     stats.pointsAgainst  = pointsAgainst
     stats.pointsDifference  = pointsFor - pointsAgainst
+    
+    updateFromCurrent(stats, pointsFor, pointsAgainst)
+    
+  }
+  
+  private def updateFromCurrent(stats:WeekStats, pointsFor:Int = 0, pointsAgainst:Int = 0) = {
     stats.cumuPointsFor = seasonStats.runningPointsFor + pointsFor
     stats.cumuPointsAgainst = seasonStats.runningPointsAgainst + pointsAgainst
     stats.cumuPointsDifference = seasonStats.runningPointsDifference + stats.pointsDifference
     seasonStats.runningPointsFor  = stats.cumuPointsFor
     seasonStats.runningPointsAgainst = stats.cumuPointsAgainst 
     seasonStats.runningPointsDifference = stats.cumuPointsDifference 
-     
+    stats
   }
   
   def addLeaguePosition(date:Date, leaguePosition:Int) = {
@@ -67,7 +73,7 @@ class Statistics extends BaseEntity{
       weekStats put (week, WeekStats(date))
       weekStats(week)
     }
-    else weekStats.getOrElseUpdate(week, WeekStats(date))
+    else weekStats.getOrElseUpdate(week, updateFromCurrent(WeekStats(date,true)))
 
   }
   
@@ -122,13 +128,15 @@ class WeekStats{
   var cumuPointsFor = 0
   var cumuPointsAgainst = 0
   var cumuPointsDifference = 0
+  var ignorable = false
 
 }
 
 object WeekStats{
-  def apply(date:Date) = {
+  def apply(date:Date, ignorable:Boolean = false) = {
     val stats = new WeekStats
     stats.date = date
+    stats.ignorable = ignorable
     stats
   }
 }
