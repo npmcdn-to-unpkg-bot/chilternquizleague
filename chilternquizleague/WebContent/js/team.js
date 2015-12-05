@@ -233,6 +233,8 @@
 										}]
 								};
 								
+								function nullIgnorables(i){return i.ignorable ? null : i}
+								
 								$scope.pointsData = {
 										labels: dateLabels,
 										responsive:true,
@@ -244,7 +246,7 @@
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(220,220,220,1)",
-											data: mapToProperty(weekStats.map(function(i){return i.ignorable ? null : i}), "pointsFor")
+											data: mapToProperty(weekStats.map(nullIgnorables), "pointsFor")
 										},{
 											strokeColor: "rgba(205,50,50,1)",
 											fillColor: "rgba(151,187,205,0.2)",
@@ -253,7 +255,7 @@
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(205,50,50,1)",
-											data: mapToProperty(weekStats.map(function(i){return i.ignorable ? null : i}), "pointsAgainst") 
+											data: mapToProperty(weekStats.map(nullIgnorables), "pointsAgainst") 
 										}]	
 								};
 								
@@ -268,7 +270,7 @@
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(220,220,220,1)",
-											data: mapToProperty(weekStats, "cumuPointsFor") 
+											data: mapToProperty(weekStats.map(nullIgnorables), "cumuPointsFor") 
 										},{
 											label:"Against",
 											strokeColor: "rgba(205,50,50,1)",
@@ -277,7 +279,7 @@
 								            pointStrokeColor: "#fff",
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(205,50,50,1)",
-											data: mapToProperty(weekStats, "cumuPointsAgainst") 
+											data: mapToProperty(weekStats.map(nullIgnorables), "cumuPointsAgainst") 
 										}]	
 										
 								};
@@ -294,7 +296,7 @@
 								            pointHighlightFill: "#fff",
 								            pointHighlightStroke: "rgba(220,220,220,1)",
 
-											data: mapToProperty(weekStats, "cumuPointsDifference") 
+											data: mapToProperty(weekStats.map(nullIgnorables), "cumuPointsDifference") 
 										}]	
 										
 								};
