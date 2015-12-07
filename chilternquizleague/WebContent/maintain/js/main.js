@@ -97,6 +97,8 @@ maintainApp.controller("MainCtrl",[ '$mdSidenav',"$scope", function($mdSidenav,$
 	  $scope.toggleLeft = function() {
 		    $mdSidenav('left').toggle();
 		  };
+		  
+		  $scope.$on("progress", function(ev,value){$scope.progress = value;});
 }]);
 
 maintainApp.directive("cqlAddButton",function(){

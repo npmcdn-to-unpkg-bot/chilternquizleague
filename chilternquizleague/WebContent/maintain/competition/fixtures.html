@@ -44,9 +44,9 @@
 			<div
 				ng-repeat="fixt in fixtures.fixtures | orderBy : 'home.shortName'"
 				layout="row" class="md-padding" layout-align="start center">
+				<md-button class="md-fab md-mini md-warn"  ng-click="removeFixture(fixt)">X</md-button>
 				<span flex="50">{{fixt.home.shortName}} -
 					{{fixt.away.shortName}}</span>
-				<md-button ng-click="removeFixture(fixt)">Remove</md-button>
 			</div>
 			</md-card>
 		</div>

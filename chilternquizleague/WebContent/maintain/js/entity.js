@@ -1,6 +1,6 @@
 var ENTITY_SERVICE_DEFN = [
-		"$http",
-		function($http) {
+		"$http",'$rootScope',
+		function($http,$rootScope) {
 			var cacheHolder = {};
 			function makeEntryKey(type, id) {
 				return type + (id ? id : "new");
@@ -33,21 +33,29 @@ var ENTITY_SERVICE_DEFN = [
 
 			function cacheCallbackFactory(type, callback, id) {
 				return function(ret) {
-					cache.add(type, ret, id ? id : ret.id);
 					callback ? callback(ret) : null;
 				};
 			}
 
+			function callbackWrapper(callback){
+				
+				return function(ret){
+					$rootScope.$broadcast("progress", false);
+					callback ? callback(ret) : null;
+				}
+			}
+			
 			function loadFromServer(type, id, callback) {
-
+				$rootScope.$broadcast("progress", true);
+				
 				$http.get("/entity/" + type + "/" + id, {
 					"responseType" : "json"
-				}).success(callback).error(cache.flush);
+				}).success(callbackWrapper(callback));
 			}
 
 			function saveToServer(type, entity, callback) {
-				$http.post("/entity/" + type, entity).success(callback).error(
-						cache.flush);
+				$rootScope.$broadcast("progress", true);
+				$http.post("/entity/" + type, entity).success(callbackWrapper(callback));
 
 			}
 
@@ -75,17 +83,20 @@ var ENTITY_SERVICE_DEFN = [
 				},
 
 				loadList : function(type, callback) {
+					$rootScope.$broadcast("progress", true);
 					$http.get("/entity/" + type + "-list", {
 						"responseType" : "json"
-					}).success(callback).error(cache.flush);
+					}).success(callbackWrapper(callback));
 				},
 				
 				command: function(command,content, params, callback){
-					$http.post("/entity/" + command,content,{"params":params}).success(callback);
+					$rootScope.$broadcast("progress", true);
+					$http.post("/entity/" + command,content,{"params":params}).success(callbackWrapper(callback));
 				},
 				
 				upload : function(file, fileName, callback){
 					
+					$rootScope.$broadcast("progress", true);
 					var r  = new FileReader();
 					
 					r.onload = function() {
@@ -96,7 +107,7 @@ var ENTITY_SERVICE_DEFN = [
 					        data: new Uint8Array(r.result), 
 					        params : {name:fileName},
 					        transformRequest: []
-					    }).success(callback)
+					    }).success(callbackWrapper(callback))
 					};
 					r.readAsArrayBuffer(file);
 					
