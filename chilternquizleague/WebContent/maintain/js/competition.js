@@ -211,6 +211,15 @@ maintainApp
 
 						$scope.usedTeamsControl.add(fixture.home, fixture.away);
 					};
+					
+					$scope.removeFixtures = function(fixtures) {
+						
+						var index = $scope.fixturesList.indexOf(fixtures);
+						
+						
+						$scope.fixturesList.splice(index,1);
+					};
+					
 					$scope.removeFixture = function(fixture) {
 						
 						function compareTeams(t1,t2){
@@ -225,11 +234,13 @@ maintainApp
 							if(compareTeams(fix.home,fixture.home) && compareTeams(fix.away, fixture.away)){	
 								 $scope.fixtures.fixtures.splice(idx, 1)
 								 $scope.usedTeamsControl.remove(fixture.start,fixture.home,fixture.away)
-								 break
+								 break;
 							}
 							
 						}
 					};
+					
+	
 					
 					$scope.addFixtures= function(){
 						var date = new Date()
@@ -263,7 +274,7 @@ maintainApp
 						
 
 						
-					}
+					};
 
 					$scope.updateFixtures = function(fixtures) {
 						$scope.competition.fixtures = fixtures;
@@ -409,6 +420,13 @@ maintainApp.controller('ResultsCtrl',
 			$scope.resetResults = function(){
 				$scope.resultsList = angular.copy($scope.masterResults)
 			}
+			$scope.removeResults = function(results) {
+				
+				var index = $scope.resultsList.indexOf(results);
+				
+				
+				$scope.resultsList.splice(index,1);
+			};
 			
 			$scope.removeResult = function(result) {
 				

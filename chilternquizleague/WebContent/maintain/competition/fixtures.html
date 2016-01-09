@@ -11,7 +11,8 @@
 				<md-list-item
 					ng-class="fixts.start == currentDate.getTime() ? 'highlit-border' : 'lowlit-border'"
 					ng-repeat="fixts in fixturesList | orderBy : 'start'"> <md-list-item-contents
-					layout="row" layout-align="space-between center">
+					layout="row" layout-align="space-between center"><md-button class="md-fab md-mini md-warn"  ng-click="removeFixtures(fixts)">X</md-button>
+					
 				<md-button class="md-accent md-hue-1" ng-click="setCurrentFixtures(fixts)" style="text-transform:none;"><span hide-gt-sm>{{fixts.start
 				| date:'dd MMM yy'}}</span><span hide-sm>{{fixts.start
 				| date:'dd MMMM yyyy'}}</span></md-button>
