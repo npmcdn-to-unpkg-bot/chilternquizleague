@@ -1,7 +1,7 @@
 <cql-title-bar>
-	<span hide-sm class="page-header">{{::global.leagueName}}</span><span show-sm hide-gt-sm>{{global.leagueName}}</span>
+	<span hide show-gt-sm class="page-header">{{::global.leagueName}}</span><span hide-gt-sm>{{::global.leagueName}}</span>
 </cql-title-bar>
-<md-content flex layout="row" layout-sm="column" layout-margin class="full-content">
+<md-content flex layout-gt-sm="row" layout="column" layout-margin class="full-content">
 		<section>
 			<div class="league-table-container " ng-class="{collapse : $mdMedia('md')}"
 				ng-include="'/results/league-table.html'"></div>
@@ -14,7 +14,7 @@
 				<md-card-content class="fix-text" cql-text="'front-page-suppl'"></md-card-content>
 			</md-card>
 		</div>
-		<section hide-sm hide-md>
+		<section hide show-gt-md>
 			<iframe
 				src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FChilternQuizLeague&amp;width&amp;height=427&amp;colorscheme=light&amp;show_faces=false&amp;header=true&amp;stream=true&amp;show_border=true"
 				scrolling="no" frameborder="0"
