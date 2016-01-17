@@ -34,7 +34,7 @@
 
 </head>
 <body ng-app="maintainApp" md-swipe-right="toggleLeft()" layout="column" ng-controller="MainCtrl">
-	<md-toolbar><div class="md-toolbar-tools" ><md-button class="slim-button" hide show-sm show-md aria-label="Main menu" ng-click="toggleLeft()"><md-icon md-svg-src="/images/icons/ic_menu.svg" style="margin-bottom:5px"></md-icon><md-tooltip>Main menu</md-tooltip></md-button><span style="margin-left:.25em;">Maintenance</span></div></md-toolbar>
+	<md-toolbar><div class="md-toolbar-tools" ><md-button class="md-icon-button" hide show-sm show-md aria-label="Main menu" ng-click="toggleLeft()"><md-icon md-svg-src="/images/icons/ic_menu.svg" style="margin-bottom:5px"></md-icon><md-tooltip>Main menu</md-tooltip></md-button><span style="margin-left:.25em;">Maintenance</span></div></md-toolbar>
 	<div layout="row">
 	<md-sidenav class="md-sidenav-left md-whiteframe-z2"
 	md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" ng-click="toggleLeft()">

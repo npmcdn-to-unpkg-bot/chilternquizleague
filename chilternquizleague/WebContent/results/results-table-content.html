@@ -9,7 +9,7 @@
 				<td>-</td>
 				<td class="left-align">{{::result.awayScore}}</td>
 				<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
-				<td ng-if="result.hasReports" class="row-annotation"><md-button class="slim-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
+				<td ng-if="result.hasReports" class="row-annotation"><md-button class="md-icon-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
 				<td ng-if="result.note != null && result.note != ''"><md-button class="md-mini md-warn md-fab" ng-click="showInfo($event,result.note)"><span>N</span></md-button><span hide-sm>{{result.note}}</span></td>
 				<td ng-repeat-end></td>
 			</tr>
@@ -24,7 +24,7 @@
 				<td>-</td>
 				<td class="left-align">{{::result.awayScore}}</td>
 				<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
-				<td ng-if="result.hasReports" class="row-annotation"><md-button class="slim-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
+				<td ng-if="result.hasReports" class="row-annotation"><md-button class="md-icon-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
 				<td ng-if="result.note != null && result.note != ''"><md-button class="md-mini md-warn md-fab" ng-click="showInfo($event,result.note)"><span>N</span></md-button><span hide-sm>{{result.note}}</span></td>
 				<td ng-repeat-end></td>
 			</tr>
@@ -53,7 +53,7 @@
 					<td>-</td>
 					<td class="left-align">{{::result.awayScore}}</td>
 					<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
-					<td ng-if="result.hasReports" class="row-annotation"><md-button class="slim-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
+					<td ng-if="result.hasReports" class="row-annotation"><md-button class="md-icon-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
 					<td ng-if="result.note != null && result.note != ''"><md-button class="md-mini md-warn md-fab" ng-click="showInfo($event,result.note)"><span>N</span></md-button><span hide-sm>{{result.note}}</span></td>
 				</tr>
 			</tbody>

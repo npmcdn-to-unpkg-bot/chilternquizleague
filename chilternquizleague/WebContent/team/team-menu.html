@@ -2,11 +2,11 @@
 <cql-title-bar page-menu>
 	<span hide-sm>{{team.name}}</span><span hide-gt-sm>{{team.shortName}}</span>
 	<span hide-sm layout="row" style="margin-left:.5em;padding-bottom:5px;">
-		<md-button class="slim-button" aria-label="contact us"
+		<md-button class="md-icon-button" aria-label="contact us"
 			ng-click="showContactForm(team.name,team.emailName)" > <md-icon
 			md-svg-src="/images/icons/ic_email.svg" ></md-icon> <md-tooltip>Contact
 		Us!</md-tooltip></md-button>			
-		<md-button class="slim-button" aria-label="go to venue"
+		<md-button class="md-icon-button" aria-label="go to venue"
 			ng-href="/venues/{{team.venue.id}}"> <md-icon
 			md-svg-src="/images/icons/ic_location_on.svg" ></md-icon> <md-tooltip>Venue</md-tooltip></md-button>
 	</span>
