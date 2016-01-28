@@ -137,7 +137,7 @@ mainApp.directive('cqlSeasons', ["viewService","$rootScope",function(viewService
     		scope.seasons = $rootScope.seasons;
     		scope.hidelabel = attrs.hasOwnProperty("hidelabel");
     		scope.selectstyle = attrs.hasOwnProperty("toolstyle") ? {background:"inherit",border:"none",color:"inherit"}:{};
-    		scope.containerstyle = attrs.hasOwnProperty("toolstyle") ? {padding:"0",paddingBottom:"2px",paddingLeft:".25em"}:{}
+    		scope.containerstyle = attrs.hasOwnProperty("toolstyle") ? {padding:"0",paddingBottom:".45em",paddingLeft:".25em"}:{}
     		scope.toolclass = attrs.hasOwnProperty("toolstyle") ?"tool" : ""
      	},
     	templateUrl:'/common/season-dropdown.html'
@@ -169,7 +169,7 @@ mainApp.directive("cqlPageMenu",function(){
 	return {
 		restrict:'E',
 		replace:true,
-		template : "<span><md-button class='slim-button' ng-click='toggleLeft()' aria-label='Page menu'><md-icon md-svg-src='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
+		template : "<span><md-button class='md-icon-button' ng-click='toggleLeft()' aria-label='Page menu'><md-icon md-svg-src='/images/icons/ic_more_horiz.svg'></md-icon><md-tooltip>Page menu</md-tooltip></md-button></span>"};
 });
 
 mainApp.directive("cqlPageNav",["$mdSidenav", function($mdSidenav){
