@@ -316,8 +316,8 @@ abstract class TeamCompetition(
  * @param result The result to add
  * @return Tuple of the {@link Results} to which result has been added, and a boolean indicating whether it was added (true), or already present (false)
  */
-def addResult(result:Result):(Results,Boolean)
-	def resultsForDate(date:Date):Option[Results] = {
+  def addResult(result:Result):(Results,Boolean)
+  def resultsForDate(date:Date):Option[Results] = {
 	  
 	  val resultSet = results.find(r=>r.get != null && sameDay(date, r.date)) 
 	  
