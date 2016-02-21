@@ -4,7 +4,7 @@ public enum CompetitionType {
 
 	LEAGUE("League", LeagueCompetition.class) ,
 	BEER("Beer Leg", BeerCompetition.class) ,
-	INDIVIDUAL("Individual", IndividualCompetition.class) , 
+	INDIVIDUAL("Individual Quiz", IndividualCompetition.class) , 
 	CUP("Knockout Cup", CupCompetition.class) ,
 	PLATE("Plate", PlateCompetition.class) ,
 	BUZZER("Buzzer Quiz", BuzzerCompetition.class);

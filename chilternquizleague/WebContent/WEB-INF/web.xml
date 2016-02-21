@@ -47,6 +47,7 @@
     <url-pattern>/entity/*</url-pattern>
     <url-pattern>/view/*</url-pattern>
     <url-pattern>/secure/*</url-pattern>
+    <url-pattern>/calendar/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   <filter-mapping>
@@ -104,6 +105,15 @@
     <servlet-name>tokenhandler</servlet-name>
     <url-pattern>/tasks/tokens</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <servlet-name>calendar</servlet-name>
+    <servlet-class> org.chilternquizleague.web.CalendarService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>calendar</servlet-name>
+    <url-pattern>/calendar/*</url-pattern>
+  </servlet-mapping>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintenance</web-resource-name>

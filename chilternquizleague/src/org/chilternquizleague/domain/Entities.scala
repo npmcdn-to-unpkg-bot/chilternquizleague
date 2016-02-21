@@ -141,7 +141,8 @@ class GlobalApplicationData extends BaseEntity{
 
 
 object Season{
-  val types = HashSet(CompetitionType.LEAGUE,CompetitionType.BEER, CompetitionType.CUP, CompetitionType.PLATE);
+  val teamTypes = HashSet(CompetitionType.LEAGUE,CompetitionType.BEER, CompetitionType.CUP, CompetitionType.PLATE);
+  val singletonTypes = HashSet(CompetitionType.BUZZER, CompetitionType.INDIVIDUAL)
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -160,7 +161,9 @@ class Season extends BaseEntity{
   @Ignore
   lazy val description = s"$startYear / $endYear"
   
-  def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.types.contains(c.`type`)).map(_.get).asInstanceOf[List[TeamCompetition]]
+  def teamCompetitions:List[TeamCompetition] = competitions.values.filter(c=>Season.teamTypes.contains(c.`type`)).map(_.get).asInstanceOf[List[TeamCompetition]]
+  def singletonCompetitions:List[SingletonCompetition] = competitions.values.filter(c=>Season.singletonTypes.contains(c.`type`)).map(_.get).asInstanceOf[List[SingletonCompetition]]
+  
   def competition[T <: Competition](compType:CompetitionType) = compType.castTo(competitions.get(compType)).asInstanceOf[T]
 
   def positions(team:Team):List[String] = {
@@ -260,8 +263,16 @@ class Fixtures extends BaseEntity{
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class Event{
+
+  var venue:Ref[Venue] = null
+  var start = new Date
+  var end = new Date
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class Fixture{
-  	var start:Date = null
+  var start:Date = null
 	var end:Date = null
 	var home:Ref[Team] = null
 	var away:Ref[Team] = null
@@ -288,10 +299,18 @@ abstract class Competition(
 	var parent:Ref[BaseEntity] = null
 }
 
+
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class IndividualCompetition extends Competition(CompetitionType.INDIVIDUAL, "","20:00", "22:00", "/images/icons/competition/individual.svg")
+class IndividualCompetition extends SingletonCompetition(CompetitionType.INDIVIDUAL, "/images/icons/competition/individual.svg")
+
+
+abstract class SingletonCompetition(`type`:CompetitionType,
+    iconPath:String)  extends Competition(`type`,"","20:30","22:00", iconPath, false){
+
+  var event:Event = new Event
+}
 
 abstract class TeamCompetition(
     `type`:CompetitionType,
@@ -486,7 +505,7 @@ abstract class KnockoutCompetition(`type`:CompetitionType, iconPath:String) exte
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache
 @Subclass
-class BuzzerCompetition extends Competition(CompetitionType.BUZZER,"","","","/images/icons/competition/buzzer.svg")
+class BuzzerCompetition extends SingletonCompetition(CompetitionType.BUZZER,"/images/icons/competition/buzzer.svg")
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 @Cache

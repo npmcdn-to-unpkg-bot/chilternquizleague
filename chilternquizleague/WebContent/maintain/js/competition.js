@@ -21,9 +21,20 @@ function teamCompetitionControllerFactory() {
 				
 				if(!competition){
 					entityService.load(ucName,"new", function(competition){
+						if(competition.event){
+							competition.event.start = new Date(competition.event.start)
+							competition.event.end = new Date(competition.event.end)
+						}
 						$scope[masterName] = competition;
 						$scope[competitionName] = angular.copy(competition);
 					})
+				}
+				
+				entityService.loadList("venue", function(venues){$scope.venues = venues});
+				
+				if(competition.event){
+					competition.event.start = new Date(competition.event.start)
+					competition.event.end = new Date(competition.event.end)
 				}
 				
 				$scope[masterName] = competition;

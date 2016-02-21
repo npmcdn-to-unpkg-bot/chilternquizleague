@@ -14,7 +14,8 @@ object RefUtils {
 	
 	implicit def value2Ref[T<:BaseEntity](value:T):Ref[T] = if(value.id == null) Ref.create(ofy.save.entity(value).now) else Ref.create(value)
 
-	implicit def ref2ValueList[T<:BaseEntity](ref:JList[Ref[T]]):JList[T] = ref.map(_())
+  implicit def ref2ValueList[T<:BaseEntity](ref:List[Ref[T]]):List[T] = ref.map(_())
+	implicit def ref2ValueJList[T<:BaseEntity](ref:JList[Ref[T]]):JList[T] = ref.map(_())
 	implicit def ref2ValueCollection[T<:BaseEntity](ref:java.util.Collection[Ref[T]]):java.util.Collection[T] = ref.map(_())
 	implicit def ref2ValueIterable[T<:BaseEntity](ref:Iterable[Ref[T]]):Iterable[T] = ref.map(_())
 

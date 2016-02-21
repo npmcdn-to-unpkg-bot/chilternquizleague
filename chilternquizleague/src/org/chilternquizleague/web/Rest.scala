@@ -60,6 +60,7 @@ import javax.mail.Message.RecipientType
 import org.chilternquizleague.util.LocalExample
 import org.chilternquizleague.util.CloudStorage
 import java.io.InputStream
+import java.text.SimpleDateFormat
 
 trait BaseRest {
 
@@ -339,6 +340,8 @@ class ViewService extends HttpServlet with BaseRest {
     competitions filter { _ != null } flatMap { _.fixtures.map(_()) filter filter flatMap flatMapFixtures } sortWith (_.start before _.start) slice (0, limit)
 
   }
+  
+  
 
   def teamResults(teamId: Option[Long], season: Season, limit: Int = 20000, filter: Results => Boolean = { _ => true }): List[Results] = {
     val competitions = season.teamCompetitions.filter(!_.subsidiary)
@@ -545,6 +548,119 @@ class SecureService extends EntityService {
     None
   }
 
+}
+
+class CalendarService extends ViewService{
+  val dateFormatString = "yyyyMMdd'T'HHmmssz"
+  override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {}  
+  override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
+      val bits = parts(req)
+      val head = bits.head
+      val id = bits.tail.head
+      
+      val contents = head match{
+        
+        case "team" => makeICal(entity[Team](Option(id.toLong)))
+        case _ => ""
+        
+      }
+      
+      resp.getWriter.append(contents)
+      resp.getWriter.flush()
+    }
+    
+    private def formatEvent(event:Event, text:String):String = {
+      
+      val dateFormat = new SimpleDateFormat(dateFormatString)
+      val now = dateFormat.format(new Date())
+      val uidPart = text.replaceAll("\\s", "") 
+      val address = event.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
+      s"""
+BEGIN:VEVENT
+DTSTAMP:$now
+UID:${event.start.getTime}.$uidPart.chilternquizleague.uk
+DESCRIPTION:$text
+SUMMARY:$text
+DTSTART:${dateFormat.format(event.start)}
+DTEND:${dateFormat.format(event.end)}
+LOCATION:${event.venue.name},$address
+END:VEVENT
+"""
+
+    }
+    private def formatFixture(fixture:Fixture, description:String) = {
+      
+      val text = s"${fixture.home.shortName} - ${fixture.away.shortName} : $description"
+      val dateFormat = new SimpleDateFormat(dateFormatString)
+      val now = dateFormat.format(new Date())
+      val uidPart = fixture.home.shortName.replaceAll("\\s", "") 
+      val address = fixture.home.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
+      s"""
+BEGIN:VEVENT
+DTSTAMP:$now
+UID:${fixture.start.getTime}.$uidPart.chilternquizleague.uk
+DESCRIPTION:$text
+SUMMARY:$text
+DTSTART:${dateFormat.format(fixture.start)}
+DTEND:${dateFormat.format(fixture.end)}
+LOCATION:${fixture.home.name},$address
+END:VEVENT
+"""
+
+    }
+    private def formatBlankFixtures(fixtures:Fixtures) = {
+      
+      val dateFormat = new SimpleDateFormat(dateFormatString)
+      val now = dateFormat.format(new Date())
+      val uidPart = fixtures.description.replaceAll("\\s", "") 
+      s"""
+BEGIN:VEVENT
+DTSTAMP:$now
+UID:${fixtures.start.getTime}.$uidPart.chilternquizleague.uk
+DESCRIPTION:${fixtures.description}
+SUMMARY:${fixtures.description}
+DTSTART:${dateFormat.format(fixtures.start)}
+DTEND:${dateFormat.format(fixtures.end)}
+END:VEVENT
+"""
+
+    }
+
+    private def makeICal(team:Option[Team]):String = {
+      val builder = new StringBuilder("BEGIN:VCALENDAR\nVERSION:2.0\n")
+      
+      for{
+        t <- team
+        gap <- Application.globalData
+      }
+      yield{
+        for{
+          c <- gap.currentSeason.teamCompetitions
+          fixtures <- c.fixtures
+          f <- fixtures.findRow(t)
+        }
+        yield{
+          builder.append(formatFixture(f, fixtures.description))
+        }
+        for{
+          c <- gap.currentSeason.singletonCompetitions
+        
+        }
+        yield{
+          builder.append(formatEvent(c.event, s"${gap.leagueName} ${c.description}"))
+        }
+        for{
+          c <- gap.currentSeason.teamCompetitions
+          fixtures <- c.fixtures if fixtures.fixtures.isEmpty()
+                 }
+        yield{
+          builder.append(formatBlankFixtures(fixtures))
+        }
+
+      }
+      builder.append("END:VCALENDAR\n").toString()
+    }
+  
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
