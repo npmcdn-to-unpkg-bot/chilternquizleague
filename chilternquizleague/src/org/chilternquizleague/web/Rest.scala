@@ -551,7 +551,7 @@ class SecureService extends EntityService {
 }
 
 class CalendarService extends ViewService{
-  val dateFormatString = "yyyyMMdd'T'HHmmssz"
+  val dateFormatString = "yyyyMMdd'T'HHmmss'Z'"
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {}  
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
       val bits = parts(req)
