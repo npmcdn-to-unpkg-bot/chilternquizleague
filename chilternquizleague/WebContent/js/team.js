@@ -87,28 +87,9 @@
 
 	function extraStuff($scope, $interval, viewService, $location, $stateParams) {
 
-		$scope.makeICal = function(team) {
-
-			viewService.list("Venue", function(venueList){
-				
-				var venues = venueList.reduce(function(acc,venue){acc[venue.id] = venue;return acc},{})
-				
-				var contents = generateICalContent(team.extras.fixtures, venues);
-
-				var filename = team.shortName.replace(/\s/g, "_") + "_fixtures"
-						+ ".ics";
-
-				var blob = new Blob([ contents ], {
-					type : "text/calendar;charset=utf-8"
-				});
-
-				saveAs(blob, filename);
-				
-			})
-			
-
-
-		};
+		$scope.copyToClipboard = function(text){
+			clipboard.copy(document.baseURI + "calendar/" + text);
+		}
 		
 		$scope.season = {};
 		
