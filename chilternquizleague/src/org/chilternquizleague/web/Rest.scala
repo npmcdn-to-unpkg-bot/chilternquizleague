@@ -565,6 +565,7 @@ class CalendarService extends ViewService{
         
       }
       
+      resp.setContentType("text/calendar")
       resp.getWriter.append(contents)
       resp.getWriter.flush()
     }
