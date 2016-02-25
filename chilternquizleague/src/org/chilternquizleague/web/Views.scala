@@ -28,6 +28,11 @@ class CompetitionView(competition:Competition) {
 	val subsidiary = competition.subsidiary
 	val startTime = competition.startTime
 	val text = competition.text
+  val event = competition match{
+    case s : SingletonCompetition => s.event
+    case _  => null
+  }
+  
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
