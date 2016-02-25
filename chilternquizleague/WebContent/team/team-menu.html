@@ -1,7 +1,7 @@
 <div>
 <cql-title-bar page-menu>
-	<span hide-sm>{{team.name}}</span><span hide-gt-sm>{{team.shortName}}</span>
-	<span hide-sm layout="row" style="margin-left:.5em;padding-bottom:5px;">
+	<span hide-xs>{{team.name}}</span><span hide-gt-xs>{{team.shortName}}</span>
+	<span hide-xs layout="row" style="margin-left:.5em;padding-bottom:5px;">
 		<md-button class="md-icon-button" aria-label="contact us"
 			ng-click="showContactForm(team.name,team.emailName)" > <md-icon
 			md-svg-src="/images/icons/ic_email.svg" ></md-icon> <md-tooltip>Contact
@@ -12,7 +12,7 @@
 	</span>
 </cql-title-bar>
 
-<div hide show-sm style="top: 0;
+<div hide-gt-xs style="top: 0;
   height: 160px;
   position: absolute;
   right: 0;

@@ -2,14 +2,14 @@
 	<md-card>
 	<md-card-content>
 	<md-subheader class="md-primary">{{venue.name}}</md-subheader>
-	<div flex layout="row" layout-sm="column" layout-md="column">
+	<div flex layout-gt-sm="row" layout="column">
 		<div flex layout="column" >
 			<div class="venue-address"
 				ng-bind-html="venue.address | lineBreaks | htmlify">
 			</div>
 			<div ng-if="venue.address">
-			<iframe hide-sm hide-md ng-src='{{embeddedUrl}}' width="400" height="300" frameborder="0" style="border:0"></iframe>
-			<a hide-gt-md ng-href="{{linkUrl}}" target="_blank">map</a>
+			<iframe hide-xs ng-src='{{embeddedUrl}}' width="400" height="300" frameborder="0" style="border:0"></iframe>
+			<a hide-gt-xs ng-href="{{linkUrl}}" target="_blank">map</a>
 			</div>
 			
 			<div>
@@ -20,7 +20,7 @@
 			</div>
 			<div>phone : {{venue.phone}}</div>
 		</div>
-		<div ng-if="venue.imageURL" hide-sm >
+		<div ng-if="venue.imageURL" hide-xs >
 			<div>
 				<img alt="" ng-src="{{venue.imageURL}}">
 			</div>

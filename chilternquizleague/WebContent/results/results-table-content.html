@@ -1,6 +1,6 @@
 <div class="results-table" ng-switch="type" ng-class="type">
 	<table ng-switch-when="inline-header">
-		<tbody hide-sm>
+		<tbody hide-xs>
 			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount"></tr>
 			<tr ng-repeat-end>
 				<td class="inline-header-cell" ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" >{{::resultSet.date | date:'d MMMM yyyy'}} : {{::resultSet.description}}</span></td>
@@ -14,7 +14,7 @@
 				<td ng-repeat-end></td>
 			</tr>
 		</tbody>
-		<tbody hide-gt-sm>
+		<tbody hide-gt-xs>
 			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
 				<td class="inline-header-cell" colspan="7">{{::resultSet.date | date:'d MMMM yyyy'}} : {{::resultSet.description}}</td>
 			</tr>
