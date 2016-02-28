@@ -174,7 +174,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 				}])
 				;
 
-mainApp.factory("seasonService", ["viewService","$rootScope",function(viewService, $rootScope){
+mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 	
 	var service = {
 			seasons : [],
@@ -182,7 +182,7 @@ mainApp.factory("seasonService", ["viewService","$rootScope",function(viewServic
 			global : null
 	}
 	service.getGlobal = function(){
-				var promise = new Promise(function(resolve, reject){
+				var promise = $q(function(resolve, reject){
 					if(service.global){
 						resolve(service.global)
 					}
@@ -197,7 +197,7 @@ mainApp.factory("seasonService", ["viewService","$rootScope",function(viewServic
 			}
 			
 	service.getSeasons = function(){
-				var promise = new Promise(function(resolve, reject){
+				var promise = $q(function(resolve, reject){
 					if(service.seasons.length > 0){
 						resolve(service.seasons)
 					}
@@ -212,7 +212,7 @@ mainApp.factory("seasonService", ["viewService","$rootScope",function(viewServic
 			}
 			
 	service.getSeason = function(){
-				var promise = new Promise(function(resolve, reject){
+				var promise = $q(function(resolve, reject){
 					if(service.season){
 						resolve(service.season)
 					}
