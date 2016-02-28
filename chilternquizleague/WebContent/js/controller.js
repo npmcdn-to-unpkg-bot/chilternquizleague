@@ -217,16 +217,14 @@ mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 						resolve(service.season)
 					}
 					else{
-						service.getGlobal().then(function(global){
-							service.getSeasons().then(function(seasons){
-								service.season = seasons.reduce(function(prev,curr){
-									return prev ? prev : (curr.id == global.currentSeasonId ? curr : null)},null)
-								resolve(service.season)
-							})
-						})
+						$q.all({global:service.getGlobal(), seasons:service.getSeasons()}).then(
+								function(values){
+									resolve(service.season = values.seasons.reduce(function(prev,curr){
+										return prev ? prev : (curr.id == values.global.currentSeasonId ? curr : null)},null))
+								}
+						)
+						
 					}
-					
-					
 				})
 				return promise
 			}
