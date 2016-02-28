@@ -1,11 +1,11 @@
 mainApp.controller('LeagueTableController', [ '$scope', '$interval',
-		'viewService','$rootScope', function($scope, $interval, viewService,$rootScope) {
+		'viewService','seasonService', function($scope, $interval, viewService,seasonService) {
 
-			$scope.$watch("global.currentSeasonId", function(currentSeasonId) {
-				if (currentSeasonId) {
+			seasonService.getGlobal().then(function(global) {
+				
 					function loadTable() {
 						viewService.view("leaguetable", {
-							id : currentSeasonId
+							id : global.currentSeasonId
 						},function(leagueTable){
 							$scope.leagueTable=leagueTable;});
 					}
@@ -19,8 +19,8 @@ mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 						$interval.cancel(p);
 					    });
 
-				}
-			});
-			
+				
+			})
+						
 
 		} ]);

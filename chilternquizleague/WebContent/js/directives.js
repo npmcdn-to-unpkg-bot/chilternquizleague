@@ -114,27 +114,21 @@ mainApp.directive('cqlLeagueTable', function() {
     };
   });
 
-mainApp.directive('cqlSeasons', ["viewService","$rootScope",function(viewService, $rootScope) {
+mainApp.directive('cqlSeasons', ["viewService","seasonService",function(viewService, seasonService) {
     return {
     	scope:{season:"="},
     	restrict:'E',
     	replace:true,
     	link: function(scope, element, attrs){
-    		
+		
     		if(!scope.season){
-	    		scope.$watchCollection("seasons", function(seasons){
-	    			if(seasons){
-	    				for(idx in seasons){
-	    					if(seasons[idx].id == $rootScope.global.currentSeasonId){
-	    						scope.season = seasons[idx];
-	    						break;
-	    					}
-	    				}
-	    			}
-	    		});
-	    	}
-    		
-    		scope.seasons = $rootScope.seasons;
+       		seasonService.getSeason().then(function(season){
+      			scope.season = season;
+      		})
+    		}
+    	
+	  		seasonService.getSeasons().then(function(seasons){
+	  			scope.seasons = seasons})
     		scope.hidelabel = attrs.hasOwnProperty("hidelabel");
     		scope.selectstyle = attrs.hasOwnProperty("toolstyle") ? {background:"inherit",border:"none",color:"inherit"}:{};
     		scope.containerstyle = attrs.hasOwnProperty("toolstyle") ? {padding:"0",paddingBottom:".45em",paddingLeft:".25em"}:{}

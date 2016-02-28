@@ -60,8 +60,8 @@
 
 
 	
-	mainApp.controller('ResultsSubmitController', [ '$scope', 'viewService',
-			'$mdDialog', function($scope, viewService, $mdDialog) {
+	mainApp.controller('ResultsSubmitController', [ '$scope', 'viewService','seasonService',
+			'$mdDialog', function($scope, viewService, seasonService,$mdDialog) {
 
 				$scope.fixturesForEmail = function(email) {
 
@@ -69,9 +69,11 @@
 					
 					$scope.preSubmission = null
 					
-					viewService.view("results-for-submission", {
+					seasonService.getGlobal().then(function(global){					
+						$scope.global = global
+						viewService.view("results-for-submission", {
 						email : email,
-						seasonId : $scope.global.currentSeasonId,
+						seasonId : global.currentSeasonId,
 						isArray : false}, function(presub){
 							
 							$scope.results = angular.copy(presub.results).map(function(result){
@@ -82,7 +84,9 @@
 							$scope.preSubmission = presub
 							
 						}						
-					);
+					);})
+					
+
 				};
 				
 				$scope.$watch("email",$scope.fixturesForEmail);

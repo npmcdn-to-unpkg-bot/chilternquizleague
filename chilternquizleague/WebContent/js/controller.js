@@ -171,40 +171,84 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 						
 					};
 					return service;
-				}]);
+				}])
+				;
+
+mainApp.factory("seasonService", ["viewService","$rootScope",function(viewService, $rootScope){
+	
+	var service = {
+			seasons : [],
+			season : null,
+			global : null
+	}
+	service.getGlobal = function(){
+				var promise = new Promise(function(resolve, reject){
+					if(service.global){
+						resolve(service.global)
+					}
+					else
+					{
+						service.global = viewService.view("globaldata",{}, function(global){
+							resolve(global)})
+					}
+				})
+				
+				return promise;
+			}
+			
+	service.getSeasons = function(){
+				var promise = new Promise(function(resolve, reject){
+					if(service.seasons.length > 0){
+						resolve(service.seasons)
+					}
+					else{
+						service.seasons = viewService.list("season-views", function(seasons){
+							resolve(seasons)
+						});
+					}
+				})
+				
+				return promise
+			}
+			
+	service.getSeason = function(){
+				var promise = new Promise(function(resolve, reject){
+					if(service.season){
+						resolve(service.season)
+					}
+					else{
+						service.getGlobal().then(function(global){
+							service.getSeasons().then(function(seasons){
+								service.season = seasons.reduce(function(prev,curr){
+									return prev ? prev : (curr.id == global.currentSeasonId ? curr : null)},null)
+								resolve(service.season)
+							})
+						})
+					}
+					
+					
+				})
+				return promise
+			}
 
 
+	return service
+}]
+		)
 
-mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService',
-		function($rootScope, $state, $stateParams, $mdDialog, viewService) {
+mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService','seasonService',
+		function($rootScope, $state, $stateParams, $mdDialog, viewService, seasonService) {
 
 			$rootScope.$state = $state;
 			$rootScope.$stateParams = $stateParams;
 
+			seasonService.getGlobal().then(function(global){$rootScope.global = global})
+			
 			$rootScope.closeDialog = function(){
 				
 				$mdDialog.hide();
 			};
 
-			$rootScope.global = viewService.view("globaldata");
-			
-			$rootScope.seasons = viewService.list("season-views");
-			
-			var dereg = $rootScope.$watchGroup(["global.currentSeasonId","seasons.length"], function(){
-				
-				if($rootScope.global.currentSeasonId && $rootScope.seasons.length > 1){
-					
-					for(idx in $rootScope.seasons){
-						if($rootScope.seasons[idx].id == $rootScope.global.currentSeasonId){
-							$rootScope.global.currentSeason = $rootScope.seasons[idx];
-							dereg();
-							break;
-						}
-					}
-
-				}
-			});
-			
 			$rootScope.showInfo = function($event,content){
 				
 				$mdDialog.show(

@@ -7,14 +7,14 @@ function listControllerFactory(type, otherFunctions) {
 
 	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
 	var listName = type + "s";
-	return function($scope, $interval, viewService, $location, $stateParams, $sce) {
+	return function($scope, $interval, viewService, seasonService ,$location, $stateParams, $sce) {
 
 		$scope["set" + camelName] = function(item) {
 			$scope[type] = item;
 		};
 
 
-		otherFunctions ? otherFunctions($scope, $interval, viewService,
+		otherFunctions ? otherFunctions($scope, $interval, viewService, seasonService,
 				$location, $stateParams, $sce) : null;
 
 		viewService

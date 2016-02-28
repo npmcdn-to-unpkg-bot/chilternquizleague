@@ -85,17 +85,15 @@
 
 	} ]);
 
-	function extraStuff($scope, $interval, viewService, $location, $stateParams) {
+	function extraStuff($scope, $interval, viewService, seasonService, $location, $stateParams) {
 
 		$scope.copyToClipboard = function(text){
 			clipboard.copy(document.baseURI + "calendar/" + text);
 		}
 		
-		$scope.season = {};
-		
-		$scope.$watch("global.currentSeason", function(currentSeason) {
-			$scope.season = currentSeason;
-		});
+		$scope.season = {}
+		seasonService.getSeason().then(function(season){$scope.season = season})
+				
 	}
 
 	mainApp.controller('FindTeams', [ '$scope', 'viewService',
@@ -104,7 +102,7 @@
 			} ]);
 
 	mainApp.controller('TeamsController', [ '$scope', '$interval',
-			'viewService', '$location', '$stateParams',
+			'viewService', 'seasonService','$location', '$stateParams',
 			 listControllerFactory("team", extraStuff)]);
 
 	mainApp.controller('TeamController', [ '$scope', 
