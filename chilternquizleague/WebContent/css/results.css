@@ -73,10 +73,26 @@
 }
 
 .results-table{
-	border-spacing:0;
+	border-collapse: collapse;
 }
 
+.results-table th,td {
+	border: none;
+	outline:none;
+	border-spacing: 0;
 
+}
+
+#.stripe1 tr:nth-of-type(4n-2){
+  background:rgba(0,0,0,0.05);
+}
+
+.stripe2 tr:nth-of-type(4n-2){
+  background:rgba(0,0,0,0.05);
+}
+.stripe2 tr:nth-of-type(4n-3){
+  background:rgba(0,0,0,0.05);
+}
 
 .results-table .winner{
 	color:darkred;
@@ -88,12 +104,6 @@
 	text-align: left;
 }
 
-.header-highlight .results-table>thead>tr>th{
-	
-	background: #c1dff8;
-	border-radius: .5em;
-	padding:.25em;
-}
 
 .no-header .results-table>section>.md-subheader{
  	display:none;
