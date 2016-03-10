@@ -604,7 +604,7 @@ DESCRIPTION:$text
 SUMMARY:$text
 DTSTART:${dateFormat.format(fixture.start)}
 DTEND:${dateFormat.format(fixture.end)}
-LOCATION:${fixture.home.name},$address
+LOCATION:${fixture.home.venue.name},$address
 END:VEVENT
 """
 

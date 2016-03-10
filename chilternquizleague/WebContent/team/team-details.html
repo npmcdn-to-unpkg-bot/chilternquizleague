@@ -27,8 +27,8 @@
 			<cql-fixtures type="'inline-header'" rows="5" fixtures="team.extras.fixtures"></cql-fixtures> 
 			<div  class="md-toolbar-tools">
 				<md-button class="md-primary" ng-href="/teams/{{team.id}}/fixtures">Show all</md-button>
-				<md-button class="md-primary" download="calendar.ics" href="calendar/team/{{team.id}}/calendar.ics" target="_blank">Download Calendar</md-button>
-				<md-button ng-click="copyToClipboard(team.id)">Copy Calendar URL<md-tooltip>Import into your calendar application</md-tooltip></md-button>
+				<md-button class="md-primary" download="fixtures.ics" href="calendar/team/{{team.id}}/calendar.ics" target="_blank">Download Calendar</md-button>
+				<md-button ng-click="copyToClipboard('team/' + team.id)">Copy Calendar URL<md-tooltip>Import into your calendar application</md-tooltip></md-button>
 			</div>
 			</md-card-content>
 		</md-card>
