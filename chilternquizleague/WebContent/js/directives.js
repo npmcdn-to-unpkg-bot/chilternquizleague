@@ -114,7 +114,7 @@ mainApp.directive('cqlLeagueTable', function() {
     };
   });
 
-mainApp.directive('cqlSeasons', ["viewService","seasonService",function(viewService, seasonService) {
+mainApp.directive('cqlSeasons', ["viewService","seasonService","$rootScope",function(viewService, seasonService, $rootScope) {
     return {
     	scope:{season:"="},
     	restrict:'E',
@@ -133,6 +133,9 @@ mainApp.directive('cqlSeasons', ["viewService","seasonService",function(viewServ
     		scope.selectstyle = attrs.hasOwnProperty("toolstyle") ? {background:"inherit",border:"none",color:"inherit"}:{};
     		scope.containerstyle = attrs.hasOwnProperty("toolstyle") ? {padding:"0",paddingBottom:".45em",paddingLeft:".25em"}:{}
     		scope.toolclass = attrs.hasOwnProperty("toolstyle") ?"tool" : ""
+    		if(attrs.hasOwnProperty("broadcast")){
+    			scope.$watch("season", function(season){$rootScope.$broadcast("season",season)})
+    		}
      	},
     	templateUrl:'/common/season-dropdown.html'
     	

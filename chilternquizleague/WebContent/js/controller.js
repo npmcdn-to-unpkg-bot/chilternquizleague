@@ -7,24 +7,27 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 						return doLoad(type, params, callback, isArray);
 					}
 
+
 					function doLoad(type, params, callback, isArray) {
-						
-						$rootScope.$broadcast("progress", true);
-						
+							
 						var retval = isArray ? [] : {};
 						
-						function callbackWrapper(item){
-							
-							callback && item ? callback(item):null;
-							angular.copy(item,retval);
-							
-							$rootScope.$broadcast("progress", false);
-
+						function callbackWrapper(response){
+							$rootScope.$broadcast("progress", true);
+							try
+							{
+								var item = response.data
+								callback && item ? callback(item):null;
+								angular.copy(item,retval);
+							}
+							finally{
+								$rootScope.$broadcast("progress", false);
+							}
 						}
 						
 						$http.get("/view/" + type, {
 							"responseType" : "json","params":params
-						}).success(callbackWrapper);
+						}).then(callbackWrapper);
 						
 						return retval;
 					}
@@ -56,7 +59,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 						},
 
 						post : function(type, payload, callback) {
-							return $http.post("/view/" + type, payload).success(callback);
+							return $http.post("/view/" + type, payload).then(function(response){callback && callback(response.data)});
 						},
 						
 						text : function(name) {
@@ -102,9 +105,9 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 						
 						var retval = isArray ? [] : {};
 						
-						function callbackWrapper(payload){
+						function callbackWrapper(response){
 							
-							var item = decrypt(session.password,payload.text)
+							var item = decrypt(session.password,response.data.text)
 							
 							callback && item ? callback(item):null;
 							angular.copy(item,retval);
@@ -116,7 +119,7 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 						params.sessionId = session.id
 						
 						$http.get("/secure/" + type, {
-							"responseType" : "json","params":params}).success(callbackWrapper);
+							"responseType" : "json","params":params}).then(callbackWrapper);
 						
 						return retval;
 					}
@@ -151,18 +154,18 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 							
 							return $http.post("/secure/" + type, {
 								"text":encrypt(session.password,payload)
-								}).success(
-									function(payload){
-										var res = decrypt(session.password,payload.text)
+								}).then(
+									function(response){
+										var res = decrypt(session.password,response.data.text)
 										callback(res)
 									}
 									
 									);
 						},
 						logon : function(password, email, callback){
-							$http.post("/secure/logon", {"text":encrypt(password,{"email":email,"password":password})}).success(function(payload){
+							$http.post("/secure/logon", {"text":encrypt(password,{"email":email,"password":password})}).then(function(response){
 
-								var res = decrypt(password,payload.text)
+								var res = decrypt(password,response.data.text)
 								session = res
 								callback(res.teamId)
 								
