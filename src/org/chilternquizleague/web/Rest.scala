@@ -41,7 +41,6 @@ import com.fasterxml.jackson.core.io.SerializedString
 import com.fasterxml.jackson.databind.JsonNode
 import java.io.IOException
 import java.io.StringWriter
-import com.google.api.client.util.StringUtils
 import org.apache.commons.io.IOUtils
 import org.chilternquizleague.util.JacksonUtils
 import org.chilternquizleague.util.JacksonUtils.ObjectMapperImprovements
@@ -442,7 +441,6 @@ class SecureService extends EntityService {
   import javax.crypto.spec._
   import javax.crypto._
   import java.security._
-  import com.google.api.client.util._
   import javax.script._
   import org.chilternquizleague.util.UserUtils._
   import org.chilternquizleague.util.Crypto

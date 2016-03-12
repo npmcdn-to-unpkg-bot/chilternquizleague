@@ -12,7 +12,6 @@ import org.chilternquizleague.domain.util.RefUtils._
 import com.google.appengine.api.taskqueue.Queue
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
-import com.google.gson.Gson
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.chilternquizleague.util.JacksonUtils
 
