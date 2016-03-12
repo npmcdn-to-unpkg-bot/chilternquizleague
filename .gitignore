@@ -1,0 +1,5 @@
+/build
+/.cache
+/.cache-main
+/.google_apis/
+/.externalToolBuilders

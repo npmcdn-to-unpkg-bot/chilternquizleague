@@ -1,0 +1,198 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic);
+html,body {
+	margin: 0;
+	height: 100%;
+	font-size: medium;
+
+}
+
+body {
+	padding-left: .25em;
+	padding-top: .25em;
+	overflow-x:hidden;
+}
+
+.fix-text > p {
+	line-height: initial;
+}
+
+md-sidenav{
+	margin-right:1em;
+}
+
+section{
+	margin-top:.25em;
+	margin-bottom:.25em;
+}
+
+
+.highlit-border{
+	box-shadow: .063em .063em .125em .031em #c1dff8, -.063em -.063em .125em
+		.031em #c1dff8, -.063em .063em .125em .031em #c1dff8, .063em -.063em
+		.125em .031em #c1dff8, .063em .063em .125em .031em #c1dff8 inset, -.063em
+		-.063em .125em .031em #c1dff8 inset, -.063em .063em .125em .031em #c1dff8
+		inset, .063em -.063em .125em .031em #c1dff8 inset;
+	transition: all .5s ease-in;
+	z-index:1;
+}
+.highlit-border > div{
+	overflow: hidden;
+	height:1.5em;
+	transition:all .5s ease-in;
+}
+
+.lowlit-border > div{
+	overflow: hidden;
+	height:0;
+	transition:all .5s ease-in;
+}
+
+.lowlit-border a:hover ~div{
+
+	overflow: hidden;
+	height:1.5em;
+	transition:all .5s ease-in;
+
+}
+
+.highlit-border > div.ng-enter, .highlit-border > div.ng-move {
+  transition:all 0.5s ease-in;
+  height:0;
+ }
+ 
+ .highlit-border> div.ng-enter.ng-enter-active,
+.highlit-border> div.ng-move.ng-move-active {
+  height:1.5em;
+ }
+ 
+@-webkit-keyframes my_animation {
+  from { height:1.5em; }
+  to { height:0; }
+}
+
+@keyframes my_animation {
+  from { height:1.5em; }
+  to { height:0; }
+}
+
+
+/*
+  We're using CSS keyframe animations for when
+  the leave event is triggered for the element
+  that has the .repeated-item class
+*/
+.highlit-border> div.ng-leave {
+  -webkit-animation:0.5s my_animation;
+  animation:0.5s my_animation;
+
+}
+ 
+ 
+ 
+.standard-margins {
+	margin-left: .25em;
+	margin-top: .25em;
+	padding: .125em;
+}
+
+
+.page-header{
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 150% !important;
+		text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
+	20px rgb(63,81,181), 0 0 30px rgb(63,81,181), 0 0 40px rgb(63,81,181), 0 0 50px rgb(63,81,181) !important;
+	color: darkblue !important;
+
+	transition:all 1s ease-out;
+}
+
+.page-header-small{
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 100% !important;
+	color: white !important;
+	transition:all 1s ease-out;
+}
+
+.page-header:hover {
+	
+	color: white !important;
+	
+}
+
+
+
+.selected {
+	padding-left:.25em;
+	min-height:1.5em;
+	background: #c1dff8;
+	border-radius: .375em;
+	transition: all 1s ease-in;
+}
+
+.unselected {
+	padding-left:.25em;
+	min-height:1.5em;
+	border-radius: .375em;
+	transition: all 1s ease-out;
+}
+
+
+.title-text{
+	color: darkblue;
+	font-weight: 700;
+}
+
+
+.top-bar {
+	box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+	margin-bottom:6px;
+
+}
+
+.full-content{
+	 max-height:calc(100vh - 112px);
+	 overflow-x:hidden;
+}
+
+@media screen and (max-width: 960px) {
+    .full-content {
+        max-height:calc(100vh - 64px);
+    }
+}
+
+body > div:first-child > div{
+	
+	overflow:visible;
+}
+
+.chart-legend {
+  list-style-type: none;
+  padding-left: 0;
+}
+.chart-legend li {
+  display: block;
+  float: left;
+  clear:both;
+  padding:.125em;
+  font-size: small;
+}
+.chart-legend li span {
+  width:1em;
+  height:1em;
+  display:block;
+  float:left;
+  margin-right:.5em;
+  border-radius:.25em;
+}
+
+.menu-item.menu-title {
+	margin:0 0 0 0;
+}
+
+.md-button.slim-button{
+	min-width:0;
+	min-height:0;
+	margin:0;
+}
+
+

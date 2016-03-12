@@ -1,0 +1,38 @@
+<div flex ng-controller="TeamController" itemscope itemtype="http://schema.org/SportsTeam">
+	<md-subheader hide-gt-xs class="md-primary">{{team.name}}</md-subheader>
+	<div ng-controller="TeamExtrasController" layout="column">
+		<md-card hide-xs ng-if="team.extras.text"><md-card-content class="fix-text"
+			ng-bind-html="team.extras.text | htmlify"></md-card-content></md-card>
+		<md-card>
+			<md-card-content>
+			<md-list ng-if="team.extras.positions.length > 0">
+			<md-subheader class="md-accent" >Standings:</md-subheader>
+			<md-list-content class="md-1-line" ng-repeat="position in team.extras.positions">
+			<div class="md-list-item-text" >
+			<p>{{position }}</p>
+			</div>
+			</md-list-content>
+			</md-list>
+			<md-subheader class="md-accent" >Last few results:</md-subheader>
+			<cql-results type="'inline-header'" rows="5" results="team.extras.results"></cql-results>
+			<div class="md-toolbar-tools">
+				<md-button class="md-primary" ng-href="/teams/{{team.id}}/results">Show all</md-button>
+				<md-button class="md-primary" ng-href="/teams/{{team.id}}/charts">Graphs & Stats</md-button>
+			</div>
+			</md-card-content>
+		</md-card>
+		<md-card>
+			<md-card-content>
+			<md-subheader class="md-accent">Next few fixtures:</md-subheader>
+			<cql-fixtures type="'inline-header'" rows="5" fixtures="team.extras.fixtures"></cql-fixtures> 
+			<div  class="md-toolbar-tools">
+				<md-button class="md-primary" ng-href="/teams/{{team.id}}/fixtures">Show all</md-button>
+				<md-button class="md-primary" download="fixtures.ics" href="calendar/team/{{team.id}}/calendar.ics" target="_blank">Download Calendar</md-button>
+				<md-button ng-click="copyToClipboard('team/' + team.id)">Copy Calendar URL<md-tooltip>Import into your calendar application</md-tooltip></md-button>
+			</div>
+			</md-card-content>
+		</md-card>
+	</div>
+</div>
+
+

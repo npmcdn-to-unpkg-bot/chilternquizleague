@@ -1,0 +1,30 @@
+<div>
+	<md-subheader class="md-primary">Individual Competition Details</md-subheader>
+	<form>
+		<div layout="column">
+		<md-input-container>
+			<label>Description</label>
+			<input ng-model="competition.description">
+		</md-input-container>
+		<md-input-container>
+		<label>Venue</label>
+		<md-select ng-model="competition.event.venue" placeholder="Venue"  ng-model-options="{trackBy: '$value.id'}" required>
+			<md-option ng-value="venue" ng-repeat="venue in venues" >{{venue.name}}</md-option>
+		</md-select>
+		</md-input-container>
+		<div layout-gt-sm="row" layout="column" layout-align-gt-md="start center" layout-align="start start">
+			<md-input-container> <label>Start</label> <input
+				ng-model="competition.event.start" type="datetime-local"> </md-input-container>
+			<md-input-container> <label>End</label> <input
+				ng-model="competition.event.end" type="datetime-local"> </md-input-container>
+		</div>
+		<md-subheader>Text</md-subheader>
+		<textarea ui-tinymce="tinymceOptions" ng-model="competition.text" cols="60"
+							rows="15" ></textarea>
+		</div>
+		<md-button ng-click="resetCompetition()">Reset</md-button>
+		<md-button  ng-if="!competition.id" class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
+		<md-button ng-if="competition.id" class="md-primary" ng-click="saveCompetition(competition)">Save and Close</md-button>
+
+	</form>
+</div>

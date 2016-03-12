@@ -1,0 +1,6 @@
+<md-card ng-controller="CompetitionAllResults">
+	<md-subheader>Remaining Fixtures - {{competition.description}}</md-subheader>
+	<md-card-content ng-controller="FixturesTable">
+	<cql-fixtures type="'full-header'" fixtures="fixtures" ></cql-fixtures>
+	</md-card-content>
+</md-card>

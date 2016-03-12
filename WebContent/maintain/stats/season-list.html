@@ -1,0 +1,8 @@
+<div ng-controller="SeasonListCtrl">
+	<md-subheader class="md-primary">Statistics</md-subheader>
+	<md-list>
+		<md-list-item ng-repeat="season in seasons | orderBy:'startYear':true">
+			<md-list-item-content><md-button href="/maintain/stats/{{season.id}}">{{season.startYear}}/{{season.endYear}}</md-button></md-list-item-content>
+		</md-list-item>
+	</md-list>
+</div>

@@ -1,0 +1,63 @@
+<div class="results-table" ng-switch="type" ng-class="type">
+	<table ng-switch-when="inline-header" cellspacing="0">
+		<tbody hide-xs class="stripe1">
+			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount"></tr>
+			<tr ng-repeat-end>
+				<td class="inline-header-cell" ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" >{{::resultSet.date | date:'d MMMM yyyy'}} : {{::resultSet.description}}</span></td>
+				<td class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{::result.fixture.home.shortName}}</td>
+				<td class="numeric">{{::result.homeScore}}</td>
+				<td>-</td>
+				<td class="left-align">{{::result.awayScore}}</td>
+				<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
+				<td ng-if="result.hasReports" class="row-annotation"><md-button class="md-icon-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
+				<td ng-if="result.note != null && result.note != ''"><md-button class="md-mini md-warn md-fab" ng-click="showInfo($event,result.note)"><span>N</span></md-button><span hide-sm>{{result.note}}</span></td>
+				<td ng-repeat-end></td>
+			</tr>
+		</tbody>
+		<tbody hide-gt-xs class="stripe2">
+			<tr ng-repeat-start="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
+				<td class="inline-header-cell" colspan="7">{{::resultSet.date | date:'d MMMM yyyy'}} : {{::resultSet.description}}</td>
+			</tr>
+			<tr  ng-repeat-end>
+				<td ng-repeat-start="result in resultSet.results | orderBy :'result.home.shortName'" class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{::result.fixture.home.shortName}}</td>
+				<td class="numeric">{{::result.homeScore}}</td>
+				<td>-</td>
+				<td class="left-align">{{::result.awayScore}}</td>
+				<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
+				<td ng-if="result.hasReports" class="row-annotation"><md-button class="md-icon-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
+				<td ng-if="result.note != null && result.note != ''"><md-button class="md-mini md-warn md-fab" ng-click="showInfo($event,result.note)"><span>N</span></md-button><span hide-sm>{{result.note}}</span></td>
+				<td ng-repeat-end></td>
+			</tr>
+		</tbody>
+	</table>
+	<section ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
+
+		<md-subheader ng-if="type='full-header'" class="full-header">
+			<a id="f{{::resultSet.date}}"></a>{{::resultSet.date
+				| date:'dd MMMM yyyy'}} : {{::resultSet.description}}
+		</md-subheader>
+
+		<md-subheader ng-if="type='comp-header'" class="comp-header">
+			{{::resultSet.description}}
+		</md-subheader>
+
+		<md-subheader ng-if="type='date-header'" class="date-header" >
+			{{::resultSet.date | date:'dd MMMM yyyy'}}
+		</md-subheader>
+
+		<table>
+			<tbody>
+				<tr	ng-repeat="result in resultSet.results | orderBy :'fixture.home.shortName'">
+					<td class="home-team" ng-class="result.homeScore > result.awayScore ? 'winner':''">{{::result.fixture.home.shortName}}</td>
+					<td class="numeric">{{::result.homeScore}}</td>
+					<td>-</td>
+					<td class="left-align">{{::result.awayScore}}</td>
+					<td class="away-team" ng-class="result.awayScore > result.homeScore ? 'winner':''">{{::result.fixture.away.shortName}}</td>
+					<td ng-if="result.hasReports" class="row-annotation"><md-button class="md-icon-button" aria-label="match reports" ng-click="showReports($event,resultSet,result)"><md-icon md-svg-src="/images/icons/ic_comment.svg" style="width: 24px; height: 24px;"></md-icon><md-tooltip hide show-gt-md>Show match reports</md-tooltip></md-button></td>
+					<td ng-if="result.note != null && result.note != ''"><md-button class="md-mini md-warn md-fab" ng-click="showInfo($event,result.note)"><span>N</span></md-button><span hide-sm>{{result.note}}</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+</div>
+

@@ -1,0 +1,29 @@
+<div ng-controller="TeamCharts">
+
+<md-card>
+<md-card-content>
+<cql-seasons season="season"></cql-seasons>
+<md-subheader class="md-accent">Graphs and Statistics</md-subheader>
+<div layout="row" layout-xs="column" layout-align="space-around">
+	<div>
+		<md-subheader class=" md-no-sticky">League Position</md-subheader>
+		<div><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" height="300" ></canvas></div>
+	</div> 
+	<div>
+		<md-subheader  class=" md-no-sticky">Match Points</md-subheader>
+		<div layout="row" layout-xs="column"><canvas tc-chartjs-line chart-options="options" chart-data="pointsData" auto-legend height="300"></canvas></div>
+	</div>
+</div>
+<div layout="row" layout-xs="column" layout-align="space-around">
+	<div>
+		<md-subheader  class=" md-no-sticky">Cumulative Match Points Difference</md-subheader>
+		<div><canvas tc-chartjs-line chart-options="differenceOptions" chart-data="cumPointsDifferenceData" height="300"></canvas></div>
+	</div>
+	<div>
+		<md-subheader  class=" md-no-sticky">Cumulative Match Points</md-subheader>
+		<div layout="row" layout-xs="column"><canvas auto-legend tc-chartjs-line chart-options="options" chart-data="cumPointsData" height="300"></canvas></div>
+	</div>
+</div>
+</md-card-content>
+</md-card>
+</div>

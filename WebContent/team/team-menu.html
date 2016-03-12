@@ -1,0 +1,32 @@
+<div>
+<cql-title-bar page-menu>
+	<span hide-xs>{{team.name}}</span><span hide-gt-xs>{{team.shortName}}</span>
+	<span hide-xs layout="row" style="margin-left:.5em;padding-bottom:5px;">
+		<md-button class="md-icon-button" aria-label="contact us"
+			ng-click="showContactForm(team.name,team.emailName)" > <md-icon
+			md-svg-src="/images/icons/ic_email.svg" ></md-icon> <md-tooltip>Contact
+		Us!</md-tooltip></md-button>			
+		<md-button class="md-icon-button" aria-label="go to venue"
+			ng-href="/venues/{{team.venue.id}}"> <md-icon
+			md-svg-src="/images/icons/ic_location_on.svg" ></md-icon> <md-tooltip>Venue</md-tooltip></md-button>
+	</span>
+</cql-title-bar>
+
+<div hide-gt-xs style="top: 0;
+  height: 160px;
+  position: absolute;
+  right: 0;
+  width: 94px; margin-top:50px;">
+	<div><md-button class="md-primary md-hue-1 md-fab md-fab-top-right" aria-label="contact us"
+			ng-click="showContactForm(team.name,team.emailName)"> <md-icon
+			md-svg-src="/images/icons/ic_email.svg" style="width: 24px; height: 24px;"></md-icon> <md-tooltip>Contact
+		Us!</md-tooltip></md-button></div>
+		<div >	
+		<md-button class="md-primary md-hue-1 md-fab md-fab-bottom-right" style="bottom:.125em;" aria-label="go to venue"
+			ng-href="/venues/{{team.venue.id}}"> <md-icon
+			md-svg-src="/images/icons/ic_location_on.svg" style="width: 24px; height: 24px;"></md-icon> <md-tooltip>Venue</md-tooltip></md-button></div>
+</div>
+</div>
+
+
+

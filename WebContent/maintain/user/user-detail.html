@@ -1,0 +1,17 @@
+<div ng-controller="UserDetailCtrl">
+	<md-subheader class="md-primary">User Details</md-subheader>
+	<form>
+		<md-input-container>
+			<label>Name</label>
+			<input ng-model="user.name" required>
+		</md-input-container>
+		<md-input-container>
+			<label>email</label>
+			<input type="email" ng-model="user.email" ng-change="user.name=user.email" required>
+		</md-input-container>
+		
+		<md-button ng-click="resetUser()">Reset</md-button>
+		<md-button class="md-primary" ng-click="updateUser(user)">Save</md-button>
+
+	</form>
+</div>

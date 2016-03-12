@@ -1,0 +1,8 @@
+<md-card ng-controller="CompetitionAllResults">
+	<md-subheader>All Results - {{competition.description}}</md-subheader>
+	<md-card-content ng-controller="CompetitionResultsTable">
+	<section>
+		<cql-results type="'full-header'"  results="results" ></cql-results>
+	</section>
+	</md-card-content>
+</md-card>

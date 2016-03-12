@@ -1,0 +1,31 @@
+<div layout="column" ng-controller="VenueController">
+	<md-card>
+	<md-card-content>
+	<md-subheader class="md-primary">{{venue.name}}</md-subheader>
+	<div flex layout-gt-sm="row" layout="column">
+		<div flex layout="column" >
+			<div class="venue-address"
+				ng-bind-html="venue.address | lineBreaks | htmlify">
+			</div>
+			<div ng-if="venue.address">
+			<iframe hide-xs ng-src='{{embeddedUrl}}' width="400" height="300" frameborder="0" style="border:0"></iframe>
+			<a hide-gt-xs ng-href="{{linkUrl}}" target="_blank">map</a>
+			</div>
+			
+			<div>
+				Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>
+			</div>
+			<div>
+				email : <a href="mailto:{{venue.email}}">{{venue.email}}</a>
+			</div>
+			<div>phone : {{venue.phone}}</div>
+		</div>
+		<div ng-if="venue.imageURL" hide-xs >
+			<div>
+				<img alt="" ng-src="{{venue.imageURL}}">
+			</div>
+		</div>
+	</div>
+	</md-card-content>
+	</md-card>
+</div>

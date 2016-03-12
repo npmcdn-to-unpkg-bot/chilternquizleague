@@ -1,0 +1,38 @@
+<div flex ng-controller="TeamDetailCtrl">
+	<md-subheader class="md-primary">Team Details</md-subheader>
+	<form>
+		<div layout="row" layout-sm="column" layout-align="space-between">
+			<div layout="column">
+				<md-input-container> <label>Name</label> <input
+					ng-model="team.name" required maxlength="30"> </md-input-container>
+				<md-input-container> <label>Short Name</label>
+				<input ng-model="team.shortName" required maxlength="13"> </md-input-container>
+				
+
+				<md-input-container>
+				
+				<md-select ng-model="team.venue" placeholder="Venue" ng-change="team.name=team.venue.name" ng-model-options="{trackBy: '$value.id'}" required>
+					<md-option ng-value="venue" ng-repeat="venue in venues" >{{venue.name}}</md-option>
+				</md-select>
+				</md-input-container>
+				<md-checkbox ng-model="team.retired">Retired</md-checkbox>
+
+				<div>
+					<md-subheader>Users</md-subheader>
+					<md-contact-chips ng-model="team.users" md-contacts="matchUsers(users,$query)" md-contact-name="name" md-contact-email="email" placeholder="Users">
+					</md-contact-chips>
+				</div>
+			</div>
+			<div>
+				<md-input-container><label>Rubric</label><input type="hidden" ng-model="team.rubric.text"></md-input-container>
+				<textarea
+					ui-tinymce="tinymceOptions" cols="60" rows="15"
+					ng-model="team.rubric.text" ></textarea>
+			</div>
+		</div>
+
+
+		<md-button ng-click="resetTeam()">Reset</md-button>
+		<md-button class="md-primary" ng-click="updateTeam(team)">Save</md-button>
+	</form>
+</div>

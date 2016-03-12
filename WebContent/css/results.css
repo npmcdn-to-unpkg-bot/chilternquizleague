@@ -1,0 +1,169 @@
+@import url('/css/main.css');
+@import url('/css/standard-table.css');
+
+
+.league-table { 
+	padding-right:.125em;
+}
+
+
+
+.league-tables>div.header {
+	padding-left: .25em;
+	font-weight: 700;
+	margin-top:.5em;
+	margin-bottom: .75em;
+}
+
+
+.league-table .team-name {
+	min-width: 6em;
+}
+
+
+.league-table .league-table-description{
+	display:table-caption;
+	background: #c0c0c0;
+	border: medium solid #c0c0c0;
+	border-radius: .25em;
+	text-align:center;
+	margin-top:.5em;
+	margin-bottom:.25em;
+}
+
+
+.league-table .spacer{
+}
+
+.league-table .numeric{
+	min-width: 2em;
+}
+
+.league-table .team-btn{
+	line-height:normal;
+	margin-top:0;
+	margin-bottom:0;
+}
+
+.collapse .league-table .standard-table div>span.optional{
+   display:none;
+}
+
+.results:hover div{
+
+	overflow: hidden;
+	height:1.5em;
+	transition:all .5s ease-in;
+
+}
+.results > div{
+	overflow: hidden;
+	height:0;
+	transition:all .5s ease-in;
+}
+
+
+.results-table .numeric{
+	min-width:2em;
+	text-align:right;
+}
+.results-table .left-align{
+	text-align:left;
+	min-width:2em;
+}
+
+.results-table{
+	border-collapse: collapse;
+}
+
+.results-table th,td {
+	border: none;
+	outline:none;
+	border-spacing: 0;
+
+}
+
+#.stripe1 tr:nth-of-type(4n-2){
+  background:rgba(0,0,0,0.05);
+}
+
+.stripe2 tr:nth-of-type(4n-2){
+  background:rgba(0,0,0,0.05);
+}
+.stripe2 tr:nth-of-type(4n-3){
+  background:rgba(0,0,0,0.05);
+}
+
+.results-table .winner{
+	color:darkred;
+	font-weight:600;
+	
+}
+
+.header-left .results-table>thead>tr>th{
+	text-align: left;
+}
+
+
+.no-header .results-table>section>.md-subheader{
+ 	display:none;
+ }
+
+.date-header.results-table>section>.md-subheader:not(.date-header){
+	
+	display:none;
+}
+
+.comp-header.results-table>section>.md-subheader:not(.comp-header){
+	
+	display:none;
+}
+
+.full-header.results-table>section>.md-subheader:not(.full-header){
+	
+	display:none;
+}
+
+.results-table table td.inline-header-cell{
+ 	font-style: italic;
+ 	padding-right:.5em;
+ 	color:darkblue;
+ }
+ 
+
+
+
+.results-table>tbody>tr:hover{
+	
+	background-color:whitesmoke;
+	transition:background-color .2s ease-in;
+}
+
+.results-table>tbody>tr{
+	transition:background-color .2s ease-out;
+}
+.results-table>tbody>tr td{
+
+	border:none;
+}
+
+.results-table .row-annotation{
+	padding-left:.5em;
+}
+
+
+
+
+.home-team{
+	
+	text-align:right;
+	padding-right:.5em;
+
+}
+
+.away-team{
+	
+	text-align:left;
+	padding-left:.5em;
+
+}
