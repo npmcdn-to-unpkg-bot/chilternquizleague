@@ -11,7 +11,7 @@ mainApp.controller('LeagueTableController', [ '$scope', '$interval',
 					}
 					loadTable();
 					var p = $interval(loadTable, 30000, 60);
-					p["catch"](function() {
+					p.then(null,function() {
 						$interval.cancel(p);
 					});
 					

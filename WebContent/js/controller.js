@@ -6,17 +6,23 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 					function loadFromServer(type, params, callback, isArray) {
 						return doLoad(type, params, callback, isArray);
 					}
-
+					
+					function get(type, params){
+						
+						return $http.get("/view/" + type, {
+							"responseType" : "json","params":params
+						}).then(function(response){return response.data})
+						
+					}
 
 					function doLoad(type, params, callback, isArray) {
 							
 						var retval = isArray ? [] : {};
 						
-						function callbackWrapper(response){
-							$rootScope.$broadcast("progress", true);
+						function callbackWrapper(item){
+							
 							try
 							{
-								var item = response.data
 								callback && item ? callback(item):null;
 								angular.copy(item,retval);
 							}
@@ -24,10 +30,8 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 								$rootScope.$broadcast("progress", false);
 							}
 						}
-						
-						$http.get("/view/" + type, {
-							"responseType" : "json","params":params
-						}).then(callbackWrapper);
+						$rootScope.$broadcast("progress", true);
+						get(type,params).then(callbackWrapper);
 						
 						return retval;
 					}
@@ -39,6 +43,10 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 						load : function(type, id, callback) {
 
 							return doLoad(type, "/" + id, callback);
+						},
+						loadP : function(type, id) {
+
+							return get(type, "/" + id);
 						},
 
 						view : function(type, params, callback) {
@@ -52,10 +60,28 @@ var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','u
 
 							return loadFromServer(type, params, callback,isArray);
 						},
+						
+						viewP : function(type, params, callback) {
+
+							var isArray = false;
+							
+							if(params){
+								isArray = params.isArray;
+								delete params.isArray;
+							}
+
+							return get(type, params);
+						},
+
 
 						list : function(type, callback) {
 
 							return doLoad(type + "-list", "", callback, true);
+						},
+						
+						listP : function(type, callback) {
+
+							return get(type + "-list", "");
 						},
 
 						post : function(type, payload, callback) {
@@ -191,8 +217,7 @@ mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 					}
 					else
 					{
-						service.global = viewService.view("globaldata",{}, function(global){
-							resolve(global)})
+						viewService.viewP("globaldata",{}).then(function(global){return service.global = global},reject).then(resolve)
 					}
 				})
 				
@@ -205,9 +230,8 @@ mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 						resolve(service.seasons)
 					}
 					else{
-						service.seasons = viewService.list("season-views", function(seasons){
-							resolve(seasons)
-						});
+						viewService.listP("season-views", {}).then(function(seasons){
+							return service.seasons = seasons},reject).then(resolve);
 					}
 				})
 				
