@@ -1,0 +1,19 @@
+[0m[[0minfo[0m] [0mFull optimizing C:\Users\Dad\git\chilternquizleague\target\scala-2.10\chilternquizleague-root-project-opt.js[0m
+[0m[[0mdebug[0m] [0mLinker: Compute reachability: 671602 us[0m
+[0m[[0mdebug[0m] [0mLinker: Assemble LinkedClasses: 3281567 us[0m
+[0m[[0mdebug[0m] [0mBasic Linking: 3983956 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Batch mode: true[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Incremental part: 600385 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Optimizing 2071 methods.[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Optimizer part: 2989734 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: 3596291 us[0m
+[0m[[0mdebug[0m] [0mRefiner: Compute reachability: 13858342 us[0m
+[0m[[0mdebug[0m] [0mRefiner: Assemble LinkedClasses: 6235 us[0m
+[0m[[0mdebug[0m] [0mRefiner: 13866005 us[0m
+[0m[[0mdebug[0m] [0mEmitter: Class tree cache stats: reused: 0 -- invalidated: 35[0m
+[0m[[0mdebug[0m] [0mEmitter: Method tree cache stats: resued: 0 -- invalidated: 91[0m
+[0m[[0mdebug[0m] [0mEmitter (create Closure trees): 146027 us[0m
+[0m[[0minfo[0m] [0mClosure: 0 error(s), 0 warning(s)[0m
+[0m[[0mdebug[0m] [0mClosure: Compiler pass: 4918946 us[0m
+[0m[[0mdebug[0m] [0mClosure: Write result: 430630 us[0m
+[0m[[0mdebug[0m] [0mGlobal IR cache stats: reused: 49 -- invalidated: 0 -- trees read: 378[0m

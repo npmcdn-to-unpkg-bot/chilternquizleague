@@ -1,0 +1,16 @@
+[0m[[0minfo[0m] [0mFast optimizing C:\Users\Dad\git\chilternquizleague\target\scala-2.10\chilterquizleague-root-project-fastopt.js[0m
+[0m[[0mdebug[0m] [0mLinker: Compute reachability: 558215 us[0m
+[0m[[0mdebug[0m] [0mLinker: Assemble LinkedClasses: 693547 us[0m
+[0m[[0mdebug[0m] [0mBasic Linking: 1280847 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Batch mode: true[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Incremental part: 724220 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Optimizing 2076 methods.[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: Optimizer part: 2713609 us[0m
+[0m[[0mdebug[0m] [0mInc. optimizer: 3489891 us[0m
+[0m[[0mdebug[0m] [0mRefiner: Compute reachability: 1251536 us[0m
+[0m[[0mdebug[0m] [0mRefiner: Assemble LinkedClasses: 100149 us[0m
+[0m[[0mdebug[0m] [0mRefiner: 1357801 us[0m
+[0m[[0mdebug[0m] [0mEmitter: Class tree cache stats: reused: 0 -- invalidated: 38[0m
+[0m[[0mdebug[0m] [0mEmitter: Method tree cache stats: resued: 0 -- invalidated: 95[0m
+[0m[[0mdebug[0m] [0mEmitter (write output): 1099484 us[0m
+[0m[[0mdebug[0m] [0mGlobal IR cache stats: reused: 0 -- invalidated: 2 -- trees read: 379[0m
