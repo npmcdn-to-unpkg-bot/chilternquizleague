@@ -7,7 +7,9 @@
 				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="inline-header-cell">{{::fixtureSet.start | date:'d MMMM yyyy'}} : {{::fixtureSet.description}}</td>
 				<td class="home-team">{{::fixture.home.shortName}}</td>
 				<td>:</td>
-				<td ng-repeat-end class="away-team">{{::fixture.away.shortName}}</td>
+				<td class="away-team">{{::fixture.away.shortName}}</td>
+				<td ng-repeat-end ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span>Venue : <a href="/venue/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
+				
 			</tr>
 		</tbody>
 		<tbody hide-gt-xs class="stripe2">
@@ -15,9 +17,9 @@
 				<td colspan="6" class="inline-header-cell">{{::fixtureSet.start | date:'d MMMM yyyy'}} : {{::fixtureSet.description}}</td>
 			</tr>
 			<tr ng-repeat-end>
-				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="home-team">{{::fixture.home.shortName}}</td>
+				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="home-team">{{::fixture.home.shortName}} </td>
 				<td>:</td>
-				<td ng-repeat-end class="away-team">{{::fixture.away.shortName}}</td>
+				<td ng-repeat-end class="away-team">{{::fixture.away.shortName}} <span ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)">@ <a href="/venue/{{fixture.venue.id}}"> {{::fixture.venue.name}}</a></span></td>
 			</tr>
 		</tbody>
 	</table>
@@ -38,11 +40,16 @@
 
 		<table>
 			<tbody>
+				
 				<tr
-					ng-repeat="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
+					ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
 					<td class="home-team">{{::fixture.home.shortName}}</td>
 					<td>:</td>
 					<td class="away-team">{{::fixture.away.shortName}}</td>
+				</tr>
+				<tr  ng-repeat-end >
+					<td colspan="6" ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span>Venue : <a href="/venue/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
+
 				</tr>
 			</tbody>
 		</table>

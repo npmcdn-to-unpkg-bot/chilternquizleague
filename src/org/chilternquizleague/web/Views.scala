@@ -131,6 +131,7 @@ class FixtureView(fixture:Fixture){
   val end = fixture.end
   val home = TeamView(fixture.home)
   val away = TeamView(fixture.away)
+  val venue:Venue = fixture.venue
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)

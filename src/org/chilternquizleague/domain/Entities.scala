@@ -266,17 +266,19 @@ class Fixtures extends BaseEntity{
 class Event{
 
   var venue:Ref[Venue] = null
-  var start = new Date
-  var end = new Date
+  var start:Date = null
+  var end:Date = null
+  
+  def getVenue() = venue
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-class Fixture{
-  var start:Date = null
-	var end:Date = null
+class Fixture extends Event{
 	var home:Ref[Team] = null
 	var away:Ref[Team] = null
 	
+  override def getVenue = if (venue == null && home != null) home.get().venue else venue
+  
 	def same(other:Fixture) = (start sameDay other.start) && home.getKey().equivalent(other.home.getKey())
 }
 
