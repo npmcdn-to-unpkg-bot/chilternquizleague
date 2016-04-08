@@ -213,6 +213,11 @@ maintainApp
 					}
 
 
+					
+					$scope.$watch("fixture.home", function(home){if(home){
+						$scope.fixture.venue = home.venue};})
+					
+					
 					$scope.addFixture = function(fixture) {
 
 						fixture.start = $scope.fixtures.start;

@@ -28,6 +28,7 @@
 				<md-input-container> <label>End</label> <input
 					ng-model="fixtures.end" type="datetime-local"> </md-input-container>
 			</div>
+			<div layout="column">
 			<div layout-gt-md="row" layout="column" layout-align-gt-md="start center" layout-align="start start">
 
 				<md-input-container> <label>Home</label>
@@ -39,8 +40,14 @@
 						<md-option ng-value="team" ng-repeat="team in unusedTeams">{{team.name}}</md-option>
 					</md-select> 
 				</md-input-container>
-
+			</div>
+				<md-input-container> <label>Venue</label> 					
+				<md-select ng-model="fixture.venue" ng-model-options="{trackBy: '$value.id'}">
+						<md-option ng-value="venue" ng-repeat="venue in venues">{{venue.name}}</md-option>
+					</md-select> 
+				</md-input-container>
 				<md-button class="md-accent" ng-click="addFixture(fixture)">Add</md-button>
+
 			</div>
 			<div
 				ng-repeat="fixt in fixtures.fixtures | orderBy : 'home.shortName'"

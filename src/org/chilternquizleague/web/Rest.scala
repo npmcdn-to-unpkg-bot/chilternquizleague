@@ -593,7 +593,7 @@ END:VEVENT
       val dateFormat = new SimpleDateFormat(dateFormatString)
       val now = dateFormat.format(new Date())
       val uidPart = fixture.home.shortName.replaceAll("\\s", "") 
-      val address = fixture.home.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
+      val address = fixture.getVenue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
       s"""
 BEGIN:VEVENT
 DTSTAMP:$now
@@ -602,7 +602,7 @@ DESCRIPTION:$text
 SUMMARY:$text
 DTSTART:${dateFormat.format(fixture.start)}
 DTEND:${dateFormat.format(fixture.end)}
-LOCATION:${fixture.home.venue.name},$address
+LOCATION:${fixture.getVenue.name},$address
 END:VEVENT
 """
 
