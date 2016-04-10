@@ -21,5 +21,13 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 			}
 		}
 	}
+	
+}));
 
+maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, $routeParams,
+		$rootScope, $location) {
+	var seasonId = $routeParams.seasonId;
+	$scope.seasonId = seasonId;
+	makeListFn("venue")($scope, entityService);
+		
 }));

@@ -41,6 +41,10 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 		templateUrl:"/maintain/season/season-detail-contents.html",
 		url : '/maintain/seasons/:seasonId'}
 	)
+	.state('season.calendar', {
+		templateUrl : '/maintain/season/calendar.html',
+		url: "/maintain/seasons/:seasonId/calendar"}
+	)
 	.state('season.competition', {
 		templateUrl : '/maintain/competition/competition-container.html',
 		url: "/maintain/seasons/:seasonId/competition"}
