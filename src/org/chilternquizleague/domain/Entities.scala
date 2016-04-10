@@ -276,7 +276,7 @@ class Event{
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CalendarEvent extends Event{
-  val description = null
+  var description:String = null
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
