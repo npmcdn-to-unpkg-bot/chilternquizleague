@@ -8,6 +8,7 @@ import scala.annotation.meta.param
 import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.util.RefUtils._
 import java.util.Date
+import java.util.{ List => JList }
 
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -186,15 +187,17 @@ class MassMailRequest{
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-class EventView(description:String, start:Date, end:Date, venue:Venue = null)
+class EventView(val description:String, val start:Date, val end:Date, val venue:Venue = null)
+  
 object EventView{
   def apply(f:Fixtures) = new EventView(f.description, f.start, f.end)
   def apply(c:SingletonCompetition) = new EventView(c.description,c.event.start,c.event.end, c.event.venue)
   def apply(e:CalendarEvent) = new EventView(e.description,e.start,e.end,e.venue)
 }
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 class CalendarView(f:List[Fixtures], c:List[SingletonCompetition], e:List[CalendarEvent]){
-  val events = f.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_))
+  val events:JList[EventView] = f.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_))
 
  
   
