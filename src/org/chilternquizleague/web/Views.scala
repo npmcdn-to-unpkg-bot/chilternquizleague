@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import scala.annotation.meta.param
 import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.util.RefUtils._
+import org.chilternquizleague.util.DateUtils._
 import java.util.Date
 import java.util.{ List => JList }
 
@@ -197,8 +198,19 @@ object EventView{
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 class CalendarView(f:List[Fixtures], c:List[SingletonCompetition], e:List[CalendarEvent]){
-  val events:JList[EventView] = f.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_))
+  
+  val days:JList[CalendarDay] = eventDayMap(f.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_)))
 
- 
+  def eventDayMap(events:List[EventView]):List[CalendarDay] = {
+   
+    List() ++ (for{
+      d <- Set() ++ events.map(_.start.dateOnly)
+      e = events.filter(_.start.sameDay(d))
+    }
+    yield new CalendarDay(d,e))
+  }
   
 }
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class CalendarDay(val day:Date, val events:JList[EventView])
+
