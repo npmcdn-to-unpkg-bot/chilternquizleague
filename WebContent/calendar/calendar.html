@@ -10,7 +10,7 @@
            </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            <div layout="row" ng-repeat="event in day.events" layout-padding>
+            <div layout="row" layout-xs="column" ng-repeat="event in day.events" layout-padding>
             <span style="font-weight: bold;">{{event.description}}</span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
             <span ng-if="event.venue">Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
           	</div>
