@@ -21,6 +21,7 @@ object DateUtils{
   implicit class DateImprovements(val d:Date){
     
     def sameDay(other:Date) = DateUtils.sameDay(d,other)
+    def dateOnly() = format.parse(format.format(d))
     
   }
 }

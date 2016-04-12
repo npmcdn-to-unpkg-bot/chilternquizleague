@@ -158,6 +158,8 @@ class Season extends BaseEntity{
   @Stringify(classOf[CompetitionTypeStringifier])
   var competitions:JMap[CompetitionType, Ref[Competition]] = new HashMap
   
+  var calendar:JList[CalendarEvent] = new ArrayList
+  
   @Ignore
   lazy val description = s"$startYear / $endYear"
   
@@ -270,6 +272,11 @@ class Event{
   var end:Date = null
   
   def getVenue() = venue
+}
+
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class CalendarEvent extends Event{
+  var description:String = null
 }
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)

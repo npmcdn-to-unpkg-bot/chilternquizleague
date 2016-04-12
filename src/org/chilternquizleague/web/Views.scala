@@ -1,13 +1,15 @@
 package org.chilternquizleague.web
 
 import org.chilternquizleague.domain._
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.JsonIgnore
 import scala.annotation.meta.param
 import scala.collection.JavaConversions._
 import org.chilternquizleague.domain.util.RefUtils._
+import org.chilternquizleague.util.DateUtils._
+import java.util.Date
+import java.util.{ List => JList }
 
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -184,3 +186,31 @@ class MassMailRequest{
   var text:String = null
   var sender:String = null
 }
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class EventView(val description:String, val start:Date, val end:Date, val venue:Venue = null)
+  
+object EventView{
+  def apply(f:Fixtures) = new EventView(f.description, f.start, f.end)
+  def apply(c:SingletonCompetition) = new EventView(c.description,c.event.start,c.event.end, c.event.venue)
+  def apply(e:CalendarEvent) = new EventView(e.description,e.start,e.end,e.venue)
+}
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class CalendarView(f:List[Fixtures], c:List[SingletonCompetition], e:List[CalendarEvent]){
+  
+  val days:JList[CalendarDay] = eventDayMap(f.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_)))
+
+  def eventDayMap(events:List[EventView]):List[CalendarDay] = {
+   
+    List() ++ (for{
+      d <- Set() ++ events.map(_.start.dateOnly)
+      e = events.filter(_.start.sameDay(d))
+    }
+    yield new CalendarDay(d,e))
+  }
+  
+}
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+class CalendarDay(val day:Date, val events:JList[EventView])
+
