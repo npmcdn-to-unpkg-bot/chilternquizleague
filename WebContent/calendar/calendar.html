@@ -1,0 +1,21 @@
+<div layout="column" layout-fill ng-controller="CalendarController">
+	<cql-title-bar md-theme="amber">Calendar</cql-title-bar>
+	<md-content class="full-content" >
+	    <div layout="column" flex-xs flex-gt-xs="50">
+	    <md-card ng-repeat="day in calendar.days|orderBy:'day'" >
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{day.day | date:'EEEE dd MMMM yyyy'}}</span>
+            
+           </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row" ng-repeat="event in day.events" layout-padding>
+            <span style="font-weight: bold;">{{event.description}}</span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+            <span ng-if="event.venue">Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+          	</div>
+        </md-card-content>
+      </md-card>
+      </div>
+	</md-content>
+</div>
