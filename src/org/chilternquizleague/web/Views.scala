@@ -188,12 +188,15 @@ class MassMailRequest{
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-class EventView(val description:String, val start:Date, val end:Date, val venue:Venue = null)
-  
+abstract class EventView(val description:String, val start:Date, val end:Date,  val eventType:String, val venue:Venue = null)
+class CompetitionEventView(description:String, start:Date, end:Date, val compType:String, venue:Venue) extends EventView(description,start,end, "singleton", venue)
+class FixturesEventView(description:String, start:Date, end:Date, val compType:String, val fixturesId:Long) extends EventView(description,start,end, "fixtures")
+class CalendarEventView(description:String, start:Date, end:Date, venue:Venue) extends EventView(description,start,end,"calendar", venue)
+
 object EventView{
-  def apply(f:Fixtures) = new EventView(f.description, f.start, f.end)
-  def apply(c:SingletonCompetition) = new EventView(c.description,c.event.start,c.event.end, c.event.venue)
-  def apply(e:CalendarEvent) = new EventView(e.description,e.start,e.end,e.venue)
+  def apply(f:Fixtures) = new FixturesEventView(f.description, f.start, f.end, f.competitionType.name(), f.id)
+  def apply(c:SingletonCompetition) = new CompetitionEventView(c.description,c.event.start,c.event.end, c.`type`.name(), c.event.venue)
+  def apply(e:CalendarEvent) = new CalendarEventView(e.description,e.start,e.end,e.venue)
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

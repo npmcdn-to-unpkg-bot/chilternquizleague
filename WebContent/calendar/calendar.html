@@ -10,9 +10,19 @@
            </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            <div layout="row" layout-xs="column" ng-repeat="event in day.events" layout-padding>
-            <span style="font-weight: bold;">{{event.description}}</span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
-            <span ng-if="event.venue">Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+            <div ng-repeat="event in day.events" ng-switch on="event.eventType">
+	            <div layout="row" layout-xs="column" layout-padding ng-switch-when="calendar">
+		            <span style="font-weight: bold;">{{event.description}}</span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+		            <span>Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+	            </div>
+	           	<div layout="row" layout-xs="column" layout-padding ng-switch-when="singleton">
+		            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+		            <span>Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+	            </div>
+	            <div layout="row" layout-xs="column" layout-padding ng-switch-when="fixtures">
+		            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+	            </div>
+	            
           	</div>
         </md-card-content>
       </md-card>
