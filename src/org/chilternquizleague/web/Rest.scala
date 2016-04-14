@@ -232,6 +232,7 @@ class ViewService extends HttpServlet with BaseRest {
       case "team-statistics" => teamStatistics(req)
       case "request-logon" => requestLogon(req.parameter("email"), req,resp)
       case "calendar" => calendarForSeason(req)
+      case "fixturesById" => fixturesById(req)
       case _ => handleEntities(bits, head)
 
     }
@@ -252,6 +253,13 @@ class ViewService extends HttpServlet with BaseRest {
 
     ret.foreach(r => objectMapper.writeValue(resp.getWriter, r))
 
+  }
+  
+  def fixturesById(req:HttpServletRequest) = {
+      for {
+        f <- entityByKey[Fixtures](req.id())
+      }
+      yield new FixturesView(f)
   }
   
   def calendarForSeason(req:HttpServletRequest)= {

@@ -13,7 +13,7 @@ import java.nio.charset.Charset
  */
 trait AES {
   /**
-   * AES Cipher function: encrypt 'input' state with Rijndael algorithm [§5.1];
+   * AES Cipher function: encrypt 'input' state with Rijndael algorithm [ï¿½5.1];
    *   applies Nr rounds (10/12/14) using key schedule w for 'add round key' stage.
    *
    * @param   {number[]}   input - 16-byte (128-bit) input state array.
@@ -52,7 +52,7 @@ trait AES {
   }
 
   /**
-   * Perform key expansion to generate a key schedule from a cipher key [§5.2].
+   * Perform key expansion to generate a key schedule from a cipher key [ï¿½5.2].
    *
    * @param   {number[]}   key - Cipher key as 16/24/32-byte array.
    * @returns {number[][]} Expanded key schedule as 2D byte-array (Nr+1 x Nb bytes).
@@ -91,7 +91,7 @@ trait AES {
   };
 
   /**
-   * Apply SBox to state S [§5.1.1]
+   * Apply SBox to state S [ï¿½5.1.1]
    * @private
    */
   private def subLongs(s: Array[Array[Long]], Nb: Int) = {
@@ -102,7 +102,7 @@ trait AES {
   }
 
   /**
-   * Shift row r of state S left by r bytes [§5.1.2]
+   * Shift row r of state S left by r bytes [ï¿½5.1.2]
    * @private
    */
   private def shiftRows(s: Array[Array[Long]], Nb: Int) = {
@@ -115,28 +115,28 @@ trait AES {
   };
 
   /**
-   * Combine bytes of each col of state S [§5.1.3]
+   * Combine bytes of each col of state S [ï¿½5.1.3]
    * @private
    */
   def mixColumns(s: Array[Array[Long]], Nb: Int) = {
     for (c <- 0 until 4) {
       var a = Array.ofDim[Long](4); // 'a' is a copy of the current column from 's'
-      var b = Array.ofDim[Long](4); // 'b' is a•{02} in GF(2^8)
+      var b = Array.ofDim[Long](4); // 'b' is aï¿½{02} in GF(2^8)
       for (i <- 0 until 4) {
         a(i) = s(i)(c);
         b(i) = if ((a(i) & 0x80L) != 0) a(i) << 1 ^ 0x011bL else a(i) << 1
       }
-      // a[n] ^ b[n] is a•{03} in GF(2^8)
-      s(0)(c) = b(0) ^ a(1) ^ b(1) ^ a(2) ^ a(3) // {02}•a0 + {03}•a1 + a2 + a3
-      s(1)(c) = a(0) ^ b(1) ^ a(2) ^ b(2) ^ a(3) // a0 • {02}•a1 + {03}•a2 + a3
-      s(2)(c) = a(0) ^ a(1) ^ b(2) ^ a(3) ^ b(3) // a0 + a1 + {02}•a2 + {03}•a3
-      s(3)(c) = a(0) ^ b(0) ^ a(1) ^ a(2) ^ b(3) // {03}•a0 + a1 + a2 + {02}•a3
+
+      s(0)(c) = b(0) ^ a(1) ^ b(1) ^ a(2) ^ a(3) 
+      s(1)(c) = a(0) ^ b(1) ^ a(2) ^ b(2) ^ a(3) 
+      s(2)(c) = a(0) ^ a(1) ^ b(2) ^ a(3) ^ b(3) 
+      s(3)(c) = a(0) ^ b(0) ^ a(1) ^ a(2) ^ b(3) 
     }
     s
   };
 
   /**
-   * Xor Round Key into state S [§5.1.4]
+   * Xor Round Key into state S [5.1.4]
    * @private
    */
   def addRoundKey(state: Array[Array[Long]], w: Array[Array[Long]], rnd: Int, Nb: Int) = {
@@ -174,7 +174,7 @@ trait AES {
     w
   };
 
-  // sBox is pre-computed multiplicative inverse in GF(2^8) used in subLongs and keyExpansion [§5.1.1]
+  // sBox is pre-computed multiplicative inverse in GF(2^8) used in subLongs and keyExpansion [ï¿½5.1.1]
   val sBox = Array[Long](0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
     0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
     0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15,
@@ -192,7 +192,7 @@ trait AES {
     0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
     0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16)
 
-  // rCon is Round Constant used for the Key Expansion [1st col is 2^(r-1) in GF(2^8)] [§5.2]
+  // rCon is Round Constant used for the Key Expansion [1st col is 2^(r-1) in GF(2^8)] [ï¿½5.2]
   val rCon = Array[Array[Long]](Array(0x00, 0x00, 0x00, 0x00),
     Array(0x01, 0x00, 0x00, 0x00),
     Array(0x02, 0x00, 0x00, 0x00),
@@ -218,7 +218,7 @@ trait AES {
  * @returns {string} Encrypted text.
  *
  * @example
- *   var encr = Ctr.encrypt('big secret', 'pasšword', 256); // encr: 'lwGl66VVwVObKIr6of8HVqJr'
+ *   var encr = Ctr.encrypt('big secret', 'pasï¿½word', 256); // encr: 'lwGl66VVwVObKIr6of8HVqJr'
  */
 object Crypto extends AES {
   def encrypt(pt: String, pwd: String, nBits: Int = 256): String = {
@@ -235,7 +235,7 @@ object Crypto extends AES {
     var key = cipher(pwLongs, keyExpansion(pwLongs)); // gives us 16-byte key
     key = key ++ (key.slice(0, nLongs - 16)); // expand key to 16/24/32 bytes long
 
-    // initialise 1st 8 bytes of counter block with nonce (NIST SP800-38A §B.2): [0-1] = millisec,
+    // initialise 1st 8 bytes of counter block with nonce (NIST SP800-38A ï¿½B.2): [0-1] = millisec,
     // [2-3] = random, [4-7] = seconds, together giving full sub-millisec uniqueness up to Feb 2106
     val counterBlock = Array.ofDim[Long](blockSize);
 
@@ -293,7 +293,7 @@ object Crypto extends AES {
    * @returns {string} Decrypted text
    *
    * @example
-   *   var decr = Ctr.encrypt('lwGl66VVwVObKIr6of8HVqJr', 'pasšword', 256); // decr: 'big secret'
+   *   var decr = Ctr.encrypt('lwGl66VVwVObKIr6of8HVqJr', 'pasï¿½word', 256); // decr: 'big secret'
    */
   def decrypt(et: String, pwd: String, nBits: Int = 256): String = {
     val blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES

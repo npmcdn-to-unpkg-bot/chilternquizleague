@@ -19,10 +19,14 @@
 		            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
 		            <span>Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
 	            </div>
-	            <div layout="row" layout-xs="column" layout-padding ng-switch-when="fixtures">
-		            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+	            <div layout-padding ng-switch-when="fixtures" layout="column">
+		            <div layout="row" layout-xs="column" >
+			            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+	       	
+		            </div>
+		            <md-button ng-click="loadFixtures(event.fixturesId)">Fixtures</md-button>
+		            <cql-fixtures type="'full-header'" class="header-left" fixtures="getFixtures(event.fixturesId)" show-all></cql-fixtures>
 	            </div>
-	            
           	</div>
         </md-card-content>
       </md-card>

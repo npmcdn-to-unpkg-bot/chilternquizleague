@@ -10,7 +10,8 @@
 	mainApp.controller("CalendarController", ["$scope","viewService","seasonService" , "$sce",
 			function($scope,viewService,seasonService, $sce ){
 		
-	
+		$scope.fixtures = {}
+		
 		seasonService.getSeason().then(function(season){
 			$scope.calendar = viewService.view("calendar",{seasonId:season.id})
 		})
@@ -24,6 +25,17 @@
 			return $sce.trustAsResourceUrl(parts.join());
 
 			
+		}
+		
+		$scope.loadFixtures = function(id){
+			
+			viewService.viewP("fixturesById",{id:id}).then(function(fixtures){
+				$scope.fixtures["f" + id] = [fixtures]
+			})
+		}
+		
+		$scope.getFixtures = function(id){
+			return $scope.fixtures["f" + id]
 		}
 		
 		
