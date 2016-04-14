@@ -1,6 +1,7 @@
 <div layout="column" layout-fill ng-controller="CalendarController">
-	<cql-title-bar md-theme="amber">Calendar</cql-title-bar>
+	<cql-title-bar md-theme="amber">Calendar {{season.description}}</cql-title-bar>
 	<md-content class="full-content" >
+		<div flex="none"><cql-seasons season="season"></cql-seasons></div>
 	    <div layout="column" flex-xs flex-gt-xs="50">
 	    <md-card ng-repeat="day in calendar.days|orderBy:'day'" >
         <md-card-title>
@@ -10,9 +11,23 @@
            </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            <div layout="row" layout-xs="column" ng-repeat="event in day.events" layout-padding>
-            <span style="font-weight: bold;">{{event.description}}</span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
-            <span ng-if="event.venue">Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+            <div ng-repeat="event in day.events" ng-switch on="event.eventType">
+	            <div layout="row" layout-xs="column" layout-padding ng-switch-when="calendar">
+		            <span style="font-weight: bold;">{{event.description}}</span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+		            <span>Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+	            </div>
+	           	<div layout="row" layout-xs="column" layout-padding ng-switch-when="singleton">
+		            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+		            <span>Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
+	            </div>
+	            <div ng-switch-when="fixtures" layout="column">
+		            <div layout="row" layout-xs="column" layout-padding >
+			            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
+	       	
+		            </div>
+		            <div flex="none" ><md-button ng-click="loadFixtures(event.fixturesId)">Fixtures</md-button></div>
+		            <cql-fixtures type="'no-header'" fixtures="getFixtures(event.fixturesId)" show-all></cql-fixtures>
+	            </div>
           	</div>
         </md-card-content>
       </md-card>

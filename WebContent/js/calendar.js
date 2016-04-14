@@ -7,12 +7,15 @@
 		})
 	} ]);
 
-	mainApp.controller("CalendarController", ["$scope","viewService","seasonService" , "$sce",
-			function($scope,viewService,seasonService, $sce ){
+	mainApp.controller("CalendarController", ["$scope","viewService","seasonService" , "$sce", "$rootScope",
+			function($scope,viewService,seasonService, $sce, $rootScope ){
 		
-	
-		seasonService.getSeason().then(function(season){
-			$scope.calendar = viewService.view("calendar",{seasonId:season.id})
+		$scope.fixtures = {}
+		
+		//seasonService.getSeason().then(function(season){$scope.season = season})
+		
+		$scope.$watch("season", function(season){
+			if(season) $scope.calendar = viewService.view("calendar",{seasonId:season.id})
 		})
 		
 		$scope.embeddedMap = function(venue){
@@ -24,6 +27,17 @@
 			return $sce.trustAsResourceUrl(parts.join());
 
 			
+		}
+		
+		$scope.loadFixtures = function(id){
+			
+			viewService.viewP("fixturesById",{id:id}).then(function(fixtures){
+				$scope.fixtures["f" + id] = [fixtures]
+			})
+		}
+		
+		$scope.getFixtures = function(id){
+			return $scope.fixtures["f" + id]
 		}
 		
 		
