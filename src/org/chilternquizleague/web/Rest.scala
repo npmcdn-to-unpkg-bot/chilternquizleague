@@ -233,6 +233,7 @@ class ViewService extends HttpServlet with BaseRest {
       case "request-logon" => requestLogon(req.parameter("email"), req,resp)
       case "calendar" => calendarForSeason(req)
       case "fixturesById" => fixturesById(req)
+      case "resultsById" => resultsById(req)
       case _ => handleEntities(bits, head)
 
     }
@@ -262,6 +263,13 @@ class ViewService extends HttpServlet with BaseRest {
       yield new FixturesView(f)
   }
   
+  def resultsById(req:HttpServletRequest) = {
+      for {
+        f <- entityByKey[Results](req.id())
+      }
+      yield new ResultsView(f)
+  }
+  
   def calendarForSeason(req:HttpServletRequest)= {
     for {
       s <- entityByKey[Season](req.id("seasonId"))
@@ -269,10 +277,12 @@ class ViewService extends HttpServlet with BaseRest {
       
     }
     yield{
-      val f:List[Fixtures]= s.teamCompetitions.flatMap {_.fixtures}
+      val now = new Date()
+      val f:List[Fixtures]= s.teamCompetitions.flatMap {_.fixtures.filter(_.start.after(now))}
+      val r:List[(Results, TeamCompetition)] = s.teamCompetitions.flatMap(c => c.results.map(res => (res(),c)))
       
       
-      new CalendarView(f,s.singletonCompetitions,s.calendar.toList)
+      new CalendarView(f,r,s.singletonCompetitions,s.calendar.toList)
     }
   }
 

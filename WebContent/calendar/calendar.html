@@ -28,6 +28,15 @@
 		            <div flex="none" ><md-button ng-click="loadFixtures(event.fixturesId)">Fixtures</md-button></div>
 		            <cql-fixtures type="'no-header'" fixtures="getFixtures(event.fixturesId)" show-all></cql-fixtures>
 	            </div>
+	            <div ng-switch-when="results" layout="column">
+		            <div layout="row" layout-xs="column" layout-padding >
+			            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>
+	       	
+		            </div>
+		            <div flex="none" ><md-button ng-click="loadResults(event.resultsId)">Results</md-button></div>
+		            <cql-results type="'no-header'" results="getResults(event.resultsId)" ></cql-results>
+	            </div>
+	            
           	</div>
         </md-card-content>
       </md-card>
