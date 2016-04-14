@@ -1,6 +1,7 @@
 <div layout="column" layout-fill ng-controller="CalendarController">
-	<cql-title-bar md-theme="amber">Calendar</cql-title-bar>
+	<cql-title-bar md-theme="amber">Calendar {{season.description}}</cql-title-bar>
 	<md-content class="full-content" >
+		<div flex="none"><cql-seasons season="season"></cql-seasons></div>
 	    <div layout="column" flex-xs flex-gt-xs="50">
 	    <md-card ng-repeat="day in calendar.days|orderBy:'day'" >
         <md-card-title>
@@ -19,13 +20,13 @@
 		            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
 		            <span>Venue : <a href="/venues/{{event.venue.id}}">{{event.venue.name}}</a></span>
 	            </div>
-	            <div layout-padding ng-switch-when="fixtures" layout="column">
-		            <div layout="row" layout-xs="column" >
+	            <div ng-switch-when="fixtures" layout="column">
+		            <div layout="row" layout-xs="column" layout-padding >
 			            <span style="font-weight: bold;"><a href="/competitions/{{event.compType}}">{{event.description}}</a></span>   <span>{{event.start | date:'HH:mm'}} - {{event.end | date:'HH:mm'}}</span>
 	       	
 		            </div>
-		            <md-button ng-click="loadFixtures(event.fixturesId)">Fixtures</md-button>
-		            <cql-fixtures type="'full-header'" class="header-left" fixtures="getFixtures(event.fixturesId)" show-all></cql-fixtures>
+		            <div flex="none" ><md-button ng-click="loadFixtures(event.fixturesId)">Fixtures</md-button></div>
+		            <cql-fixtures type="'no-header'" fixtures="getFixtures(event.fixturesId)" show-all></cql-fixtures>
 	            </div>
           	</div>
         </md-card-content>
