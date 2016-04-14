@@ -11,8 +11,7 @@
 			function($scope,viewService,seasonService, $sce, $rootScope ){
 		
 		$scope.fixtures = {}
-		
-		//seasonService.getSeason().then(function(season){$scope.season = season})
+		$scope.results = {}
 		
 		$scope.$watch("season", function(season){
 			if(season) $scope.calendar = viewService.view("calendar",{seasonId:season.id})
@@ -39,6 +38,18 @@
 		$scope.getFixtures = function(id){
 			return $scope.fixtures["f" + id]
 		}
+		
+		$scope.loadResults = function(id){
+			
+			viewService.viewP("resultsById",{id:id}).then(function(results){
+				$scope.results["f" + id] = [results]
+			})
+		}
+		
+		$scope.getResults = function(id){
+			return $scope.results["f" + id]
+		}
+
 		
 		
 		

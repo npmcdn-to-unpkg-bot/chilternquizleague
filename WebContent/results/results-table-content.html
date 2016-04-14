@@ -32,16 +32,16 @@
 	</table>
 	<section ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
 
-		<md-subheader ng-if="type='full-header'" class="full-header">
+		<md-subheader ng-if="type=='full-header'" class="full-header">
 			<a id="f{{::resultSet.date}}"></a>{{::resultSet.date
 				| date:'dd MMMM yyyy'}} : {{::resultSet.description}}
 		</md-subheader>
 
-		<md-subheader ng-if="type='comp-header'" class="comp-header">
+		<md-subheader ng-if="type=='comp-header'" class="comp-header">
 			{{::resultSet.description}}
 		</md-subheader>
 
-		<md-subheader ng-if="type='date-header'" class="date-header" >
+		<md-subheader ng-if="type=='date-header'" class="date-header" >
 			{{::resultSet.date | date:'dd MMMM yyyy'}}
 		</md-subheader>
 

@@ -190,25 +190,27 @@ class MassMailRequest{
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 abstract class EventView(val description:String, val start:Date, val end:Date,  val eventType:String, val venue:Venue = null)
 class CompetitionEventView(description:String, start:Date, end:Date, val compType:String, venue:Venue) extends EventView(description,start,end, "singleton", venue)
+class ResultsEventView(description:String, start:Date, val compType:String, val resultsId:Long) extends EventView(description,start,null, "results")
 class FixturesEventView(description:String, start:Date, end:Date, val compType:String, val fixturesId:Long) extends EventView(description,start,end, "fixtures")
 class CalendarEventView(description:String, start:Date, end:Date, venue:Venue) extends EventView(description,start,end,"calendar", venue)
 
 object EventView{
   def apply(f:Fixtures) = new FixturesEventView(f.description, f.start, f.end, f.competitionType.name(), f.id)
+  def apply(r:(Results, TeamCompetition)) = new ResultsEventView(r._1.description, r._1.date, r._2.`type`.name(), r._1.id)
   def apply(c:SingletonCompetition) = new CompetitionEventView(c.description,c.event.start,c.event.end, c.`type`.name(), c.event.venue)
   def apply(e:CalendarEvent) = new CalendarEventView(e.description,e.start,e.end,e.venue)
 }
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-class CalendarView(f:List[Fixtures], c:List[SingletonCompetition], e:List[CalendarEvent]){
+class CalendarView(f:List[Fixtures], r:List[(Results,TeamCompetition)], c:List[SingletonCompetition], e:List[CalendarEvent]){
   
-  val days:JList[CalendarDay] = eventDayMap(f.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_)))
+  val days:JList[CalendarDay] = eventDayMap(f.map(EventView(_)) ++ r.map(EventView(_)) ++ c.map(EventView(_)) ++ e.map(EventView(_)))
 
   def eventDayMap(events:List[EventView]):List[CalendarDay] = {
    
     List() ++ (for{
-      d <- Set() ++ events.map(_.start.dateOnly)
-      e = events.filter(_.start.sameDay(d))
+      d <- Set() ++ events.filter(_.start != null).map(_.start.dateOnly)
+      e = events.filter(_.start != null).filter(_.start.sameDay(d))
     }
     yield new CalendarDay(d,e))
   }
