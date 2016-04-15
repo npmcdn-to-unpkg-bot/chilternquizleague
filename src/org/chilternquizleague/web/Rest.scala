@@ -279,7 +279,7 @@ class ViewService extends HttpServlet with BaseRest {
     yield{
       val now = new Date()
       val f:List[Fixtures]= s.teamCompetitions.flatMap {_.fixtures.filter(_.start.after(now))}
-      val r:List[(Results, TeamCompetition)] = s.teamCompetitions.flatMap(c => c.results.map(res => (res(),c)))
+      val r:List[(Results, TeamCompetition)] = s.teamCompetitions.filter(!_.subsidiary).flatMap(c => c.results.map(res => (res(),c)))
       
       
       new CalendarView(f,r,s.singletonCompetitions,s.calendar.toList)
