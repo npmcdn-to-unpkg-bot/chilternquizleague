@@ -154,9 +154,25 @@ section{
 	 overflow-x:hidden;
 }
 
-@media screen and (max-width: 960px) {
+.index-content{
+	top:90px;
+}
+
+@media screen and (max-width: 1280px) {
     .full-content {
         max-height:calc(100vh - 64px);
+    }
+    .index-content{
+    	top:64px;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .full-content {
+        max-height:calc(100vh - 48px);
+    }
+    .index-content{
+    	top:48px;
     }
 }
 
