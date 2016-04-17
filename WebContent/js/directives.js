@@ -45,12 +45,14 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
   			}
     		scope.showReports = function(ev,results, result) {
 
-  				$mdDialog.show({
+    			var parentEl = angular.element(document);
+    			$mdDialog.show({
   					scope : scope,
+  					parent : parentEl,
   					preserveScope: true,
   					templateUrl : '/results/reports.html',
   					controller : "ReportsController",
-  					targetEvent : ev,
+  					//targetEvent : ev,
   					clickOutsideToClose:true,
   					locals : {
   						reportsData : {
@@ -58,7 +60,7 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
   							result : result
   						}
   					}
-  				});
+  				})
 
   			};
     		

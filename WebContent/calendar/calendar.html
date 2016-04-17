@@ -1,6 +1,6 @@
 <div layout="column" layout-fill ng-controller="CalendarController">
-	<cql-title-bar md-theme="amber">Calendar {{season.description}}</cql-title-bar>
-	<md-content class="full-content" >
+	<cql-title-bar md-theme="amber" >Calendar {{season.description}}</cql-title-bar>
+	<md-content class="full-content">
 		<div flex="none"><cql-seasons season="season"></cql-seasons></div>
 	    <div layout="column" flex-xs flex-gt-xs="50">
 	    <md-card ng-repeat="day in calendar.days|orderBy:'day'" >

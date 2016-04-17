@@ -1,5 +1,5 @@
 <div>
-<md-toolbar hide-gt-md md-scroll-shrink>
+<md-toolbar hide-gt-md md-scroll-shrink class="fixed-bar">
 <div class="md-toolbar-tools">
 	<cql-page-menu ng-if="pageMenu"></cql-page-menu>
 	<span class="md-toolbar-tools" flex ng-transclude></span>
@@ -21,7 +21,7 @@
 </md-menu>
 </div>
 </md-toolbar>
-<md-toolbar hide show-gt-md class="md-medium-tall top-bar">
+<md-toolbar hide show-gt-md class="md-medium-tall top-bar fixed-bar">
 	<div class="md-toolbar-tools" style="margin-left:.25em;" ng-transclude></div>
 	<div ng-include="'/common/menu-top.html'"></div>
 </md-toolbar>
