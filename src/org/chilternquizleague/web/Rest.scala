@@ -688,6 +688,12 @@ END:VEVENT
         yield{
           builder.append(formatBlankFixtures(fixtures))
         }
+        for{
+          e <- gap.currentSeason.calendar
+        }
+        yield{
+          builder.append(formatEvent(e, e.description))
+        }
 
       }
       builder.append("END:VCALENDAR\n").toString()
