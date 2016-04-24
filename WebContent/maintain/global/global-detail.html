@@ -1,6 +1,6 @@
 <div ng-controller="GlobalDetailCtrl">
 	<md-subheader class="md-primary">Global Details</md-subheader>
-	<form>
+	<form layout="column">
 		<md-input-container>
 			<label>League Name</label>
 			<input ng-model="global.leagueName" required size="60"/>
@@ -25,7 +25,7 @@
 			<md-input-container>
 				<input placeholder="alias" required ng-model="emailAlias.alias">
 			</md-input-container>
-			<md-input-container>
+			<md-input-container style="top:-1.5em;">
 				<md-select required ng-model="emailAlias.user" ng-model-options="{trackBy: '$value.id'}">
 					<md-option ng-value="user" ng-repeat="user in users">{{user.name}}</md-option>
 				</md-select>

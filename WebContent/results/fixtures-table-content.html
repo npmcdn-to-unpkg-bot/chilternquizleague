@@ -8,7 +8,7 @@
 				<td class="home-team">{{::fixture.home.shortName}}</td>
 				<td>:</td>
 				<td class="away-team">{{::fixture.away.shortName}}</td>
-				<td ng-repeat-end ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span>Venue : <a href="/venues/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
+				<td ng-repeat-end ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span style="font-weight: bold;padding-left:2em;"> Venue : <a href="/venues/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
 				
 			</tr>
 		</tbody>
@@ -19,7 +19,7 @@
 			<tr ng-repeat-end>
 				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="home-team">{{::fixture.home.shortName}} </td>
 				<td>:</td>
-				<td ng-repeat-end class="away-team">{{::fixture.away.shortName}} <span ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)">@ <a href="/venues/{{fixture.venue.id}}"> {{::fixture.venue.name}}</a></span></td>
+				<td ng-repeat-end class="away-team">{{::fixture.away.shortName}} <span ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"> @ <a href="/venues/{{fixture.venue.id}}"> {{::fixture.venue.name}}</a></span></td>
 			</tr>
 		</tbody>
 	</table>
