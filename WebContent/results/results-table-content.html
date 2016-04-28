@@ -30,21 +30,23 @@
 			</tr>
 		</tbody>
 	</table>
-	<section ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
+	<md-card ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
 
-		<md-subheader ng-if="type=='full-header'" class="full-header">
+		<md-card-title>
+		<md-card-title-text ng-if="type=='full-header'" class="full-header md-headline">
 			<a id="f{{::resultSet.date}}"></a>{{::resultSet.date
 				| date:'dd MMMM yyyy'}} : {{::resultSet.description}}
-		</md-subheader>
+		</md-card-title-text>
 
-		<md-subheader ng-if="type=='comp-header'" class="comp-header">
+		<md-card-title-text ng-if="type=='comp-header'" class="comp-header md-headline">
 			{{::resultSet.description}}
-		</md-subheader>
+		</md-card-title-text>
 
-		<md-subheader ng-if="type=='date-header'" class="date-header" >
+		<md-card-title-text ng-if="type=='date-header'" class="date-header md-headline" >
 			{{::resultSet.date | date:'dd MMMM yyyy'}}
-		</md-subheader>
-
+		</md-card-title-text>
+		</md-card-title>
+		<md-card-content>
 		<table>
 			<tbody>
 				<tr	ng-repeat="result in resultSet.results | orderBy :'fixture.home.shortName'">
@@ -58,6 +60,7 @@
 				</tr>
 			</tbody>
 		</table>
-	</section>
+		</md-card-content>
+	</md-card>
 </div>
 

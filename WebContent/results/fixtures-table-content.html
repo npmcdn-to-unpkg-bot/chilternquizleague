@@ -1,4 +1,4 @@
-<div class="results-table" ng-switch="type" ng-class="type" >
+<div class="results-table" ng-switch="type" ng-class="type" md-theme="altTheme">
 	<table ng-switch-when="inline-header" cellspacing="0">
 		<tbody hide-xs class="stripe1">
 			<tr ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount"
