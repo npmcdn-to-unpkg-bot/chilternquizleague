@@ -35,6 +35,7 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     		
     		scope.close = function(){$mdDialog.hide()}
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
+    		scope.cardStyle = attrs.hasOwnProperty("noCard") ? {'box-shadow':'unset'} : {};
     		scope.showInfo = function($event,content){
   				
   				$mdDialog.show(
@@ -78,10 +79,11 @@ mainApp.directive('cqlFixtures', ["$location",function($location) {
     	templateUrl:'/results/fixtures-table-content.html',
     	link : function(scope, element, attrs){
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
-     		scope.afterNow = function(){
+       		scope.cardStyle = attrs.hasOwnProperty("noCard") ? {'box-shadow':'unset'} : {};
+    		scope.afterNow = function(){
         		var now = new Date().getTime();
         		var showAll = attrs.hasOwnProperty("showAll");
-    			return function(fixtures){
+     			return function(fixtures){
     				return showAll || fixtures.start > now;
     			};
     		};

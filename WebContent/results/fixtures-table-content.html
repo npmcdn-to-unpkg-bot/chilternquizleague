@@ -23,21 +23,23 @@
 			</tr>
 		</tbody>
 	</table>
-	<section ng-switch-default ng-repeat="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount">
+	<md-card ng-switch-default ng-repeat="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount" ng-style="cardStyle">
 
-		<md-subheader ng-if="type=='full-header'" class="full-header">
+		<md-card-title ng-if="type!='no-header'">
+		<md-card-title-text ng-if="type=='full-header'" class="full-header md-headline">
 			<a id="f{{::fixtureSet.start}}"></a>{{::fixtureSet.start
 				| date:'dd MMMM yyyy'}} : {{::fixtureSet.description}}
-		</md-subheader>
+		</md-card-title-text>
 
-		<md-subheader ng-if="type=='comp-header'" class="comp-header">
+		<md-card-title-text ng-if="type=='comp-header'" class="comp-header md-headline">
 			{{::fixtureSet.description}}
-		</md-subheader>
+		</md-card-title-text>
 
-		<md-subheader ng-if="type=='date-header'" class="date-header">
+		<md-card-title-text ng-if="type=='date-header'" class="date-header md-headline">
 			{{::fixtureSet.start | date:'dd MMMM yyyy'}}
-		</md-subheader>
-
+		</md-card-title-text>
+		</md-card-title>
+		<md-card-content>
 		<table>
 			<tbody>
 				
@@ -53,5 +55,6 @@
 				</tr>
 			</tbody>
 		</table>
-	</section>
+		</md-card-content>
+	</md-card>
 </div>

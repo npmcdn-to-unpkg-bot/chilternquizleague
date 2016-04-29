@@ -30,9 +30,9 @@
 			</tr>
 		</tbody>
 	</table>
-	<md-card ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount">
+	<md-card ng-switch-default ng-repeat="resultSet in results | filter:afterNow() | orderBy: 'date' :true |limitTo:rowCount" ng-style="cardStyle">
 
-		<md-card-title>
+		<md-card-title ng-if="type!='no-header'">
 		<md-card-title-text ng-if="type=='full-header'" class="full-header md-headline">
 			<a id="f{{::resultSet.date}}"></a>{{::resultSet.date
 				| date:'dd MMMM yyyy'}} : {{::resultSet.description}}
