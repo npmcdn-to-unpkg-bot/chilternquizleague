@@ -1,7 +1,16 @@
-<div >
-	<md-subheader class="md-accent">Next Fixtures</md-subheader>
+<md-card>
+	<md-card-title>
+		<md-card-title-text>
+			<span class="md-headline">Fixtures</span>
+			<span class="md-subhead">Next Fixtures</span>
+		</md-card-title-text>
+	</md-card-title>
+	<md-card-content>
 	<div ng-controller="FixturesTable">
-	<cql-fixtures type="'full-header'" class="header-left" fixtures="fixtures" rows="1" ></cql-fixtures>
+	<cql-fixtures type="'full-header'" class="header-left" fixtures="fixtures" rows="1" no-card></cql-fixtures>
 	</div>
-	<div class="md-toolbar-tools"><md-button class="md-primary" ng-href="/competitions/{{competition.type.name}}/fixtures">Show All</md-button></div>
-</div>
+	</md-card-content>
+	<md-card_actions layout="row" layout-align="start center">
+	<md-button class="md-primary" ng-href="/competitions/{{competition.type.name}}/fixtures">Show All</md-button>
+	</md-card_actions>
+</md-card>

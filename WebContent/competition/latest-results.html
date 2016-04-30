@@ -1,7 +1,16 @@
-<div>
-	<md-subheader class="md-accent">Latest Results</md-subheader>
+<md-card>
+	<md-card-title>
+		<md-card-title-text>
+			<span class="md-headline">Results</span>
+			<span class="md-subhead">Latest Results</span>
+		</md-card-title-text>
+	</md-card-title>
+	<md-card-content>
 	<div ng-controller="CompetitionResultsTable">
-	<cql-results type="'full-header'" class="header-left" results="results" rows="1" ></cql-results>
+		<cql-results type="'full-header'" class="header-left" results="results" rows="1" no-card></cql-results>
 	</div>
-	<div class="md-toolbar-tools"><md-button class="md-primary" ng-href="/competitions/{{competition.type.name}}/results" >Show All</md-button></div>
-</div>
+	</md-card-content>
+	<md-card_actions layout="row" layout-align="start center">
+	<md-button class="md-primary" ng-href="/competitions/{{competition.type.name}}/results" >Show All</md-button>
+	</md-card_actions>
+</md-card>

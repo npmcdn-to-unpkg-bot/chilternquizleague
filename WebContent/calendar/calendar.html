@@ -1,7 +1,7 @@
 <div layout="column" layout-fill ng-controller="CalendarController">
 	<cql-title-bar md-theme="amber">Calendar {{season.description}}</cql-title-bar>
 	<md-content class="full-content" >
-		<div flex="none"><cql-seasons season="season"></cql-seasons></div>
+		<div style="position:sticky;top:0;opacity:1;background-color:white;width:8em;z-index:10000;"><cql-seasons season="season"></cql-seasons></div>
 	    <div layout="column" flex-xs flex-gt-xs="50">
 	    <md-card ng-repeat="day in calendar.days|orderBy:'day'" >
         <md-card-title>
@@ -34,7 +34,7 @@
 	       	
 		            </div>
 		            <div flex="none" ><md-button ng-click="loadResults(event.resultsId)">Results</md-button></div>
-		            <cql-results type="'no-header'" results="getResults(event.resultsId)" ></cql-results>
+		            <cql-results type="'no-header'" results="getResults(event.resultsId)" no-card></cql-results>
 	            </div>
 	            
           	</div>

@@ -1,13 +1,13 @@
-<div class="results-table" ng-switch="type" ng-class="type" >
+<div class="results-table" ng-switch="type" ng-class="type" md-theme="altTheme">
 	<table ng-switch-when="inline-header" cellspacing="0">
 		<tbody hide-xs class="stripe1">
 			<tr ng-repeat-start="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount"
 			></tr>
 			<tr ng-repeat-end>
 				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="inline-header-cell">{{::fixtureSet.start | date:'d MMMM yyyy'}} : {{::fixtureSet.description}}</td>
-				<td class="home-team">{{::fixture.home.shortName}}</td>
+				<td class="home-team"><span hide show-gt-sm>{{::fixture.home.name}}</span><span hide-gt-sm>{{::fixture.home.shortName}}</span></td>
 				<td>:</td>
-				<td class="away-team">{{::fixture.away.shortName}}</td>
+				<td class="away-team">{{::fixture.away.name}}</span><span hide-gt-sm>{{::fixture.away.shortName}}</span></td>
 				<td ng-repeat-end ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span style="font-weight: bold;padding-left:2em;"> Venue : <a href="/venues/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
 				
 			</tr>
@@ -23,29 +23,31 @@
 			</tr>
 		</tbody>
 	</table>
-	<section ng-switch-default ng-repeat="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount">
+	<md-card ng-switch-default ng-repeat="fixtureSet in fixtures | filter:afterNow() | orderBy: 'start' | limitTo:rowCount" ng-style="cardStyle">
 
-		<md-subheader ng-if="type=='full-header'" class="full-header">
+		<md-card-title ng-if="type!='no-header'">
+		<md-card-title-text ng-if="type=='full-header'" class="full-header md-headline">
 			<a id="f{{::fixtureSet.start}}"></a>{{::fixtureSet.start
 				| date:'dd MMMM yyyy'}} : {{::fixtureSet.description}}
-		</md-subheader>
+		</md-card-title-text>
 
-		<md-subheader ng-if="type=='comp-header'" class="comp-header">
+		<md-card-title-text ng-if="type=='comp-header'" class="comp-header md-headline">
 			{{::fixtureSet.description}}
-		</md-subheader>
+		</md-card-title-text>
 
-		<md-subheader ng-if="type=='date-header'" class="date-header">
+		<md-card-title-text ng-if="type=='date-header'" class="date-header md-headline">
 			{{::fixtureSet.start | date:'dd MMMM yyyy'}}
-		</md-subheader>
-
+		</md-card-title-text>
+		</md-card-title>
+		<md-card-content>
 		<table>
 			<tbody>
 				
 				<tr
 					ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
-					<td class="home-team">{{::fixture.home.shortName}}</td>
+					<td class="home-team">{{::fixture.home.name}}</span><span hide-gt-sm>{{::fixture.home.shortName}}</span></td>
 					<td>:</td>
-					<td class="away-team">{{::fixture.away.shortName}}</td>
+					<td class="away-team">{{::fixture.away.name}}</span><span hide-gt-sm>{{::fixture.away.shortName}}</span></td>
 				</tr>
 				<tr  ng-repeat-end >
 					<td colspan="6" ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span>Venue : <a href="/venues/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
@@ -53,5 +55,6 @@
 				</tr>
 			</tbody>
 		</table>
-	</section>
+		</md-card-content>
+	</md-card>
 </div>
