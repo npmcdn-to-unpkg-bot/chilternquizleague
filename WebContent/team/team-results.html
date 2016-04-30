@@ -1,8 +1,13 @@
 <section ng-controller="TeamExtrasController">
+	<div style="position:sticky;top:0;opacity:1;background-color:white;width:8em;"><cql-seasons season="season" ></cql-seasons></div>
+	
 	<md-card>
+		<md-card-title>
+			<md-card-title-text>
+			<span class="md-headline">All Results</span>
+			</md-card-title-text>
+		</md-card-title>
 		<md-card-content>
-			<cql-seasons season="season"></cql-seasons> 
-			<md-subheader class="md-accent md-no-sticky">All Results</md-subheader>
 			<cql-results type="'inline-header'" class="header-left" results="team.extras.results"></cql-results>
 		</md-card-content>
 	</md-card>

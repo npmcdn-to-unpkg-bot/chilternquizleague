@@ -5,9 +5,9 @@
 			></tr>
 			<tr ng-repeat-end>
 				<td ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'" class="inline-header-cell">{{::fixtureSet.start | date:'d MMMM yyyy'}} : {{::fixtureSet.description}}</td>
-				<td class="home-team">{{::fixture.home.shortName}}</td>
+				<td class="home-team"><span hide show-gt-sm>{{::fixture.home.name}}</span><span hide-gt-sm>{{::fixture.home.shortName}}</span></td>
 				<td>:</td>
-				<td class="away-team">{{::fixture.away.shortName}}</td>
+				<td class="away-team">{{::fixture.away.name}}</span><span hide-gt-sm>{{::fixture.away.shortName}}</span></td>
 				<td ng-repeat-end ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span style="font-weight: bold;padding-left:2em;"> Venue : <a href="/venues/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
 				
 			</tr>
@@ -45,9 +45,9 @@
 				
 				<tr
 					ng-repeat-start="fixture in fixtureSet.fixtures | orderBy :'fixture.home.shortName'">
-					<td class="home-team">{{::fixture.home.shortName}}</td>
+					<td class="home-team">{{::fixture.home.name}}</span><span hide-gt-sm>{{::fixture.home.shortName}}</span></td>
 					<td>:</td>
-					<td class="away-team">{{::fixture.away.shortName}}</td>
+					<td class="away-team">{{::fixture.away.name}}</span><span hide-gt-sm>{{::fixture.away.shortName}}</span></td>
 				</tr>
 				<tr  ng-repeat-end >
 					<td colspan="6" ng-if="fixture.venue && fixture.venue.id && (fixture.venue.id != fixture.home.venueId)"><span>Venue : <a href="/venues/{{fixture.venue.id}}">{{::fixture.venue.name}}</a></span></td>
