@@ -400,6 +400,8 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			  };
 			  
 			$scope.$on("progress", function(ev,value){$scope.progress = value;});
+			$scope.$on("progress", function(ev,value){
+				$scope.sponsor = value?"hide-sponsor":"show-sponsor";});
 			
 			$scope.$mdMedia = $mdMedia
 

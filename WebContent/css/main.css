@@ -211,4 +211,34 @@ body > div:first-child > div{
 	margin:0;
 }
 
+@keyframes sponsor-message {
+    from {bottom:-50px}
+    10% {bottom:6px}
+    90% {bottom:6px}
+    to {bottom:-50px}
+}
+
+.sponsor {
+	position:fixed;
+	bottom:-50px;
+	left:0;
+	width:100%;
+	z-index:999999;
+	text-align: center;
+
+}
+
+.show-sponsor{
+	animation-name: sponsor-message;
+	animation-delay: 2s;
+    animation-duration: 6s;
+    animation-iteration-count: 1;
+}
+.show-sponsor:hover{
+	animation-play-state: paused;
+}
+.hide-sponsor{
+	#display:none;
+}
+
 
