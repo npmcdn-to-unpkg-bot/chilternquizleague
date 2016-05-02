@@ -11,11 +11,17 @@
 				<md-option ng-value="season" ng-repeat="season in seasons">{{season.startYear}}</md-option>
 			</md-select>
 		</md-input-container>
-		<md-subheader>Front Page Text</md-subheader>
+		<md-subheader class="md-no-sticky">Front Page Text</md-subheader>
 		<md-input-container>
 		<textarea ui-tinymce="tinymceOptions" ng-model="global.frontPageText" cols="60"
 							rows="15" required></textarea>
 		</md-input-container>
+		<md-input-container>
+		<md-subheader class="md-no-sticky">Sponsor Message</md-subheader>
+		<textarea ui-tinymce="tinymceOptions" ng-model="global.sponsorMessage" cols="60"
+							rows="1" ></textarea>
+		</md-input-container>
+		<md-input-container>
 		<md-input-container>
 		<label>Sender email</label>
 		<input type="email" ng-model="global.senderEmail">

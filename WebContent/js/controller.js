@@ -378,8 +378,8 @@ mainApp.config(function($mdThemingProvider) {
 	});
 
 
-mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia',
-		function($scope, $interval, viewService, $mdSidenav, $mdMedia) {
+mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$mdSidenav','$mdMedia', 'seasonService',
+		function($scope, $interval, viewService, $mdSidenav, $mdMedia, seasonService) {
 			
 		  $scope.toggleRight = function() {
 		    $mdSidenav('right').toggle();
@@ -399,6 +399,7 @@ mainApp.controller('MainController', [ '$scope', '$interval', 'viewService', '$m
 			    $mdSidenav('right').close();
 			  };
 			  
+	  
 			$scope.$on("progress", function(ev,value){$scope.progress = value;});
 			$scope.$on("progress", function(ev,value){
 				$scope.sponsor = value?"hide-sponsor":"show-sponsor";});

@@ -41,6 +41,7 @@ class CompetitionView(competition:Competition) {
 class GlobalApplicationDataView(data:GlobalApplicationData ) {
 		val frontPageText = data.frontPageText ;
 		val leagueName = data.leagueName ;
+    val sponsorMessage = data.sponsorMessage
 		val currentSeasonId = if (data.currentSeason == null) null else data.currentSeason.id;
 		val textId = if (data.globalText == null) null else data.globalText.id;
 }
