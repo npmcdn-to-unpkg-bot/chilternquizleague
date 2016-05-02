@@ -43,7 +43,7 @@
 	<div ui-view>
 	</div>
 	<md-progress-linear ng-show="progress" style="position:fixed;bottom:0px;left:0;width:100%;z-index:1000000;" md-mode="indeterminate" ></md-progress-linear>
-	<div ng-class="sponsor" class="sponsor"><span ng-bind-html="global.sponsorMessage | htmlify"></span></div>
+	<div ng-class="sponsor" class="sponsor"><span cql-text="'sponsor-message'"></span></div>
 	
 </body>
 </html>
