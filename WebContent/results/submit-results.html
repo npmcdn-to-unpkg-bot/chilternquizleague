@@ -5,9 +5,9 @@
 		<div>
 			<md-input-container>
 			<label>Enter your email address</label>
-			<input autofocus autocomplete="on" type="email"
+			<input autocomplete="on" type="email"
 				ng-model="email" ng-change="fixturesForEmail(email)" size="50"
-				required >
+				required ng-disabled="preSubmission.fixtures" autofocus>
 			</md-input-container>
 		</div>
 		<div ng-if="preSubmission.fixtures"  layout="column">
@@ -21,7 +21,7 @@
 					
 					<md-input-container>
 						<label>{{result.result.fixture.home.shortName}} - Home</label>
-						<input min="1"  type="number" ng-model="result.result.homeScore" ng-disabled="preSubmission.results[0].result.homeScore" >
+						<input min="1"  type="number" ng-model="result.result.homeScore" ng-disabled="preSubmission.results[0].result.homeScore" autofocus>
 					</md-input-container>
 					<md-input-container>
 						<label>{{result.result.fixture.away.shortName}} - Away</label>
