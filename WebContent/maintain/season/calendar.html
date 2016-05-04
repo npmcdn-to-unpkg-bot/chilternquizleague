@@ -33,7 +33,7 @@
 <md-content>
 	<md-list>
 		<md-list-item ng-repeat="event in season.calendar | orderBy:'start'" >
-			<md-list-item-content><md-button class="md-fab md-mini md-warn"  ng-click="removeEvent(event)">X</md-button><span ng-click="setEvent(event)">{{event.description}} {{event.start | date:'dd-MM-yyyy hh:mm'}} {{event.venue.name}}</span></md-list-item-content>
+			<md-list-item-content><md-button class="md-fab md-mini md-warn md-exclude"  ng-click="removeEvent(event)">X</md-button><span ng-click="setEvent(event)">{{event.description}} {{event.start | date:'dd-MM-yyyy HH:mm'}} {{event.venue.name}}</span></md-list-item-content>
 		</md-list-item>
 	</md-list>
 </md-content>
