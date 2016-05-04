@@ -1,26 +1,29 @@
 <div ng-controller="TeamCharts">
 
+<div style="position:sticky;top:0px;opacity:1;background-color:white;width:8em;"><cql-seasons season="season"></cql-seasons></div>
+
 <md-card>
+<md-card-title>
+<md-card-title-text><span class="md-headline">Graphs and Statistics</span></md-card-title-text>
+</md-card-title>
 <md-card-content>
-<cql-seasons season="season"></cql-seasons>
-<md-subheader class="md-accent">Graphs and Statistics</md-subheader>
-<div layout="row" layout-xs="column" layout-align="space-around">
+<div layout-gt-sm="row" layout="column" layout-align="space-around">
 	<div>
-		<md-subheader class=" md-no-sticky">League Position</md-subheader>
+		<div class="md-subhead">League Position</div>
 		<div><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" height="300" ></canvas></div>
 	</div> 
 	<div>
-		<md-subheader  class=" md-no-sticky">Match Points</md-subheader>
+		<div class="md-subhead">Match Points</div>
 		<div layout="row" layout-xs="column"><canvas tc-chartjs-line chart-options="options" chart-data="pointsData" auto-legend height="300"></canvas></div>
 	</div>
 </div>
-<div layout="row" layout-xs="column" layout-align="space-around">
+<div layout-gt-sm="row" layout="column" layout-align="space-around">
 	<div>
-		<md-subheader  class=" md-no-sticky">Cumulative Match Points Difference</md-subheader>
+		<div class="md-subhead">Cumulative Match Points Difference</div>
 		<div><canvas tc-chartjs-line chart-options="differenceOptions" chart-data="cumPointsDifferenceData" height="300"></canvas></div>
 	</div>
 	<div>
-		<md-subheader  class=" md-no-sticky">Cumulative Match Points</md-subheader>
+		<div class="md-subhead">Cumulative Match Points</div>
 		<div layout="row" layout-xs="column"><canvas auto-legend tc-chartjs-line chart-options="options" chart-data="cumPointsData" height="300"></canvas></div>
 	</div>
 </div>
