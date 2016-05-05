@@ -6,7 +6,7 @@
 </md-card-title-text>
 </md-card-title>
 <md-card-content>
-<md-tabs md-dynamic-height="true">
+<md-tabs md-dynamic-height="true" md-enable-disconnect>
 	<md-tab label="Single Season">
 	<div  ng-controller="TeamCharts" style="height:100%">
 	<div style="position:sticky;top:0px;opacity:1;background-color:white;width:8em;"><cql-seasons season="season"></cql-seasons></div>
@@ -40,8 +40,12 @@
 		<div class="md-subhead">League Position</div>
 		<div><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" height="250" ></canvas></div>
 	</div> 
-</div>
-		</div>
+		<div>
+		<div class="md-subhead">Average Match Points</div>
+		<div layout="row" layout-xs="column"><canvas tc-chartjs-line chart-options="options" chart-data="pointsData" auto-legend height="250"></canvas></div>
+	</div>
+	</div>
+	</div>
 	</md-tab>
 </md-tabs>
 </md-card-content>
