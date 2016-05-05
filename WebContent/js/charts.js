@@ -298,6 +298,15 @@ mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonS
 	
 	function doLoadStats(teams, season){
 		
+		function getRandomColor() {
+	    var letters = '0123456789ABCDEF'.split('');
+	    var color = '#';
+	    for (var i = 0; i < 6; i++ ) {
+	        color += letters[Math.floor(Math.random() * 16)];
+	    }
+	    return color;
+	}
+		
 		$q.all(teams.map(function(team){return viewService.viewP("team-statistics",{
 							seasonId : season.id,
 							teamId : team.id})}))
@@ -308,13 +317,14 @@ mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonS
 
 										var datasets = statsSet.map(function(stats){
 											
+											var col = getRandomColor()
 											 return {
 												label:stats.team.shortName,
-												strokeColor: "rgba(220,220,220,1)",
-												pointColor : "rgba(220,220,220,1)",
+												strokeColor: col,
+												pointColor : col,
 												      pointStrokeColor: "#fff",
 									            pointHighlightFill: "#fff",
-									            pointHighlightStroke: "rgba(220,220,220,1)",
+									            pointHighlightStroke: col,
 												data: mapToProperty(stats.weekStats, "leaguePosition") 
 											}
 										});
