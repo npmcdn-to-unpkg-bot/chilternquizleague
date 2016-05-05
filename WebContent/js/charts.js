@@ -269,7 +269,9 @@ mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonS
 			scaleOverride:true,
 			scaleSteps:9,
 			datasetFill : false,
-			bezierCurve : true
+			bezierCurve : true,
+			legendTemplate : '<ul class="chart-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+	    datasetStroke : true,	
 			};
 	
 	$scope.options={
@@ -325,7 +327,7 @@ mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonS
 												      pointStrokeColor: "#fff",
 									            pointHighlightFill: "#fff",
 									            pointHighlightStroke: col,
-												data: mapToProperty(stats.weekStats, "leaguePosition") 
+												data: mapToProperty(stats.weekStats.map(nullIgnorables).reverse(), "leaguePosition") 
 											}
 										});
 										
