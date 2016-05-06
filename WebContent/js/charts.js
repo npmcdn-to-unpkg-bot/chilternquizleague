@@ -256,4 +256,94 @@ mainApp.controller("AllSeasonCharts",["$scope", 'viewService',"$filter", "season
 		
 		$scope.$watch("team", loadStats);
 }]);
+
+mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonService", "$q",function($scope,viewService, $filter, seasonService, $q){
+	$scope.setCurrentItem();
+	function dateToLabel(dates){
+		return dates.map(function(d){return $filter("date")(new Date(d),"dd MMM")});
+	}
+	
+	$scope.positionOptions={
+			scaleStartValue:10,
+			scaleStepWidth:-1,
+			scaleOverride:true,
+			scaleSteps:9,
+			datasetFill : false,
+			bezierCurve : true,
+			legendTemplate : '<ul class="chart-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+	    datasetStroke : true,	
+			};
+	
+	$scope.options={
+			datasetFill : true,
+			bezierCurve : true,
+			scaleBeginAtZero : false,
+			legendTemplate : '<ul class="chart-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+		    datasetStroke : true,	
+		};
+	
+	$scope.differenceOptions={
+			datasetFill : false,
+			bezierCurve : true,
+			scaleBeginAtZero : false,
+		    datasetStroke : true,	
+		};
+	
+	function loadStats(values){
+		
+		if(values[0] && values[1]){
+			
+			doLoadStats(values[0], values[1])
+		}
+		
+	}
+	
+	function doLoadStats(teams, season){
+		
+		function getRandomColor() {
+	    var letters = '0123456789ABCDEF'.split('');
+	    var color = '#';
+	    for (var i = 0; i < 6; i++ ) {
+	        color += letters[Math.floor(Math.random() * 16)];
+	    }
+	    return color;
+	}
+		
+		$q.all(teams.map(function(team){return viewService.viewP("team-statistics",{
+							seasonId : season.id,
+							teamId : team.id})}))
+							.then(
+									function(statsSet){
+										statsSet = statsSet.filter(function(stats){return stats != null}).sort(function(stats1, stats2){return stats1.team.name.localeCompare(stats2.team.name) })
+										var dateLabels = dateToLabel(mapToProperty(statsSet[0].weekStats, "date").sort());
+
+										var datasets = statsSet.map(function(stats){
+											
+											var col = getRandomColor()
+											 return {
+												label:stats.team.shortName,
+												strokeColor: col,
+												pointColor : col,
+												      pointStrokeColor: "#fff",
+									            pointHighlightFill: "#fff",
+									            pointHighlightStroke: col,
+												data: mapToProperty(stats.weekStats.sort(function(s1,s2){return s1.date - s2.date;}), "leaguePosition") 
+											}
+										});
+										
+										$scope.positionData = {
+												labels: dateLabels,
+												responsive:true,
+												datasets: datasets
+									}
+									}
+							)
+		
+	
+				}
+		
+
+		
+	$scope.$watchGroup(["teams","season"], loadStats);
+}]);
 })()
