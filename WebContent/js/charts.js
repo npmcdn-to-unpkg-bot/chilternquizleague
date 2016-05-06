@@ -327,7 +327,7 @@ mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonS
 												      pointStrokeColor: "#fff",
 									            pointHighlightFill: "#fff",
 									            pointHighlightStroke: col,
-												data: mapToProperty(stats.weekStats.map(nullIgnorables).reverse(), "leaguePosition") 
+												data: mapToProperty(stats.weekStats.sort(function(s1,s2){return s1.date - s2.date;}), "leaguePosition") 
 											}
 										});
 										
