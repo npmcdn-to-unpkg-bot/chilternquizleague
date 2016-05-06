@@ -1,15 +1,15 @@
 <md-card>
 <md-card-content class="fix-text" cql-text="'teams-header'"></md-card-content>
 </md-card>
-<md-card>
-<md-card-title>
+<md-card hide-xs>
+<md-card-title >
 	<md-card-title-text>
-		<span class="md-headline">The season so far</span>
+		<span class="md-headline">The Season So Far</span>
 	</md-card-title-text>
 </md-card-title>
 <md-card-content>
 	<div  ng-controller="AllTeamsCharts" style="height:100%">
-	<div layout-gt-sm="row" layout="column" layout-align="space-around">
+	<div layout-gt-sm="row" layout="column" >
 	<div>
 		<div class="md-subhead">League Position</div>
 		<div layout="row" layout-xs="column"><canvas tc-chartjs-line chart-options="positionOptions" chart-data="positionData" auto-legend height="400" width="400" ></canvas></div>
