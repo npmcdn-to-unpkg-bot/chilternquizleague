@@ -30,7 +30,7 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     	scope:{results:"=",
     		type:"="},
     	restrict:'E',
-    	templateUrl:'/results/results-table-content.html',
+    	templateUrl:'/directives/results/results-table-content.html',
     	link : function(scope, element, attrs){
     		
     		scope.close = function(){$mdDialog.hide()}
@@ -76,7 +76,7 @@ mainApp.directive('cqlFixtures', ["$location",function($location) {
     		type:"="	
     		},
     	restrict:'E',
-    	templateUrl:'/results/fixtures-table-content.html',
+    	templateUrl:'/directives/fixtures/fixtures-table-content.html',
     	link : function(scope, element, attrs){
     		scope.rowCount = attrs.rows ? attrs.rows :10000;
        		scope.cardStyle = attrs.hasOwnProperty("noCard") ? {'box-shadow':'unset'} : {};
@@ -106,7 +106,7 @@ mainApp.directive('cqlLeagueTable', function() {
     return {
     	scope:{league:"=leaguetable"},
     	restrict:'E',
-    	templateUrl:'/results/league-table-content.html',
+    	templateUrl:'/directives/leagueTable/league-table-content.html',
     	link : function(scope, element, attrs){
     		scope.clazz = "";
     		scope.clazz = scope.clazz + (attrs.hasOwnProperty("collapse")?"collapse" : "");
@@ -139,7 +139,7 @@ mainApp.directive('cqlSeasons', ["viewService","seasonService","$rootScope",func
     			scope.$watch("season", function(season){$rootScope.$broadcast("season",season)})
     		}
      	},
-    	templateUrl:'/common/season-dropdown.html'
+    	templateUrl:'/directtives/season/season-dropdown.html'
     	
     };
   }]);
@@ -151,7 +151,7 @@ mainApp.directive("cqlTitleBar",["$mdSidenav", function($mdSidenav){
 		restrict:'E',
 		replace:true,
 		transclude:true,
-		templateUrl : "/common/titlebar.html",
+		templateUrl : "/directives/titleBar/titlebar.html",
 		link: function(scope, element, attrs, ctrl, transclude){
 			scope.toggleRight = function(){
 				$mdSidenav('right').toggle();
@@ -182,6 +182,6 @@ mainApp.directive("cqlPageNav",["$mdSidenav", function($mdSidenav){
 				$mdSidenav('left').close();};
 			scope.classes = "md-subheader md-default-theme"
 		},
-		templateUrl: "/common/sidenav.html"
+		templateUrl: "/directives/pageNav/sidenav.html"
 	}
 }])
