@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','ui.router',"tc.chartjs","ui.tinymce"]).factory(
+var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','ui.router',"tc.chartjs","ui.tinymce","ngComponentRouter"]).factory(
 		'viewService',
 		[
 				"$http","$rootScope",
@@ -260,6 +260,9 @@ mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 	return service
 }]
 		)
+		
+mainApp.value('$routerRootComponent', 'app')
+
 
 mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService','seasonService',
 		function($rootScope, $state, $stateParams, $mdDialog, viewService, seasonService) {
