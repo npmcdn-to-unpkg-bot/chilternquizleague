@@ -2,7 +2,9 @@
 mainApp.component('app', {
   templateUrl:"/app/app.html",
   $routeConfig: [
-    {path: '/', name: 'IndexContent', component: 'indexContent'},
+    {path: '/', name: 'IndexContent', component: 'indexContent', useAsDefault: true},
+    {path: '/rules', name: 'Rules', component: 'rules'},
+    {path: '/contact', name: 'Contact', component: 'contact'}
   ]
 })
 .component('indexContent', {
