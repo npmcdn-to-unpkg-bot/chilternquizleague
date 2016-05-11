@@ -10,7 +10,7 @@
 	mainApp.controller("CalendarController", ["$scope","viewService","seasonService" , "$sce", "$rootScope",
 			function($scope,viewService,seasonService, $sce, $rootScope ){
 		
-		$scope.season = null;
+		seasonService.getSeason().then(function(season){$scope.season = season});
 		$scope.fixtures = {}
 		$scope.results = {}
 		

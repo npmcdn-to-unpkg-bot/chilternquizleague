@@ -3,11 +3,12 @@
 	mainApp.component('reports', {
 	  templateUrl:"/reports/reports.html",
 	  $routeConfig: [
-		 {path: '/all',    name: 'AllReports',   component: 'allReports', useAsDefault: false},
+		 {path: '/all',    name: 'AllReports',   component: 'allReports', useAsDefault: true},
 	  ]
 	})
 	.component('allReports', {
 		templateUrl:"/reports/all-reports.html",
+		controller : "AllResultsController"
 	})
 	.component('reportsMenu', {
 		templateUrl:"/reports/all-reports-menu.html"

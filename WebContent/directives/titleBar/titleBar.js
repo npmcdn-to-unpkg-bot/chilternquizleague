@@ -1,7 +1,7 @@
 mainApp.directive("cqlTitleBar",["$mdSidenav", function($mdSidenav){
 	
 	return {
-		scope:{},
+		scope : {season : "="},
 		restrict:'E',
 		replace:true,
 		transclude:true,
@@ -12,6 +12,8 @@ mainApp.directive("cqlTitleBar",["$mdSidenav", function($mdSidenav){
 				$mdSidenav('left').close();};
 			
 			scope.toggleLeft = function(){$mdSidenav('left').toggle();};
+			
+			scope.$watch("season", function(season){season && console.log(season.id)})
 			
 			scope.pageMenu = attrs.hasOwnProperty("pageMenu");
 		}};

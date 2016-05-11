@@ -20,7 +20,10 @@
 		'$scope',
 		'viewService',
 		'$location',
-		function($scope, viewService, $location) {
+		"seasonService",
+		function($scope, viewService, $location, seasonService) {
+			
+
 			
 			$scope.setSeason = function(season) {
 	
@@ -28,6 +31,9 @@
 				
 				$scope.season = season;
 			};
+			
+			seasonService.getSeason().then(function(season){$scope.setSeason(season)});
+
 			
 			$scope.$on("season", function(evt, season){
 				$scope.setSeason(season);
