@@ -1,19 +1,20 @@
 (function() {
 
-	mainApp.config([ "$stateProvider", function($stateProvider) {
-		$stateProvider.state("calendar", {
-			url : "/calendar_view",
-			templateUrl : "/calendar/calendar.html"
-		})
-	} ]);
+	mainApp.component('calendar', {
+	  templateUrl:"/calendar/calendar.html",
+	  controller : "CalendarController"
+	})
+	
+	
 
 	mainApp.controller("CalendarController", ["$scope","viewService","seasonService" , "$sce", "$rootScope",
 			function($scope,viewService,seasonService, $sce, $rootScope ){
 		
+		$scope.season = null;
 		$scope.fixtures = {}
 		$scope.results = {}
 		
-		$scope.$watch("season", function(season){
+		$scope.$on("season", function(evt, season){
 			if(season) $scope.calendar = viewService.view("calendar",{seasonId:season.id})
 		})
 		

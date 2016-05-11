@@ -23,7 +23,7 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
   					scope : scope,
   					preserveScope: true,
   					templateUrl : '/directives/results/reports.html',
-  					controller : "ReportsController",
+  					controller : "ReportsDialogController",
   					targetEvent : ev,
   					clickOutsideToClose:true,
   					locals : {
@@ -39,4 +39,17 @@ mainApp.directive('cqlResults',["$mdDialog", function($mdDialog) {
     	}
     	
     };
-  }]);
+  }])
+.controller("ReportsDialogController", [ '$scope','viewService','reportsData',
+	function($scope,viewService,reportsData) {
+
+		$scope.reportsData = reportsData;	
+		
+		if (reportsData) {
+				$scope.reports = viewService.view("reports", {
+					resultsKey : reportsData.results.key,
+					homeTeamId : reportsData.result.fixture.home.id
+
+			});}
+
+	} ]);;

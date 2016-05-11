@@ -323,29 +323,7 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
 	             function ($stateProvider,   $urlRouterProvider, $locationProvider){
 	
-	
-	$stateProvider.state("home", {
-    url: "/",
-    templateUrl: '/indexContents.html'
-
-  })
-  .state("rules", {
-  	url:"/rules",
-  	templateUrl : "/rules/rules.html"
-  })
-  .state("contact", {
-  	url:"/contact",
-  	templateUrl : "/contact/contact.html"
-  })
-  .state("links", {
-  	url:"/links",
-  	templateUrl : "/links/links.html"
-  })
-  
-  
-  ;
-	
-$locationProvider.html5Mode(true);
+	$locationProvider.html5Mode(true);
 }]);
 
 mainApp.config(function($mdThemingProvider) {
