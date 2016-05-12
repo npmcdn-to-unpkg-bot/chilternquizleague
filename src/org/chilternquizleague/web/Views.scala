@@ -25,6 +25,7 @@ object CompetitionTypeView{
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CompetitionView(competition:Competition) {
+  val id = competition.id
 	val description = competition.description
 	val `type` = new CompetitionTypeView(competition.`type`)
 	val subsidiary = competition.subsidiary

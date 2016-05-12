@@ -1,9 +1,8 @@
-<div layout="column"  ng-controller="CompetitionsController"  md-theme="cyan">
-	<div ui-view="menu">
-	</div>
+<div layout="column"  md-theme="cyan">
+	<competitions-menu type="$ctrl.type"></competitions-menu>
 	<div layout="row">
-	<div ng-include="'/competition/sidenav.html'" ></div>
-	<md-content class="full-content" flex ui-view="content"></md-content>
+	<competitions-sidenav></competitions-sidenav>
+	<md-content class="full-content" flex ><ng-outlet></ng-outlet></md-content>
 	</div>
 </div>
 

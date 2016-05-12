@@ -1,5 +1,5 @@
 <cql-page-nav title="Competitions">
 	<div layout-align="start" layout="column">
-		<md-button ng-repeat="item in competitions | orderBy : 'type.name'" class="menu-item menu-title"  href="/competitions/{{item.type.name}}">{{item.description}}</md-button>
+		<md-button ng-repeat="item in competitionTypes | orderBy : 'name'" class="menu-item menu-title"  href="/competitions/{{item.name}}">{{item.description}}</md-button>
 	</div>
 </cql-page-nav>
