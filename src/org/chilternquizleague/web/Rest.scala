@@ -261,9 +261,9 @@ class ViewService extends HttpServlet with BaseRest {
   
   def competitionTables(req:HttpServletRequest) = {
     for{
-      c <- entityByKey[LeagueCompetition](req.id())
+      c <- entityByKey[BaseLeagueCompetition](req.id())
     }
-    yield c.leagueTables
+    yield new LeagueTableWrapperView2(c)
     
   }
   

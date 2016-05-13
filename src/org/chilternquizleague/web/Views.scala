@@ -59,6 +59,13 @@ class LeagueTableWrapperView(season:Season , compType:CompetitionType ){
 		val tables = if(comp != null)  comp.leagueTables.map(new LeagueTableView(_)) else List();
 		val description = season.description;
 }
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
+class LeagueTableWrapperView2(comp:BaseLeagueCompetition ){
+
+    val competition = new CompetitionView(comp)
+		val tables = if(comp != null)  comp.leagueTables.map(new LeagueTableView(_)) else List();
+		val description = comp.description;
+}
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class LeagueTableView(table:LeagueTable){

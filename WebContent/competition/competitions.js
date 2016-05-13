@@ -23,6 +23,8 @@
 	})
 	.component('competitionBeer', {
 		templateUrl:"/competition/beer-leg.html",
+		controller : "BeerCompetitionController",
+		require : {"competitions" : "^competitions"}
 	})
 	.component('competitionPlate', {
 		templateUrl:"/competition/plate.html",
@@ -54,10 +56,19 @@
       competition: '='
     }}
 	})
-		.directive("competitionNextFixtures", function() {
+	.directive("competitionNextFixtures", function() {
 	  return {
-		templateUrl : "/competition/bext-results.html",
+		templateUrl : "/competition/next-fixtures.html",
 		controller : "CompetitionFixturesTable",
+		restrict: 'E',
+    scope: {
+      competition: '='
+    }}
+	})
+	.directive("competitionLeagueTables", function() {
+	  return {
+		templateUrl : "/competition/league-table.html",
+		controller : "CompetitionLeagueTableController",
 		restrict: 'E',
     scope: {
       competition: '='
@@ -67,15 +78,15 @@
 	
 	
 	function loadTable($scope,viewService, tableName){
-		 function func(season) {
-			if (season) {
-				$scope.leagueTable = viewService.view(tableName, {
-					id : season.id
+		 function func(competition) {
+			if (competition) {
+				$scope.leagueTable = viewService.view("tablesForCompetition", {
+					id : competition.id
 				});
 			}
 		};
 		
-		$scope.$watch("season", func);
+		$scope.$watch("competition", func);
 	}
 	
 	function loadResults($scope, viewService){
@@ -97,7 +108,6 @@
 			if (competition) {
 				$scope.fixtures = viewService.view("competition-fixtures", {
 					id : competition.id,
-					type : type,
 					isArray:true
 				});
 			}
@@ -192,35 +202,38 @@ mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
 		
 	} ]);
 
-	mainApp.controller('CompetitionLeagueTableController', [ '$scope', '$interval',
-			'viewService', function($scope, $interval, viewService) {
+	mainApp.controller('CompetitionLeagueTableController', [ '$scope', 
+			'viewService', function($scope, viewService) {
 				
-		      loadTable($scope,viewService,"leaguetable");
+		      loadTable($scope,viewService);
 
 			} ]);
+	
+	function competitionControllerFactory(type){
+		return function($scope, viewService) {
+			  $scope.type = type 
+					this.$onInit = function() {
+				  	 this.competitions.watch("season", function(season){$scope.season = season})
+				      
+				    };
+				   this.$onDestroy = function(){
+				  	 this.competitions.unwatch("season")
+				   }
+				   
+				   $scope.$watch("season", function(season){
+				  	 if(season){
+				  		 viewService.view("competition", {seasonId:season.id, type:$scope.type},function(comp){$scope.competition = comp})
+				  	 }
+				   })
+				   
+				   
+				}
+	}
 
 	mainApp.controller('LeagueCompetitionController', [
 			'$scope',
-			'$location',
 			'viewService',
-			function($scope, $location, viewService) {
-			  $scope.type = "LEAGUE" 
-				this.$onInit = function() {
-			  	 this.competitions.watch("season", function(season){$scope.season = season})
-			      
-			    };
-			   this.$onDestroy = function(){
-			  	 this.competitions.unwatch("season")
-			   }
-			   
-			   $scope.$watch("season", function(season){
-			  	 if(season){
-			  		 viewService.view("competition", {seasonId:season.id, type:$scope.type},function(comp){$scope.competition = comp})
-			  	 }
-			   })
-			   
-			   
-			} ]);
+			competitionControllerFactory("LEAGUE") ]);
 	
 
 		mainApp.controller('CompetitionBeerTableController', [ '$scope', '$interval',
@@ -230,11 +243,7 @@ mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
 			} ]);
 	
 
-		mainApp.controller('BeerCompetitionController', [ '$scope', '$location',
-			'viewService', function($scope, $location, viewService) {
-			$scope.setCompetitionByType("BEER");
-				
-			} ]);
+		mainApp.controller('BeerCompetitionController', [ '$scope', 'viewService', competitionControllerFactory("BEER") ]);
 		
 
 		mainApp.controller('CupCompetitionController', [
@@ -280,8 +289,7 @@ mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
 			'viewService',
 			
 			function($scope, viewService) {
-				$scope.$watch("competition", function(competition){
-					competition && loadResults($scope, viewService);});
+				loadResults($scope, viewService)
 				
 			} ]);
 		
@@ -289,9 +297,7 @@ mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
 		mainApp.controller('CompetitionFixturesTable', [ '$scope', 'viewService',
 		function($scope, viewService) {
 
-			$scope.$watch("competition", function(competition) {
-				competition && loadFixtures($scope, viewService);
-			});
+			loadFixtures($scope, viewService)
 
 		} ]);
 		
