@@ -1,5 +1,5 @@
-<div ng-controller="CupCompetitionController">
+<div>
 	<md-card><md-card-content><div class="fix-text"  cql-text="'cup-comp'"></div><div class="fix-text" ng-bind-html="competition.text | htmlify"></div></md-card-content></md-card>
-	<div flex ng-include="'/competition/latest-results.html'"></div>
-	<div flex ng-include="'/competition/next-fixtures.html'"></div>
+	<competition-latest-results competition="competition"></competition-latest-results>
+	<competition-next-fixtures competition="competition"></competition-next-fixtures>
 </div>

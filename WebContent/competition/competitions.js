@@ -11,6 +11,9 @@
 		 {path: '/CUP',    name: 'Cup',   component: 'competitionCup'},
 		 {path: '/INDIVIDUAL',    name: 'Individual',   component: 'competitionIndividual'},
 		 {path: '/BUZZER',    name: 'Buzzer',   component: 'competitionBuzzer'},
+		 {path: '/:type/results',    name: 'CompetitionResults',   component: 'competitionResults'},
+		 {path: '/:type/fixtures',    name: 'CompetitionFixtures',   component: 'competitionFixtures'},
+
 		 ]
 	})
 	.component('competitionLeague', {
@@ -28,25 +31,46 @@
 	})
 	.component('competitionPlate', {
 		templateUrl:"/competition/plate.html",
+		controller : "PlateCompetitionController",
+		require : {"competitions" : "^competitions"}
 	})
 	.component('competitionCup', {
 		templateUrl:"/competition/cup.html",
+		controller : "CupCompetitionController",
+		require : {"competitions" : "^competitions"}
 	})
 	.component('competitionIndividual', {
 		templateUrl:"/competition/individual.html",
+		controller : "IndividualCompetitionController",
+		require : {"competitions" : "^competitions"}
 	})
 	.component('competitionBuzzer', {
 		templateUrl:"/competition/team-buzzer.html",
+		controller : "BuzzerCompetitionController",
+		require : {"competitions" : "^competitions"}
+		
 	})
-	.component('competitionsMenu', {
-		templateUrl:"/competition/competitions-menu.html"
+	.component('competitionResults', {
+		templateUrl:"/competition/results.html",
+		controller : "CompetitionAllResults",
+		require : {"competitions" : "^competitions"}
+		
 	})
-	.component('competitionsSidenav', {
+	.component('competitionFixtures', {
+		templateUrl:"/competition/fixtures.html",
+		controller : "CompetitionAllResults",
+		require : {"competitions" : "^competitions"}
+		
+	})
+	.directive('competitionsMenu', function(){ return{
+		templateUrl:"/competition/competitions-menu.html",
+		scope : {type : "<"}
+	}})
+	.directive('competitionsSidenav', function(){return{
 		templateUrl:"/competition/sidenav.html",
 		controller : "CompetitionTypesController",
-		require : {"competitions" : "^competitions"}
-
-	})
+		scope : {season : "="}
+	}})
 	.directive("competitionLatestResults", function() {
 	  return {
 		templateUrl : "/competition/latest-results.html",
@@ -119,88 +143,18 @@
 
 mainApp.controller('CompetitionTypesController', [ '$scope', 'viewService', 'seasonService',
     function($scope, viewService, seasonService) {
-			seasonService.getSeason().then(function(season){$scope.season = season})
-			
+	
 			$scope.$watch("season", function(season){
 				season && viewService.viewP("competition-types", {id:season.id}).then(function(types){$scope.competitionTypes = types})
 			})
-			
-			$scope.$on("season", function(evt,season){$scope.season = season})
-		 
+	 
 }])
 
 mainApp.controller("CompetitionsController", ["$scope",function($scope){
-	this.watchers = []	
-	this.watch = function(name,ln){this.watchers.push({name:name, fn:ln})}
-	this.fire = function(name,value){
-		this.watchers.filter(function(i){return i && i.name == name}).forEach(function(i){i.fn(value)})
-	}
-	this.unwatch = function(name){this.watchers = this.watchers.filter(function(i){return i.name != name})}
-	
-	$scope.$watch("season", function(season){$scope.$ctrl.fire("season", season)})
+	this.watch = function(name,ln){$scope.$watch(name,ln)}
 	$scope.$on("season", function(evt, season){$scope.season = season})
 }])
 	
-mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
-		'viewService','$stateParams', function($scope, $location, viewService, $stateParams) {
-
-	function getForTypeName(name){
-		
-		var comps = $scope.competitions.filter(function(comp){return comp.type.name == name})
-		
-		return comps.length > 0 ? comps.pop():$scope.competitions[0]
-	}
-	
-	$scope.setCompetition = function(comp){$scope.competition = comp;};
-	$scope.setCompetitionByType = function(type){
-		
-		if($scope.competitions){
-			$scope.setCompetition(getForTypeName(type));
-		} 
-		else{
-			var dereg = $scope.$watchCollection("competitions",function(competitions){
-				if(competitions && competitions.length > 0){
-					$scope.setCompetition(getForTypeName(type));
-					dereg();
-			    }
-			});
-			
-		}
-	};
-	
-
-	
-	$scope.$watch("global.currentSeason",function(season){
-		$scope.season = season;
-	});
-	
-
-	$scope.$watchCollection("competitions",function(competitions){
-	    	
-		
-		if(competitions && competitions.length > 0){
-		    var compType = $scope.competition ? $scope.competition.type.name : "LEAGUE"
-		    	//competitions.sort(function(c1,c2){c1.type.name.localeCompare(c2.type.name);})[0].type;	
-	    	$scope.setCompetitionByType(compType);}
-
-	    });
-	
-	
-		$scope.$watch("season", function(season) {
-			if(season){
-
-			$scope.competitions = viewService.view("competitions-view", {
-				id : season.id,
-				isArray : true
-			});
-			}
-		});
-		
-		$scope.$on("season",function(evt, season){
-			$scope.season = season;
-		});
-		
-	} ]);
 
 	mainApp.controller('CompetitionLeagueTableController', [ '$scope', 
 			'viewService', function($scope, viewService) {
@@ -211,18 +165,22 @@ mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
 	
 	function competitionControllerFactory(type){
 		return function($scope, viewService) {
-			  $scope.type = type 
+			 
 					this.$onInit = function() {
-				  	 this.competitions.watch("season", function(season){$scope.season = season})
-				      
+				  	
+						var parent = this.competitions
+						
+			  		$scope.season = parent.season
+			  		parent.watch("season", function(season){$scope.season = season})
+				    $scope.$watch("competition", function(competition){competition && (parent.competition = competition)})  
 				    };
 				   this.$onDestroy = function(){
-				  	 this.competitions.unwatch("season")
+				  	 //this.competitions.unwatch("season")
 				   }
 				   
 				   $scope.$watch("season", function(season){
 				  	 if(season){
-				  		 viewService.view("competition", {seasonId:season.id, type:$scope.type},function(comp){$scope.competition = comp})
+				  		 viewService.view("competition", {seasonId:season.id, type:type},function(comp){$scope.competition = comp})
 				  	 }
 				   })
 				   
@@ -236,51 +194,57 @@ mainApp.controller('OldCompetitionsController', [ '$scope', '$location',
 			competitionControllerFactory("LEAGUE") ]);
 	
 
-		mainApp.controller('CompetitionBeerTableController', [ '$scope', '$interval',
-			'viewService', function($scope, $interval, viewService) {
-				
-		      loadTable($scope,viewService,"beertable");
-			} ]);
-	
-
 		mainApp.controller('BeerCompetitionController', [ '$scope', 'viewService', competitionControllerFactory("BEER") ]);
 		
 
 		mainApp.controller('CupCompetitionController', [
 			'$scope',
-			'$location',
 			'viewService',
-			function($scope, $location, viewService) {
-
-				$scope.setCompetitionByType("CUP");
-				
-			} ]);
+			competitionControllerFactory("CUP") ]);
 		
 
-		mainApp.controller('PlateCompetitionController', [ '$scope', '$location',
-			'viewService', function($scope, $location, viewService) {
-
-			$scope.setCompetitionByType("PLATE");
-
-			} ]);
+		mainApp.controller('PlateCompetitionController', [
+			'$scope',
+			'viewService',
+			competitionControllerFactory("PLATE") ]);
 		
-		mainApp.controller('BuzzerCompetitionController', [ '$scope', function($scope) {
-
-				$scope.setCompetitionByType("BUZZER");
-
-			} ]);
-		mainApp.controller('IndividualCompetitionController', [ '$scope', function($scope) {
-
-			$scope.setCompetitionByType("INDIVIDUAL");
-
-		} ]);
+		mainApp.controller('BuzzerCompetitionController', [
+ 			'$scope',
+			'viewService',
+			competitionControllerFactory("BUZZER") ]);
+		
+		mainApp.controller('IndividualCompetitionController', [
+ 			'$scope',
+			'viewService',
+			competitionControllerFactory("INDIVIDUAL") ]);
 		
 		mainApp.controller('CompetitionAllResults', [
-   			'$scope',
-   			'$stateParams',
-   			function($scope, $stateParams) {
+   			'$scope', 'viewService',
+   			 			function($scope, viewService) {
+   				var $ctrl = this
    				
-   				$scope.setCompetitionByType($stateParams.type);
+   				this.$routerOnActivate = function(next, previous) {
+   				  // Get the hero identified by the route parameter
+   				  $ctrl.type = next.params.type;
+   				}
+   				
+					this.$onInit = function() {
+				  	
+						var parent = this.competitions
+						
+			  		$scope.season = parent.season
+			  		parent.watch("season", function(season){$scope.season = season})
+				    $scope.$watch("competition", function(competition){competition && (parent.competition = competition)})  
+				    };
+				   this.$onDestroy = function(){
+				  	 //this.competitions.unwatch("season")
+				   }
+				   
+				   $scope.$watch("season", function(season){
+				  	 if(season){
+				  		 viewService.view("competition", {seasonId:season.id, type:$ctrl.type},function(comp){$scope.competition = comp})
+				  	 }
+				   })
 		                                   				
 		}]);
 		
