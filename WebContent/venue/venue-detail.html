@@ -1,1 +1,30 @@
-<venue venue="venue"></venue>
+<div layout="column">
+	<md-card> <md-card-title> <md-card-title-text>
+	<span class="md-headline">{{$ctrl.venue.name}}</span>
+		<div flex layout="column">
+	<div class="venue-address"
+		ng-bind-html="$ctrl.venue.address | lineBreaks | htmlify"></div>
+
+			<div ng-if="$ctrl.venue.address">
+					<iframe hide-xs ng-src='{{$ctrl.embeddedUrl($ctrl.venue)}}' width="400" height="300"
+			frameborder="0" style="border: 0"></iframe>
+		<a hide-gt-xs ng-href="{{$ctrl.linkUrl($ctrl.venue)}}" target="_blank">map</a>
+	</div>
+		<div>
+			Website : <a href="{{$ctrl.venue.website}}" target="_blank">{{$ctrl.venue.website}}</a>
+		</div>
+		<div>
+			email : <a href="mailto:{{$ctrl.venue.email}}">{{$ctrl.venue.email}}</a>
+		</div>
+		<div>phone : {{$ctrl.venue.phone}}</div>
+	</div>
+	</md-card-title-text> 
+	<md-card-title-media ng-if="$ctrl.venue.imageURL" hide-xs>
+
+	<img alt="" ng-src="{{$ctrl.venue.imageURL}}">
+	<div ng-if="$ctrl.venue.address">
+
+	</div>
+
+	</md-card-title-media> </md-card-title> <md-card-content> </md-card-content> </md-card>
+</div>
