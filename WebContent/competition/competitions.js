@@ -150,9 +150,21 @@ mainApp.controller('CompetitionTypesController', [ '$scope', 'viewService', 'sea
 	 
 }])
 
-mainApp.controller("CompetitionsController", ["$scope",function($scope){
-	this.watch = function(name,ln){$scope.$watch(name,ln)}
+mainApp.controller("CompetitionsController", ["$scope","viewService",function($scope, viewService){
+	this.watch = function(name,ln){return $scope.$watch(name,ln)}
+	this.setType = function(type){ $scope.type = type}
 	$scope.$on("season", function(evt, season){$scope.season = season})
+	
+	$scope.$watchGroup(["season","type"], function(values){
+		
+		if(values[0] && values[1]){
+			
+			$scope.competition = viewService.view("competition", {seasonId:values[0].id, type:values[1]},function(comp){$scope.competition = comp})
+
+			
+		}
+		
+	})
 }])
 	
 
@@ -166,26 +178,22 @@ mainApp.controller("CompetitionsController", ["$scope",function($scope){
 	function competitionControllerFactory(type){
 		return function($scope, viewService) {
 			 
-					this.$onInit = function() {
+			var deregs = []	
+			
+			this.$onInit = function() {
 				  	
-						var parent = this.competitions
-						
-			  		$scope.season = parent.season
-			  		parent.watch("season", function(season){$scope.season = season})
-				    $scope.$watch("competition", function(competition){competition && (parent.competition = competition)})  
-				    };
-				   this.$onDestroy = function(){
-				  	 //this.competitions.unwatch("season")
-				   }
-				   
-				   $scope.$watch("season", function(season){
-				  	 if(season){
-				  		 viewService.view("competition", {seasonId:season.id, type:type},function(comp){$scope.competition = comp})
-				  	 }
-				   })
-				   
-				   
-				}
+				var parent = this.competitions
+				
+	  		deregs.push(parent.watch("competition", 
+	  				function(competition){
+	  			$scope.competition = competition
+	  			}))
+	  		parent.setType(type)
+			}
+	  	this.$onDestroy = function(){
+		  	 deregs.forEach(function(i){i()})
+		   }
+			}
 	}
 
 	mainApp.controller('LeagueCompetitionController', [
@@ -224,27 +232,22 @@ mainApp.controller("CompetitionsController", ["$scope",function($scope){
    				var $ctrl = this
    				
    				this.$routerOnActivate = function(next, previous) {
-   				  // Get the hero identified by the route parameter
-   				  $ctrl.type = next.params.type;
+   				  this.competitions.setType(next.params.type);
    				}
    				
-					this.$onInit = function() {
-				  	
-						var parent = this.competitions
-						
-			  		$scope.season = parent.season
-			  		parent.watch("season", function(season){$scope.season = season})
-				    $scope.$watch("competition", function(competition){competition && (parent.competition = competition)})  
-				    };
-				   this.$onDestroy = function(){
-				  	 //this.competitions.unwatch("season")
-				   }
-				   
-				   $scope.$watch("season", function(season){
-				  	 if(season){
-				  		 viewService.view("competition", {seasonId:season.id, type:$ctrl.type},function(comp){$scope.competition = comp})
-				  	 }
-				   })
+   				var deregs = []	
+   				
+   				this.$onInit = function() {
+   					  	
+   					var parent = this.competitions
+   					
+   		  		deregs.push(parent.watch("competition", function(competition){$scope.competition = competition}))
+ 
+   				}
+   		  	this.$onDestroy = function(){
+   			  	 deregs.forEach(function(i){i()})
+   			   }
+   				
 		                                   				
 		}]);
 		
