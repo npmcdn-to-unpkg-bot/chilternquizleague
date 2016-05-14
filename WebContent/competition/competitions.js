@@ -103,7 +103,7 @@
 	
 	function loadTable($scope,viewService, tableName){
 		 function func(competition) {
-			if (competition) {
+			if (competition && competition.id) {
 				$scope.leagueTable = viewService.view("tablesForCompetition", {
 					id : competition.id
 				});
@@ -115,7 +115,7 @@
 	
 	function loadResults($scope, viewService){
 		function func(competition) {
-			if (competition) {
+			if (competition  && competition.id) {
 				$scope.results = viewService.view("competition-results", {
 					id : competition.id,
 					isArray:true
@@ -128,8 +128,8 @@
 	}
 	
 	function loadFixtures($scope, viewService){
-		function func(competition) {
-			if (competition) {
+		function func(competition ) {
+			if (competition  && competition.id) {
 				$scope.fixtures = viewService.view("competition-fixtures", {
 					id : competition.id,
 					isArray:true
@@ -152,7 +152,7 @@ mainApp.controller('CompetitionTypesController', [ '$scope', 'viewService', 'sea
 
 mainApp.controller("CompetitionsController", ["$scope","viewService",function($scope, viewService){
 	this.watch = function(name,ln){return $scope.$watch(name,ln)}
-	this.setType = function(type){ $scope.type = type}
+	this.setType = function(type){ $scope.competition = null;$scope.type = type}
 	$scope.$on("season", function(evt, season){$scope.season = season})
 	
 	$scope.$watchGroup(["season","type"], function(values){
@@ -183,15 +183,16 @@ mainApp.controller("CompetitionsController", ["$scope","viewService",function($s
 			this.$onInit = function() {
 				  	
 				var parent = this.competitions
-				
+	  		parent.setType(type)
 	  		deregs.push(parent.watch("competition", 
 	  				function(competition){
 	  			$scope.competition = competition
 	  			}))
-	  		parent.setType(type)
+
 			}
 	  	this.$onDestroy = function(){
-		  	 deregs.forEach(function(i){i()})
+		  	 deregs.forEach(function(i){i()});
+		  	 deregs = []
 		   }
 			}
 	}
@@ -246,6 +247,7 @@ mainApp.controller("CompetitionsController", ["$scope","viewService",function($s
    				}
    		  	this.$onDestroy = function(){
    			  	 deregs.forEach(function(i){i()})
+   			  	 deregs = []
    			   }
    				
 		                                   				
