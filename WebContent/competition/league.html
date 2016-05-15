@@ -1,8 +1,8 @@
-<div ng-controller="LeagueCompetitionController">
+<div>
 	<md-card hide-xs>
 	<md-card-content>
-	<div class="fix-text" cql-text="'league-comp'"></div>
-	<div class="fix-text" ng-bind-html="competition.text | htmlify"></div>
+		<div class="fix-text" cql-text="'league-comp'"></div>
+		<div class="fix-text" ng-bind-html="competition.text | htmlify"></div>
 	</md-card-content></md-card>
 	<md-card>
 		<md-card-title>
@@ -10,10 +10,10 @@
 				<span class="md-headline">League Table</span>
 			</md-card-title-text>
 		</md-card-title>
-		<md-card-content flex
-		class="league-table-container"
-		ng-include="'/competition/league-table.html'"></md-card-content>
+		<md-card-content flex class="league-table-container">
+			<competition-league-tables competition="competition"></competition-league-tables>
+		</md-card-content>
 	</md-card>
-	<div flex ng-include="'/competition/latest-results.html'"></div>
-	<div flex ng-include="'/competition/next-fixtures.html'"></div>
+	<competition-latest-results competition="competition"></competition-latest-results>
+	<competition-next-fixtures competition="competition"></competition-next-fixtures>
 </div>

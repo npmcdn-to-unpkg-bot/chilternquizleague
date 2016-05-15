@@ -219,10 +219,13 @@ class ViewService extends HttpServlet with BaseRest {
       case "globaldata" => Application.globalData.map(new GlobalApplicationDataView(_))
       case "leaguetable" => currentLeagueTable(req, CompetitionType.LEAGUE)
       case "beertable" => currentLeagueTable(req, CompetitionType.BEER)
+      case "tablesForCompetition" => competitionTables(req)
       case "season-views" => seasons
       case "team-extras" => teamExtras(req)
       case "all-results" => allResults(req)
       case "all-fixtures" => allFixtures(req)
+      case "competition" => competitionForSeason(req)
+      case "competition-types" => competitionTypesForSeason(req)
       case "competition-results" => competitionResults(req)
       case "competition-fixtures" => competitionFixtures(req)
       case "results-for-submission" => resultsForSubmission(req)
@@ -254,6 +257,14 @@ class ViewService extends HttpServlet with BaseRest {
 
     ret.foreach(r => objectMapper.writeValue(resp.getWriter, r))
 
+  }
+  
+  def competitionTables(req:HttpServletRequest) = {
+    for{
+      c <- entityByKey[BaseLeagueCompetition](req.id())
+    }
+    yield new LeagueTableWrapperView2(c)
+    
   }
   
   def fixturesById(req:HttpServletRequest) = {
@@ -401,9 +412,9 @@ class ViewService extends HttpServlet with BaseRest {
     } yield s.competition(t).asInstanceOf[TeamCompetition]
   }
 
-  def competitionResults(req: HttpServletRequest): Option[JList[ResultsView]] = teamCompetitionForSeason(req) map { _.results.map(new ResultsView(_)) }
+  def competitionResults(req: HttpServletRequest): Option[JList[ResultsView]] = entityByKey[TeamCompetition](req.id()) map { _.results.map(new ResultsView(_)) }
 
-  def competitionFixtures(req: HttpServletRequest): Option[JList[FixturesView]] = teamCompetitionForSeason(req) map { _.fixtures.map(new FixturesView(_)) }
+  def competitionFixtures(req: HttpServletRequest): Option[JList[FixturesView]] = entityByKey[TeamCompetition](req.id()) map { _.fixtures.map(new FixturesView(_)) }
 
   def textForName(req: HttpServletRequest): Option[String] = {
 
@@ -455,7 +466,21 @@ class ViewService extends HttpServlet with BaseRest {
 
   def competitionsForSeason(req: HttpServletRequest): Option[JList[CompetitionView]] =
     entityByKey[Season](idParam(req)).map(_.competitions.values.toList.map { a => new CompetitionView(a) })
+  
+  def competitionTypesForSeason(req: HttpServletRequest): Option[JList[CompetitionTypeView]] =
+    entityByKey[Season](req.id()).map(_.competitions.keys.toList.map (new CompetitionTypeView(_) ))
 
+    
+  def competitionForSeason(req: HttpServletRequest):Option[CompetitionView] = 
+  {
+    for{
+      s <- entityByKey[Season](req.id("seasonId"))
+      t <- req.parameter("type")
+      
+    }
+    yield new CompetitionView(s.competitions.get(CompetitionType.valueOf(t)))
+  }
+    
   def resultReports(req: HttpServletRequest): Option[ResultsReportsView] = {
 
     for {

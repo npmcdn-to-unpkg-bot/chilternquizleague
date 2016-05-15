@@ -1,9 +1,9 @@
-<div layout="column" ng-controller="TeamsController" md-theme="blue-grey">
-	<div ui-view="menu" >
-	</div>
+<div layout="column" md-theme="blue-grey">
+	<span ng-if="team"><team-menu team="team"></team-menu></span>
+	<span ng-if="!team"><teams-menu></team-menu></span>
 	<div layout="row">
-	<div ng-include="'/team/sidenav.html'" ></div>
-	<md-content flex ui-view="content" class="full-content" ></md-content>
+	<teams-sidenav teams="teams"></teams-sidenav>
+	<md-content flex class="full-content" ><ng-outlet></ng-outlet></md-content>
 	</div>
 </div>
 

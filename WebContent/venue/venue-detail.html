@@ -1,4 +1,4 @@
-<div layout="column" ng-controller="VenueController">
+<div layout="column">
 	<md-card> <md-card-title> <md-card-title-text>
 	<span class="md-headline">{{venue.name}}</span>
 		<div flex layout="column">
@@ -6,9 +6,9 @@
 		ng-bind-html="venue.address | lineBreaks | htmlify"></div>
 
 			<div ng-if="venue.address">
-					<iframe hide-xs ng-src='{{embeddedUrl}}' width="400" height="300"
+					<iframe hide-xs ng-src='{{$ctrl.embeddedUrl(venue)}}' width="400" height="300"
 			frameborder="0" style="border: 0"></iframe>
-		<a hide-gt-xs ng-href="{{linkUrl}}" target="_blank">map</a>
+		<a hide-gt-xs ng-href="{{$ctrl.linkUrl(venue)}}" target="_blank">map</a>
 	</div>
 		<div>
 			Website : <a href="{{venue.website}}" target="_blank">{{venue.website}}</a>

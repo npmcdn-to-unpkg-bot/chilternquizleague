@@ -1,4 +1,8 @@
-<div ng-controller="TeamEdit">
+<div layout="column" md-theme="blue-grey">
+	<cql-title-bar page-menu>Edit Team Details</cql-title-bar>
+	<div layout="row">
+	<teams-sidenav teams="teams"></teams-sidenav>
+	<md-content flex class="full-content" ><div>
 	<form ng-submit="saveTeam(team)" layout="column">
 	<md-input-container>
 		<label>Name</label>
@@ -21,4 +25,8 @@
 	
 	<span class="md-action"><md-button type="submit" class="md-primary md-raised" style="margin-top:.25em;">Save</md-button></span>
 	</form>
+</div></md-content>
+	</div>
 </div>
+
+

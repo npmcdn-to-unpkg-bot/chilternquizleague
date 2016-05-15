@@ -1,7 +1,7 @@
-<div ng-controller="CompetitionAllResults">
+<div>
 	<md-subheader>Remaining Fixtures - {{competition.description}}</md-subheader>
 	<md-content >
-		<section ng-controller="FixturesTable">
+		<section ng-controller="CompetitionFixturesTable">
 			<cql-fixtures type="'full-header'"  fixtures="fixtures" ></cql-fixtures>
 		</section>
 	</md-content>

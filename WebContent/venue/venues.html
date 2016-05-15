@@ -1,17 +1,20 @@
-<div ng-controller="VenuesController" md-theme="lime">
-	<cql-title-bar page-menu>{{venue.name}}</cql-title-bar>
+<div md-theme="lime">
+
+	<span ng-if="venue"><cql-title-bar  page-menu>{{venue.name}}</cql-title-bar></span>
+	<span ng-if="!venue"><cql-title-bar page-menu>Venues</cql-title-bar></span>
+
 	<div layout="row">
-	<div>
-		<cql-page-nav title="Venues">
-
-			<div ng-repeat="item in venues | orderBy:'name'">
-				<md-button class="menu-item menu-title" 
-					href="/venues/{{item.id}}">{{item.name}}</md-button>
-			</div>
-
-		</cql-page-nav>
+		<div>
+			<cql-page-nav title="Venues">
+	
+				<div ng-repeat="item in venues | orderBy:'name'">
+					<md-button class="menu-item menu-title" 
+						href="/venues/{{item.id}}">{{item.name}}</md-button>
+				</div>
+	
+			</cql-page-nav>
 		</div>
-		<md-content flex ui-view class="full-content"></md-content>
+		<md-content flex class="full-content"><ng-outlet></ng-outlet></md-content>
 	</div>
 </div>
 

@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','ui.router',"tc.chartjs","ui.tinymce"]).factory(
+var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies',"tc.chartjs","ui.tinymce","ngComponentRouter"]).factory(
 		'viewService',
 		[
 				"$http","$rootScope",
@@ -260,12 +260,12 @@ mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 	return service
 }]
 		)
+		
+mainApp.value('$routerRootComponent', 'app')
 
-mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService','seasonService',
-		function($rootScope, $state, $stateParams, $mdDialog, viewService, seasonService) {
 
-			$rootScope.$state = $state;
-			$rootScope.$stateParams = $stateParams;
+mainApp.run([ '$rootScope', '$mdDialog', 'viewService','seasonService',
+		function($rootScope, $mdDialog, viewService, seasonService) {
 
 			seasonService.getGlobal().then(function(global){$rootScope.global = global})
 			
@@ -317,32 +317,10 @@ mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService'
 			};
 		} ]);
 
-mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
-	             function ($stateProvider,   $urlRouterProvider, $locationProvider){
+mainApp.config(['$locationProvider',
+	             function ($locationProvider){
 	
-	
-	$stateProvider.state("home", {
-    url: "/",
-    templateUrl: '/indexContents.html'
-
-  })
-  .state("rules", {
-  	url:"/rules",
-  	templateUrl : "/rules/rules.html"
-  })
-  .state("contact", {
-  	url:"/contact",
-  	templateUrl : "/contact/contact.html"
-  })
-  .state("links", {
-  	url:"/links",
-  	templateUrl : "/links/links.html"
-  })
-  
-  
-  ;
-	
-$locationProvider.html5Mode(true);
+	$locationProvider.html5Mode(true);
 }]);
 
 mainApp.config(function($mdThemingProvider) {

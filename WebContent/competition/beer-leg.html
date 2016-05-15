@@ -1,5 +1,5 @@
-<div ng-controller="BeerCompetitionController">
-<md-card><md-card-content><div class="fix-text"  cql-text="'beer-comp'"></div><div class="fix-text" ng-bind-html="competition.text | htmlify"></div><md-card-content></md-card>
+<div>
+<md-card><md-card-content><div class="fix-text"  cql-text="'beer-comp'"></div><div ng-if="competition.text" class="fix-text" ng-bind-html="competition.text"></div><md-card-content></md-card>
 <md-card>
 <md-card-title>
 	<md-card-title-text>
@@ -8,6 +8,7 @@
 </md-card-title>
 
 <md-card-content>
-<div class="league-table-container" ng-include="'/competition/beer-table.html'" ></div></md-card-content></md-card>
-<div flex ng-include="'/competition/latest-results.html'"></div>
+	<competition-league-tables competition="competition"></competition-league-tables>
+</md-card-content></md-card>
+<competition-latest-results competition="competition"></competition-latest-results>
 </div>

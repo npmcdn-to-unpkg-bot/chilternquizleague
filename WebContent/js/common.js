@@ -3,57 +3,49 @@ var b = document.documentElement;
   b.setAttribute('data-platform', navigator.platform );
   b.className += ((!!('ontouchstart' in window) || !!('onmsgesturechange' in window))?' touch':'');
 
-function listControllerFactory(type, otherFunctions) {
-
-	var camelName = type.charAt(0).toUpperCase() + type.substr(1);
-	var listName = type + "s";
-	return function($scope, $interval, viewService, seasonService ,$location, $stateParams, $sce) {
-
-		$scope["set" + camelName] = function(item) {
-			$scope[type] = item;
-		};
-
-
-		otherFunctions ? otherFunctions($scope, $interval, viewService, seasonService,
-				$location, $stateParams, $sce) : null;
-
-		viewService
-				.list(
-						type,
-						function(items) {
-							$scope[listName] = items;
-						});
 	
-		
-		$scope.setCurrentItem = function(){
-			
-			var id = $stateParams.itemId;
-			
-			function findItem(id) {
-			for (idx in $scope[listName]) {
-
-				if ($scope[listName][idx].id == id) {
-					$scope["set" + camelName]($scope[listName][idx]);
-					break;
+ var COMMON = {
+		 
+		 configureGroupController : function(name,ctrl, $scope, viewService){
+				
+				var listName = name + "s"
+				
+				viewService.list(name, function(items){$scope[listName] = items})
+				
+				ctrl.setId = function(id){$scope.id = id}
+				ctrl.watch = function(name, lstn){return $scope.$watch(name, lstn)}
+				
+				$scope.$watchGroup([listName, "id"], function(values){
+					if(values[0] && values[1]){
+						$scope[name] = values[0].filter(function(v){return v.id == values[1]}).pop()
+					}
+				})
+				
+			},
+		 
+		 configureItemController : function(name,ctrl, $scope){
+				var listName = name + "s"
+				
+				var derefs = []
+				ctrl.$routerOnActivate = function(next, previous) {
+					ctrl[listName].setId(next.params.id);
+				}
+				
+				ctrl.$onInit = function(){
+					derefs.push(ctrl[listName].watch(name, 
+							function(item){
+						$scope[name] = item
+						}))
+				}
+				
+				ctrl.$onDelete = function(){
+					derefs.forEach(function(i){i()})
+					derefs = []
 				}
 			}
-		}
-				
-		if($scope[listName]){
-			
-			findItem(id);
-		}
-		else{
-			var destr = $scope.$watchCollection(listName, function(items) {
-				if(items && items.length > 0){
-					findItem(id);
-					destr();
-				}
-			});
+		 
+ } 
+  
 
-			
-		}
-		}
-	};
-}
+	
 

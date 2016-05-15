@@ -1,7 +1,7 @@
 <div layout="column" md-theme="light-blue">
-	<div ui-view="menu"></div>
+	<results-menu></results-menu>
 	<div layout="row">
-		<div ng-include="'/results/sidenav.html'"></div>
-		<md-content flex ui-view="content" class="full-content"></md-content>
+		<results-sidenav></results-sidenav>
+		<md-content flex class="full-content"><ng-outlet></ng-outlet></md-content>
 	</div>
 </div>
