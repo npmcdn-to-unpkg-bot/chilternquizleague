@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies','ui.router',"tc.chartjs","ui.tinymce","ngComponentRouter"]).factory(
+var mainApp = angular.module('mainApp', ["ngAnimate",'ngMaterial','ngCookies',"tc.chartjs","ui.tinymce","ngComponentRouter"]).factory(
 		'viewService',
 		[
 				"$http","$rootScope",
@@ -317,8 +317,8 @@ mainApp.run([ '$rootScope', '$mdDialog', 'viewService','seasonService',
 			};
 		} ]);
 
-mainApp.config(['$stateProvider', '$urlRouterProvider','$locationProvider',
-	             function ($stateProvider,   $urlRouterProvider, $locationProvider){
+mainApp.config(['$locationProvider',
+	             function ($locationProvider){
 	
 	$locationProvider.html5Mode(true);
 }]);

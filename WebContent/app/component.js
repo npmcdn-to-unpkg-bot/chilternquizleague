@@ -14,6 +14,7 @@ mainApp.component('app', {
     {path: '/competitions/...', name: 'Competitions', component: 'competitions'},
     {path: '/venues/...', name: 'Venues', component: 'venues'},
     {path: '/teams/...', name: 'Teams', component: 'teams'},
+		{path: '/teams/edit/:id',    name: 'TeamEdit',   component: 'teamEdit'},
   ]
 })
 .component('indexContent', {

@@ -12,14 +12,12 @@
 		 {path: '/:id/charts',    name: 'TeamCharts',   component: 'teamCharts'},
 		 {path: '/start-team',    name: 'TeamStart',   component: 'teamStart'},
 		 {path: '/logon',    name: 'TeamLogon',   component: 'teamLogon'},
-		 {path: '/edit/:id',    name: 'TeamEdit',   component: 'teamEdit'},
-
-
 		 ]
 	})
 	.component('teamsPage', {
 		templateUrl:"/team/teams-content.html",
-		require : {"teams" : "^teams"}
+		require : {"teams" : "^teams"},
+		controller : "TeamContentController"
 	})
 	.component('team', {
 		templateUrl:"/team/team-details.html",
@@ -46,10 +44,12 @@
 	})
 	.component('teamLogon', {
 		templateUrl:"/team/team-logon.html",
+		controller : "TeamLogon",
 		bindings: { $router: '<' }
 	})
 	.component('teamEdit', {
 		templateUrl:"/team/team-edit.html",
+		controller : "TeamEdit"
 	})
 	.directive('teamsSidenav', function(){return{
 		templateUrl:"/team/sidenav.html",
@@ -81,11 +81,21 @@
 			function($scope, viewService){
 		
 				COMMON.configureGroupController("team", this, $scope, viewService)
+		}]);
+	
+	mainApp.controller('TeamContentController', [ '$scope',
+			function($scope){
 				
-
-				
-
-	}]);
+				var ctrl = this
+				var deregs = []
+				this.$onInit = function(){
+					deregs.push(ctrl.teams.watch("teams", function(teams){$scope.teams = teams}))
+				}
+				this.onDestroy = function(){
+					deregs.forEach(function(i){i()})
+					deregs = []
+				}
+		}]);
 
 	mainApp.controller('TeamController', [ '$scope', 'seasonService',
 			function($scope, seasonService) {
@@ -132,11 +142,13 @@
 	
 
 	
-	mainApp.controller("TeamLogon", ["$scope","viewService","secureService",function($scope,viewService,secureService){
+	mainApp.controller("TeamLogon", ["$scope","viewService","secureService","$rootRouter",function($scope,viewService,secureService,$rootRouter){
+		
+		var ctrl = this
 		
 		$scope.logon = function(password,email){
 			
-			secureService.logon(password,email,function(teamId){this.$router.navigate(["TeamEdit"],{"id":teamId})})
+			secureService.logon(password,email,function(teamId){$rootRouter.navigate(["TeamEdit",{"id":teamId}])})
 			
 		}
 		
@@ -151,9 +163,13 @@
 		
 	}])
 	
-		mainApp.controller("TeamEdit", ["$scope","secureService","$stateParams","$mdDialog", function($scope,secureService,$stateParams, $mdDialog){
+		mainApp.controller("TeamEdit", ["$scope","secureService","$mdDialog", function($scope,secureService, $mdDialog){
 		
-		$scope.team = secureService.load("team",$stateParams.itemId)
+			this.$routerOnActivate = function(next, previous) {
+				$scope.team = secureService.load("team", next.params.id)
+			}
+			
+		
 		$scope.users = secureService.list("user")
 		$scope.tinymceOptions={ 
 				plugins: "link, image, autolink, table, code, charmap, searchreplace, contextmenu",

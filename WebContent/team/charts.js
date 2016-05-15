@@ -11,7 +11,6 @@ mainApp.controller("TeamCharts",["$scope", 'viewService',"$filter", function($sc
 		function dateToLabel(dates){
 			return dates.map(function(d){return $filter("date")(new Date(d),"dd MMM")});
 		}
-
 		
 		$scope.positionOptions={
 				scaleStartValue:10,
@@ -344,5 +343,8 @@ mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonS
 
 		
 	$scope.$watchGroup(["teams","season"], loadStats);
+	
+	seasonService.getSeason().then(function(season){$scope.season = season})
+
 }]);
 })()
