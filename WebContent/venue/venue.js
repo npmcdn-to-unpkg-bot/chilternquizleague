@@ -23,37 +23,15 @@
 	  templateUrl: '/venue/venue-text.html',
 	})
 	
+
+	
 	mainApp.controller('VenuesController', [  '$scope', 'viewService', function($scope, viewService){
-			viewService.list("venue", function(venues){$scope.venues = venues})
-			
-			this.setId = function(id){$scope.venueId = id}
-			this.watch = function(name, lstn){return $scope.$watch(name, lstn)}
-			
-			$scope.$watchGroup(["venues", "venueId"], function(values){
-				if(values[0] && values[1]){
-					$scope.venue = values[0].filter(function(v){return v.id == values[1]}).pop()
-				}
-			})
+			COMMON.configureGroupController("venue", this, $scope, viewService)
 	}
 	]);
-	mainApp.controller("VenueDetailController", ["$scope", 'viewService','$sce',function($scope, viewService, $sce){
-			var $ctrl = this
-			var derefs = []
-			this.$routerOnActivate = function(next, previous) {
-				$ctrl.venues.setId(next.params.id);
-			}
-			
-			this.$onInit = function(){
-				derefs.push($ctrl.venues.watch("venue", 
-						function(venue){
-					$ctrl.venue = venue
-					}))
-			}
-			
-			this.$onDelete = function(){
-				derefs.forEach(function(i){i()})
-				derefs = []
-			}
+	mainApp.controller("VenueDetailController", ["$scope", '$sce',function($scope, $sce){
+		
+		  COMMON.configureItemController("venue", this, $scope)
 			
 			function makeParts(venue){
 				var parts=["https://maps.google.com/maps?&q=","", "&output=embed"];

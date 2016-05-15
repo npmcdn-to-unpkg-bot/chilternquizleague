@@ -1,6 +1,5 @@
 (function(){
-	
-		
+			
 	mainApp.component('competitions', {
 	  templateUrl:"/competition/competitions.html",
 	  controller : "CompetitionsController",
@@ -19,9 +18,6 @@
 	.component('competitionLeague', {
 		templateUrl:"/competition/league.html",
 		controller : "LeagueCompetitionController",
-		bindings:{
-			"onUpdate":"&",
-			},
 		require : {"competitions" : "^competitions"}
 	})
 	.component('competitionBeer', {

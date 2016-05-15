@@ -1,113 +1,101 @@
 (function() {
 
-	mainApp.config([ '$stateProvider','$urlRouterProvider', function($stateProvider,$urlRouterProvider) {
+	mainApp.component('teams', {
+	  templateUrl:"/team/teams.html",
+	  controller : "TeamsController",
+	  $routeConfig: [
+		 {path: '/',    name: 'TeamsPage',   component: 'teamsPage', useAsDefault: true},
+		 {path: '/:id',    name: 'Team',   component: 'team'},
+		 {path: '/team/:id',    name: 'Team',   component: 'team'},
+		 {path: '/:id/results',    name: 'TeamResults',   component: 'teamResults'},
+		 {path: '/:id/fixtures',    name: 'TeamFixtures',   component: 'teamFixtures'},
+		 {path: '/:id/charts',    name: 'TeamCharts',   component: 'teamCharts'},
+		 {path: '/start-team',    name: 'TeamStart',   component: 'teamStart'},
+		 {path: '/logon',    name: 'TeamLogon',   component: 'teamLogon'},
+		 {path: '/edit/:id',    name: 'TeamEdit',   component: 'teamEdit'},
 
-		 $urlRouterProvider
-		 //route from old-style to new-style team urls 
-	        .when('/teams/team/:id', '/teams/:id');
-		
-		$stateProvider.state("teams", {
 
-			url : "/teams",
-			templateUrl:"/team/teams.html"
-
-
-		}).state("teams.all", {
-
-			url : "/all",
-			views : {
-				menu:{templateUrl:"/team/teams-menu.html"},
-				content: {templateUrl:"/team/teams-content.html"}
-		
-			}
-
-		}).state("teams.start", {
-
-			url : "/start-team",
-			views : {
-				menu:{templateUrl:"/team/start-team-menu.html"},
-				content: {templateUrl : '/team/start-team.html'}
-		
-			}
-
-		}).state("teams.logon",{
-			url:"/logon",
-			views : {
-				menu:{templateUrl:"/team/teams-menu.html"},
-				content: {templateUrl:"/team/team-logon.html"}
-		
-			}
-
-		})
-		.state("teams.edit",{
-			url:"/edit/:itemId",
-			views : {
-				menu:{templateUrl:"/team/team-edit-menu.html"},
-				content: {templateUrl:"/team/team-edit.html"}
-		
-			}
-
-		}).state("teams.id", {
-
-			url : "/:itemId",
-			views : {
-				menu:{templateUrl:"/team/team-menu.html"},
-				content: {templateUrl:"/team/team-details.html"}
-		
-			}
-		}).state("teams.results", {
-
-			url : "/:itemId/results",
-			views : {
-				menu:{templateUrl:"/team/team-menu.html"},
-				content: {templateUrl:"/team/team-results.html"}
-		
-			}
-		}).state("teams.fixtures", {
-
-			url : "/:itemId/fixtures",
-			views : {
-				menu:{templateUrl:"/team/team-menu.html"},
-				content: {templateUrl : '/team/team-fixtures.html'}
-		
-			}
-
-		}).state("teams.charts", {
-
-			url : "/:itemId/charts",
-			views : {
-				menu:{templateUrl:"/team/team-menu.html"},
-				content: {templateUrl:"/team/team-charts.html"}
-		
-			}
-		})
-		;
-
-	} ]);
-
-	function extraStuff($scope, $interval, viewService, seasonService, $location, $stateParams) {
-
-		$scope.copyToClipboard = function(text){
-			clipboard.copy(document.baseURI + "calendar/" + text);
+		 ]
+	})
+	.component('teamsPage', {
+		templateUrl:"/team/teams-content.html",
+		require : {"teams" : "^teams"}
+	})
+	.component('team', {
+		templateUrl:"/team/team-details.html",
+		controller : "TeamController",
+		require : {"teams" : "^teams"}
+	})
+	.component('teamResults', {
+		templateUrl:"/team/team-results.html",
+		controller : "TeamController",
+		require : {"teams" : "^teams"}
+	})
+	.component('teamFixtures', {
+		templateUrl:"/team/team-fixtures.html",
+		controller : "TeamController",
+		require : {"teams" : "^teams"}
+	})
+	.component('teamCharts', {
+		templateUrl:"/team/team-charts.html",
+		controller : "TeamController",
+		require : {"teams" : "^teams"}
+	})
+	.component('teamStart', {
+		templateUrl:"/team/start-team.html",
+	})
+	.component('teamLogon', {
+		templateUrl:"/team/team-logon.html",
+		bindings: { $router: '<' }
+	})
+	.component('teamEdit', {
+		templateUrl:"/team/team-edit.html",
+	})
+	.directive('teamsSidenav', function(){return{
+		templateUrl:"/team/sidenav.html",
+		scope : {teams : "<"}
+	}})
+	.directive('teamsMenu', function(){return{
+		templateUrl:"/team/teams-menu.html",
+		scope : {team : "<"}
+	}})
+	.directive('teamMenu', ["$rootScope",function($rootScope){return{
+		templateUrl:"/team/team-menu.html",
+		scope : {team : "<"},
+		link  : function(scope){
+			scope.showContactForm = $rootScope.showContactForm
 		}
-		
-		$scope.season = {}
-		seasonService.getSeason().then(function(season){$scope.season = season})
-				
-	}
+	}}])
+	
+	
+	
+
 
 	mainApp.controller('FindTeams', [ '$scope', 'viewService',
 			function($scope, viewService) {
 
 			} ]);
 
-	mainApp.controller('TeamsController', [ '$scope', '$interval',
-			'viewService', 'seasonService','$location', '$stateParams',
-			 listControllerFactory("team", extraStuff)]);
+	mainApp.controller('TeamsController', [ '$scope', 
+			'viewService',
+			function($scope, viewService){
+		
+				COMMON.configureGroupController("team", this, $scope, viewService)
+				
 
-	mainApp.controller('TeamController', [ '$scope', 
-			function($scope) {
-		$scope.setCurrentItem();
+				
+
+	}]);
+
+	mainApp.controller('TeamController', [ '$scope', 'seasonService',
+			function($scope, seasonService) {
+				COMMON.configureItemController("team", this, $scope)
+								$scope.season = {}
+				seasonService.getSeason().then(function(season){$scope.season = season})
+				
+				$scope.copyToClipboard = function(text){
+					clipboard.copy(document.baseURI + "calendar/" + text);
+				}
 	} ]);
 
 	mainApp.controller("TeamExtrasController", [
@@ -116,7 +104,7 @@
 			'viewService',
 			'$location',
 			function($scope, $interval, viewService, $location) {
-				$scope.setCurrentItem();
+				//$scope.setCurrentItem();
 				function teamExtras() {
 
 					if ($scope.team && $scope.season && $scope.season.id ) {
@@ -144,11 +132,11 @@
 	
 
 	
-	mainApp.controller("TeamLogon", ["$scope","viewService","secureService","$state", function($scope,viewService,secureService, $state){
+	mainApp.controller("TeamLogon", ["$scope","viewService","secureService",function($scope,viewService,secureService){
 		
 		$scope.logon = function(password,email){
 			
-			secureService.logon(password,email,function(teamId){$state.go("teams.edit",{"itemId":teamId})})
+			secureService.logon(password,email,function(teamId){this.$router.navigate(["TeamEdit"],{"id":teamId})})
 			
 		}
 		

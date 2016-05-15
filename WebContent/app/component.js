@@ -13,6 +13,7 @@ mainApp.component('app', {
     {path: '/results/submit', name: 'SubmitResults', component: 'submitResults'},
     {path: '/competitions/...', name: 'Competitions', component: 'competitions'},
     {path: '/venues/...', name: 'Venues', component: 'venues'},
+    {path: '/teams/...', name: 'Teams', component: 'teams'},
   ]
 })
 .component('indexContent', {

@@ -8,7 +8,6 @@
 	
 
 mainApp.controller("TeamCharts",["$scope", 'viewService',"$filter", function($scope,viewService, $filter){
-		$scope.setCurrentItem();
 		function dateToLabel(dates){
 			return dates.map(function(d){return $filter("date")(new Date(d),"dd MMM")});
 		}
@@ -151,7 +150,7 @@ mainApp.controller("TeamCharts",["$scope", 'viewService',"$filter", function($sc
 
 
 mainApp.controller("AllSeasonCharts",["$scope", 'viewService',"$filter", "seasonService", "$q",function($scope,viewService, $filter, seasonService, $q){
-	$scope.setCurrentItem();
+
 	function dateToLabel(dates){
 		return dates.map(function(d){return $filter("date")(new Date(d),"dd MMM")});
 	}
@@ -258,7 +257,7 @@ mainApp.controller("AllSeasonCharts",["$scope", 'viewService',"$filter", "season
 }]);
 
 mainApp.controller("AllTeamsCharts",["$scope", 'viewService',"$filter", "seasonService", "$q",function($scope,viewService, $filter, seasonService, $q){
-	$scope.setCurrentItem();
+
 	function dateToLabel(dates){
 		return dates.map(function(d){return $filter("date")(new Date(d),"dd MMM")});
 	}

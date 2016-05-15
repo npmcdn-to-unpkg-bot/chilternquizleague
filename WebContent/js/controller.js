@@ -264,17 +264,8 @@ mainApp.factory("seasonService", ["viewService","$q",function(viewService,$q){
 mainApp.value('$routerRootComponent', 'app')
 
 
-mainApp.run([ '$rootScope', '$state', '$stateParams', '$mdDialog', 'viewService','seasonService','$templateCache',
-		function($rootScope, $state, $stateParams, $mdDialog, viewService, seasonService, $templateCache) {
-
-  $rootScope.$on('$routeChangeStart', function(event, next, current) {
-    if (typeof(current) !== 'undefined'){
-        $templateCache.remove(current.templateUrl);
-    }
-})
-	
-			$rootScope.$state = $state;
-			$rootScope.$stateParams = $stateParams;
+mainApp.run([ '$rootScope', '$mdDialog', 'viewService','seasonService',
+		function($rootScope, $mdDialog, viewService, seasonService) {
 
 			seasonService.getGlobal().then(function(global){$rootScope.global = global})
 			
