@@ -1,10 +1,11 @@
 
-var maintainApp = angular.module('maintainApp', ['ngMaterial','ui.router', "ngAnimate","ui.tinymce"])
+var maintainApp = angular.module('maintainApp', ['ngMaterial','ui.router', "ngAnimate","ui.tinymce", "ngComponentRouter"])
 		.factory('entityService', ENTITY_SERVICE_DEFN);
 
 
-maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+maintainApp.config(['$locationProvider', function($locationProvider) {
 
+/*
 	$stateProvider.state("home", {
 	    url: "/maintain",
 	    templateUrl: '/maintain/dummy.html'
@@ -91,7 +92,7 @@ maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvi
 
 	$locationProvider.html5Mode(true);
 	
-
+*/
 	
 	
 } ]);
@@ -112,6 +113,8 @@ maintainApp.directive("cqlAddButton",function(){
 		replace:true,
 		template : "<span><md-button class='md-raised' ng-click='addScreen()'>Add New</md-button></span>"};
 });
+
+maintainApp.value('$routerRootComponent', 'app')
 
 function makeUpdateFn(typeName, noRedirect) {
 	return makeUpdateFnWithCallback(typeName, (noRedirect ? null : function(
@@ -160,7 +163,7 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 
 function makeListFn(typeName, config) {
 
-	return function($scope, entityService, $routeParams, $rootScope, $location) {
+	return function($scope, entityService) {
 		config = config ? config : {};
 		
 		var collectionName = (config.collName ? config.collName
@@ -218,7 +221,7 @@ function filter(list, fn){
 
 function getCommonParams(constructorFn) {
 
-	return [ '$scope', 'entityService', '$stateParams', '$rootScope',
+	return [ '$scope', 'entityService', '$rootScope',
 			'$location', constructorFn ];
 }
 

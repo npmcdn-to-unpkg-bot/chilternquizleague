@@ -5,9 +5,15 @@ maintainApp.controller('VenueListCtrl', getCommonParams(makeListFn("venue", {
 })));
 
 maintainApp.controller('VenueDetailCtrl', getCommonParams(function($scope,
-		entityService, $routeParams, $rootScope, $location) {
-	makeUpdateFn("venue")($scope, entityService, $routeParams, $rootScope,
-			$location);
+		entityService,  $rootScope, $location) {
+
+	
+	
+	this.$routerOnActivate = function(next){
+		makeUpdateFn("venue")($scope, entityService, next.params, $rootScope,
+				$location);
+		
+	}
 	
 	$scope.uploadImage = function(){
 		
