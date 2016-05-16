@@ -1,9 +1,9 @@
 maintainApp.controller('TextListCtrl', getCommonParams(makeListFn("text")));
 
 maintainApp.controller('TextDetailCtrl', getCommonParams(function($scope,
-		entityService, $routeParams, $rootScope, $location) {
-	makeUpdateFn("text")($scope, entityService, $routeParams,
-			$rootScope, $location);
+		entityService, $rootScope, $location) {
+	makeUpdateFn("text")($scope, entityService, 
+			$rootScope, $location, this);
 
 	$scope.addEntry = function() {
 		var entry = {

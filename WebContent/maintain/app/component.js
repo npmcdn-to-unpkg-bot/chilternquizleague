@@ -1,15 +1,37 @@
 
 maintainApp.component('app', {
-  templateUrl:"/app/app.html",
+  templateUrl:"/maintain/app/app.html",
   $routeConfig: [
     {path: '/maintain', name: 'IndexContent', component: 'indexContent', useAsDefault: true},
-    {path: '/maintain/venues', name: 'Venues', component: 'venues'},
-    {path: '/maintain/venue', name: 'Venue', component: 'venue'},
+    {path: '/maintain/...', name: 'Root', component: 'root'},
+
 
   ]
 })
 .component('indexContent', {
-	templateUrl:"/maintain/dummy.html",
+	templateUrl:"/maintain/app/dummy.html",
+})
+.component('root', {
+	templateUrl:"/maintain/app/root.html",
+	$routeConfig:[
+    {path: 'venues', name: 'Venues', component: 'venues'},
+    {path: 'venues/:venueId', name: 'Venue', component: 'venue'},
+    {path: 'users', name: 'Users', component: 'users'},
+    {path: 'users/:userId', name: 'User', component: 'user'},
+    {path: 'texts', name: 'Texts', component: 'texts'},
+    {path: 'texts/:textId', name: 'Text', component: 'text'},
+    {path: 'global/current', name: 'Global', component: 'global'},
+    {path: 'database', name: 'Database', component: 'database'},
+    {path: 'teams', name: 'Teams', component: 'teams'},
+    {path: 'teams/:teamId', name: 'Team', component: 'team'},
+    {path: 'mail', name: 'Mail', component: 'mail'},
+    {path: 'mail/mass-mail', name: 'MassMail', component: 'massMail'},
+    {path: 'stats', name: 'Stats', component: 'stats'},
+    {path: 'stats/:seasonId', name: 'StatsDetail', component: 'statsDetail'},
+    {path: 'seasons', name: 'Seasons', component: 'seasons'},
+    {path: 'seasons/...', name: 'Season', component: 'season'},
+	]
+
 })
 .component('venues', {
 	templateUrl:"/maintain/venue/venue-list.html",
@@ -19,7 +41,72 @@ maintainApp.component('app', {
 	templateUrl:"/maintain/venue/venue-detail.html",
 	controller : "VenueDetailCtrl"
 })
-
+.component('users', {
+	templateUrl:"/maintain/user/user-list.html",
+	controller : "UserListCtrl"
+})
+.component('user', {
+	templateUrl:"/maintain/user/user-detail.html",
+	controller : "UserDetailCtrl"
+})
+.component('texts', {
+	templateUrl:"/maintain/text/text-list.html",
+	controller : "TextListCtrl"
+})
+.component('text', {
+	templateUrl:"/maintain/text/text-detail.html",
+	controller : "TextDetailCtrl"
+})
+.component('global', {
+	templateUrl:"/maintain/global/global-detail.html",
+	controller : "GlobalDetailCtrl"
+})
+.component('database', {
+	templateUrl:"/maintain/database/database.html",
+	controller : "DatabaseCtrl"
+})
+.component('teams', {
+	templateUrl:"/maintain/team/team-list.html",
+	controller : "TeamListCtrl"
+})
+.component('team', {
+	templateUrl:"/maintain/team/team-detail.html",
+	controller : "TeamDetailCtrl"
+})
+.component('mail', {
+	templateUrl:"/maintain/mail/mail-options.html",
+})
+.component('massMail', {
+	templateUrl:"/maintain/mail/mass-mail.html",
+	controller : "MassMailCtrl"
+})
+.component('stats', {
+	templateUrl:"/maintain/stats/season-list.html",
+	controller : "SeasonListCtrl"
+})
+.component('statsDetail', {
+	templateUrl:"/maintain/stats/stats-detail.html",
+	controller : "StatsDetailCtrl"
+})
+.component('seasons', {
+	templateUrl:"/maintain/season/season-list.html",
+	controller : "SeasonListCtrl"
+})
+.component('season', {
+	templateUrl:"/maintain/season/season-detail.html",
+	$routeConfig:[
+	  {path: ':seasonId', name: 'SeasonDetail', component: 'seasonDetail'},
+	  {path: ':seasonId/calendar', name: 'SeasonCalendar', component: 'seasonCalendar'}
+	]
+})
+.component('seasonDetail', {
+	templateUrl:"/maintain/season/season-detail-contents.html",
+	controller : "SeasonDetailCtrl"
+})
+.component('seasonCalendar', {
+	templateUrl:"/maintain/season/calendar.html",
+	controller : "SeasonCalendarCtrl"
+})
 
 /*
 

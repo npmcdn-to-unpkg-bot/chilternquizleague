@@ -1,8 +1,8 @@
 maintainApp.controller('GlobalDetailCtrl', getCommonParams(function($scope,
-		entityService, $routeParams, $rootScope, $location) {
+		entityService,  $rootScope, $location) {
 	makeUpdateFnWithCallback("global", function(ret, $location) {
 		$location.url("/maintain");
-	})($scope, entityService, $routeParams, $rootScope, $location);
+	})($scope, entityService, $rootScope, $location, this);
 	makeListFn("season", {
 		bindName : "currentSeason",
 		entityName : "global"

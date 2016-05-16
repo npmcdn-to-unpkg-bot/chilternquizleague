@@ -89,10 +89,10 @@ maintainApp.config(['$locationProvider', function($locationProvider) {
 	.state('mass-mail', {
 		templateUrl : '/maintain/mail/mass-mail.html',
 		url : '/maintain/mail/mass-mail'})
-
-	$locationProvider.html5Mode(true);
 	
 */
+	$locationProvider.html5Mode(true);
+
 	
 	
 } ]);
@@ -133,29 +133,37 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 	var masterName = "master" + camelName;
 	var resetName = "reset" + camelName;
 
-	return function($scope, entityService, $routeParams, $rootScope, $location) {
+	return function($scope, entityService, $rootScope, $location, ctrlfn) {
 
-		var id = $routeParams[typeName + "Id"];
+		var ctrl = ctrlfn ? ctrlfn : this
+		
+		ctrl.$routerOnActivate = function(next){
+			var id = next.params[typeName + "Id"];
+			
+			$scope[typeName + "Id"] = id
+			
+			$scope[resetName] = function() {
+				$scope[typeName] = angular.copy($scope[masterName]);
+			};
 
-		$scope[resetName] = function() {
-			$scope[typeName] = angular.copy($scope[masterName]);
-		};
-
-		entityService.load(typeName, id, function(ret) {
-			$scope[masterName] = ret;
-			$scope[resetName]();
-			loadCallback ? loadCallback(ret) : null;
-		});
-
-		$scope["update" + camelName] = function(entity) {
-
-			$scope[masterName] = angular.copy(entity);
-			entityService.remove(typeName, id);
-			entityService.save(typeName, entity, function(ret) {
-				saveCallback ? saveCallback(ret, $location) : null;
+			entityService.load(typeName, id, function(ret) {
+				$scope[masterName] = ret;
+				$scope[resetName]();
+				loadCallback ? loadCallback(ret) : null;
 			});
 
-		};
+			$scope["update" + camelName] = function(entity) {
+
+				$scope[masterName] = angular.copy(entity);
+				entityService.remove(typeName, id);
+				entityService.save(typeName, entity, function(ret) {
+					saveCallback ? saveCallback(ret, $location) : null;
+				});
+
+			};
+		}
+		
+
 
 	};
 

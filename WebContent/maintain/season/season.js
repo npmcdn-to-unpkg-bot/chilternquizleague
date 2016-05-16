@@ -1,18 +1,17 @@
 maintainApp.controller('SeasonListCtrl', getCommonParams(makeListFn("season")));
 
-maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, entityService, $routeParams,
+maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, entityService,
 		$rootScope, $location) {
-	var seasonId = $routeParams.seasonId;
-	$scope.seasonId = seasonId;
+
 	$scope.addCompType = {};
-	makeUpdateFn("season")($scope, entityService, $routeParams, $rootScope,
-			$location);
+	makeUpdateFn("season")($scope, entityService, $rootScope,
+			$location,this);
 	makeListFn("competitionType")($scope, entityService);
 	$scope.updateEndYear = function(startYear) {
 		$scope.season.endYear = parseInt(startYear) + 1;
 	};
 	$scope.addCompetition = function(type) {
-		$location.url("/maintain/seasons/" + seasonId + "/competition/" + type.name);
+		$location.url("/maintain/seasons/" + $scope.seasonId + "/competition/" + type.name);
 	};
 	$scope.removeCompetition = function(competition){
 		for(compType in $scope.season.competitions){
@@ -24,10 +23,10 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 	
 }));
 
-maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, $routeParams,
+maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, 
 		$rootScope, $location) {
-	var seasonId = $routeParams.seasonId;
-	$scope.seasonId = seasonId;
+	makeUpdateFn("season")($scope, entityService, $rootScope,
+			$location,this);
 	makeListFn("venue")($scope, entityService);
 	function cleanEvent(){
 		return {start:new Date(), end:new Date()}
@@ -42,7 +41,7 @@ maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, en
 		$scope.event = event;
 		
 	}
-	$scope.ok = function(){$location.url("/maintain/seasons/"+seasonId)}
+	$scope.ok = function(){$location.url("/maintain/seasons/"+$scope.seasonId)}
 	$scope.removeEvent = function(event){$scope.season.calendar.splice($scope.season.calendar.indexOf(event),1)}
 		
 }));
