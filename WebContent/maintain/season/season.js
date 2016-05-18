@@ -21,6 +21,8 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 		}
 	}
 	
+
+	
 }));
 
 maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, 

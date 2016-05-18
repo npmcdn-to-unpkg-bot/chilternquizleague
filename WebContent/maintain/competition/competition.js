@@ -1,65 +1,81 @@
 function teamCompetitionControllerFactory() {
 
-	return function($scope, entityService, $routeParams, $rootScope, $location) {
-
-		var ucName = $routeParams.compType.toUpperCase();
-		name = $routeParams.compType.toLowerCase();
-		var competitionName = "competition";
-		var masterName = "masterCompetition";
-		var addName = "addCompetition";
-		var saveName = "saveCompetition";
-		$scope[competitionName] = {}
-		$scope[masterName] = {}
-
+	return function($scope, entityService, $rootScope, $location) {
+		
 		$scope.tinymceOptions = tinymceOptions;
+		
+		var ctrl = this
+		
+		this.$onInit = function(){
+			ctrl.parent.watch("season", function(season){$scope.season = season})
+		}
+		
+		this.$routerOnActivate = function(next){
+			var compId = next.params.compId
+			
+			var ucName = next.urlPath.toUpperCase()
+			name = ucName.toLowerCase();
 
-		$scope.$watch("season", function(season) {
+			$scope.competition = {}
+			$scope.master = {}
 
-			if (season) {
-				
-				var competition = season.competitions[ucName]
-				
-				if(!competition){
-					entityService.load(ucName,"new", function(competition){
-						if(competition.event){
-							competition.event.start = new Date(competition.event.start)
-							competition.event.end = new Date(competition.event.end)
-						}
-						$scope[masterName] = competition;
-						$scope[competitionName] = angular.copy(competition);
-					})
-				}
-				
-				entityService.loadList("venue", function(venues){$scope.venues = venues});
-				
-				if(competition.event){
-					competition.event.start = new Date(competition.event.start)
-					competition.event.end = new Date(competition.event.end)
-				}
-				
-				$scope[masterName] = competition;
-				$scope[competitionName] = angular.copy(competition);
+			$scope.$watch("season", function(season) {
 
-				$scope[addName] = function(competition) {
-					season.competitions[ucName] = $scope[competitionName];
-					$location.url("/maintain/seasons/" + season.id);
-				};
-				
-				$scope[saveName] = function(competition){
-					entityService.save("competition", competition, function(){
-						$location.path("/maintain/seasons")
-					})
-				}
+				if (season) {
+					
+					var competition = season.competitions[ucName]
+					
+					var competitions = []
+					for(i in season.competitions){
+						competitions.push(season.competitions[i])
+					}
+					$scope.competitions = competitions
+					
+					if(!competition){
+						entityService.load(ucName,"new", function(competition){
+							if(competition.event){
+								competition.event.start = new Date(competition.event.start)
+								competition.event.end = new Date(competition.event.end)
+							}
+							$scope.master = competition;
+							$scope.competition = angular.copy(competition);
+						})
+					}
+					
+					entityService.loadList("venue", function(venues){$scope.venues = venues});
+					
+					if(competition.event){
+						competition.event.start = new Date(competition.event.start)
+						competition.event.end = new Date(competition.event.end)
+					}
+					
+					$scope.master = competition;
+					$scope.competition = angular.copy(competition);
 
-				$scope.resetCompetition = function() {
-					$scope[competitionName] = angular.copy($scope[masterName])
-				}
-				$scope.subFilter = function(value, index) {
-					return value.comp.subsidiary
+					$scope.add = function(competition) {
+						season.competitions[ucName] = competition;
+						$location.url("/maintain/seasons/" + season.id);
+					};
+					
+					$scope.save = function(competition){
+						entityService.save("competition", competition, function(){
+							$location.path("/maintain/seasons")
+						})
+					}
 
+					$scope.resetCompetition = function() {
+						$scope.competition = angular.copy($scope.master)
+					}
+					$scope.subFilter = function(value, index) {
+						return value.subsidiary
+
+					}
 				}
 			}
-		})
+			)
+		}
+		
+
 
 	};
 
@@ -295,7 +311,7 @@ maintainApp
 					$scope.updateFixtures = function(fixtures) {
 						$scope.competition.fixtures = fixtures;
 						$location.url("/maintain/seasons/" + $scope.season.id
-								+ "/competition/" + $scope.competition.type);
+								+ "/competition/" + $scope.competition.id + "/" +$scope.competition.type);
 					};
 
 					$scope.resetFixtures = function() {
@@ -380,6 +396,58 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 	$scope.$watch("leagueTables", setTeams);
 
 }));
+
+
+
+maintainApp.controller("CompetitionDetailController", ["$scope", "entityService","$rootScope", "$location", teamCompetitionControllerFactory()])
+
+
+maintainApp.controller("CompetitionDetailControllerOld", ["$scope", "entityService","$rootScope", "$location", function($scope, entityService, $rootScope, $location){
+	
+	var ctrl = this
+	
+	this.$routerOnActivate = function(next){
+		var params = next.params
+	}
+	this.$onInit = function(){
+		ctrl.parent.watch("competition", function(competition){
+			$scope.competition = competition
+		})
+		
+		ctrl.parent.watch("season", function(season){
+			$scope.season = season
+		})
+
+	}
+	$scope.$watch("season", function(season){
+		if(season){
+		
+			var competitions = [];
+			
+			for(i in season.competitions){
+				competitions.push(season.competitions[i])
+			}
+			$scope.competitions = competitions
+		}
+	})
+	$scope.subFilter = function(value, index) {
+		return value.subsidiary
+	}
+	
+	$scope.tinymceOptions = tinymceOptions;
+}])
+
+maintainApp.controller("CompetitionController", ["$scope", "entityService","$rootScope", "$location", function($scope, entityService, $rootScope, $location){
+	
+	makeUpdateFn("season")($scope, entityService, $rootScope, $location, this)
+	makeUpdateFn("competition")($scope, entityService, $rootScope, $location, this)
+	
+
+	
+	
+	this.watch = function(name, lstn){return $scope.$watch(name, lstn)}
+
+}])
 
 maintainApp.controller('ResultsCtrl',
 		getCommonParams(function($scope, entityService, $routeParams,

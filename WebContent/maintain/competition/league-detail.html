@@ -16,12 +16,12 @@
 				<md-input-container>
 					<label>Subsidiary Competition</label>
 					<md-select ng-model="competition.subsidiaryCompetition" ng-model-options="{trackBy: '$value.id'}">
-						<md-option ng-value="comp" ng-repeat="(type,comp) in season.competitions | filter : subFilter | orderBy : 'type'">{{type}}</md-option>
+						<md-option ng-value="comp" ng-repeat="comp in competitions | filter : subFilter | orderBy : 'type'">{{comp.type}}</md-option>
 					</md-select>
 				</md-input-container>
-				<md-button href="/maintain/seasons/{{season.id}}/competition/LEAGUE/fixtures">Fixtures</md-button>
-				<md-button href="/maintain/seasons/{{season.id}}/competition/LEAGUE/results">Results</md-button>
-				<md-button href="/maintain/seasons/{{season.id}}/competition/LEAGUE/tables">Tables</md-button>
+				<md-button href="fixtures">Fixtures</md-button>
+				<md-button href="results">Results</md-button>
+				<md-button href="tables">Tables</md-button>
 			</div>
 			<div>
 				<md-input-container> <label>Text</label> 
@@ -32,8 +32,8 @@
 			</div>
 		</div>
 		<md-button ng-click="resetCompetition()">Reset</md-button>
-		<md-button  ng-if="!competition.id" class="md-primary" ng-click="addCompetition(competition)">Save</md-button>
-  		<md-button ng-if="competition.id" class="md-primary" ng-click="saveCompetition(competition)">Save and Close</md-button>
+		<md-button  ng-if="!competition.id" class="md-primary" ng-click="add(competition)">Save</md-button>
+  		<md-button ng-if="competition.id" class="md-primary" ng-click="save(competition)">Save and Close</md-button>
 
 	</form>
 </div>

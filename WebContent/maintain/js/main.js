@@ -137,6 +137,10 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 
 		var ctrl = ctrlfn ? ctrlfn : this
 		
+		var roaFn = ctrl.$routerOnActivate
+		
+		roaFn = roaFn ? roaFn : function(){};
+				
 		ctrl.$routerOnActivate = function(next){
 			var id = next.params[typeName + "Id"];
 			
@@ -161,6 +165,7 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 				});
 
 			};
+			roaFn(next)
 		}
 		
 

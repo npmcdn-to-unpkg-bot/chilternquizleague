@@ -96,7 +96,8 @@ maintainApp.component('app', {
 	templateUrl:"/maintain/season/season-detail.html",
 	$routeConfig:[
 	  {path: ':seasonId', name: 'SeasonDetail', component: 'seasonDetail'},
-	  {path: ':seasonId/calendar', name: 'SeasonCalendar', component: 'seasonCalendar'}
+	  {path: ':seasonId/calendar', name: 'SeasonCalendar', component: 'seasonCalendar'},
+	  {path: ':seasonId/competition/:competitionId/...', name: 'Competition', component: 'competition'}
 	]
 })
 .component('seasonDetail', {
@@ -107,6 +108,72 @@ maintainApp.component('app', {
 	templateUrl:"/maintain/season/calendar.html",
 	controller : "SeasonCalendarCtrl"
 })
+.component("competition",	{
+	templateUrl:"/maintain/competition/competition.html",
+	controller : "CompetitionController",
+	require : {"parent" : "^season"},
+	$routeConfig:[
+	  {path: 'LEAGUE', name: 'LeagueDetail', component: 'leagueDetail'},
+	  {path: 'LEAGUE/results', name: 'LeagueResults', component: 'competitionResults'},
+	  {path: 'LEAGUE/fixtures', name: 'LeagueFixtures', component: 'competitionFixtures'},
+	  {path: 'LEAGUE/tables', name: 'LeagueTables', component: 'competitionTables'},
+	  {path: 'BEER', name: 'BeerDetail', component: 'beerDetail'},
+	  {path: 'BEER/results', name: 'BeerResults', component: 'competitionResults'},
+	  {path: 'BEER/tables', name: 'BeerTables', component: 'competitionTables'},
+	  {path: 'CUP', name: 'CupDetail', component: 'cupDetail'},
+	  {path: 'CUP/results', name: 'CupResults', component: 'competitionResults'},
+	  {path: 'CUP/fixtures', name: 'CupFixtures', component: 'competitionFixtures'},
+	  {path: 'PLATE', name: 'PlateDetail', component: 'plateDetail'},
+	  {path: 'PLATE/results', name: 'PlateResults', component: 'competitionResults'},
+	  {path: 'PLATE/fixtures', name: 'PlateFixtures', component: 'competitionFixtures'},
+	  {path: 'BUZZER', name: 'BuzzerDetail', component: 'buzzerDetail'},
+	  {path: 'INDIVIDUAL', name: 'IndividualDetail', component: 'individualDetail'},
+	]
+	})
+	.component("leagueDetail",{
+		templateUrl:"/maintain/competition/league-detail.html",
+		controller: "CompetitionDetailController",
+		require : {"parent" : "^competition"}
+	})
+	.component("beerDetail",{
+		templateUrl:"/maintain/competition/beer-detail.html",
+		controller: "CompetitionDetailController",
+		require : {"competition" : "^competition"}
+	})
+	.component("cupDetail",{
+		templateUrl:"/maintain/competition/cup-detail.html",
+		controller: "CompetitionDetailController",
+		require : {"competition" : "^competition"}
+	})
+	.component("plateDetail",{
+		templateUrl:"/maintain/competition/plate-detail.html",
+		controller: "CompetitionDetailController",
+		require : {"competition" : "^competition"}
+	})
+	.component("knockoutDetail",{
+		templateUrl:"/maintain/competition/knockout-detail.html",
+	})
+	.component("buzzerDetail",{
+		templateUrl:"/maintain/competition/buzzer-detail.html",
+		controller: "CompetitionDetailController",
+		require : {"competition" : "^competition"}
+	})
+	.component("individualDetail",{
+		templateUrl:"/maintain/competition/individual-detail.html",
+		controller: "CompetitionDetailController",
+		require : {"competition" : "^competition"}
+	})
+	.component("competitionResults",{
+		templateUrl:"/maintain/competition/results.html",
+		controller: "CompetitionDetailController",
+		require : {"parent" : "^competition"}
+	})
+	.component("competitionFixtures",{
+		templateUrl:"/maintain/competition/fixtures.html",
+		controller: "CompetitionDetailController",
+		require : {"parent" : "^competition"}
+	})
+
 
 /*
 
