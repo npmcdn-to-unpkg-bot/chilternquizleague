@@ -11,7 +11,7 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 		$scope.season.endYear = parseInt(startYear) + 1;
 	};
 	$scope.addCompetition = function(type) {
-		$location.url("/maintain/seasons/" + $scope.seasonId + "/competition/" + type.name);
+		$location.url("/maintain/seasons/" + $scope.seasonId + "/competition/new/" + type.name);
 	};
 	$scope.removeCompetition = function(competition){
 		for(compType in $scope.season.competitions){

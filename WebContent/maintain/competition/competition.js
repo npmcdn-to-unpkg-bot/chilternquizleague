@@ -44,7 +44,7 @@ function teamCompetitionControllerFactory() {
 					
 					entityService.loadList("venue", function(venues){$scope.venues = venues});
 					
-					if(competition.event){
+					if(competition && competition.event){
 						competition.event.start = new Date(competition.event.start)
 						competition.event.end = new Date(competition.event.end)
 					}
