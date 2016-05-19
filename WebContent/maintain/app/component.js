@@ -29,7 +29,7 @@ maintainApp.component('app', {
     {path: 'stats', name: 'Stats', component: 'stats'},
     {path: 'stats/:seasonId', name: 'StatsDetail', component: 'statsDetail'},
     {path: 'seasons', name: 'Seasons', component: 'seasons'},
-    {path: 'seasons/...', name: 'Season', component: 'season'},
+    {path: 'seasons/:seasonId/...', name: 'Season', component: 'season'},
 	]
 
 })
@@ -96,18 +96,20 @@ maintainApp.component('app', {
 	templateUrl:"/maintain/season/season-detail.html",
 	controller :"SeasonCtrl",
 	$routeConfig:[
-	  {path: ':seasonId', name: 'SeasonDetail', component: 'seasonDetail'},
-	  {path: ':seasonId/calendar', name: 'SeasonCalendar', component: 'seasonCalendar'},
-	  {path: ':seasonId/competition/:competitionId/...', name: 'Competition', component: 'competition'}
+	  {path: '/', name: 'SeasonDetail', component: 'seasonDetail' ,useAsDefault:true},
+	  {path: '/calendar', name: 'SeasonCalendar', component: 'seasonCalendar'},
+	  {path: '/competition/:competitionId/...', name: 'Competition', component: 'competition'}
 	]
 })
 .component('seasonDetail', {
 	templateUrl:"/maintain/season/season-detail-contents.html",
-	controller : "SeasonDetailCtrl"
+	controller : "SeasonDetailCtrl",
+	require : {"parent" : "^season"},
 })
 .component('seasonCalendar', {
 	templateUrl:"/maintain/season/calendar.html",
-	controller : "SeasonCalendarCtrl"
+	controller : "SeasonCalendarCtrl",
+	require : {"parent" : "^season"},
 })
 .component("competition",	{
 	templateUrl:"/maintain/competition/competition.html",
@@ -139,39 +141,44 @@ maintainApp.component('app', {
 	.component("beerDetail",{
 		templateUrl:"/maintain/competition/beer-detail.html",
 		controller: "CompetitionDetailController",
-		require : {"competition" : "^competition"}
+		require : {"parent" : "^competition"}
 	})
 	.component("cupDetail",{
 		templateUrl:"/maintain/competition/cup-detail.html",
 		controller: "CompetitionDetailController",
-		require : {"competition" : "^competition"}
+		require : {"parent" : "^competition"}
 	})
 	.component("plateDetail",{
 		templateUrl:"/maintain/competition/plate-detail.html",
 		controller: "CompetitionDetailController",
-		require : {"competition" : "^competition"}
+		require : {"parent" : "^competition"}
 	})
-	.component("knockoutDetail",{
-		templateUrl:"/maintain/competition/knockout-detail.html",
+	.directive("knockoutDetail",function() {
+	  return {templateUrl:"/maintain/competition/knockout-detail.html",}
 	})
 	.component("buzzerDetail",{
 		templateUrl:"/maintain/competition/buzzer-detail.html",
 		controller: "CompetitionDetailController",
-		require : {"competition" : "^competition"}
+		require : {"parent" : "^competition"}
 	})
 	.component("individualDetail",{
 		templateUrl:"/maintain/competition/individual-detail.html",
 		controller: "CompetitionDetailController",
-		require : {"competition" : "^competition"}
+		require : {"parent" : "^competition"}
 	})
 	.component("competitionResults",{
 		templateUrl:"/maintain/competition/results.html",
-		controller: "CompetitionDetailController",
+		controller: "ResultsCtrl",
 		require : {"parent" : "^competition"}
 	})
 	.component("competitionFixtures",{
 		templateUrl:"/maintain/competition/fixtures.html",
-		controller: "CompetitionDetailController",
+		controller: "FixturesCtrl",
+		require : {"parent" : "^competition"}
+	})
+	.component("competitionTables",{
+		templateUrl:"/maintain/competition/tables.html",
+		controller: "LeagueTablesCtrl",
 		require : {"parent" : "^competition"}
 	})
 

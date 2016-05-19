@@ -23,7 +23,7 @@
 			<div ng-repeat="(type,competition) in season.competitions" layout="row">
 				<md-button class="md-fab md-mini md-warn"  ng-click="removeCompetition(competition)">X</md-button>
 				<md-button
-						href="/maintain/seasons/{{seasonId}}/competition/{{competition.id}}/{{competition.type}}">{{competition.description}}</md-button>
+						href="/maintain/seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}">{{competition.description}}</md-button>
 			</div>
 
 	</div>

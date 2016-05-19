@@ -4,10 +4,10 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 		$rootScope, $location) {
 
 	$scope.addCompType = {};
-	makeUpdateFn("season")($scope, entityService, $rootScope,
-			$location,this);
+	bindToParent("season", $scope,this)
 	makeListFn("competitionType")($scope, entityService);
-	$scope.updateEndYear = function(startYear) {
+	
+  $scope.updateEndYear = function(startYear) {
 		$scope.season.endYear = parseInt(startYear) + 1;
 	};
 	$scope.addCompetition = function(type) {
@@ -20,20 +20,14 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 			}
 		}
 	}
-	
-	var ctrl = this
-	this.$onInit = function(){
-		$scope.$watch("season", function(season){ctrl.parent.setSeason(season)})
-	}
-	
 
-	
 }));
 
-maintainApp.controller('SeasonCtrl', ["$scope", function($scope){
-	this.setSeason = function(season){$scope.season = season}
-	this.watch = function(name, lstn){return $scope.$watch(name, lstn)}
-}]);
+maintainApp.controller('SeasonCtrl', getCommonParams(function($scope, entityService,	$rootScope, $location){
+	
+	makeUpdateFn("season")($scope, entityService,	$rootScope, $location, this)
+	addWatchFn($scope,this)
+}));
 
 maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, 
 		$rootScope, $location) {
