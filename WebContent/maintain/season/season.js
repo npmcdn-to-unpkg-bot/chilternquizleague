@@ -21,9 +21,19 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 		}
 	}
 	
+	var ctrl = this
+	this.$onInit = function(){
+		$scope.$watch("season", function(season){ctrl.parent.setSeason(season)})
+	}
+	
 
 	
 }));
+
+maintainApp.controller('SeasonCtrl', ["$scope", function($scope){
+	this.setSeason = function(season){$scope.season = season}
+	this.watch = function(name, lstn){return $scope.$watch(name, lstn)}
+}]);
 
 maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, 
 		$rootScope, $location) {

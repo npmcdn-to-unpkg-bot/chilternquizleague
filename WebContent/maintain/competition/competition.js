@@ -439,10 +439,11 @@ maintainApp.controller("CompetitionDetailControllerOld", ["$scope", "entityServi
 
 maintainApp.controller("CompetitionController", ["$scope", "entityService","$rootScope", "$location", function($scope, entityService, $rootScope, $location){
 	
-	makeUpdateFn("season")($scope, entityService, $rootScope, $location, this)
-	makeUpdateFn("competition")($scope, entityService, $rootScope, $location, this)
+	var ctrl = this
 	
-
+	this.$onInit = function(){
+		ctrl.parent.watch("season", function(season){$scope.season = season})
+	}
 	
 	
 	this.watch = function(name, lstn){return $scope.$watch(name, lstn)}

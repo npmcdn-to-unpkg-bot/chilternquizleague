@@ -94,6 +94,7 @@ maintainApp.component('app', {
 })
 .component('season', {
 	templateUrl:"/maintain/season/season-detail.html",
+	controller :"SeasonCtrl",
 	$routeConfig:[
 	  {path: ':seasonId', name: 'SeasonDetail', component: 'seasonDetail'},
 	  {path: ':seasonId/calendar', name: 'SeasonCalendar', component: 'seasonCalendar'},
