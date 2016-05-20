@@ -19,9 +19,9 @@
 						<md-option ng-value="comp" ng-repeat="comp in competitions | filter : subFilter | orderBy : 'type'">{{comp.type}}</md-option>
 					</md-select>
 				</md-input-container>
-				<md-button href="/maintain/seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}/fixtures">Fixtures</md-button>
-				<md-button href="/maintain/seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}/results">Results</md-button>
-				<md-button href="/maintain/seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}/tables">Tables</md-button>
+				<md-button href="seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}/fixtures">Fixtures</md-button>
+				<md-button href="seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}/results">Results</md-button>
+				<md-button href="seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}/tables">Tables</md-button>
 			</div>
 			<div>
 				<md-input-container> <label>Text</label> 

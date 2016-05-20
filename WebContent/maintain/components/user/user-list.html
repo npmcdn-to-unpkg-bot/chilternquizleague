@@ -5,7 +5,7 @@
 	<md-list>
 		<md-list-item ng-repeat="user in users | orderBy : 'name'">
 			<md-list-item-content>
-				<md-button style="text-transform:none;" href="/maintain/users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</md-button>
+				<md-button style="text-transform:none;" href="users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</md-button>
 			</md-list-item-content>
 		</md-list-item>
 	</md-list>

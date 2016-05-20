@@ -1,6 +1,6 @@
 
 maintainApp.component('app', {
-  templateUrl:"/maintain/components/app/app.html",
+  templateUrl:"components/app/app.html",
   $routeConfig: [
     {path: '/', name: 'IndexContent', component: 'indexContent', useAsDefault: true},
     {path: '/...', name: 'Root', component: 'root'},
@@ -9,10 +9,10 @@ maintainApp.component('app', {
   ]
 })
 .component('indexContent', {
-	templateUrl:"/maintain/components/app/dummy.html",
+	templateUrl:"components/app/dummy.html",
 })
 .component('root', {
-	templateUrl:"/maintain/components/app/root.html",
+	templateUrl:"components/app/root.html",
 	$routeConfig:[
     {path: 'venues', name: 'Venues', component: 'venues'},
     {path: 'venues/:venueId', name: 'Venue', component: 'venue'},
@@ -34,66 +34,66 @@ maintainApp.component('app', {
 
 })
 .component('venues', {
-	templateUrl:"/maintain/components/venue/venue-list.html",
+	templateUrl:"components/venue/venue-list.html",
 	controller : "VenueListCtrl"
 })
 .component('venue', {
-	templateUrl:"/maintain/components/venue/venue-detail.html",
+	templateUrl:"components/venue/venue-detail.html",
 	controller : "VenueDetailCtrl"
 })
 .component('users', {
-	templateUrl:"/maintain/components/user/user-list.html",
+	templateUrl:"components/user/user-list.html",
 	controller : "UserListCtrl"
 })
 .component('user', {
-	templateUrl:"/maintain/components/user/user-detail.html",
+	templateUrl:"components/user/user-detail.html",
 	controller : "UserDetailCtrl"
 })
 .component('texts', {
-	templateUrl:"/maintain/components/text/text-list.html",
+	templateUrl:"components/text/text-list.html",
 	controller : "TextListCtrl"
 })
 .component('text', {
-	templateUrl:"/maintain/components/text/text-detail.html",
+	templateUrl:"components/text/text-detail.html",
 	controller : "TextDetailCtrl"
 })
 .component('global', {
-	templateUrl:"/maintain/components/global/global-detail.html",
+	templateUrl:"components/global/global-detail.html",
 	controller : "GlobalDetailCtrl"
 })
 .component('database', {
-	templateUrl:"/maintain/components/database/database.html",
+	templateUrl:"components/database/database.html",
 	controller : "DatabaseCtrl"
 })
 .component('teams', {
-	templateUrl:"/maintain/team/team-list.html",
+	templateUrl:"components/team/team-list.html",
 	controller : "TeamListCtrl"
 })
 .component('team', {
-	templateUrl:"/maintain/team/team-detail.html",
+	templateUrl:"components/team/team-detail.html",
 	controller : "TeamDetailCtrl"
 })
 .component('mail', {
-	templateUrl:"/maintain/components/mail/mail-options.html",
+	templateUrl:"components/mail/mail-options.html",
 })
 .component('massMail', {
-	templateUrl:"/maintain/components/mail/mass-mail.html",
+	templateUrl:"components/mail/mass-mail.html",
 	controller : "MassMailCtrl"
 })
 .component('stats', {
-	templateUrl:"/maintain/components/stats/season-list.html",
+	templateUrl:"components/stats/season-list.html",
 	controller : "SeasonListCtrl"
 })
 .component('statsDetail', {
-	templateUrl:"/maintain/components/stats/stats-detail.html",
+	templateUrl:"components/stats/stats-detail.html",
 	controller : "StatsDetailCtrl"
 })
 .component('seasons', {
-	templateUrl:"/maintain/season/season-list.html",
+	templateUrl:"components/season/season-list.html",
 	controller : "SeasonListCtrl"
 })
 .component('season', {
-	templateUrl:"/maintain/season/season-detail.html",
+	templateUrl:"components/season/season-detail.html",
 	controller :"SeasonCtrl",
 	$routeConfig:[
 	  {path: '/', name: 'SeasonDetail', component: 'seasonDetail' ,useAsDefault:true},
@@ -102,17 +102,17 @@ maintainApp.component('app', {
 	]
 })
 .component('seasonDetail', {
-	templateUrl:"/maintain/season/season-detail-contents.html",
+	templateUrl:"components/season/season-detail-contents.html",
 	controller : "SeasonDetailCtrl",
 	require : {"parent" : "^season"},
 })
 .component('seasonCalendar', {
-	templateUrl:"/maintain/season/calendar.html",
+	templateUrl:"components/season/calendar.html",
 	controller : "SeasonCalendarCtrl",
 	require : {"parent" : "^season"},
 })
 .component("competition",	{
-	templateUrl:"/maintain/competition/competition.html",
+	templateUrl:"components/competition/competition.html",
 	controller : "CompetitionController",
 	require : {"parent" : "^season"},
 	$routeConfig:[
@@ -134,138 +134,50 @@ maintainApp.component('app', {
 	]
 	})
 	.component("leagueDetail",{
-		templateUrl:"/maintain/competition/league-detail.html",
+		templateUrl:"components/competition/league-detail.html",
 		controller: "CompetitionDetailController",
 		require : {"parent" : "^competition"}
 	})
 	.component("beerDetail",{
-		templateUrl:"/maintain/competition/beer-detail.html",
+		templateUrl:"components/competition/beer-detail.html",
 		controller: "CompetitionDetailController",
 		require : {"parent" : "^competition"}
 	})
 	.component("cupDetail",{
-		templateUrl:"/maintain/competition/cup-detail.html",
+		templateUrl:"components/competition/cup-detail.html",
 		controller: "CompetitionDetailController",
 		require : {"parent" : "^competition"}
 	})
 	.component("plateDetail",{
-		templateUrl:"/maintain/competition/plate-detail.html",
+		templateUrl:"components/competition/plate-detail.html",
 		controller: "CompetitionDetailController",
 		require : {"parent" : "^competition"}
 	})
 	.directive("knockoutDetail",function() {
-	  return {templateUrl:"/maintain/competition/knockout-detail.html",}
+	  return {templateUrl:"components/competition/knockout-detail.html",}
 	})
 	.component("buzzerDetail",{
-		templateUrl:"/maintain/competition/buzzer-detail.html",
+		templateUrl:"components/competition/buzzer-detail.html",
 		controller: "CompetitionDetailController",
 		require : {"parent" : "^competition"}
 	})
 	.component("individualDetail",{
-		templateUrl:"/maintain/competition/individual-detail.html",
+		templateUrl:"components/competition/individual-detail.html",
 		controller: "CompetitionDetailController",
 		require : {"parent" : "^competition"}
 	})
 	.component("competitionResults",{
-		templateUrl:"/maintain/competition/results.html",
+		templateUrl:"components/competition/results.html",
 		controller: "ResultsCtrl",
 		require : {"parent" : "^competition"}
 	})
 	.component("competitionFixtures",{
-		templateUrl:"/maintain/competition/fixtures.html",
+		templateUrl:"components/competition/fixtures.html",
 		controller: "FixturesCtrl",
 		require : {"parent" : "^competition"}
 	})
 	.component("competitionTables",{
-		templateUrl:"/maintain/competition/tables.html",
+		templateUrl:"components/competition/tables.html",
 		controller: "LeagueTablesCtrl",
 		require : {"parent" : "^competition"}
 	})
-
-
-/*
-
-	$stateProvider.state("home", {
-	    url: "/maintain",
-	    templateUrl: '/maintain/dummy.html'
-	})
-	.state("venues", {
-		url : "/maintain/venues",
-		templateUrl : "/maintain/venue/venue-list.html"
-	})
-	.state("venue", {
-		url : "/maintain/venues/:venueId",
-		templateUrl : '/maintain/venue/venue-detail.html'
-	})
-	.state("teams", {
-		url : "/maintain/teams",
-		templateUrl : "/maintain/team/team-list.html"
-	})
-	.state("team", {
-		url : "/maintain/teams/:teamId",
-		templateUrl : '/maintain/team/team-detail.html'
-	})
-
-	.state('users', {
-		templateUrl : '/maintain/user/user-list.html',
-		url : '/maintain/users'})
-	.state('user', {
-		templateUrl : '/maintain/user/user-detail.html',
-		url : '/maintain/users/:userId'})
-	.state('seasons', {
-		templateUrl : '/maintain/season/season-list.html',
-		url : '/maintain/seasons'})
-	.state("season", {
-		templateUrl : '/maintain/season/season-detail.html'})
-	.state("season.detail", {
-		templateUrl:"/maintain/season/season-detail-contents.html",
-		url : '/maintain/seasons/:seasonId'}
-	)
-	.state('season.calendar', {
-		templateUrl : '/maintain/season/calendar.html',
-		url: "/maintain/seasons/:seasonId/calendar"}
-	)
-	.state('season.competition', {
-		templateUrl : '/maintain/competition/competition-container.html',
-		url: "/maintain/seasons/:seasonId/competition"}
-	)
-	.state("season.competition.detail", {
-		templateUrl : function(params){return "/maintain/competition/" + params.compType.toLowerCase() + "-detail.html"},
-		url : "/:compType"}
-	)
-
-	.state("season.competition.fixtures", {
-		templateUrl : '/maintain/competition/fixtures.html',
-		url : '/:compType/fixtures'})
-	.state("season.competition.results", {
-		templateUrl : '/maintain/competition/results.html',
-		url : '/:compType/results'})
-	.state("season.competition.tables", {
-		templateUrl : '/maintain/competition/tables.html',
-		url : '/:compType/tables'})
-	.state("global", {
-		templateUrl : '/maintain/global/global-detail.html',
-		url : '/maintain/global/current'})
-	.state('texts', {
-		templateUrl : '/maintain/text/text-list.html',
-		url : '/maintain/texts'})
-	.state('text', {
-		templateUrl : '/maintain/text/text-detail.html',
-		url : '/maintain/texts/:textId'})
-	.state('stats', {
-		templateUrl : '/maintain/stats/season-list.html',
-		url : '/maintain/stats'})
-	.state('stats-detail', {
-		templateUrl : '/maintain/stats/stats-detail.html',
-		url: "/maintain/stats/:seasonId"})
-
-	.state("database", {
-		templateUrl : '/maintain/database/database.html',
-		url:'/maintain/database'})
-	.state('mail', {
-		templateUrl : '/maintain/mail/mail-options.html',
-		url : '/maintain/mail'})
-	.state('mass-mail', {
-		templateUrl : '/maintain/mail/mass-mail.html',
-		url : '/maintain/mail/mass-mail'})
-*/

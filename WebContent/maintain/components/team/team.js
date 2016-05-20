@@ -1,9 +1,9 @@
 maintainApp.controller('TeamListCtrl', getCommonParams(makeListFn("team")));
 
 maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope,
-		entityService, $rootScope, $location) {
-	makeUpdateFn("team")($scope, entityService, $rootScope,
-			$location,this);
+		entityService, $rootScope, $location,ctrlUtil) {
+	ctrlUtil.makeUpdateFn("team", $scope, this)
+	
 	makeListFn("venue", {
 		entityName : "team",
 		bindName : "venue",

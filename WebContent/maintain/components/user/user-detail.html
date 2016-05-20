@@ -1,6 +1,7 @@
 <div>
 	<md-subheader class="md-primary">User Details</md-subheader>
 	<form>
+		<div>
 		<md-input-container>
 			<label>Name</label>
 			<input ng-model="user.name" required>
@@ -9,9 +10,10 @@
 			<label>email</label>
 			<input type="email" ng-model="user.email" ng-change="user.name=user.email" required>
 		</md-input-container>
-		
+		</div>
+		<div layout="row">
 		<md-button ng-click="resetUser()">Reset</md-button>
 		<md-button class="md-primary" ng-click="updateUser(user)">Save</md-button>
-
+		</div>
 	</form>
 </div>

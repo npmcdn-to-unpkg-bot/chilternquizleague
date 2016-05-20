@@ -4,7 +4,7 @@
 
 	<md-list>
 		<md-list-item ng-repeat="venue in venues | orderBy :'name'">
-			<md-list-item-content><md-button href="/maintain/venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</md-button></md-list-item-content>
+			<md-list-item-content><md-button href="venues/{{venue.id}}" ng-class="venue.retired ? 'retired' : ''">{{venue.name}}</md-button></md-list-item-content>
 		</md-list-item>
 	</md-list>
 </div>

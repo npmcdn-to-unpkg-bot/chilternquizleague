@@ -1,17 +1,18 @@
 maintainApp.controller('SeasonListCtrl', getCommonParams(makeListFn("season")));
 
 maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, entityService,
-		$rootScope, $location) {
+		$rootScope, $location, ctrlUtil) {
 
 	$scope.addCompType = {};
-	bindToParent("season", $scope,this)
-	makeListFn("competitionType")($scope, entityService);
+	ctrlUtil.bindToParent("season", $scope,this)
+	ctrlUtil.makeFormFns("season",$scope,this)
+	ctrlUtil.makeListFn("competitionType",$scope);
 	
   $scope.updateEndYear = function(startYear) {
 		$scope.season.endYear = parseInt(startYear) + 1;
 	};
 	$scope.addCompetition = function(type) {
-		$location.url("/maintain/seasons/" + $scope.seasonId + "/competition/new/" + type.name);
+		$location.url("seasons/" + $scope.seasonId + "/competition/new/" + type.name);
 	};
 	$scope.removeCompetition = function(competition){
 		for(compType in $scope.season.competitions){
@@ -23,17 +24,16 @@ maintainApp.controller('SeasonDetailCtrl', getCommonParams(function($scope, enti
 
 }));
 
-maintainApp.controller('SeasonCtrl', getCommonParams(function($scope, entityService,	$rootScope, $location){
+maintainApp.controller('SeasonCtrl', getCommonParams(function($scope, entityService,	$rootScope, $location, ctrlUtil){
 	
-	makeUpdateFn("season")($scope, entityService,	$rootScope, $location, this)
-	addWatchFn($scope,this)
+	ctrlUtil.makeUpdateFn("season", $scope, this)
+	ctrlUtil.addWatchFn($scope,this)
 }));
 
 maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, entityService, 
-		$rootScope, $location) {
-	makeUpdateFn("season")($scope, entityService, $rootScope,
-			$location,this);
-	makeListFn("venue")($scope, entityService);
+		$rootScope, $location, ctrlUtil) {
+	ctrlUtil.bindToParent("season", $scope,this)
+	ctrlUtil.makeListFn("venue",$scope);
 	function cleanEvent(){
 		return {start:new Date(), end:new Date()}
 	}
@@ -47,7 +47,7 @@ maintainApp.controller('SeasonCalendarCtrl', getCommonParams(function($scope, en
 		$scope.event = event;
 		
 	}
-	$scope.ok = function(){$location.url("/maintain/seasons/"+$scope.seasonId)}
+	$scope.ok = function(season){$location.url("seasons/" + season.id)}
 	$scope.removeEvent = function(event){$scope.season.calendar.splice($scope.season.calendar.indexOf(event),1)}
 		
 }));

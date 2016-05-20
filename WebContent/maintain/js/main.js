@@ -1,6 +1,100 @@
 
 var maintainApp = angular.module('maintainApp', ['ngMaterial',"ngAnimate","ui.tinymce", "ngComponentRouter"])
-		.factory('entityService', ENTITY_SERVICE_DEFN);
+		.factory('entityService', ENTITY_SERVICE_DEFN)
+		.factory("ctrlUtil", ["$location", "$rootRouter", "$rootScope", "entityService", 
+				function($location, $rootRouter, $rootScope, entityService){
+			
+			var service = {
+					bindToParent : bindToParent,
+					addWatchFn : addWatchFn,
+					
+					makeUpdateFn : function(typeName, $scope, ctrlfn, saveCallback,loadCallback){
+							service.makeLoadFn(typeName, $scope,ctrlfn, loadCallback)
+							service.makeFormFns(typeName, $scope, ctrlfn, saveCallback)
+					},
+					
+					makeLoadFn : 		function(typeName, $scope, ctrlfn, loadCallback){
+						var camelName = typeName.charAt(0).toUpperCase() + typeName.substr(1);
+
+						var masterName = "master" + camelName;
+						var resetName = "reset" + camelName;
+
+						var ctrl = ctrlfn ? ctrlfn : this
+							
+							var roaFn = ctrl.$routerOnActivate
+							
+							roaFn = roaFn ? roaFn : function(){};
+									
+							ctrl.$routerOnActivate = function(next){
+								var id = next.params[typeName + "Id"];
+								
+								$scope[typeName + "Id"] = id
+
+								entityService.load(typeName, id, function(ret) {
+									$scope[masterName] = ret;
+									$scope[resetName]();
+									loadCallback ? loadCallback(ret) : null;
+								});
+
+
+								roaFn(next)
+							}},
+					
+					makeFormFns : function(typeName, $scope, ctrlfn, saveCallback) {
+						var camelName = typeName.charAt(0).toUpperCase() + typeName.substr(1);
+
+						var masterName = "master" + camelName;
+						var resetName = "reset" + camelName;
+						
+						
+						var ctrl = ctrlfn ? ctrlfn : this
+						
+						var roaFn = ctrl.$routerOnActivate
+						
+						roaFn = roaFn ? roaFn : function(){};
+								
+						ctrl.$routerOnActivate = function(next){
+							var id = next.params[typeName + "Id"];
+							
+							$scope[typeName + "Id"] = id
+							
+							$scope[resetName] = function() {
+								$scope[typeName] = angular.copy($scope[masterName]);
+							};
+
+							$scope["update" + camelName] = function(entity) {
+
+								$scope[masterName] = angular.copy(entity);
+								entityService.remove(typeName, id);
+								entityService.save(typeName, entity, function(ret) {
+									saveCallback ? saveCallback(ret, $location) : null;
+								}).then(function(entity){$scope[masterName] = entity;
+													$rootRouter.navigate(["Root",camelName + "s"])
+								});
+
+							};
+							roaFn(next)}
+						},
+						makeListFn : function makeListFn(typeName,$scope, config) {
+
+							config = config ? config : {};
+							
+							var collectionName = (config.collName ? config.collName
+									: typeName + "s")
+
+							entityService.loadList(typeName, function(ret) {
+								$scope[collectionName] = config.sort ? ret.sort(config.sort) : ret;
+							});
+
+							$scope.addScreen = function() {
+								$location.path("" + collectionName + "/new");
+							};
+
+				
+					}
+			}
+			return service
+		}]);
 
 
 maintainApp.config(['$locationProvider', function($locationProvider) {
@@ -34,7 +128,7 @@ maintainApp.value('$routerRootComponent', 'app')
 function makeUpdateFn(typeName, noRedirect) {
 	return makeUpdateFnWithCallback(typeName, (noRedirect ? null : function(
 			ret, $location) {
-		$location.url("/maintain/" + typeName + "s");
+		$location.url(typeName + "s");
 	}));
 }
 
@@ -102,7 +196,7 @@ function makeListFn(typeName, config) {
 		});
 
 		$scope.addScreen = function() {
-			$location.path("/maintain/" + collectionName + "/new");
+			$location.path("" + collectionName + "/new");
 		};
 
 	};
@@ -150,7 +244,7 @@ function filter(list, fn){
 function getCommonParams(constructorFn) {
 
 	return [ '$scope', 'entityService', '$rootScope',
-			'$location', constructorFn ];
+			'$location','ctrlUtil', constructorFn ];
 }
 
 var tinymceOptions={ 

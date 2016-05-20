@@ -7,7 +7,7 @@
 	<md-input-container> <label>End Year</label> <input
 		ng-model="season.endYear" required> </md-input-container>
 	<md-divider></md-divider>
-	<md-button href="/maintain/seasons/{{seasonId}}/calendar">Calendar</md-button>
+	<md-button href="seasons/{{season.id}}/calendar">Calendar</md-button>
 	
 	<md-subheader>Competitions</md-subheader>
 	<div layout="row" layout-align="start start">
@@ -23,7 +23,7 @@
 			<div ng-repeat="(type,competition) in season.competitions" layout="row">
 				<md-button class="md-fab md-mini md-warn"  ng-click="removeCompetition(competition)">X</md-button>
 				<md-button
-						href="/maintain/seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}">{{competition.description}}</md-button>
+						href="seasons/{{season.id}}/competition/{{competition.id}}/{{competition.type}}">{{competition.description}}</md-button>
 			</div>
 
 	</div>
