@@ -1,18 +1,18 @@
 
 maintainApp.component('app', {
-  templateUrl:"/maintain/app/app.html",
+  templateUrl:"/maintain/components/app/app.html",
   $routeConfig: [
-    {path: '/maintain', name: 'IndexContent', component: 'indexContent', useAsDefault: true},
-    {path: '/maintain/...', name: 'Root', component: 'root'},
+    {path: '/', name: 'IndexContent', component: 'indexContent', useAsDefault: true},
+    {path: '/...', name: 'Root', component: 'root'},
 
 
   ]
 })
 .component('indexContent', {
-	templateUrl:"/maintain/app/dummy.html",
+	templateUrl:"/maintain/components/app/dummy.html",
 })
 .component('root', {
-	templateUrl:"/maintain/app/root.html",
+	templateUrl:"/maintain/components/app/root.html",
 	$routeConfig:[
     {path: 'venues', name: 'Venues', component: 'venues'},
     {path: 'venues/:venueId', name: 'Venue', component: 'venue'},
@@ -34,35 +34,35 @@ maintainApp.component('app', {
 
 })
 .component('venues', {
-	templateUrl:"/maintain/venue/venue-list.html",
+	templateUrl:"/maintain/components/venue/venue-list.html",
 	controller : "VenueListCtrl"
 })
 .component('venue', {
-	templateUrl:"/maintain/venue/venue-detail.html",
+	templateUrl:"/maintain/components/venue/venue-detail.html",
 	controller : "VenueDetailCtrl"
 })
 .component('users', {
-	templateUrl:"/maintain/user/user-list.html",
+	templateUrl:"/maintain/components/user/user-list.html",
 	controller : "UserListCtrl"
 })
 .component('user', {
-	templateUrl:"/maintain/user/user-detail.html",
+	templateUrl:"/maintain/components/user/user-detail.html",
 	controller : "UserDetailCtrl"
 })
 .component('texts', {
-	templateUrl:"/maintain/text/text-list.html",
+	templateUrl:"/maintain/components/text/text-list.html",
 	controller : "TextListCtrl"
 })
 .component('text', {
-	templateUrl:"/maintain/text/text-detail.html",
+	templateUrl:"/maintain/components/text/text-detail.html",
 	controller : "TextDetailCtrl"
 })
 .component('global', {
-	templateUrl:"/maintain/global/global-detail.html",
+	templateUrl:"/maintain/components/global/global-detail.html",
 	controller : "GlobalDetailCtrl"
 })
 .component('database', {
-	templateUrl:"/maintain/database/database.html",
+	templateUrl:"/maintain/components/database/database.html",
 	controller : "DatabaseCtrl"
 })
 .component('teams', {
@@ -74,18 +74,18 @@ maintainApp.component('app', {
 	controller : "TeamDetailCtrl"
 })
 .component('mail', {
-	templateUrl:"/maintain/mail/mail-options.html",
+	templateUrl:"/maintain/components/mail/mail-options.html",
 })
 .component('massMail', {
-	templateUrl:"/maintain/mail/mass-mail.html",
+	templateUrl:"/maintain/components/mail/mass-mail.html",
 	controller : "MassMailCtrl"
 })
 .component('stats', {
-	templateUrl:"/maintain/stats/season-list.html",
+	templateUrl:"/maintain/components/stats/season-list.html",
 	controller : "SeasonListCtrl"
 })
 .component('statsDetail', {
-	templateUrl:"/maintain/stats/stats-detail.html",
+	templateUrl:"/maintain/components/stats/stats-detail.html",
 	controller : "StatsDetailCtrl"
 })
 .component('seasons', {
