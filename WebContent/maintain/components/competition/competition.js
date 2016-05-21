@@ -1,6 +1,6 @@
 function teamCompetitionControllerFactory() {
 
-	return function($scope, entityService, $rootScope, $location, ctrlUtil) {
+	return function($scope, entityService, $rootRouter, ctrlUtil) {
 		
 		$scope.tinymceOptions = tinymceOptions;
 
@@ -11,7 +11,6 @@ function teamCompetitionControllerFactory() {
 
 			$scope.competition = {}
 			$scope.master = {}
-			//$scope.$watch("competition", function(competition){ctrl.parent.set("competition", competition);})
 
 			$scope.$watch("season", function(season) {
 
@@ -49,14 +48,14 @@ function teamCompetitionControllerFactory() {
 					$scope.addCompetition = function(competition) {
 						season.competitions[competition.type] = competition;
 						entityService.save("season", season, function(){
-							$location.url("seasons/" + season.id);
+							$rootRouter.navigate(["Root","Season", {seasonId:season.id}]);
 						})
 						
 					};
 					
 					$scope.saveCompetition = function(competition){
 						entityService.save("competition", competition, function(){
-							$location.url("seasons/"  + season.id);
+							$rootRouter.navigate(["Root","Season", {seasonId:season.id}]);
 						})
 					}
 
@@ -78,8 +77,29 @@ function teamCompetitionControllerFactory() {
 
 }
 
-maintainApp.controller('CompCtrl',
-		getCommonParams(teamCompetitionControllerFactory()));
+maintainApp.controller("CompetitionDetailController", ["$scope", "entityService","$rootRouter","ctrlUtil", teamCompetitionControllerFactory()])
+
+maintainApp.controller("CompetitionController", ["$scope", "ctrlUtil", function($scope, ctrlUtil){
+	
+	this.$routerOnActivate = function(next){
+		var compId = next.params.competitionId
+		
+		$scope.$watch("season", function(season){
+			if(season){
+				for(i in season.competitions){
+					if(season.competitions[i].id == compId){
+						$scope.competition = season.competitions[i]
+					}
+				}
+			}
+		})
+	}
+	
+	ctrlUtil.bindToParent("season", $scope,this)
+	
+  ctrlUtil.addWatchFn($scope,this)
+
+}])
 
 function UsedTeamsControl(teams, $scope) {
 
@@ -130,11 +150,11 @@ UsedTeamsControl.prototype.remove = function(date, team1, team2) {
 maintainApp
 		.controller(
 				'FixturesCtrl',
-				getCommonParams(function($scope, entityService, 
-						$rootScope, $location, ctrlUtil) {
+				getCommonParams(function($scope, ctrlUtil, $rootRouter) {
 					
 					ctrlUtil.bindToParent("season", $scope, this)
 					ctrlUtil.bindToParent("competition", $scope, this)
+					ctrlUtil.makeListFn("team",$scope)
 	
 					$scope.fixturesList = []
 					$scope.setCurrentFixtures = function(fixtures){
@@ -205,14 +225,7 @@ maintainApp
 
 									});
 
-					makeListFn(
-							"team",
-							{
-								sort : function(team1, team2) {
-									return team1.shortName
-											.localeCompare(team2.shortName);
-								}
-							})($scope, entityService);
+
 
 					$scope.$watch("teams", function(teams) {
 						resolveExistingUnusedTeams($scope.fixturesList);
@@ -290,7 +303,7 @@ maintainApp
 						var start = makeDateWithTime(date, $scope.competition.startTime)
 						var end = makeDateWithTime(date, $scope.competition.endTime)
 						
-						entityService.load("Fixtures","new" , function(f){
+						ctrlUtil.newEntity("Fixtures").then(function(f){
 							
 							var fixtures = angular.copy(f)
 							
@@ -304,14 +317,11 @@ maintainApp
 							
 						})
 						
-
-						
 					};
 
 					$scope.updateFixtures = function(fixtures) {
 						$scope.competition.fixtures = fixtures;
-						$location.url("seasons/" + $scope.season.id
-								+ "/competition/" + $scope.competition.id + "/" +$scope.competition.type);
+						$rootRouter.navigate(["Root", "Season" ,{seasonId : $scope.season.id}, "Competition", {competitionId:$scope.competition.id},ctrlUtil.camelCase($scope.competition.type.toLowerCase() + "Detail")])			
 					};
 
 					$scope.resetFixtures = function() {
@@ -319,11 +329,12 @@ maintainApp
 								.copy($scope.masterFixtures)
 						initialiseUI()
 					}
+					
 
 				}));
 
 maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
-		entityService, $rootScope, $location) {
+		ctrlUtil, $rootRouter) {
 
 	ctrlUtil.bindToParent("season", $scope, this)
 	ctrlUtil.bindToParent("competition", $scope, this)
@@ -336,23 +347,17 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 		}
 	})
 
-	makeListFn("team", {
-		bindName : "currentSeason",
-		entityName : "global"
-	})($scope, entityService);
+	ctrlUtil.makeListFn("team",$scope);
 
 	$scope.addTable = function(leagueTables) {
 
-		entityService.load("leagueTable", "new", function(ret) {
-			leagueTables.push(angular.copy(ret));
-		});
-
+		ctrlUtil.newEntity("leagueTable").then(function(ret) {
+			leagueTables.push(angular.copy(ret))})
 	};
 
 	$scope.addRow = function(table) {
-		entityService.load("leagueTableRow", "new", function(ret) {
-			table.rows.push(angular.copy(ret));
-		});
+		ctrlUtil.newEntity("leagueTableRow").then(function(ret) {
+			table.rows.push(angular.copy(ret))})
 	};
 	
 	$scope.removeRow = function(table,item){
@@ -364,7 +369,7 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 
 	$scope.updateTables = function(leagueTables) {
 		$scope.competition.leagueTables = leagueTables;
-		$location.url("seasons/" + $scope.season.id + "/competition/" + $scope.competition.id + "/"+ $scope.competition.type);
+		$rootRouter.navigate(["Root","Season", {seasonId:$scope.season.id},"Competition", {competitionId : $scope.competition.id}, ctrlUtil.camelCase($scope.competition.type.toLowerCase() + "Detail")])
 	};
 	
 	$scope.resetTables = function(){
@@ -402,32 +407,11 @@ maintainApp.controller('LeagueTablesCtrl', getCommonParams(function($scope,
 
 
 
-maintainApp.controller("CompetitionDetailController", ["$scope", "entityService","$rootScope", "$location","ctrlUtil", teamCompetitionControllerFactory()])
 
-maintainApp.controller("CompetitionController", ["$scope", "ctrlUtil", function($scope, ctrlUtil){
-	
-	this.$routerOnActivate = function(next){
-		var compId = next.params.competitionId
-		
-		$scope.$watch("season", function(season){
-			if(season){
-				for(i in season.competitions){
-					if(season.competitions[i].id == compId){
-						$scope.competition = season.competitions[i]
-					}
-				}
-			}
-		})
-	}
-	
-	ctrlUtil.bindToParent("season", $scope,this)
-	
-  ctrlUtil.addWatchFn($scope,this)
 
-}])
 
 maintainApp.controller('ResultsCtrl',
-		getCommonParams(function($scope, entityService, $rootScope, $location,ctrlUtil) {
+		getCommonParams(function($scope, ctrlUtil, $rootRouter) {
 			ctrlUtil.bindToParent("season", $scope, this)
 			ctrlUtil.bindToParent("competition", $scope, this)
 			
@@ -446,6 +430,8 @@ maintainApp.controller('ResultsCtrl',
 			
 			$scope.$watch("competition", function(competition) {
 
+				if(!competition) return
+				
 				for(idx in competition.results){
 					var f = competition.results[idx]
 					f.date = new Date(f.date)
@@ -475,8 +461,7 @@ maintainApp.controller('ResultsCtrl',
 
 			$scope.updateResults = function(results) {
 				$scope.competition.results = results;
-				$location.url("seasons/" + $scope.season.id
-						+ "/competition/" + $scope.competition.id +"/" +$scope.competition.type);
+				$rootRouter.navigate(["Root","Season", {seasonId:$scope.season.id},"Competition", {competitionId : $scope.competition.id}, ctrlUtil.camelCase($scope.competition.type.toLowerCase() + "Detail")])
 			};
 			
 			$scope.resetResults = function(){
@@ -512,5 +497,4 @@ maintainApp.controller('ResultsCtrl',
 				}
 			};
 
-			// $scope.setCurrentDate(new Date());
 		}));

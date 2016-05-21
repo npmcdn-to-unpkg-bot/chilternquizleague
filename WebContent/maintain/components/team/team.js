@@ -1,17 +1,13 @@
-maintainApp.controller('TeamListCtrl', getCommonParams(makeListFn("team")));
+maintainApp.controller('TeamListCtrl', getCommonParams(function($scope, ctrlUtil){
+	ctrlUtil.makeListFn("team", $scope)
+}));
 
-maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope,
-		entityService, $rootScope, $location,ctrlUtil) {
+maintainApp.controller('TeamDetailCtrl', getCommonParams(function($scope,ctrlUtil) {
 	ctrlUtil.makeUpdateFn("team", $scope, this)
 	
-	makeListFn("venue", {
-		entityName : "team",
-		bindName : "venue",
-		sort : function(venue1, venue2) {
-			return venue1.name.localeCompare(venue2.name);
-		}
-	})($scope, entityService);
-	makeListFn("user")($scope, entityService);
+	ctrlUtil.makeListFn("venue", $scope);
+	
+	ctrlUtil.makeListFn("user", $scope);
 
 	$scope.matchUsers = function(users,text){
 		

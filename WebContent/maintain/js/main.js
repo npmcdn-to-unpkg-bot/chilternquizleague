@@ -4,17 +4,28 @@ var maintainApp = angular.module('maintainApp', ['ngMaterial',"ngAnimate","ui.ti
 		.factory("ctrlUtil", ["$location", "$rootRouter", "$rootScope", "entityService", 
 				function($location, $rootRouter, $rootScope, entityService){
 			
+			
+			
 			var service = {
+					
+					camelCase : function (typeName){
+						return typeName.charAt(0).toUpperCase() + typeName.substr(1);
+					},
+					
 					bindToParent : bindToParent,
 					addWatchFn : addWatchFn,
 					
+					newEntity : function(typeName){
+						return entityService.load(typeName,"new")
+					}
+	,				
 					makeUpdateFn : function(typeName, $scope, ctrlfn, saveCallback,loadCallback){
 							service.makeLoadFn(typeName, $scope,ctrlfn, loadCallback)
 							service.makeFormFns(typeName, $scope, ctrlfn, saveCallback)
 					},
 					
 					makeLoadFn : 		function(typeName, $scope, ctrlfn, loadCallback){
-						var camelName = typeName.charAt(0).toUpperCase() + typeName.substr(1);
+						var camelName = service.camelCase(typeName);
 
 						var masterName = "master" + camelName;
 						var resetName = "reset" + camelName;
@@ -41,7 +52,7 @@ var maintainApp = angular.module('maintainApp', ['ngMaterial',"ngAnimate","ui.ti
 							}},
 					
 					makeFormFns : function(typeName, $scope, ctrlfn, saveCallback) {
-						var camelName = typeName.charAt(0).toUpperCase() + typeName.substr(1);
+						var camelName = service.camelCase(typeName)
 
 						var masterName = "master" + camelName;
 						var resetName = "reset" + camelName;
@@ -67,7 +78,7 @@ var maintainApp = angular.module('maintainApp', ['ngMaterial',"ngAnimate","ui.ti
 								$scope[masterName] = angular.copy(entity);
 								entityService.remove(typeName, id);
 								entityService.save(typeName, entity, function(ret) {
-									saveCallback ? saveCallback(ret, $location) : null;
+									saveCallback ? saveCallback(ret, $rootRouter) : null;
 								}).then(function(entity){$scope[masterName] = entity;
 													$rootRouter.navigate(["Root",camelName + "s"])
 								});
@@ -243,8 +254,7 @@ function filter(list, fn){
 
 function getCommonParams(constructorFn) {
 
-	return [ '$scope', 'entityService', '$rootScope',
-			'$location','ctrlUtil', constructorFn ];
+	return [ '$scope', 'ctrlUtil', '$rootRouter', constructorFn ];
 }
 
 var tinymceOptions={ 

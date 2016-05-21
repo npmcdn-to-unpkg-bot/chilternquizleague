@@ -1,14 +1,11 @@
-maintainApp.controller('VenueListCtrl', getCommonParams(makeListFn("venue", {
-	sort : function(venue1, venue2) {
-		return venue1.name.localeCompare(venue2.name);
-	}
-})));
+maintainApp.controller('VenueListCtrl', getCommonParams(function($scope, ctrlUtil){
+	ctrlUtil.makeListFn("venue", $scope)
+}));
 
 maintainApp.controller('VenueDetailCtrl', getCommonParams(function($scope,
-		entityService,  $rootScope, $location) {
+		ctrlUtils) {
 
-	makeUpdateFn("venue")($scope, entityService, $rootScope,
-				$location, this);
+	ctrlUtils.makeUpdateFn("venue",$scope, this);
 	
 	$scope.uploadImage = function(){
 		

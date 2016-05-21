@@ -8,7 +8,13 @@
 		<md-input-container>
 			<label>Current Season</label>
 			<md-select ng-model="global.currentSeason" placeholder="Select a season" ng-model-options="{trackBy: '$value.id'}" required>
-				<md-option ng-value="season" ng-repeat="season in seasons">{{season.startYear}}</md-option>
+				<md-option ng-value="season" ng-repeat="season in seasons | orderBy : 'startYear' : 'desc'">{{season.startYear}}</md-option>
+			</md-select>
+		</md-input-container>
+		<md-input-container>
+			<label>Global Text</label>
+			<md-select ng-model="global.globalText" placeholder="Select a text set" ng-model-options="{trackBy: '$value.id'}" required>
+				<md-option ng-value="text" ng-repeat="text in texts | orderBy : 'name'">{{text.name}}</md-option>
 			</md-select>
 		</md-input-container>
 		<md-subheader class="md-no-sticky">Front Page Text</md-subheader>
@@ -31,9 +37,9 @@
 				</md-select>
 			</md-input-container>
 		</div>
-		
+		<div>
 		<md-button ng-click="resetGlobal()">Reset</md-button>
 		<md-button class="md-primary" ng-click="updateGlobal(global)">Save</md-button>
-
+		</div>
 	</form>
 </div>

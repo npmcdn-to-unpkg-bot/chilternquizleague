@@ -12,7 +12,7 @@
 				<md-input-container>
 				
 				<md-select ng-model="team.venue" placeholder="Venue" ng-change="team.name=team.venue.name" ng-model-options="{trackBy: '$value.id'}" required>
-					<md-option ng-value="venue" ng-repeat="venue in venues" >{{venue.name}}</md-option>
+					<md-option ng-value="venue" ng-repeat="venue in venues | orderBy : 'name'" >{{venue.name}}</md-option>
 				</md-select>
 				</md-input-container>
 				<md-checkbox ng-model="team.retired">Retired</md-checkbox>

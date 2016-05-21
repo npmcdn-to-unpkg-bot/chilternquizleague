@@ -1,6 +1,9 @@
-maintainApp.controller('UserListCtrl', getCommonParams(makeListFn("user")));
+maintainApp.controller('UserListCtrl', getCommonParams(function($scope, ctrlUtil){
+	
+	ctrlUtil.makeListFn("user",$scope)
+}));
 
-maintainApp.controller('UserDetailCtrl', ["$scope", "ctrlUtil", function($scope, ctrlUtil){
+maintainApp.controller('UserDetailCtrl', getCommonParams(function($scope, ctrlUtil){
 	
 		ctrlUtil.makeUpdateFn("user",$scope,this)
-}]);
+}));
