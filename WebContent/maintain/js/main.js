@@ -1,96 +1,117 @@
 
-var maintainApp = angular.module('maintainApp', ['ngMaterial','ui.router', "ngAnimate","ui.tinymce"])
-		.factory('entityService', ENTITY_SERVICE_DEFN);
+var maintainApp = angular.module('maintainApp', ['ngMaterial',"ngAnimate","ui.tinymce", "ngComponentRouter"])
+		.factory('entityService', ENTITY_SERVICE_DEFN)
+		.factory("ctrlUtil", ["$location", "$rootRouter", "$rootScope", "entityService", 
+				function($location, $rootRouter, $rootScope, entityService){
+			
+			
+			
+			var service = {
+					
+					camelCase : function (typeName){
+						return typeName.charAt(0).toUpperCase() + typeName.substr(1);
+					},
+					
+					bindToParent : bindToParent,
+					addWatchFn : addWatchFn,
+					
+					newEntity : function(typeName){
+						return entityService.load(typeName,"new")
+					}
+	,				
+					makeUpdateFn : function(typeName, $scope, ctrlfn, saveCallback,loadCallback){
+							service.makeLoadFn(typeName, $scope,ctrlfn, loadCallback)
+							service.makeFormFns(typeName, $scope, ctrlfn, saveCallback)
+					},
+					
+					makeLoadFn : 		function(typeName, $scope, ctrlfn, loadCallback){
+						var camelName = service.camelCase(typeName);
+
+						var masterName = "master" + camelName;
+						var resetName = "reset" + camelName;
+
+						var ctrl = ctrlfn ? ctrlfn : this
+							
+							var roaFn = ctrl.$routerOnActivate
+							
+							roaFn = roaFn ? roaFn : function(){};
+									
+							ctrl.$routerOnActivate = function(next){
+								var id = next.params[typeName + "Id"];
+								
+								$scope[typeName + "Id"] = id
+
+								entityService.load(typeName, id, function(ret) {
+									$scope[masterName] = ret;
+									$scope[resetName]();
+									loadCallback ? loadCallback(ret) : null;
+								});
 
 
-maintainApp.config([ '$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+								roaFn(next)
+							}},
+					
+					makeFormFns : function(typeName, $scope, ctrlfn, saveCallback) {
+						var camelName = service.camelCase(typeName)
 
-	$stateProvider.state("home", {
-	    url: "/maintain",
-	    templateUrl: '/maintain/dummy.html'
-	})
-	.state("venues", {
-		url : "/maintain/venues",
-		templateUrl : "/maintain/venue/venue-list.html"
-	})
-	.state("venue", {
-		url : "/maintain/venues/:venueId",
-		templateUrl : '/maintain/venue/venue-detail.html'
-	})
-	.state("teams", {
-		url : "/maintain/teams",
-		templateUrl : "/maintain/team/team-list.html"
-	})
-	.state("team", {
-		url : "/maintain/teams/:teamId",
-		templateUrl : '/maintain/team/team-detail.html'
-	})
+						var masterName = "master" + camelName;
+						var resetName = "reset" + camelName;
+						
+						
+						var ctrl = ctrlfn ? ctrlfn : this
+						
+						var roaFn = ctrl.$routerOnActivate
+						
+						roaFn = roaFn ? roaFn : function(){};
+								
+						ctrl.$routerOnActivate = function(next){
+							var id = next.params[typeName + "Id"];
+							
+							$scope[typeName + "Id"] = id
+							
+							$scope[resetName] = function() {
+								$scope[typeName] = angular.copy($scope[masterName]);
+							};
 
-	.state('users', {
-		templateUrl : '/maintain/user/user-list.html',
-		url : '/maintain/users'})
-	.state('user', {
-		templateUrl : '/maintain/user/user-detail.html',
-		url : '/maintain/users/:userId'})
-	.state('seasons', {
-		templateUrl : '/maintain/season/season-list.html',
-		url : '/maintain/seasons'})
-	.state("season", {
-		templateUrl : '/maintain/season/season-detail.html'})
-	.state("season.detail", {
-		templateUrl:"/maintain/season/season-detail-contents.html",
-		url : '/maintain/seasons/:seasonId'}
-	)
-	.state('season.calendar', {
-		templateUrl : '/maintain/season/calendar.html',
-		url: "/maintain/seasons/:seasonId/calendar"}
-	)
-	.state('season.competition', {
-		templateUrl : '/maintain/competition/competition-container.html',
-		url: "/maintain/seasons/:seasonId/competition"}
-	)
-	.state("season.competition.detail", {
-		templateUrl : function(params){return "/maintain/competition/" + params.compType.toLowerCase() + "-detail.html"},
-		url : "/:compType"}
-	)
+							$scope["update" + camelName] = function(entity) {
 
-	.state("season.competition.fixtures", {
-		templateUrl : '/maintain/competition/fixtures.html',
-		url : '/:compType/fixtures'})
-	.state("season.competition.results", {
-		templateUrl : '/maintain/competition/results.html',
-		url : '/:compType/results'})
-	.state("season.competition.tables", {
-		templateUrl : '/maintain/competition/tables.html',
-		url : '/:compType/tables'})
-	.state("global", {
-		templateUrl : '/maintain/global/global-detail.html',
-		url : '/maintain/global/current'})
-	.state('texts', {
-		templateUrl : '/maintain/text/text-list.html',
-		url : '/maintain/texts'})
-	.state('text', {
-		templateUrl : '/maintain/text/text-detail.html',
-		url : '/maintain/texts/:textId'})
-	.state('stats', {
-		templateUrl : '/maintain/stats/season-list.html',
-		url : '/maintain/stats'})
-	.state('stats-detail', {
-		templateUrl : '/maintain/stats/stats-detail.html',
-		url: "/maintain/stats/:seasonId"})
+								$scope[masterName] = angular.copy(entity);
+								entityService.remove(typeName, id);
+								entityService.save(typeName, entity, function(ret) {
+									saveCallback ? saveCallback(ret, $rootRouter) : null;
+								}).then(function(entity){$scope[masterName] = entity;
+													$rootRouter.navigate(["Root",camelName + "s"])
+								});
 
-	.state("database", {
-		templateUrl : '/maintain/database/database.html',
-		url:'/maintain/database'})
-	.state('mail', {
-		templateUrl : '/maintain/mail/mail-options.html',
-		url : '/maintain/mail'})
-	.state('mass-mail', {
-		templateUrl : '/maintain/mail/mass-mail.html',
-		url : '/maintain/mail/mass-mail'})
+							};
+							roaFn(next)}
+						},
+						makeListFn : function makeListFn(typeName,$scope, config) {
+
+							config = config ? config : {};
+							
+							var collectionName = (config.collName ? config.collName
+									: typeName + "s")
+
+							entityService.loadList(typeName, function(ret) {
+								$scope[collectionName] = config.sort ? ret.sort(config.sort) : ret;
+							});
+
+							$scope.addScreen = function() {
+								$location.path("" + collectionName + "/new");
+							};
+
+				
+					}
+			}
+			return service
+		}]);
+
+
+maintainApp.config(['$locationProvider', function($locationProvider) {
+
 
 	$locationProvider.html5Mode(true);
-	
 
 	
 	
@@ -113,10 +134,12 @@ maintainApp.directive("cqlAddButton",function(){
 		template : "<span><md-button class='md-raised' ng-click='addScreen()'>Add New</md-button></span>"};
 });
 
+maintainApp.value('$routerRootComponent', 'app')
+
 function makeUpdateFn(typeName, noRedirect) {
 	return makeUpdateFnWithCallback(typeName, (noRedirect ? null : function(
 			ret, $location) {
-		$location.url("/maintain/" + typeName + "s");
+		$location.url(typeName + "s");
 	}));
 }
 
@@ -130,29 +153,42 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 	var masterName = "master" + camelName;
 	var resetName = "reset" + camelName;
 
-	return function($scope, entityService, $routeParams, $rootScope, $location) {
+	return function($scope, entityService, $rootScope, $location, ctrlfn) {
 
-		var id = $routeParams[typeName + "Id"];
+		var ctrl = ctrlfn ? ctrlfn : this
+		
+		var roaFn = ctrl.$routerOnActivate
+		
+		roaFn = roaFn ? roaFn : function(){};
+				
+		ctrl.$routerOnActivate = function(next){
+			var id = next.params[typeName + "Id"];
+			
+			$scope[typeName + "Id"] = id
+			
+			$scope[resetName] = function() {
+				$scope[typeName] = angular.copy($scope[masterName]);
+			};
 
-		$scope[resetName] = function() {
-			$scope[typeName] = angular.copy($scope[masterName]);
-		};
-
-		entityService.load(typeName, id, function(ret) {
-			$scope[masterName] = ret;
-			$scope[resetName]();
-			loadCallback ? loadCallback(ret) : null;
-		});
-
-		$scope["update" + camelName] = function(entity) {
-
-			$scope[masterName] = angular.copy(entity);
-			entityService.remove(typeName, id);
-			entityService.save(typeName, entity, function(ret) {
-				saveCallback ? saveCallback(ret, $location) : null;
+			entityService.load(typeName, id, function(ret) {
+				$scope[masterName] = ret;
+				$scope[resetName]();
+				loadCallback ? loadCallback(ret) : null;
 			});
 
-		};
+			$scope["update" + camelName] = function(entity) {
+
+				$scope[masterName] = angular.copy(entity);
+				entityService.remove(typeName, id);
+				entityService.save(typeName, entity, function(ret) {
+					saveCallback ? saveCallback(ret, $location) : null;
+				});
+
+			};
+			roaFn(next)
+		}
+		
+
 
 	};
 
@@ -160,7 +196,7 @@ function makeUpdateFnWithCallback(typeName, saveCallback, loadCallback) {
 
 function makeListFn(typeName, config) {
 
-	return function($scope, entityService, $routeParams, $rootScope, $location) {
+	return function($scope, entityService) {
 		config = config ? config : {};
 		
 		var collectionName = (config.collName ? config.collName
@@ -171,7 +207,7 @@ function makeListFn(typeName, config) {
 		});
 
 		$scope.addScreen = function() {
-			$location.path("/maintain/" + collectionName + "/new");
+			$location.path("" + collectionName + "/new");
 		};
 
 	};
@@ -218,8 +254,7 @@ function filter(list, fn){
 
 function getCommonParams(constructorFn) {
 
-	return [ '$scope', 'entityService', '$stateParams', '$rootScope',
-			'$location', constructorFn ];
+	return [ '$scope', 'ctrlUtil', '$rootRouter', constructorFn ];
 }
 
 var tinymceOptions={ 
@@ -228,3 +263,30 @@ var tinymceOptions={
 	    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image"
 	
 };
+
+function bindToParent(name,scope,ctrl, parentName){
+	
+
+	var oninit = ctrl.$onInit ? ctrl.$onInit : function(){}
+	
+	var ondelete = ctrl.$onDelete ? ctrl.$onDelete : function(){}
+	
+	var deregs = []
+	
+	ctrl.$onInit = function(){
+		var pName = parentName ? parentName : "parent"
+		deregs.push(ctrl[pName].watch(name, function(value){
+			scope[name] = value
+			}));
+		oninit();
+	}
+	
+	ctrl.$onDelete = function(){
+		deregs.forEach(function(i){i()})
+		ondelete()
+	}
+}
+
+function addWatchFn(scope,ctrl){
+	ctrl.watch = function(name, ln){return scope.$watch(name,ln)}
+}

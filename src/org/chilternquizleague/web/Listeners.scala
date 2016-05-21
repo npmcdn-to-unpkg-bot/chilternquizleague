@@ -94,13 +94,8 @@ class URLRewriteFilter extends Filter {
 
 class MaintainURLRewriteFilter extends Filter {
   override def doFilter(arg0: ServletRequest, arg1: ServletResponse,
-    arg2: FilterChain): Unit = {
-
-    arg0.getRequestDispatcher("/maintain/index.html").forward(
-      arg0, arg1)
-
-  }
-
+    arg2: FilterChain): Unit =  arg0.getRequestDispatcher("/maintain/index.html").forward(arg0, arg1)
+  
   override def init(arg0: FilterConfig): Unit = {}
 
   override def destroy() = {}
@@ -111,8 +106,8 @@ class PassThroughFilter extends Filter {
   override def doFilter(arg0: ServletRequest, arg1: ServletResponse,
     arg2: FilterChain): Unit = {
     val req = arg0.asInstanceOf[HttpServletRequest]
-    
-    arg0.getRequestDispatcher(req.getRequestURI).forward(arg0, arg1)
+    val uri = req.getRequestURI 
+    arg0.getRequestDispatcher(uri).forward(arg0, arg1)
 
   }
 

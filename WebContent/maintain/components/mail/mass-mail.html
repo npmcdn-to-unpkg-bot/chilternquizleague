@@ -1,0 +1,20 @@
+<div flex>
+	<md-subheader class="md-primary">Mass Mail</md-subheader>
+	<form>
+	<md-input-container>
+		<label>Sender</label>
+		<input type="hidden" ng-model="sender">
+		<select class="md-input" ng-options="sender.alias for sender in global.emailAliases" ng-model="sender"></select>
+	</md-input-container>
+	<md-input-container>
+		<label>Subject</label>
+		<input type="text" ng-model="subject">
+	</md-input-container>
+	<md-input-container>
+		<label>Text</label>
+		<textarea rows="10" cols="60" ng-model="text"></textarea>
+	</md-input-container>
+	<md-button type="submit" ng-click="submit(subject,text,sender)">Send</md-button>
+	</form>
+
+</div>

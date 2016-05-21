@@ -41,37 +41,35 @@ var ENTITY_SERVICE_DEFN = [
 				
 				return function(ret){
 					$rootScope.$broadcast("progress", false);
-					callback ? callback(ret) : null;
+					callback ? callback(ret.data) : null;
+					return ret.data
 				}
 			}
 			
 			function loadFromServer(type, id, callback) {
 				$rootScope.$broadcast("progress", true);
 				
-				$http.get("/entity/" + type + "/" + id, {
+				return $http.get("/entity/" + type + "/" + id, {
 					"responseType" : "json"
-				}).success(callbackWrapper(callback));
+				}).then(callbackWrapper(callback));
 			}
 
 			function saveToServer(type, entity, callback) {
 				$rootScope.$broadcast("progress", true);
-				$http.post("/entity/" + type, entity).success(callbackWrapper(callback));
+				return $http.post("/entity/" + type, entity)
+					.then(callbackWrapper(callback));
 
 			}
 
 			var service = {
 
 				load : function(type, id, callback) {
-					var entity;// = cache.get(type, id);
 
-					entity ? (callback ? callback(entity) : null)
-							: loadFromServer(type, id, cacheCallbackFactory(
-									type, callback, id));
+					return  loadFromServer(type, id, callback);
 				},
 
 				save : function(type, entity, callback) {
-					saveToServer(type, entity, cacheCallbackFactory(type,
-							callback));
+					return saveToServer(type, entity, callback);
 				},
 
 				put : function(type, entity, id) {
@@ -84,14 +82,14 @@ var ENTITY_SERVICE_DEFN = [
 
 				loadList : function(type, callback) {
 					$rootScope.$broadcast("progress", true);
-					$http.get("/entity/" + type + "-list", {
+					return $http.get("/entity/" + type + "-list", {
 						"responseType" : "json"
-					}).success(callbackWrapper(callback));
+					}).then(callbackWrapper(callback));
 				},
 				
 				command: function(command,content, params, callback){
 					$rootScope.$broadcast("progress", true);
-					$http.post("/entity/" + command,content,{"params":params}).success(callbackWrapper(callback));
+					return $http.post("/entity/" + command,content,{"params":params}).then(callbackWrapper(callback));
 				},
 				
 				upload : function(file, fileName, callback){

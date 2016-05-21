@@ -1,0 +1,17 @@
+<div>
+	<md-subheader class="md-primary">Users</md-subheader>
+	<cql-add-button></cql-add-button>
+
+	<md-list>
+		<md-list-item ng-repeat="user in users | orderBy : 'name'">
+			<md-list-item-content>
+				<md-button style="text-transform:none;" href="users/{{user.id}}" ng-class="user.retired ? 'retired' : ''">{{user.name}}</md-button>
+			</md-list-item-content>
+		</md-list-item>
+	</md-list>
+	
+	<div>
+		<div></div>
+	</div>
+
+</div>
