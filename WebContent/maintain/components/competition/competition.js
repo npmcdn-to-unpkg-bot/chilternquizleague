@@ -127,25 +127,15 @@ UsedTeamsControl.prototype.getUnused = function() {
 	return this.$scope.unusedTeams;
 };
 
-UsedTeamsControl.prototype.add = function(team1, team2) {
-
-	var teams = this.getUnused();
-
-	function removeTeam(team) {
-		removeFromListById(teams, team);
-	}
-
-	removeTeam(team1);
-	team2 ? removeTeam(team2) : null;
-};
-
-UsedTeamsControl.prototype.remove = function(date, team1, team2) {
-	var teams = this.dateMap[this.makeKey(date)];
-
-	teams.push(team1);
-	team2 ? teams.push(team2) : null;
-
-};
+UsedTeamsControl.prototype.set = function(fixtures) {
+	var fixtureTeams = [].concat.apply([],fixtures.fixtures.map(function(b){return [b.home, b.away]}))
+	
+	this.dateMap[this.makeKey(fixtures.start)] = this.teams.filter(
+			function(t){return !fixtureTeams.some(
+					function(t1){return t1.id == t.id})});
+	
+	this.setDate(fixtures.start)
+	};
 
 maintainApp
 		.controller(
@@ -155,6 +145,7 @@ maintainApp
 					ctrlUtil.bindToParent("season", $scope, this)
 					ctrlUtil.bindToParent("competition", $scope, this)
 					ctrlUtil.makeListFn("team",$scope)
+					ctrlUtil.makeListFn("venue",$scope)
 	
 					$scope.fixturesList = []
 					$scope.setCurrentFixtures = function(fixtures){
@@ -167,24 +158,15 @@ maintainApp
 						if (fixturesList && $scope.teams) {
 
 							var utc = $scope.usedTeamsControl = new UsedTeamsControl(
-									filter($scope.teams, function(team) {
+									$scope.teams.filter( function(team) {
 										return !team.retired
 									}), $scope);
 
-							for (idx in fixturesList) {
-
-								utc.setDate(fixturesList[idx].start);
-
-								for (idx2 in fixturesList[idx].fixtures) {
-									var fixture = fixturesList[idx].fixtures[idx2];
-
-									utc.add(fixture.home, fixture.away);
-								}
-								
-							}
-
+							
+							fixturesList.forEach(function(fixtures){
+								utc.set(fixtures);
+							})
 						}
-
 					}
 					
 					function initialiseUI(){
@@ -199,19 +181,16 @@ maintainApp
 						}
 					}
 
-					$scope
-							.$watch(
-									"competition",
+					$scope.$watch("competition",
 									function(competition) {
 
 										if (competition && competition.id) {
 
-											for(idx in competition.fixtures){
-												var f = competition.fixtures[idx]
+											competition.fixtures.forEach(function(f){
 												f.start = new Date(f.start)
 												f.end = new Date(f.end)
-											}
-											
+											})
+										
 											$scope.masterFixtures = competition.fixtures
 											$scope.fixturesList = filter(
 													angular
@@ -254,14 +233,12 @@ maintainApp
 						$scope.fixtures.fixtures.push(fixture);
 						$scope.fixture = {};
 
-						$scope.usedTeamsControl.add(fixture.home, fixture.away);
+						$scope.usedTeamsControl.set($scope.fixtures);
 					};
 					
 					$scope.removeFixtures = function(fixtures) {
 						
 						var index = $scope.fixturesList.indexOf(fixtures);
-						
-						
 						$scope.fixturesList.splice(index,1);
 					};
 					
@@ -274,19 +251,14 @@ maintainApp
 							return t1Id == t2Id
 						}
 						
-						for(idx in $scope.fixtures.fixtures){
-							var fix = $scope.fixtures.fixtures[idx]
-							if(compareTeams(fix.home,fixture.home) && compareTeams(fix.away, fixture.away)){	
-								 $scope.fixtures.fixtures.splice(idx, 1)
-								 $scope.usedTeamsControl.remove(fixture.start,fixture.home,fixture.away)
-								 break;
-							}
+						$scope.fixtures.fixtures = $scope.fixtures.fixtures.filter(function(fix){
+							return !(compareTeams(fix.home,fixture.home) && compareTeams(fix.away, fixture.away))
+						})
+						$scope.usedTeamsControl.set($scope.fixtures)	
 							
-						}
 					};
 					
 	
-					
 					$scope.addFixtures= function(){
 						var date = new Date()
 
