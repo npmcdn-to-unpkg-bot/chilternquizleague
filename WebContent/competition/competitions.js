@@ -148,7 +148,7 @@ mainApp.controller('CompetitionTypesController', [ '$scope', 'viewService', 'sea
 
 mainApp.controller("CompetitionsController", ["$scope","viewService",function($scope, viewService){
 	this.watch = function(name,ln){return $scope.$watch(name,ln)}
-	this.setType = function(type){ $scope.competition = null;$scope.type = type}
+	this.setType = function(type){$scope.type = type}
 	$scope.$on("season", function(evt, season){$scope.season = season})
 	
 	$scope.$watchGroup(["season","type"], function(values){
@@ -229,7 +229,7 @@ mainApp.controller("CompetitionsController", ["$scope","viewService",function($s
    				var $ctrl = this
    				
    				this.$routerOnActivate = function(next, previous) {
-   				  this.competitions.setType(next.params.type);
+   					$ctrl.competitions.setType(next.params.type);
    				}
    				
    				var deregs = []	
